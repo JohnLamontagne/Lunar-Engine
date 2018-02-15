@@ -1,0 +1,8 @@
+extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+/* Copyright (C) 2015 John Lamontagne - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by John Lamontagne <jdlamont@asu.edu>.
+ */
+extensions: .aspx .ascx

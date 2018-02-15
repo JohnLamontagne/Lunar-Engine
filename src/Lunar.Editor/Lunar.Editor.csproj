@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FA334815-6D78-4E9A-9F4D-6C8A58222A57}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Lunar.Editor</RootNamespace>
+    <AssemblyName>Lunar.Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DarkUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\DarkUI.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Penumbra">
+      <HintPath>..\libs\MonoGame.Penumbra.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNET">
+      <HintPath>..\libs\ScintillaNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controls\CreateLayerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateLayerDialog.Designer.cs">
+      <DependentUpon>CreateLayerDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CreateDirectoryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateDirectoryDialog.Designer.cs">
+      <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockMapAttributes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockMapAttributes.Designer.cs">
+      <DependentUpon>DockMapAttributes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockLUADocument.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockLUADocument.Designer.cs">
+      <DependentUpon>DockLUADocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockConsole.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockConsole.Designer.cs">
+      <DependentUpon>DockConsole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockHistory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockHistory.Designer.cs">
+      <DependentUpon>DockHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockLayers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockLayers.Designer.cs">
+      <DependentUpon>DockLayers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockMapDocument.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockMapDocument.Designer.cs">
+      <DependentUpon>DockMapDocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockTilesetTools.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockTilesetTools.Designer.cs">
+      <DependentUpon>DockTilesetTools.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockProperties.Designer.cs">
+      <DependentUpon>DockProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockProject.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockProject.Designer.cs">
+      <DependentUpon>DockProject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockMapObjectProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockMapObjectProperties.Designer.cs">
+      <DependentUpon>DockMapObjectProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SavableDocument.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SavableDocument.Designer.cs">
+      <DependentUpon>SavableDocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ScriptFileNameEditor.cs" />
+    <Compile Include="Controls\SpriteFileNameEditor.cs" />
+    <Compile Include="Controls\TileAttributeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\TileAttributeDialog.Designer.cs">
+      <DependentUpon>TileAttributeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\View.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\View.Designer.cs">
+      <DependentUpon>View.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SuiteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SuiteForm.Designer.cs">
+      <DependentUpon>SuiteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\Camera.cs" />
+    <Compile Include="Utilities\SerializerHelper.cs" />
+    <Compile Include="Icons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Icons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\TextureLoader.cs" />
+    <Compile Include="World\Layer.cs" />
+    <Compile Include="World\Map.cs" />
+    <Compile Include="World\MapObject.cs" />
+    <Compile Include="World\MapObjectPropertiesHelper.cs" />
+    <Compile Include="World\Tile.cs" />
+    <EmbeddedResource Include="Controls\CreateLayerDialog.resx">
+      <DependentUpon>CreateLayerDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CreateDirectoryDialog.resx">
+      <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockLUADocument.resx">
+      <DependentUpon>DockLUADocument.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockConsole.resx">
+      <DependentUpon>DockConsole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockHistory.resx">
+      <DependentUpon>DockHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockLayers.resx">
+      <DependentUpon>DockLayers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockMapAttributes.resx">
+      <DependentUpon>DockMapAttributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockMapDocument.resx">
+      <DependentUpon>DockMapDocument.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockMapObjectProperties.resx">
+      <DependentUpon>DockMapObjectProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockTilesetTools.resx">
+      <DependentUpon>DockTilesetTools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockProperties.resx">
+      <DependentUpon>DockProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockProject.resx">
+      <DependentUpon>DockProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TileAttributeDialog.resx">
+      <DependentUpon>TileAttributeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\View.resx">
+      <DependentUpon>View.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SuiteForm.resx">
+      <DependentUpon>SuiteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder_Closed_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Files_7954.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewFile_6276.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Close_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StatusAnnotations_Information_16xMD_color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StatusAnnotations_Information_16xLG_color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\properties_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Console.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Collection_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RefactoringLog_12810.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lunar.Core\Lunar.Core.csproj">
+      <Project>{7dc32392-0f22-4082-a9f9-208f598dd170}</Project>
+      <Name>Lunar.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lunar.Graphics\Lunar.Graphics.csproj">
+      <Project>{afd594bc-5272-4b55-b30d-2dced67c6930}</Project>
+      <Name>Lunar.Graphics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Brush.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BrushSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Bucket.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BucketSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dropper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DropperSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eraser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EraserSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ruler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RulerSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stamp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StampSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Select.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SelectSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NullObject.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cursor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cursor_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cursor arrow Aero.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
