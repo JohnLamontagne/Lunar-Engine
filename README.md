@@ -13,5 +13,4 @@ Documentation is coming soon...
 License
 -------
 
-Licensed under the Apache License, Version 2.0 (the "License"). Included multimedia content is licensed under CC-BY-SA 3.0.
-See the LICENSE file for details.
+Licensed under the Apache License, Version 2.0 (the "License").
