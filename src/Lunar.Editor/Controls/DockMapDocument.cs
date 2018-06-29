@@ -176,7 +176,7 @@ namespace Lunar.Editor.Controls
             if (_dockTilesetTools.Map == _map)
             {
                 var mapTilesetTexture = _mapTextureLoader.LoadFromFile(e.TilesetPath);
-                mapTilesetTexture.Tag = HelperFunctions.MakeRelative(e.TilesetPath, _project.RootDirectory.FullName + "/");
+                mapTilesetTexture.Tag = HelperFunctions.MakeRelative(e.TilesetPath, _project.ClientRootDirectory.FullName + "/");
 
                 _map.Tilesets.Add(Path.GetFileName(e.TilesetPath), mapTilesetTexture);
             }

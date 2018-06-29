@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
+using Lunar.Client.Utilities;
 using Lunar.Core.Net;
 using GameTime = Microsoft.Xna.Framework.GameTime;
 using Label = Lunar.Client.GUI.Widgets.Label;
@@ -60,11 +61,11 @@ namespace Lunar.Client.Scenes
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Label>("lblStatus")
                 .Visible = true;
 
-            var textboxUserSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/userInputError");
+            var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/userInputError.png");
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userLoginTextbox").Sprite = textboxUserSprite;
 
 
-            var textboxPassSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/passInputError");
+            var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/passInputError.png");
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("passwordLoginTextbox").Sprite = textboxPassSprite;
         }
 
@@ -72,10 +73,10 @@ namespace Lunar.Client.Scenes
         {
             var font = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/interfaceFont");
 
-            var menuButtonSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/menuButton");
-            var windowBackSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/menuWindow");
-            var checkTrueSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/checkTrue");
-            var checkFalseSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/checkFalse");
+            var menuButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/menuButton.png");
+            var windowBackSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/menuWindow.png");
+            var checkTrueSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/checkTrue.png");
+            var checkFalseSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/checkFalse.png");
 
             var mainMenuContainer = new WidgetContainer(windowBackSprite);
             mainMenuContainer.Position = new Vector2((Settings.ResolutionX / 2f) - mainMenuContainer.Size.X / 2, ((Settings.ResolutionY / 2f) - mainMenuContainer.Size.Y / 2));
@@ -99,7 +100,7 @@ namespace Lunar.Client.Scenes
             };
             mainMenuContainer.AddWidget(statusLabel, "lblStatus");
 
-            var loginButtonSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/loginButton");
+            var loginButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/loginButton.png");
             var loginButton = new Button(loginButtonSprite, "Login", font)
             {
                 Position = new Vector2(mainMenuContainer.Position.X + 30, mainMenuContainer.Position.Y + 205),
@@ -129,7 +130,7 @@ namespace Lunar.Client.Scenes
             mainMenuContainer.AddWidget(websiteButton, "btnSubmitRegistration");
 
 
-            var textboxUserSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/textUser");
+            var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/textUser.png");
             var userLoginTextbox = new Textbox(textboxUserSprite, font, new Vector2(12, 8))
             {
                 Position = new Vector2(mainMenuContainer.Position.X + 30, mainMenuContainer.Position.Y + 50),
@@ -138,8 +139,8 @@ namespace Lunar.Client.Scenes
             };
             userLoginTextbox.Text_Entered += UserLoginTextbox_Text_Entered;
             mainMenuContainer.AddWidget(userLoginTextbox, "userLoginTextbox");
-
-            var textboxPassSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/textPass");
+            
+            var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/textPass.png");
             var passwordLoginTextbox = new Textbox(textboxPassSprite, font, new Vector2(12, 8))
             {
                 Position = new Vector2(mainMenuContainer.Position.X + 30, mainMenuContainer.Position.Y + 115),
@@ -172,13 +173,13 @@ namespace Lunar.Client.Scenes
 
         private void PasswordLoginTextbox_Text_Entered(object sender, EventArgs e)
         {
-            var textboxUserSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/passInputSuccess");
+            var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/passInputSuccess.png");
             ((Textbox)sender).Sprite = textboxUserSprite;
         }
 
         private void UserLoginTextbox_Text_Entered(object sender, EventArgs e)
         {
-            var textboxUserSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/userInputSuccess");
+            var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/userInputSuccess.png");
             ((Textbox) sender).Sprite = textboxUserSprite;
         }
 
@@ -224,7 +225,7 @@ namespace Lunar.Client.Scenes
 
             if (string.IsNullOrEmpty(loginMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text))
             {
-                var textboxUserSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/userInputError");
+                var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/userInputError.png");
                 loginMenuContainer.GetWidget<Textbox>("userLoginTextbox").Sprite = textboxUserSprite;
 
                 failure = true;
@@ -232,7 +233,7 @@ namespace Lunar.Client.Scenes
 
             if (string.IsNullOrEmpty(loginMenuContainer.GetWidget<Textbox>("passwordLoginTextbox").Text))
             {
-                var textboxPassSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/passInputError");
+                var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/passInputError.png");
                 loginMenuContainer.GetWidget<Textbox>("passwordLoginTextbox").Sprite = textboxPassSprite;
 
                 failure = true;

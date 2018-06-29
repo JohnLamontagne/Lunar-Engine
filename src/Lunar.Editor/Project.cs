@@ -10,32 +10,42 @@ namespace Lunar.Editor
     public class Project
     {
         private readonly Settings _settings;
-        private readonly DirectoryInfo _directory;
+        private readonly DirectoryInfo _serverDirectory;
+        private readonly DirectoryInfo _clientDirectory;
         private readonly List<DirectoryInfo> _directories;
         private readonly Dictionary<string, List<FileInfo>> _files;
 
-        public Settings Settings => _settings;
-
-        public DirectoryInfo RootDirectory => _directory;
+        public DirectoryInfo ServerRootDirectory => _serverDirectory;
+        public DirectoryInfo ClientRootDirectory => _clientDirectory;
 
         public IEnumerable<DirectoryInfo> Directories => _directories;
 
-        public IDictionary<string, List<FileInfo>> Files => _files;
+        public string GameName { get; set; }
 
-        private Project(string projectPath)
+
+        private Project(string serverDir, string clientDir)
         {
-            _directory = new DirectoryInfo(projectPath);
-            _settings = new Settings(projectPath);
+            _serverDirectory = new DirectoryInfo(serverDir);
+            _clientDirectory = new DirectoryInfo(clientDir);
 
             _directories = new List<DirectoryInfo>();
             _files = new Dictionary<string, List<FileInfo>>();
 
-            this.LoadContents(this.RootDirectory);
+            this.LoadContents(this.ServerRootDirectory);
+            this.LoadContents(this.ClientRootDirectory);
         }
 
         public static Project Load(string projectPath)
         {
-            var project = new Project(projectPath);
+            var project = new Project(projectPath, projectPath);
+
+            return project;
+        }
+
+        public static Project Create(string serverDataDir, string clientDataDir)
+        {
+            var project = new Project(serverDataDir.Replace(@"\", "/"), clientDataDir.Replace(@"\", "/"));
+            project.GameName = "Default";
 
             return project;
         }
@@ -46,9 +56,15 @@ namespace Lunar.Editor
             f.Close();
             
             var fileInfo = new FileInfo(filePath);
-            _files[fileInfo.Directory.FullName].Add(fileInfo);
+            this.GetFiles(Path.GetFullPath(fileInfo.Directory.FullName)).Add(fileInfo);
 
             return fileInfo;
+        }
+
+        public List<FileInfo> GetFiles(string path)
+        {
+            string corrected = path.Replace(@"\", "/") + "/";
+            return _files[corrected];
         }
 
         public FileInfo AddScript(string filePath)
@@ -65,22 +81,31 @@ namespace Lunar.Editor
 
         public void DeleteFile(string filePath)
         {
-            _files.Remove(filePath);
+            _files.Remove(Path.GetFullPath(filePath));
             File.Delete(filePath);
         }
 
         public DirectoryInfo AddDirectory(string directoryPath)
         {
+
             DirectoryInfo directoryInfo = Directory.CreateDirectory(directoryPath);
 
             _directories.Add(directoryInfo);
+
+            string correctedPath = Path.GetFullPath(directoryPath).Replace(@"\", "/");
+
+            if (!correctedPath.EndsWith("/"))
+                correctedPath += "/";
+            
+            if (!_files.ContainsKey(correctedPath))
+                _files.Add(correctedPath, new List<FileInfo>());
 
             return directoryInfo;
         }
 
         public void DeleteDirectory(string directoryPath)
         {
-            _files.Remove(directoryPath);
+            _files.Remove(Path.GetFullPath(directoryPath).Replace(@"\", "/"));
 
             DirectoryInfo directoryToRemove = null;
             foreach (var directory in _directories)
@@ -103,19 +128,19 @@ namespace Lunar.Editor
             {
                 if (!_files.ContainsKey(projectDirectory.FullName))
                 {
-                    _files.Add(projectDirectory.FullName, new List<FileInfo>());
+                    this.AddDirectory(projectDirectory.FullName);
                 }
 
                 foreach (FileInfo f in projectDirectory.GetFiles())
                 {
                     //Console.WriteLine("File {0}", f.FullName);
-                   
-                    _files[projectDirectory.FullName].Add(f);
+
+                    this.GetFiles(Path.GetFullPath(projectDirectory.FullName)).Add(f);
                 }
             }
             catch
             {
-                Console.WriteLine("Directory {0}  \n could not be accessed!!!!", projectDirectory.FullName);
+                Console.WriteLine(@"Directory {0} could not be accessed!!!!", projectDirectory.FullName);
                 return;  // We alredy got an error trying to access dir so dont try to access it again
             }
 

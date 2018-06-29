@@ -388,12 +388,12 @@ namespace Lunar.Client.World.Actors
             if (_sprite == null)
             {
                 _sprite = new Sprite(
-                    contentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Characters/" + buffer.ReadString()));
+                    contentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Characters/" + buffer.ReadString()));
             }
             else
             {
                 _sprite.Texture =
-                    contentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Characters/" + buffer.ReadString());
+                    contentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Characters/" + buffer.ReadString());
             }
 
             _sprite.Position = this.Position;

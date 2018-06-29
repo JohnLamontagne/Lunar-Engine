@@ -108,7 +108,7 @@ namespace Lunar.Client
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _cursorSprite = this.Content.Load<Texture2D>(Constants.FILEPATH_GFX + "cursor");
+            _cursorSprite = this.Content.LoadTexture2D(Constants.FILEPATH_GFX + "cursor.png");
         }
 
         /// <summary>

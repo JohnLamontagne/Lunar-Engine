@@ -7,14 +7,13 @@ namespace Lunar.Client
     public static class Constants
     {
         public static readonly string FILEPATH_ROOT = "Data/";
-        public static readonly string FILEPATH_GFX = FILEPATH_ROOT + "gfx/";
-        public static readonly string FILEPATH_SFX = FILEPATH_ROOT + "sfx/";
-        public static readonly string FILEPATH_MUSIC = FILEPATH_ROOT + "music/";
-
         public static readonly string FILEPATH_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string FILEPATH_DATA = FILEPATH_DIRECTORY + "/" + FILEPATH_ROOT;
         public static readonly string FILEPATH_PLUGINS = FILEPATH_DATA + "/plugins/";
         public static readonly string FILEPATH_SHADERS = FILEPATH_DATA + "/shaders/";
+        public static readonly string FILEPATH_GFX = FILEPATH_DATA + "gfx/";
+        public static readonly string FILEPATH_SFX = FILEPATH_DATA + "sfx/";
+        public static readonly string FILEPATH_MUSIC = FILEPATH_DATA + "music/";
 
 
         public const string SERVER_IP = "localhost";

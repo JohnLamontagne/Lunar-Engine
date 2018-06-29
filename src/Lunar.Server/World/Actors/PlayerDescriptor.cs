@@ -124,7 +124,7 @@ namespace Lunar.Server.World.Actors
             {
                 Name= name,
                 Password = password,
-                Sprite = new Sprite("chara1"),
+                Sprite = new Sprite("chara1.png"),
                 Health = 100,
                 MaximumHealth = 100,
                 Speed = .1f,

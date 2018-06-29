@@ -64,7 +64,7 @@ namespace Lunar.Editor.Controls
 
             foreach (var tileset in map.Tilesets.Values)
             {
-                string tilesetPath = _project.RootDirectory + "/" + tileset.Tag.ToString();
+                string tilesetPath = _project.ClientRootDirectory + "/" + tileset.Tag.ToString();
                 var tilesetTexture = _tilesetTextureLoader.LoadFromFile(tilesetPath);
                 tilesetTexture.Tag = tileset.Tag;
                 
@@ -187,7 +187,7 @@ namespace Lunar.Editor.Controls
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.RestoreDirectory = true;
-                dialog.InitialDirectory = _project.RootDirectory.FullName;
+                dialog.InitialDirectory = _project.ClientRootDirectory.FullName;
                 dialog.Filter = @"Tileset Files (*.png)|*.png";
                 dialog.DefaultExt = ".png";
                 dialog.AddExtension = true;
@@ -239,7 +239,7 @@ namespace Lunar.Editor.Controls
 
             foreach (var tileset in _currentMap.Tilesets.Values)
             {
-                string tilesetPath = ((SuiteForm)this.ParentForm).Project.RootDirectory + "/" + tileset.Tag.ToString();
+                string tilesetPath = ((SuiteForm)this.ParentForm).Project.ClientRootDirectory + "/" + tileset.Tag.ToString();
                 var tilesetTexture = _tilesetTextureLoader.LoadFromFile(tilesetPath);
                 tilesetTexture.Tag = tileset.Tag;
 

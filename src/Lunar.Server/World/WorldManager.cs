@@ -12,7 +12,7 @@ namespace Lunar.Server.World
 {
     public class WorldManager : IService
     {
-        private WorldDictionary<string, Map> _maps;
+        private readonly WorldDictionary<string, Map> _maps;
 
         public WorldManager()
         {

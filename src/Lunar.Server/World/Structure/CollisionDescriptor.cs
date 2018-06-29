@@ -7,7 +7,11 @@ namespace Lunar.Server.World.Structure
     {
         private Rect _collisionArea;
 
-        public Rect CollisionArea { get { return _collisionArea; } set { _collisionArea = value; } }
+        public Rect CollisionArea
+        {
+            get => _collisionArea;
+            set => _collisionArea = value;
+        }
 
         public CollisionDescriptor(Rect collisionArea)
         {
@@ -17,7 +21,7 @@ namespace Lunar.Server.World.Structure
         public bool Collides(IActor actor)
         {
             Rect collisionArea = new Rect((int)(actor.Position.X + actor.CollisionBounds.Left), (int)(actor.Position.Y + actor.CollisionBounds.Top),
-                actor.CollisionBounds.Width, actor.CollisionBounds.Height);
+                (actor.Position.X + actor.CollisionBounds.Left) + actor.CollisionBounds.Width, (actor.Position.Y + actor.CollisionBounds.Top) + actor.CollisionBounds.Height);
 
             return (_collisionArea.Intersects(collisionArea));
         }

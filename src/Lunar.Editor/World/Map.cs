@@ -53,6 +53,11 @@ namespace Lunar.Editor.World
 
             _layers = new Dictionary<string, Layer>();
             _tilesets = new Dictionary<string, Texture2D>();
+
+            _layers.Add("Ground", new Layer(this.Dimensions, "Ground", 0));
+            _layers.Add("Mask1", new Layer(this.Dimensions, "Mask1", 1));
+            _layers.Add("Mask2", new Layer(this.Dimensions, "Mask2", 2));
+            _layers.Add("Fringe", new Layer(this.Dimensions, "Fringe", 3));
         }
 
         private Map()
@@ -117,7 +122,7 @@ namespace Lunar.Editor.World
                     for (int i = 0; i < tilesetCount; i++)
                     {
                         string tilesetPath = bR.ReadString();
-                        Texture2D tileset = textureLoader.LoadFromFile(project.RootDirectory + "/" + tilesetPath);
+                        Texture2D tileset = textureLoader.LoadFromFile(project.ClientRootDirectory + "/" + tilesetPath);
                         tileset.Tag = tilesetPath;
                         map.Tilesets.Add(Path.GetFileName(tilesetPath), tileset);
                     }

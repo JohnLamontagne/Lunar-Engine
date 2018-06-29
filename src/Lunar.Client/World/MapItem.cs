@@ -1,4 +1,5 @@
 ﻿using Lidgren.Network;
+using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Utilities.Services;
@@ -33,7 +34,7 @@ namespace Lunar.Client.World
 
             var textureName = netBuffer.ReadString();
             _sprite = new Sprite(Client.ServiceLocator.GetService<ContentManagerService>()
-                .ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "/Items/" + textureName))
+                .ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName))
             {
                 Position = position,
                 LayerDepth = layer.ZIndex + .001f, // the .001f makes it so that the item spawns above the map layer, but just below actors

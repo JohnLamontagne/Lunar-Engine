@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Lidgren.Network;
+using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
@@ -81,11 +82,10 @@ namespace Lunar.Client.World
                     netBuffer.ReadByte()));
                 var teleporter = netBuffer.ReadBoolean();
 
-                // We need to get rid of the file extension, as MonoGame does not use it in the content pipeline
-                var tilesetPath = Path.ChangeExtension(netBuffer.ReadString(), null);
+                var tilesetPath = Constants.FILEPATH_DATA + netBuffer.ReadString();
 
                 var sprite = Client.ServiceLocator.GetService<ContentManagerService>().ContentManager
-                    .Load<Texture2D>(Constants.FILEPATH_ROOT + tilesetPath);
+                    .LoadTexture2D(tilesetPath);
 
                 Color color = new Color(new Vector4(netBuffer.ReadByte(), netBuffer.ReadByte(), netBuffer.ReadByte(),
                     netBuffer.ReadByte()));

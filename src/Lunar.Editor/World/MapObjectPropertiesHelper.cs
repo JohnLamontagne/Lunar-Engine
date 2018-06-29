@@ -29,7 +29,7 @@ namespace Lunar.Editor.World
 
                 _mapObject.Sprite = new Sprite(_textureLoader.LoadFromFile(value))
                 {
-                    Texture = {Tag = HelperFunctions.MakeRelative(value, _project.RootDirectory.FullName + "/")}
+                    Texture = {Tag = HelperFunctions.MakeRelative(value, _project.ClientRootDirectory.FullName + "/")}
                 };
 
                 _spriteFilePath = _mapObject.Sprite.Texture.Tag.ToString();
@@ -82,7 +82,7 @@ namespace Lunar.Editor.World
         public string LuaScript
         {
             get => _mapObject.LuaScriptPath;
-            set => _mapObject.LuaScriptPath = HelperFunctions.MakeRelative(value, _project.RootDirectory.FullName + "/");
+            set => _mapObject.LuaScriptPath = HelperFunctions.MakeRelative(value, _project.ServerRootDirectory.FullName + "/");
         }
 
 

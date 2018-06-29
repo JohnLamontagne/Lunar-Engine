@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
 using Lunar.Client.Net;
+using Lunar.Client.Utilities;
 using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Graphics;
@@ -268,11 +269,11 @@ namespace Lunar.Client.World.Actors
             if (_sprite == null)
             {
                 _sprite = new Sprite(
-                    contentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "/Characters/" + buffer.ReadString()));
+                    contentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Characters/" + buffer.ReadString()));
             }
             else
             {
-                this.Sprite.Texture = contentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "/Characters/" + buffer.ReadString());
+                this.Sprite.Texture = contentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Characters/" + buffer.ReadString());
             }
 
             this.Speed = buffer.ReadFloat();

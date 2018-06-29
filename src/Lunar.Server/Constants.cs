@@ -44,7 +44,7 @@ namespace Lunar.Server
 
         public const int NPC_REST_PERIOD = 400;
 
-        public const string STARTER_MAP = "Default";
+        public const string STARTER_MAP = "blank";
 
         public const int MAP_ITEM_WIDTH = 32;
 

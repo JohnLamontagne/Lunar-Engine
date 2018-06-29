@@ -35,6 +35,8 @@ namespace Lunar.Editor
             this.mnuMain = new DarkUI.Controls.DarkMenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.recentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mostRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNewFile = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -61,8 +63,6 @@ namespace Lunar.Editor
             this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.DockPanel = new DarkUI.Docking.DarkDockPanel();
             this.darkSeparator1 = new DarkUI.Controls.DarkSeparator();
-            this.recentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mostRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.stripMain.SuspendLayout();
             this.SuspendLayout();
@@ -108,6 +108,24 @@ namespace Lunar.Editor
             this.toolStripMenuItem1.Text = "&Open Project";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
+            // recentToolStripMenuItem
+            // 
+            this.recentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mostRecentToolStripMenuItem});
+            this.recentToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.recentToolStripMenuItem.Image = global::Lunar.Editor.Icons.folder_open;
+            this.recentToolStripMenuItem.Name = "recentToolStripMenuItem";
+            this.recentToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.recentToolStripMenuItem.Text = "Open Recent";
+            // 
+            // mostRecentToolStripMenuItem
+            // 
+            this.mostRecentToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.mostRecentToolStripMenuItem.Name = "mostRecentToolStripMenuItem";
+            this.mostRecentToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.mostRecentToolStripMenuItem.Text = "Most Recent";
+            this.mostRecentToolStripMenuItem.Click += new System.EventHandler(this.mostRecentToolStripMenuItem_Click);
+            // 
             // mnuNewFile
             // 
             this.mnuNewFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -116,6 +134,7 @@ namespace Lunar.Editor
             this.mnuNewFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.mnuNewFile.Size = new System.Drawing.Size(186, 22);
             this.mnuNewFile.Text = "&New Project";
+            this.mnuNewFile.Click += new System.EventHandler(this.mnuNewFile_Click);
             // 
             // saveToolStripMenuItem
             // 
@@ -345,24 +364,6 @@ namespace Lunar.Editor
             this.darkSeparator1.Size = new System.Drawing.Size(1238, 2);
             this.darkSeparator1.TabIndex = 4;
             this.darkSeparator1.Text = "darkSeparator1";
-            // 
-            // recentToolStripMenuItem
-            // 
-            this.recentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mostRecentToolStripMenuItem});
-            this.recentToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.recentToolStripMenuItem.Image = global::Lunar.Editor.Icons.folder_open;
-            this.recentToolStripMenuItem.Name = "recentToolStripMenuItem";
-            this.recentToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.recentToolStripMenuItem.Text = "Open Recent";
-            // 
-            // mostRecentToolStripMenuItem
-            // 
-            this.mostRecentToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.mostRecentToolStripMenuItem.Name = "mostRecentToolStripMenuItem";
-            this.mostRecentToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.mostRecentToolStripMenuItem.Text = "Most Recent";
-            this.mostRecentToolStripMenuItem.Click += new System.EventHandler(this.mostRecentToolStripMenuItem_Click);
             // 
             // SuiteForm
             // 

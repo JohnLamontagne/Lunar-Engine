@@ -133,7 +133,7 @@ namespace Lunar.Editor.World
                 string texturePath = bR.ReadString();
                 textureRect = new Rectangle(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32());
 
-                texture = textureLoader.LoadFromFile(project.RootDirectory + "/" + texturePath);
+                texture = textureLoader.LoadFromFile(project.ClientRootDirectory + "/" + texturePath);
             }
             else
             {

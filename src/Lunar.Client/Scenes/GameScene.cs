@@ -236,7 +236,7 @@ namespace Lunar.Client.Scenes
                 var textureName = args.Message.ReadString();
                 EquipmentSlots slotType = (EquipmentSlots)args.Message.ReadInt32();
 
-                Texture2D texture2D = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "/Items/" + textureName);
+                Texture2D texture2D = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName);
 
                 var equipSlot = new Picture(texture2D);
 
@@ -278,7 +278,7 @@ namespace Lunar.Client.Scenes
                     var slotType = args.Message.ReadInt32();
                     var amount = args.Message.ReadInt32();
 
-                    Texture2D texture2D = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "/Items/" + textureName);
+                    Texture2D texture2D = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName);
 
                     var invSlot = new Picture(texture2D);
                     invSlot.Position = new Vector2(((i % 5) * Constants.INV_SLOT_OFFSET) + Constants.INVENTORY_OFFSET_X, ((i / 5) * Constants.INV_SLOT_OFFSET) + 
@@ -442,13 +442,13 @@ namespace Lunar.Client.Scenes
         {
             var font = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/interfaceFont");
             var chatFont = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/chatFont");
-            var idleButtonSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/idleButton");
-            var hoverButtonSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/hoverButton");
-            var backBar = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/statusBar");
-            var windowBackSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/windowBack");
+            var idleButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/idleButton.png");
+            var hoverButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/hoverButton.png");
+            var backBar = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/statusBar.png");
+            var windowBackSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/windowBack.png");
             
 
-            var chatBack = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/chat");
+            var chatBack = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/chat.png");
             var chat = new Chatbox(chatBack, chatFont, 12)
             {
                 Position = new Vector2(0, 630 - chatBack.Height),
@@ -458,7 +458,7 @@ namespace Lunar.Client.Scenes
             };
             this.GuiManager.AddWidget(chat, "chatbox");
 
-            var messageEntrySprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/textboxNormal");
+            var messageEntrySprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/textboxNormal.png");
             var messageEntry = new Textbox(messageEntrySprite, chatFont, new Vector2(12, 0))
             {
                 Position = new Vector2(17, (chat.Position.Y + chatBack.Height)),
@@ -498,7 +498,7 @@ namespace Lunar.Client.Scenes
             toggleCharacterWindowButton.Clicked += toggleCharacterWindowButton_ButtonClicked;
             this.GuiManager.AddWidget(toggleCharacterWindowButton, "toggleCharacterWindowButton");
 
-            Texture2D healthFillSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/healthFillSprite");
+            Texture2D healthFillSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/healthFillSprite.png");
             var healthStatusBar = new StatusBar(backBar, healthFillSprite, new Rectangle(7, 7, healthFillSprite.Width, healthFillSprite.Height), font)
             {
                 Visible = true,
@@ -513,7 +513,7 @@ namespace Lunar.Client.Scenes
 
             this.GuiManager.AddWidget(healthStatusBar, "healthStatusBar");
 
-            Texture2D manaFillSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/manaFillSprite");
+            Texture2D manaFillSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/manaFillSprite.png");
             var manaStatusBar = new StatusBar(backBar, manaFillSprite, new Rectangle(7, 7, manaFillSprite.Width, manaFillSprite.Height), font)
             {
                 Visible = true,
@@ -528,7 +528,7 @@ namespace Lunar.Client.Scenes
 
             this.GuiManager.AddWidget(manaStatusBar, "manaStatusBar");
 
-            Texture2D inventoryBackSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/inventory");
+            Texture2D inventoryBackSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/inventory.png");
             var inventoryWidget = new WidgetContainer(inventoryBackSprite)
             {
                 Visible = false,
@@ -537,8 +537,8 @@ namespace Lunar.Client.Scenes
             };
             this.GuiManager.AddWidget(inventoryWidget, "inventoryWidget");
 
-            Texture2D experienceBarSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/experienceBar");
-            Texture2D experienceBarPool = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/experiencePool");
+            Texture2D experienceBarSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/experienceBar.png");
+            Texture2D experienceBarPool = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/experiencePool.png");
             var experienceBar = new StatusBar(experienceBarSprite, experienceBarPool, new Rectangle(8, 31, 440, 23), font)
             {
                 Visible = true,
@@ -549,7 +549,7 @@ namespace Lunar.Client.Scenes
             this.GuiManager.AddWidget(experienceBar, "experienceBar");
 
 
-            var characterWindowSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/statScreen");
+            var characterWindowSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/statScreen.png");
             var characterWindow = new WidgetContainer(characterWindowSprite)
             {
                 Visible = false,
@@ -625,7 +625,7 @@ namespace Lunar.Client.Scenes
 
 
 
-            var targetPortrait = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/portrait");
+            var targetPortrait = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/portrait.png");
             var targetPortraitContainer = new WidgetContainer(targetPortrait)
             {
                 Position = new Vector2(Settings.ResolutionX - (healthStatusBar.BackSprite.Width + targetPortrait.Width), 5),
@@ -649,7 +649,7 @@ namespace Lunar.Client.Scenes
 
             targetPortraitContainer.AddWidget(targetHealthBar, "targetHealthBar");
 
-            var enemyIndicatorSprite = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/enemyIndicator");
+            var enemyIndicatorSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/enemyIndicator.png");
             var enemyIndicatorPicture = new Picture(enemyIndicatorSprite)
             {
                 Visible = false,

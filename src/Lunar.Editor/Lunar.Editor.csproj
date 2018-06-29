@@ -78,17 +78,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\CreateDirectoryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateDirectoryDialog.Designer.cs">
+      <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CreateLayerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\CreateLayerDialog.Designer.cs">
       <DependentUpon>CreateLayerDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CreateDirectoryDialog.cs">
+    <Compile Include="Controls\CreateProjectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\CreateDirectoryDialog.Designer.cs">
-      <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
+    <Compile Include="Controls\CreateProjectDialog.Designer.cs">
+      <DependentUpon>CreateProjectDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DockMapAttributes.cs">
       <SubType>UserControl</SubType>
@@ -193,11 +199,14 @@
     <Compile Include="World\MapObject.cs" />
     <Compile Include="World\MapObjectPropertiesHelper.cs" />
     <Compile Include="World\Tile.cs" />
+    <EmbeddedResource Include="Controls\CreateDirectoryDialog.resx">
+      <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\CreateLayerDialog.resx">
       <DependentUpon>CreateLayerDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\CreateDirectoryDialog.resx">
-      <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\CreateProjectDialog.resx">
+      <DependentUpon>CreateProjectDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockLUADocument.resx">
       <DependentUpon>DockLUADocument.cs</DependentUpon>

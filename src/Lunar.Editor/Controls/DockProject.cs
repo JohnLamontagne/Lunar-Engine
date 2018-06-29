@@ -36,18 +36,15 @@ namespace Lunar.Editor.Controls
 
         #endregion
 
-        public void InitalizeFromProject(Project project)
+
+        private DarkTreeNode InitalizeProjectDirectory(string rootName, DirectoryInfo rootDirectoryInfo)
         {
-            _project = project;
-
-            treeProject.Nodes.Clear();
-
             var stack = new Stack<DarkTreeNode>();
-            var node = new DarkTreeNode(_project.RootDirectory.Name)
+            var node = new DarkTreeNode(rootName)
             {
-                Tag = _project.RootDirectory,
                 Icon = Icons.folder_closed,
-                ExpandedIcon = Icons.folder_open
+                ExpandedIcon = Icons.folder_open,
+                Tag = rootDirectoryInfo
             };
             stack.Push(node);
 
@@ -67,19 +64,37 @@ namespace Lunar.Editor.Controls
                     stack.Push(childDirectoryNode);
                 }
 
-                foreach (var file in _project.Files[directoryInfo.FullName])
+                foreach (var file in _project.GetFiles(directoryInfo.FullName))
                 {
                     DarkTreeNode fileNode = new DarkTreeNode(file.Name)
                     {
                         Icon = Icons.document_16xLG,
                         Tag = file
                     };
-                    
+
                     currentNode.Nodes.Add(fileNode);
                 }
             }
 
-            this.treeProject.Nodes.Add(node);
+            return node;
+        }
+
+        public void InitalizeFromProject(Project project)
+        {
+            _project = project;
+
+            treeProject.Nodes.Clear();
+
+            var node = new DarkTreeNode(_project.GameName)
+            {
+                Icon = Icons.folder_closed,
+                ExpandedIcon = Icons.folder_open
+            };
+
+            node.Nodes.Add(this.InitalizeProjectDirectory("Client Data", _project.ClientRootDirectory));
+            node.Nodes.Add(this.InitalizeProjectDirectory("Server Data", _project.ServerRootDirectory));
+
+            treeProject.Nodes.Add(node);
         }
 
 
@@ -175,7 +190,6 @@ namespace Lunar.Editor.Controls
 
             var node = new DarkTreeNode(directory.Name)
             {
-                Tag = _project.RootDirectory,
                 Icon = Icons.folder_closed,
                 ExpandedIcon = Icons.folder_open,
                 Expanded = true

@@ -106,7 +106,7 @@ namespace Lunar.Editor.World
 
             int attributeDataLength = bR.ReadInt32();
             byte[] attributeData = bR.ReadBytes(attributeDataLength);
-            this.AttributeData = AttributeData.Deserialize(attributeData);
+         //   this.AttributeData = AttributeData.Deserialize(attributeData);
 
             if (bR.ReadBoolean())
             {

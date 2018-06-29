@@ -55,21 +55,6 @@
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>F2AC1932D7627AD8B1D0A338C0CE38A045B795BF</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>Ruinic.Client_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="GUI\GUIManager.cs" />
@@ -102,6 +87,7 @@
     <Compile Include="Utilities\CommandInterpreter.cs" />
     <Compile Include="Utilities\ConsoleCommands.cs" />
     <Compile Include="Utilities\ConsoleRedirector.cs" />
+    <Compile Include="Utilities\ContentManagerExtensions.cs" />
     <Compile Include="Utilities\Input\InputHelper.cs" />
     <Compile Include="Utilities\Services\ContentManagerService.cs" />
     <Compile Include="Utilities\Services\GraphicsDeviceService.cs" />

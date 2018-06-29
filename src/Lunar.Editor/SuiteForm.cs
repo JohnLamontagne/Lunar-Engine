@@ -291,7 +291,7 @@ namespace Lunar.Editor
                 {
                     _project = Project.Load(dialog.SelectedPath);
 
-                    Properties.Settings.Default["LastProjectPath"] = _project.RootDirectory.FullName;
+                    Properties.Settings.Default["LastProjectPath"] = _project.ClientRootDirectory.FullName;
                     Properties.Settings.Default.Save(); // Saves settings in application configuration file
 
                     _dockTilesetTools.SetProject(_project);
@@ -325,6 +325,26 @@ namespace Lunar.Editor
                 _dockTilesetTools.SetProject(_project);
 
                 this.PopulateProjectTree();
+            }
+        }
+
+        private void mnuNewFile_Click(object sender, EventArgs e)
+        {
+            var createProjectDialog = new CreateProjectDialog();
+
+            if (createProjectDialog.ShowDialog() == DialogResult.OK)
+            {
+                string clientDataPath = Path.GetFullPath(createProjectDialog.ClientDataPath);
+                string serverDataPath = Path.GetFullPath(createProjectDialog.ServerDataPath);
+
+                if (Directory.Exists(clientDataPath) && Directory.Exists(serverDataPath))
+                {
+                    _project = Project.Create(serverDataPath, clientDataPath);
+
+                    _dockTilesetTools.SetProject(_project);
+
+                    this.PopulateProjectTree();
+                }
             }
         }
     }

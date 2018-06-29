@@ -20,55 +20,48 @@ namespace Lunar.Server.World.Actors
 {
     public class NPC : IActor
     {
-        private ActorBehaviorDefinition _behaviorDescriptor;
-        private string _name;
-        private Sprite _sprite;
-        private float _speed;
-        private int _level;
-        private int _health;
-        private int _maximumHealth;
-        private int _aggresiveRange;
-        private Vector _position;
-        private Rect _collisionBounds;
-        private Direction _direction;
         private Map _map;
-        private Random _random;
-        private readonly long _uniqueID;
-        private Vector _maxRoam;
-        private Layer _layer;      
         private Vector _frameSize;
-        private int _attackRange;
         private List<Vector> _targetPath;
-        private long _nextMoveTime;
         private long _nextAttackTime;
+        private Random _random;
+        private long _nextMoveTime;
 
-        public string Name { get { return _name; } }
-        public Sprite Sprite { get { return _sprite; } set { _sprite = value; } }
-        public float Speed { get { return _speed; } set { _speed = value; } }
-        public int Level { get { return _level; } set { _level = value; } }
-        public int Health { get { return _health; } set { _health = value; } }
-        public int MaximumHealth { get { return _maximumHealth; } set { _maximumHealth = value; } }
-        public int AggresiveRange { get { return _aggresiveRange; } set { _aggresiveRange = value; } }
-        public Vector MaxRoam { get { return _maxRoam; } }
-        public int AttackRange { get { return _attackRange; } }
+        public string Name { get; }
 
-        public Layer Layer { get { return _layer; } set { _layer = value; } }
+        public Sprite Sprite { get; set; }
 
-        public long UniqueID => _uniqueID;
+        public float Speed { get; set; }
 
-        public Vector Position { get { return _position; } private set { _position = value; } }
+        public int Level { get; set; }
 
-        public Rect CollisionBounds { get { return _collisionBounds; } set { _collisionBounds = value; } }
+        public int Health { get; set; }
 
-        public Direction Direction { get { return _direction; } set { _direction = value; } }
+        public int MaximumHealth { get; set; }
 
-        public ActorBehaviorDefinition BehaviorDefinition { get { return _behaviorDescriptor; } set { _behaviorDescriptor = value; } }
+        public int AggresiveRange { get; set; }
+
+        public Vector MaxRoam { get; }
+
+        public int AttackRange { get; }
+
+        public Layer Layer { get; set; }
+
+        public long UniqueID { get; }
+
+        public Vector Position { get; private set; }
+
+        public Rect CollisionBounds { get; set; }
+
+        public Direction Direction { get; set; }
+
+        public ActorBehaviorDefinition BehaviorDefinition { get; set; }
 
         public bool Aggrevated { get; set; }
 
         public ActorStates State { get; set; }
 
-        public Map Map { get { return _map; } }
+        public Map Map => _map;
 
         public IActor Target { get; set; }
 
@@ -78,7 +71,7 @@ namespace Lunar.Server.World.Actors
 
         public NPC(NPCDescriptor descriptor, Map map)
         {
-            _name = descriptor.Name;
+            Name = descriptor.Name;
             _map = map;
 
             this.Sprite = descriptor.Sprite;
@@ -92,13 +85,13 @@ namespace Lunar.Server.World.Actors
             this.Layer = map.Layers.ElementAt(0);
 
             _frameSize = descriptor.FrameSize;
-            _attackRange = descriptor.AttackRange;
+            AttackRange = descriptor.AttackRange;
 
-            _maxRoam = descriptor.MaxRoam;
+            MaxRoam = descriptor.MaxRoam;
             
             _random = new Random();
 
-            _uniqueID = this.GetHashCode() + Environment.TickCount;
+            UniqueID = this.GetHashCode() + Environment.TickCount;
             _targetPath = new List<Vector>();
 
             _map.AddActor(this);
@@ -147,9 +140,9 @@ namespace Lunar.Server.World.Actors
                 && posDiff.Y.IsWithin(0, this.AttackRange))
             {
 
-                if (this.Target is Player)
+                if (this.Target is Player player)
                 {
-                    if (((Player)this.Target).InLoadingScreen)
+                    if (player.InLoadingScreen)
                         return;
                 }
 
@@ -215,10 +208,7 @@ namespace Lunar.Server.World.Actors
             Rect collisionBoundsLeft = new Rect(this.Position.X + this.CollisionBounds.Left - Constants.TILE_SIZE, this.Position.Y + this.CollisionBounds.Top,
                 this.CollisionBounds.Width, this.CollisionBounds.Height);
 
-            Rect targetCollisionBounds = new Rect(actor.Position.X + actor.CollisionBounds.Left, actor.Position.Y + actor.CollisionBounds.Top, 
-                actor.CollisionBounds.Width, actor.CollisionBounds.Height);
-
-            return (collisionBoundsRight.Intersects(targetCollisionBounds) || collisionBoundsLeft.Intersects(targetCollisionBounds));
+            return (collisionBoundsRight.Intersects(actor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.CollisionBounds));
         }
 
         private void ProcessMovement(GameTime gameTime)
@@ -301,7 +291,7 @@ namespace Lunar.Server.World.Actors
                         _targetPath.RemoveAt(_targetPath.Count - 1);
                 }
 
-                if (_targetPath.Count == 0)
+                if (_targetPath.Count == 0 && _nextMoveTime <= gameTime.TotalElapsedTime)
                 {
                     _nextMoveTime = gameTime.TotalElapsedTime + Constants.NPC_REST_PERIOD;
                     this.State = ActorStates.Idle;

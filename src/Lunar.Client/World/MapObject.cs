@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Lidgren.Network;
+using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
@@ -61,7 +62,7 @@ namespace Lunar.Client.World
             var frameTime = netBuffer.ReadInt32();
 
             var sprite =
-                new AnimatedSprite(Client.ServiceLocator.GetService<ContentManagerService>().ContentManager.Load<Texture2D>(
+                new AnimatedSprite(Client.ServiceLocator.GetService<ContentManagerService>().ContentManager.LoadTexture2D(
                     Constants.FILEPATH_ROOT + textureName))
                 {
                     SourceRectangle = sourceRectangle,

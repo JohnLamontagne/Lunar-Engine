@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
+using Lunar.Client.Utilities;
 using Lunar.Core.Net;
 
 namespace Lunar.Client.Scenes
@@ -46,7 +47,7 @@ namespace Lunar.Client.Scenes
 
         private void InitalizeInterface()
         {
-            var loadingIndicatorTexture2D = this.ContentManager.Load<Texture2D>(Constants.FILEPATH_GFX + "Interface/loadingIndicator");
+            var loadingIndicatorTexture2D = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/loadingIndicator.png");
             var loadingFont = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/loadingFont");
 
             var picLoadingIndicator = new AnimatedPicture(loadingIndicatorTexture2D, 25,
