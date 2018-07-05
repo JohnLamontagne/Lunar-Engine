@@ -1,7 +1,7 @@
-Lunar Engine
+Lunar Mirage
 ============
 
-Lunar Engine is a free, open source 2D MMORPG engine in C#
+Lunar Mirage is a free, open source 2D MMORPG engine in C#
 
 
 Documentation
