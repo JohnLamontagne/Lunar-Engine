@@ -350,7 +350,7 @@ namespace Lunar.Server.World.Actors
         {
             var packet = new Packet(PacketType.INVENTORY_UPDATE);
             
-            for (int i = 0; i < Constants.MAX_INVENTORY; i++)
+            for (int i = 0; i < Settings.MaxInventoryItems; i++)
             {
                 if (this.Inventory.GetSlot(i) != null)
                 {

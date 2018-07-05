@@ -39,6 +39,9 @@ namespace Lunar.Server
         {
             Console.WriteLine("Initalizing server...");
 
+            Console.WriteLine("Loading server settings...");
+            Settings.Initalize();
+
             Console.WriteLine("Checking file integrity...");
             this.CheckFileIntegrity();
 
@@ -77,7 +80,7 @@ namespace Lunar.Server
         {
             _netThread = new Thread(() =>
             {
-                float millisecondsPerUpdate = 1000f / Constants.TICK_RATE;
+                float millisecondsPerUpdate = 1000f / Settings.TickRate;
                 float nextUpdateTime = 0;
                 var gameTime = new GameTime();
 
@@ -98,7 +101,7 @@ namespace Lunar.Server
 
             _worldThread = new Thread(() =>
             {
-                float millisecondsPerUpdate = 1000f / Constants.TICK_RATE;
+                float millisecondsPerUpdate = 1000f / Settings.TickRate;
                 float nextUpdateTime = 0;
                 var gameTime = new GameTime();
 

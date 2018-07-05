@@ -10,7 +10,7 @@ namespace Lunar.Server.World.Actors
         public Inventory(Player player)
         {
             _player = player;
-            _inventory = new InventorySlot[Constants.MAX_INVENTORY];
+            _inventory = new InventorySlot[Settings.MaxInventoryItems];
         }
 
         public InventorySlot GetSlot(int slotNum)
@@ -86,7 +86,7 @@ namespace Lunar.Server.World.Actors
             {
                 bool placedItem = false;
 
-                for (int i = 0; i < Constants.MAX_INVENTORY; i++)
+                for (int i = 0; i < Settings.MaxInventoryItems; i++)
                 {
                     if (_inventory[i] == null)
                     {

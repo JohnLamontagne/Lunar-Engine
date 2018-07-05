@@ -170,7 +170,7 @@ namespace Lunar.Server.World.Structure
 
                 mapObject.CollisionDescriptor = new CollisionDescriptor(new Rect(
                     mapObject.Position.X, mapObject.Position.Y,
-                    Constants.TILE_SIZE, Constants.TILE_SIZE));
+                    Settings.TileSize, Settings.TileSize));
             }
            
 

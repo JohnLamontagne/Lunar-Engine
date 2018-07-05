@@ -143,7 +143,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             if (wantsToMove)
             {
                 // Can the player actually move based on the minimum update time from the tick rate
-                if (_player.CanMove(_player.Speed * (1000f / Constants.TICK_RATE)))
+                if (_player.CanMove(_player.Speed * (1000f / Settings.TileSize)))
                 {
                     _player.SendMovementPacket();
                 }

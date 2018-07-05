@@ -189,10 +189,10 @@ namespace Lunar.Server.World.Structure
         {
             List<Tile> collidingTiles = new List<Tile>();
 
-            int leftCheck = (int)(position.X + collisionBounds.Left) / Constants.TILE_SIZE;
-            int topCheck = (int)(position.Y + collisionBounds.Top) / Constants.TILE_SIZE;
-            int tilesWidth = ((collisionBounds.Left + collisionBounds.Width) / Constants.TILE_SIZE) + 1;
-            int tilesHeight = ((collisionBounds.Top + collisionBounds.Height) / Constants.TILE_SIZE) + 1;
+            int leftCheck = (int)(position.X + collisionBounds.Left) / Settings.TileSize;
+            int topCheck = (int)(position.Y + collisionBounds.Top) / Settings.TileSize;
+            int tilesWidth = ((collisionBounds.Left + collisionBounds.Width) / Settings.TileSize) + 1;
+            int tilesHeight = ((collisionBounds.Top + collisionBounds.Height) / Settings.TileSize) + 1;
 
             if (tilesWidth < 1)
                 tilesWidth = 1;
@@ -223,7 +223,7 @@ namespace Lunar.Server.World.Structure
         {
 
             if (position.X < 0 || position.Y < 0 ||
-                position.X >= (_tiles.GetLength(0) * Constants.TILE_SIZE) || position.Y >= (_tiles.GetLength(1) * Constants.TILE_SIZE))
+                position.X >= (_tiles.GetLength(0) * Settings.TileSize) || position.Y >= (_tiles.GetLength(1) * Settings.TileSize))
                 return true;
 
             Rect collisionArea = new Rect((int)(position.X + collisionBounds.Left), (int)(position.Y + collisionBounds.Top),
@@ -298,8 +298,8 @@ namespace Lunar.Server.World.Structure
                 {
                     if (bR.ReadBoolean())
                     {
-                        _tiles[x, y] = new Tile(new Vector(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE));
-                        _tiles[x, y].Load(bR, new Vector(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE));
+                        _tiles[x, y] = new Tile(new Vector(x * Settings.TileSize, y * Settings.TileSize));
+                        _tiles[x, y].Load(bR, new Vector(x * Settings.TileSize, y * Settings.TileSize));
                     }
                 }
             }

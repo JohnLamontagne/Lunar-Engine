@@ -103,6 +103,10 @@ namespace Lunar.Editor
             {
                 this.CloseLuaDocument(e.File);
             }
+            else if (e.File.Extension == ".litm")
+            {
+                this.CloseItemDocument(e.File);
+            }
         }
 
         private void CloseLuaDocument(FileInfo file)
@@ -142,6 +146,49 @@ namespace Lunar.Editor
 
             _editorDocuments.Add(luaDoc);
             DockPanel.AddContent(luaDoc);
+        }
+
+        private void OpenItemDocument(FileInfo file)
+        {
+            var itemDoc = new DockItemEditor(_project, file.Name, Icons.document_16xLG, file)
+            {
+                Tag = file
+            };
+
+            // and if there are, just activate it.
+            foreach (var iDoc in _editorDocuments)
+            {
+                if (iDoc.Tag == file)
+                {
+                    this.DockPanel.ActiveContent = iDoc;
+                    return;
+                }
+            }
+
+            itemDoc.Enter += ItemDoc_Enter;
+
+            _editorDocuments.Add(itemDoc);
+            DockPanel.AddContent(itemDoc);
+        }
+
+        private void CloseItemDocument(FileInfo file)
+        {
+            // Close the appropiate document
+            foreach (var iDoc in _editorDocuments)
+            {
+                if (iDoc.Tag == file)
+                {
+                    _editorDocuments.Remove(iDoc);
+                    iDoc.Close();
+                    DockPanel.RemoveContent(iDoc);
+                    return;
+                }
+            }
+        }
+
+        private void ItemDoc_Enter(object sender, EventArgs e)
+        {
+            _dockTilesetTools.DockGroup.Hide();
         }
 
         private void LuaDoc_Enter(object sender, EventArgs e)
@@ -192,6 +239,10 @@ namespace Lunar.Editor
             {
                 this.OpenMapDocument(e.File);
             }
+            else if (e.File.Extension == ".litm")
+            {
+                this.OpenItemDocument(e.File);    
+            }
         }
 
         private void _dockProject_File_Selected(object sender, DockProject.FileEventArgs e)
@@ -203,6 +254,10 @@ namespace Lunar.Editor
             else if (e.File.Extension == ".rmap")
             {
                 this.OpenMapDocument(e.File);
+            }
+            else if (e.File.Extension == ".litm")
+            {
+                this.OpenItemDocument(e.File);
             }
         }
 
@@ -283,21 +338,21 @@ namespace Lunar.Editor
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            using (var dialog = new FolderBrowserDialog())
+            var fileBrowserDialog = new OpenFileDialog();
+            fileBrowserDialog.Filter = @"Project Files (*.lproj)|*.lproj";
+            fileBrowserDialog.DefaultExt = ".lproj";
+            fileBrowserDialog.AddExtension = true;
+
+            if (fileBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                DialogResult result = dialog.ShowDialog();
+                _project = Project.Load(fileBrowserDialog.FileName);
 
-                if (result == DialogResult.OK)
-                {
-                    _project = Project.Load(dialog.SelectedPath);
+                Properties.Settings.Default["LastProjectPath"] = fileBrowserDialog.FileName;
+                Properties.Settings.Default.Save(); // Saves settings in application configuration file
 
-                    Properties.Settings.Default["LastProjectPath"] = _project.ClientRootDirectory.FullName;
-                    Properties.Settings.Default.Save(); // Saves settings in application configuration file
+                _dockTilesetTools.SetProject(_project);
 
-                    _dockTilesetTools.SetProject(_project);
-
-                    this.PopulateProjectTree();
-                }
+                this.PopulateProjectTree();
             }
         }
 
@@ -317,10 +372,10 @@ namespace Lunar.Editor
 
         private void mostRecentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string directory = Properties.Settings.Default["LastProjectPath"].ToString();
-            if (Directory.Exists(directory))
+            string path = Properties.Settings.Default["LastProjectPath"].ToString();
+            if (File.Exists(path))
             {
-                _project = Project.Load(directory);
+                _project = Project.Load(path);
 
                 _dockTilesetTools.SetProject(_project);
 
@@ -339,11 +394,19 @@ namespace Lunar.Editor
 
                 if (Directory.Exists(clientDataPath) && Directory.Exists(serverDataPath))
                 {
-                    _project = Project.Create(serverDataPath, clientDataPath);
+                    var fileBrowserDialog = new SaveFileDialog();
+                    fileBrowserDialog.Filter = @"Project Files (*.lproj)|*.lproj";
+                    fileBrowserDialog.DefaultExt = ".lproj";
+                    fileBrowserDialog.AddExtension = true;
 
-                    _dockTilesetTools.SetProject(_project);
+                    if (fileBrowserDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        _project = Project.Create(fileBrowserDialog.FileName, serverDataPath, clientDataPath);
 
-                    this.PopulateProjectTree();
+                        _dockTilesetTools.SetProject(_project);
+
+                        this.PopulateProjectTree();
+                    }
                 }
             }
         }

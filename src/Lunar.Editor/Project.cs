@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Lunar.Editor.Utilities;
 using Lunar.Editor.World;
+using System.Xml.Linq;
 
 namespace Lunar.Editor
 {
     public class Project
     {
-        private readonly Settings _settings;
         private readonly DirectoryInfo _serverDirectory;
         private readonly DirectoryInfo _clientDirectory;
         private readonly List<DirectoryInfo> _directories;
         private readonly Dictionary<string, List<FileInfo>> _files;
+        private string _projectPath;
 
         public DirectoryInfo ServerRootDirectory => _serverDirectory;
         public DirectoryInfo ClientRootDirectory => _clientDirectory;
@@ -23,8 +25,9 @@ namespace Lunar.Editor
         public string GameName { get; set; }
 
 
-        private Project(string serverDir, string clientDir)
+        private Project(string projectPath, string serverDir, string clientDir)
         {
+            _projectPath = projectPath;
             _serverDirectory = new DirectoryInfo(serverDir);
             _clientDirectory = new DirectoryInfo(clientDir);
 
@@ -37,15 +40,23 @@ namespace Lunar.Editor
 
         public static Project Load(string projectPath)
         {
-            var project = new Project(projectPath, projectPath);
+            var doc = XDocument.Load(projectPath);
+
+            var generalSettings = doc.Elements("Config").Elements("General");
+            string serverDataPath = generalSettings.Elements("Server_Data_Path").FirstOrDefault().Value;
+            string clientDataPath = generalSettings.Elements("Client_Data_Path").FirstOrDefault().Value;
+
+            var project = new Project(projectPath, serverDataPath, clientDataPath);
+            project.GameName = "Default";
 
             return project;
         }
 
-        public static Project Create(string serverDataDir, string clientDataDir)
+        public static Project Create(string projectPath, string serverDataDir, string clientDataDir)
         {
-            var project = new Project(serverDataDir.Replace(@"\", "/"), clientDataDir.Replace(@"\", "/"));
+            var project = new Project(projectPath, serverDataDir.Replace(@"\", "/"), clientDataDir.Replace(@"\", "/"));
             project.GameName = "Default";
+            project.Save();
 
             return project;
         }
@@ -76,6 +87,13 @@ namespace Lunar.Editor
         {
             var map = new Map(new Vector2(Constants.NEW_MAP_X, Constants.NEW_MAP_Y), "blank");
             map.Save(filePath);
+            return new FileInfo(filePath);
+        }
+
+        public FileInfo AddItem(string filePath)
+        {
+            var item = ItemDescriptor.Create();
+            item.Save(filePath);
             return new FileInfo(filePath);
         }
 
@@ -152,6 +170,17 @@ namespace Lunar.Editor
                 _directories.Add(d);
                 this.LoadContents(d);
             }
+        }
+
+        public void Save()
+        {
+            var xml = new XElement("Config",
+                new XElement("General",
+                    new XElement("Server_Data_Path", _serverDirectory.FullName),
+                    new XElement("Client_Data_Path", _clientDirectory.FullName)
+                )
+            );
+            xml.Save(_projectPath);
         }
 
     }

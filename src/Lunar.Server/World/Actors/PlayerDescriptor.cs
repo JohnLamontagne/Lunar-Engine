@@ -112,7 +112,7 @@ namespace Lunar.Server.World.Actors
         {
             _name = username;
             _password = password;
-            _mapID = Constants.STARTER_MAP;
+            _mapID = Settings.StartingMap;
         }
 
         public static PlayerDescriptor Create(string name, string password)

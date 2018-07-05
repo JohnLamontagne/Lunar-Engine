@@ -44,7 +44,7 @@ namespace Lunar.Server.World.Structure
         {
             _sprite = sprite;
 
-            _collisionArea = new Rect(sprite.Transform.Position.X, sprite.Transform.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE);
+            _collisionArea = new Rect(sprite.Transform.Position.X, sprite.Transform.Position.Y, Settings.TileSize, Settings.TileSize);
 
             this.Animated = false;
             //this.LightColor = Color.White;
@@ -52,7 +52,7 @@ namespace Lunar.Server.World.Structure
 
         public Tile(Vector position)
         {
-            _collisionArea = new Rect(position.X, position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE);
+            _collisionArea = new Rect(position.X, position.Y, Settings.TileSize, Settings.TileSize);
         }
 
         public void Update(GameTime gameTime)

@@ -354,7 +354,7 @@ namespace Lunar.Server.World.Structure
                     {
                         if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Attribute == TileAttributes.PlayerSpawn)
                         {
-                            map.AddPlayerStartArea(new Vector(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE), layer);
+                            map.AddPlayerStartArea(new Vector(x * Settings.TileSize, y * Settings.TileSize), layer);
                         }
                     }
                 }

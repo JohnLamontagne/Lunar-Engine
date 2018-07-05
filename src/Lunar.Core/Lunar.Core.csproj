@@ -64,6 +64,7 @@
     <Compile Include="World\Actor\ActorStates.cs" />
     <Compile Include="World\Direction.cs" />
     <Compile Include="World\EquipmentSlots.cs" />
+    <Compile Include="World\ItemTypes.cs" />
     <Compile Include="World\Structure\AttributeData.cs" />
     <Compile Include="World\Structure\TileAttributes.cs" />
     <Compile Include="World\Structure\WarpAttributeData.cs" />

@@ -25,7 +25,7 @@ namespace Lunar.Server.Net
         {
             _packetHandlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
 
-            var config = new NetPeerConfiguration(Constants.GAME_NAME) { Port = Constants.SERVER_PORT };
+            var config = new NetPeerConfiguration(Settings.GameName) { Port = Settings.ServerPort };
             config.DisableMessageType(NetIncomingMessageType.NatIntroductionSuccess);
             config.DisableMessageType(NetIncomingMessageType.Receipt);
             config.DisableMessageType(NetIncomingMessageType.UnconnectedData);

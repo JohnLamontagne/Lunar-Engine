@@ -24,28 +24,6 @@ namespace Lunar.Server
 
         public static readonly string FILEPATH_MAPS = FILEPATH_DATA + "/Maps/";
 
-        public const int DUNGEON_LEVEL_RANGE = 10;
-
-        public const int DUNGEON_DESPAWN_TIME = 360000;
-
-        public const string GAME_NAME = "Lunar Engine";
-
-        public const string WELCOME_MSG = "Welcome to " + GAME_NAME;
-
-        public const int SERVER_PORT = 25566;
-
-        public const int MAX_MATCH_PLAYERS = 4;
-
-        public const uint TICK_RATE = 60;
-
-        public const int MAX_INVENTORY = 30;
-
-        public const int TILE_SIZE = 32;
-
-        public const int NPC_REST_PERIOD = 400;
-
-        public const string STARTER_MAP = "blank";
-
         public const int MAP_ITEM_WIDTH = 32;
 
         public const int MAP_ITEM_HEIGHT = 32;

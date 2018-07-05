@@ -276,6 +276,29 @@ namespace Lunar.Editor.Controls
             }
         }
 
-     
+        private void itemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.treeProject.SelectedNodes.Count > 0 && this.treeProject.SelectedNodes[0].Tag is DirectoryInfo)
+            {
+                using (SaveFileDialog dialog = new SaveFileDialog())
+                {
+                    dialog.RestoreDirectory = true;
+                    dialog.InitialDirectory = ((DirectoryInfo)this.treeProject.SelectedNodes[0].Tag).FullName;
+                    dialog.Filter = @"Lunar Engine Item Files (*.litm)|*.litm";
+                    dialog.DefaultExt = ".litm";
+                    dialog.AddExtension = true;
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string path = dialog.FileName;
+
+                        var file = _project.AddItem(path);
+
+                        this.TryAppendFileNode(file);
+
+                        this.File_Created?.Invoke(this, new FileEventArgs(file));
+                    }
+                }
+            }
+        }
     }
 }

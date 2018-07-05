@@ -202,10 +202,10 @@ namespace Lunar.Server.World.Actors
 
         public bool WithinRangeOf(IActor actor)
         {
-            Rect collisionBoundsRight = new Rect(this.Position.X + this.CollisionBounds.Left + Constants.TILE_SIZE, this.Position.Y + this.CollisionBounds.Top,
+            Rect collisionBoundsRight = new Rect(this.Position.X + this.CollisionBounds.Left + Settings.TileSize, this.Position.Y + this.CollisionBounds.Top,
                 this.CollisionBounds.Width, this.CollisionBounds.Height);
 
-            Rect collisionBoundsLeft = new Rect(this.Position.X + this.CollisionBounds.Left - Constants.TILE_SIZE, this.Position.Y + this.CollisionBounds.Top,
+            Rect collisionBoundsLeft = new Rect(this.Position.X + this.CollisionBounds.Left - Settings.TileSize, this.Position.Y + this.CollisionBounds.Top,
                 this.CollisionBounds.Width, this.CollisionBounds.Height);
 
             return (collisionBoundsRight.Intersects(actor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.CollisionBounds));
@@ -293,7 +293,7 @@ namespace Lunar.Server.World.Actors
 
                 if (_targetPath.Count == 0 && _nextMoveTime <= gameTime.TotalElapsedTime)
                 {
-                    _nextMoveTime = gameTime.TotalElapsedTime + Constants.NPC_REST_PERIOD;
+                    _nextMoveTime = gameTime.TotalElapsedTime + Settings.NPCRestPeriod;
                     this.State = ActorStates.Idle;
                     this.SendMovementPacket();
                 }
@@ -337,8 +337,8 @@ namespace Lunar.Server.World.Actors
                     continue;
                 }
 
-                if (actor.Position.X >= this.Position.X - this.AggresiveRange * Constants.TILE_SIZE && actor.Position.X <= this.Position.X + this.AggresiveRange * Constants.TILE_SIZE &&
-                    actor.Position.Y >= this.Position.Y - this.AggresiveRange* Constants.TILE_SIZE && actor.Position.Y <= this.Position.Y + this.AggresiveRange * Constants.TILE_SIZE)
+                if (actor.Position.X >= this.Position.X - this.AggresiveRange * Settings.TileSize && actor.Position.X <= this.Position.X + this.AggresiveRange * Settings.TileSize &&
+                    actor.Position.Y >= this.Position.Y - this.AggresiveRange* Settings.TileSize && actor.Position.Y <= this.Position.Y + this.AggresiveRange * Settings.TileSize)
                 {
                     return actor;
                 }
