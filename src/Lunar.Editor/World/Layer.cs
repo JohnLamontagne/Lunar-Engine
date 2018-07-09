@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using Lunar.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Core.Utilities.Logic;
-using Lunar.Core.World;
 using Lunar.Editor.Utilities;
-using Lunar.Graphics;
 
 namespace Lunar.Editor.World
 {
@@ -18,6 +16,7 @@ namespace Lunar.Editor.World
         private List<MapObject> _mapObjects;
         private string _name;
         private float _zIndex;
+        private int _layerIndex;
 
         public string Name { get; set; }
 
@@ -26,15 +25,26 @@ namespace Lunar.Editor.World
         public float ZIndex
         {
             get => _zIndex;
-            set
+            private set
             {
                 _zIndex = value;
 
                 foreach (var tile in _tiles)
                 {
                     if (tile != null && tile.Sprite != null)
-                        tile.Sprite.LayerDepth = value;
+                        tile.Sprite.LayerDepth = _zIndex;
                 }
+            }
+        }
+
+        public int LayerIndex
+        {
+            get => _layerIndex;
+            set
+            {
+                _layerIndex = value;
+                
+                this.ZIndex = value * CoreConstants.PARTS_PER_LAYER;
             }
         }
 
@@ -43,13 +53,13 @@ namespace Lunar.Editor.World
             get => _mapObjects;
         }
 
-        public Layer(Vector2 dimensions, string name, float zIndex)
+        public Layer(Vector2 dimensions, string name, int layerIndex)
         {
             _mapObjects = new List<MapObject>();
             _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
 
             this.Name = name;
-            this.ZIndex = zIndex;
+            this.LayerIndex = layerIndex;
 
             this.Visible = true;
         }
@@ -126,7 +136,7 @@ namespace Lunar.Editor.World
         public void Save(BinaryWriter bW)
         {
             bW.Write(this.Name);
-            bW.Write(this.ZIndex);
+            bW.Write(this.LayerIndex);
 
             for (int x = 0; x < _tiles.GetLength(0); x++)
             {

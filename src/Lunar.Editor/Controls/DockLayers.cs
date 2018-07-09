@@ -67,15 +67,7 @@ namespace Lunar.Editor.Controls
             this.lstLayers.SelectedItem = this.lstLayers.Items[this.lstLayers.Items.Count - 1];
             this.lstLayers.SetItemChecked(this.lstLayers.Items.Count - 1, true);
 
-            _map.Layers.Add(layerName, new Layer(_map.Dimensions, layerName, 1f / _map.Layers.Count + 1));
-
-            // We now need to adjust the zIndex of all the other map layers
-            float layerI = 0f;
-            foreach (var layer in _map.Layers.Values)
-            {
-                layer.ZIndex = layerI;
-                layerI += 1f / _map.Layers.Count;
-            }
+            _map.Layers.Add(layerName, new Layer(_map.Dimensions, layerName, _map.Layers.Count + 1));
         }
 
         private void buttonAddLayer_Click(object sender, EventArgs e)
@@ -121,12 +113,10 @@ namespace Lunar.Editor.Controls
             this.lstLayers.SetItemChecked(index, checkState);
 
 
-            float zIndex = 0f;
-            float zIndexStep = 1f / this.Layers.Length;
+            int lIndex = 0;
             foreach (var layerName in this.Layers)
             {
-                _map.Layers[layerName].ZIndex = zIndex;
-                zIndex += zIndexStep;
+                _map.Layers[layerName].LayerIndex = lIndex++;
             }
         }
 

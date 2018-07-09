@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,11 +28,21 @@ namespace Lunar.Client.Utilities
             {
                 if (!_textures.ContainsKey(path))
                 {
-                    FileStream fS = File.Open(path, FileMode.Open);
-         
-                    _textures.Add(path, Texture2D.FromStream(
-                        ((IGraphicsDeviceService)cM.ServiceProvider.GetService(typeof(IGraphicsDeviceService)))
-                        .GraphicsDevice, fS));
+                    if (File.Exists(path))
+                    {
+                        FileStream fS = File.Open(path, FileMode.Open);
+
+                        _textures.Add(path, Texture2D.FromStream(
+                            ((IGraphicsDeviceService) cM.ServiceProvider.GetService(typeof(IGraphicsDeviceService)))
+                            .GraphicsDevice, fS));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Could not load texture {0}: does not exist.", path); 
+
+                        return new Texture2D(((IGraphicsDeviceService)cM.ServiceProvider.GetService(typeof(IGraphicsDeviceService)))
+                            .GraphicsDevice, 1, 1);
+                    }
                 }
 
                 return _textures[path];

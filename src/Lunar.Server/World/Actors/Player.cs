@@ -59,10 +59,10 @@ namespace Lunar.Server.World.Actors
 
         public long UniqueID => _connection.RemoteUniqueIdentifier;
 
-        public Sprite Sprite
+        public SpriteSheet SpriteSheet
         {
-            get => _descriptor.Sprite;
-            set => _descriptor.Sprite = value;
+            get => _descriptor.SpriteSheet;
+            set => _descriptor.SpriteSheet = value;
         }
 
         public Layer Layer
@@ -552,7 +552,7 @@ namespace Lunar.Server.World.Actors
             buffer.Write(this.Dexterity + _dexBoost);
             buffer.Write(this.Defense + _defBoost);
             buffer.Write(this.Position);
-            buffer.Write(this.Sprite.TextureName);
+            buffer.Write(this.SpriteSheet.Pack());
             buffer.Write(this.CollisionBounds);
             buffer.Write(this.Layer.Name);
 

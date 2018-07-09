@@ -335,9 +335,9 @@ namespace Lunar.Server.World.Structure
                     for (int i = 0; i < layerCount; i++)
                     {
                         string layerName = bR.ReadString();
-                        float zIndex = bR.ReadSingle();
+                        int lIndex = bR.ReadInt32();
 
-                        var layer = new Layer(map.Dimensions, layerName, zIndex);
+                        var layer = new Layer(map.Dimensions, layerName, lIndex);
                         layer.Load(bR);
 
                         map.AddLayer(layerName, layer);

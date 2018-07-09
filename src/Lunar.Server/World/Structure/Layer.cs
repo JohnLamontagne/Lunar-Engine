@@ -30,14 +30,14 @@ namespace Lunar.Server.World.Structure
 
         public Dictionary<Vector, CollisionDescriptor> CollisionDescriptors { get { return _collisionDescriptors; } }
 
-        public float ZIndex { get; set; }
+        public int LayerIndex { get; set; }
 
-        public Layer(Vector dimensions, string layerName, float zIndex)
+        public Layer(Vector dimensions, string layerName, int lIndex)
         {
             _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
 
             this.Name = layerName;
-            this.ZIndex = zIndex;
+            this.LayerIndex = lIndex;
 
             _playerCollidingTiles = new Dictionary<Player, List<Tile>>(); ;
             _collisionDescriptors = new Dictionary<Vector, CollisionDescriptor>();
@@ -255,7 +255,7 @@ namespace Lunar.Server.World.Structure
             var netBuffer = new NetBuffer();
 
             netBuffer.Write(this.Name);
-            netBuffer.Write(this.ZIndex);
+            netBuffer.Write(this.LayerIndex);
 
             for (int x = 0; x < _tiles.GetLength(0); x++)
             {

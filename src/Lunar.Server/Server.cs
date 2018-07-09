@@ -15,6 +15,8 @@ using System.IO;
 using System.Threading;
 using Lunar.Core.Utilities;
 using Lunar.Server.Utilities.Commands;
+using Lunar.Server.Utilities.Events;
+using Lunar.Server.Utilities.Plugin;
 
 namespace Lunar.Server
 {
@@ -57,6 +59,12 @@ namespace Lunar.Server
 
             Server.ServiceLocator.RegisterService(new WorldManager());
             Server.ServiceLocator.RegisterService(new PlayerManager());
+
+            Server.ServiceLocator.RegisterService(new GameEventListener());
+
+            var pluginManager = new PluginManager();
+            pluginManager.Initalize();
+            Server.ServiceLocator.RegisterService(pluginManager);
 
             CommandHandler commandHandler = new CommandHandler();
             Server.ServiceLocator.RegisterService(commandHandler);

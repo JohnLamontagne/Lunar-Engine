@@ -5,6 +5,7 @@ using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Utilities;
+using Lunar.Core;
 using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Client.World
@@ -20,11 +21,14 @@ namespace Lunar.Client.World
 
         public float ZIndex { get; }
 
-        public Layer(Vector2 dimensions, float zIndex, string name)
+        public int LayerIndex { get; }
+
+        public Layer(Vector2 dimensions, int lIndex, string name)
         {
             _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
             this.Name = name;
-            this.ZIndex = zIndex;
+            this.LayerIndex = lIndex;
+            this.ZIndex = lIndex * CoreConstants.PARTS_PER_LAYER;
 
             _collisionDescriptors = new Dictionary<Vector2, CollisionDescriptor>();
             _mapObjects = new List<MapObject>();

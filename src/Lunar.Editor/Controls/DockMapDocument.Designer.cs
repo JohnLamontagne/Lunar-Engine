@@ -32,6 +32,7 @@
             this.mapToolStrip = new DarkUI.Controls.DarkToolStrip();
             this.fillBucketButton = new System.Windows.Forms.ToolStripButton();
             this.brushButton = new System.Windows.Forms.ToolStripButton();
+            this.buttonAttribute = new System.Windows.Forms.ToolStripButton();
             this.eraserButton = new System.Windows.Forms.ToolStripButton();
             this.buttonSelectTileButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -42,7 +43,6 @@
             this.scrollY = new DarkUI.Controls.DarkScrollBar();
             this.scrollX = new DarkUI.Controls.DarkScrollBar();
             this.mapView = new Lunar.Editor.Controls.View();
-            this.buttonAttribute = new System.Windows.Forms.ToolStripButton();
             this.mapToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,6 +95,18 @@
             this.brushButton.Text = "toolStripButton2";
             this.brushButton.ToolTipText = "Tile Brush";
             this.brushButton.Click += new System.EventHandler(this.brushButton_Click);
+            // 
+            // buttonAttribute
+            // 
+            this.buttonAttribute.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonAttribute.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.buttonAttribute.Image = global::Lunar.Editor.Icons.Stamp;
+            this.buttonAttribute.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonAttribute.Name = "buttonAttribute";
+            this.buttonAttribute.Size = new System.Drawing.Size(23, 25);
+            this.buttonAttribute.Text = "toolStripButton1";
+            this.buttonAttribute.ToolTipText = "Place Attribute";
+            this.buttonAttribute.Click += new System.EventHandler(this.buttonAttribute_Click);
             // 
             // eraserButton
             // 
@@ -210,18 +222,6 @@
             this.mapView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseDown);
             this.mapView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseMove);
             this.mapView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseUp);
-            // 
-            // buttonAttribute
-            // 
-            this.buttonAttribute.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonAttribute.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.buttonAttribute.Image = global::Lunar.Editor.Icons.Stamp;
-            this.buttonAttribute.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonAttribute.Name = "buttonAttribute";
-            this.buttonAttribute.Size = new System.Drawing.Size(23, 25);
-            this.buttonAttribute.Text = "toolStripButton1";
-            this.buttonAttribute.ToolTipText = "Place Attribute";
-            this.buttonAttribute.Click += new System.EventHandler(this.buttonAttribute_Click);
             // 
             // DockMapDocument
             // 

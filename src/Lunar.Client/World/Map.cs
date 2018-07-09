@@ -102,7 +102,7 @@ namespace Lunar.Client.World
                 layer.Draw(spriteBatch, camera);
             }
 
-            foreach (var entity in _entities.Values.OrderBy(entity => entity.Position.Y))
+            foreach (var entity in _entities.Values.OrderBy(entity => entity.Position.Y).Reverse())
                 entity.Draw(spriteBatch);
 
             foreach (var mapObject in _mapObjects)
@@ -144,8 +144,8 @@ namespace Lunar.Client.World
             for (int i = 0; i < layerCount; i++)
             {
                 string layerName = netBuffer.ReadString();
-                float zIndex = netBuffer.ReadSingle();
-                var layer = new Layer(this.Dimensions, zIndex, layerName);
+                int lIndex = netBuffer.ReadInt32();
+                var layer = new Layer(this.Dimensions, lIndex, layerName);
                 layer.Unpack(netBuffer);
                 _layers.Add(layerName, layer);
             }

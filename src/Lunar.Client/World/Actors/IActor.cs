@@ -28,7 +28,7 @@ namespace Lunar.Client.World.Actors
 
         Rectangle CollisionBounds { get; }
 
-        Sprite Sprite { get; }
+        SpriteSheet SpriteSheet { get; }
 
         Light Light { get; }
 

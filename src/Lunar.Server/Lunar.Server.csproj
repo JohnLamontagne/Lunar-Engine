@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Content\Graphics\Sprite.cs" />
+    <Compile Include="Content\Graphics\SpriteSheet.cs" />
     <Compile Include="Net\NetHandler.cs" />
     <Compile Include="Net\ConnectionEventArgs.cs" />
     <Compile Include="Net\Packet.cs" />
@@ -84,12 +85,17 @@
     <Compile Include="Server.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utilities\Commands\CommandHandler.cs" />
+    <Compile Include="Utilities\Events\GameEventArgs.cs" />
+    <Compile Include="Utilities\Events\GameEventListener.cs" />
+    <Compile Include="Utilities\Events\GameEventSource.cs" />
     <Compile Include="Utilities\GameTime.cs" />
     <Compile Include="Utilities\GameTimer.cs" />
     <Compile Include="Utilities\GameTimerManager.cs" />
+    <Compile Include="Utilities\Plugin\Plugin.cs" />
     <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Utilities\Pathfinding\Pathfinder.cs" />
     <Compile Include="Utilities\Pathfinding\SearchNode.cs" />
+    <Compile Include="Utilities\Plugin\PluginManager.cs" />
     <Compile Include="Utilities\Scripting\Script.cs" />
     <Compile Include="Utilities\Scripting\ScriptAction.cs" />
     <Compile Include="Utilities\Scripting\ScriptActionArgs.cs" />

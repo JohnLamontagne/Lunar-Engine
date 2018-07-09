@@ -16,7 +16,7 @@ namespace Lunar.Server.World.Actors
     {
         private string _name;
         private string _password;
-        private Sprite _sprite;
+        private SpriteSheet _spriteSheet;
         private float _speed;
         private int _level;
         private int _health;
@@ -42,10 +42,10 @@ namespace Lunar.Server.World.Actors
             set => _password = value;
         }
 
-        public Sprite Sprite
+        public SpriteSheet SpriteSheet
         {
-            get => _sprite;
-            set => _sprite = value;
+            get => _spriteSheet;
+            set => _spriteSheet = value;
         }
 
         public float Speed
@@ -124,7 +124,7 @@ namespace Lunar.Server.World.Actors
             {
                 Name= name,
                 Password = password,
-                Sprite = new Sprite("chara1.png"),
+                SpriteSheet = new SpriteSheet(new Sprite("chara1.png"), 3, 4, 52, 72),
                 Health = 100,
                 MaximumHealth = 100,
                 Speed = .1f,
@@ -141,7 +141,7 @@ namespace Lunar.Server.World.Actors
         public static PlayerDescriptor Load(string name)
         {
             var password = "";
-            Sprite sprite;
+            SpriteSheet sprite;
             float speed;
             int level;
             int health;
@@ -158,7 +158,7 @@ namespace Lunar.Server.World.Actors
                 using (var binaryReader = new BinaryReader(fileStream))
                 {
                     password = binaryReader.ReadString();
-                    sprite = new Sprite(binaryReader.ReadString());
+                    sprite = new SpriteSheet(new Sprite(binaryReader.ReadString()), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
                     speed = binaryReader.ReadSingle();
                     maximumHealth = binaryReader.ReadInt32();
                     health = binaryReader.ReadInt32();
@@ -177,7 +177,7 @@ namespace Lunar.Server.World.Actors
 
             var playerDescriptor = new PlayerDescriptor(name, password)
             {
-                Sprite = sprite,
+                SpriteSheet = sprite,
                 Speed = speed,
                 Level = level,
                 Health = health,
@@ -201,7 +201,11 @@ namespace Lunar.Server.World.Actors
                 using (var binaryWriter = new BinaryWriter(fileStream))
                 {
                     binaryWriter.Write(_password);
-                    binaryWriter.Write(_sprite.TextureName);
+                    binaryWriter.Write(_spriteSheet.Sprite.TextureName);
+                    binaryWriter.Write(_spriteSheet.HorizontalFrames);
+                    binaryWriter.Write(_spriteSheet.VerticalFrames);
+                    binaryWriter.Write(_spriteSheet.FrameWidth);
+                    binaryWriter.Write(_spriteSheet.FrameHeight);
                     binaryWriter.Write(_speed);
                     binaryWriter.Write(_maximumHealth);
                     binaryWriter.Write(_health);

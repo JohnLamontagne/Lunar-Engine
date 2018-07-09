@@ -191,8 +191,8 @@ namespace Lunar.Client.Scenes
 
                     if (!characterWindow.WidgetExists("characterPicture"))
                     {
-                        AnimatedPicture characterPicture = new AnimatedPicture(player.Sprite.Texture, (int)((72 / player.Speed) / (player.Sprite.Texture.Width / 52f)), 
-                            new Vector2(player.Sprite.SourceRectangle.Width, player.Sprite.SourceRectangle.Height))
+                        AnimatedPicture characterPicture = new AnimatedPicture(player.SpriteSheet.Sprite.Texture, (int)((72 / player.Speed) / (player.SpriteSheet.Sprite.Texture.Width / 52f)), 
+                            new Vector2(player.SpriteSheet.FrameSize.X, player.SpriteSheet.FrameSize.Y))
                         {
                             Position = new Vector2(characterWindow.Position.X + 210, characterWindow.Position.Y + 150),
                             Visible = true
@@ -201,9 +201,9 @@ namespace Lunar.Client.Scenes
                     }
                     else
                     {
-                        characterWindow.GetWidget<AnimatedPicture>("characterPicture").Sprite = player.Sprite.Texture;
+                        characterWindow.GetWidget<AnimatedPicture>("characterPicture").Sprite = player.SpriteSheet.Sprite.Texture;
                         characterWindow.GetWidget<AnimatedPicture>("characterPicture").FrameTime =
-                            (int) ((72 / player.Speed) / (player.Sprite.Texture.Width / 52f));
+                            (int) ((72 / player.Speed) / (player.SpriteSheet.Sprite.Texture.Width / 52f));
                     }
                 }
             }
@@ -401,7 +401,7 @@ namespace Lunar.Client.Scenes
                     int left = (int)(entity.Position.X);
                     int top = (int)(entity.Position.Y);
 
-                    var entitySpace = new Rectangle(left, top, entity.Sprite.SourceRectangle.Width, entity.Sprite.SourceRectangle.Height);
+                    var entitySpace = new Rectangle(left, top, entity.SpriteSheet.Sprite.SourceRectangle.Width, entity.SpriteSheet.Sprite.SourceRectangle.Height);
 
                     if (entitySpace.Contains(worldPos))
                     {

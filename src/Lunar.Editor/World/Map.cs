@@ -137,9 +137,9 @@ namespace Lunar.Editor.World
                     for (int i = 0; i < layerCount; i++)
                     {
                         string layerName = bR.ReadString();
-                        float zIndex = bR.ReadSingle();
+                        int layerIndex = bR.ReadInt32();
 
-                        var layer = new Layer(map.Dimensions, layerName, zIndex);
+                        var layer = new Layer(map.Dimensions, layerName, layerIndex);
                         layer.Load(bR, textureLoader, project, map.Tilesets);
 
                         map.Layers.Add(layerName, layer);

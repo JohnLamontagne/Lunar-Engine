@@ -50,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
+    <Compile Include="SpriteSheet.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lunar.Core\Lunar.Core.csproj">

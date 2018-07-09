@@ -10,6 +10,7 @@ using Lunar.Client.Utilities;
 using Lunar.Client.Utilities.Input;
 using Lunar.Client.Utilities.Services;
 using Lunar.Core.Utilities;
+using Lunar.Graphics;
 
 namespace Lunar.Client
 {
@@ -105,8 +106,12 @@ namespace Lunar.Client
         /// </summary>
         protected override void LoadContent()
         {
+            // Initialize the SpriteBatchExtensions
+            SpriteBatchExtensions.Initalize(this.GraphicsDevice);
+
             // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(this.GraphicsDevice);
+
 
             _cursorSprite = this.Content.LoadTexture2D(Constants.FILEPATH_GFX + "cursor.png");
         }
