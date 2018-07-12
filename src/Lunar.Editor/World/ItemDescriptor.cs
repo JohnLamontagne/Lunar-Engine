@@ -177,8 +177,8 @@ namespace Lunar.Editor.World
                     binaryWriter.Write(this.Dexterity);
                     binaryWriter.Write(this.Defence);
                     binaryWriter.Write(this.Health);
-                    binaryWriter.Write(_scripts.Count);
-                    foreach (var script in _scripts)
+                    binaryWriter.Write(this.Scripts.Count);
+                    foreach (var script in this.Scripts)
                     {
                         binaryWriter.Write(script.Key);
                         binaryWriter.Write(script.Value);

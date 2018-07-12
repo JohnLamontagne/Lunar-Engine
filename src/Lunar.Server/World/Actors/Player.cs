@@ -31,7 +31,7 @@ namespace Lunar.Server.World.Actors
         private readonly NetConnection _connection;
         private readonly Inventory _inventory;
         private readonly Equipment _equipment;
-        private PlayerPacketHandler _packetHandler;
+        private readonly PlayerPacketHandler _packetHandler;
 
         private IActor _lastAttacker;
 

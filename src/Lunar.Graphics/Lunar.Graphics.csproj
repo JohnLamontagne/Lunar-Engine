@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimatedSprite.cs" />
+    <Compile Include="Effects\Animation.cs" />
     <Compile Include="Effects\Emitter.cs" />
     <Compile Include="Effects\Particle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

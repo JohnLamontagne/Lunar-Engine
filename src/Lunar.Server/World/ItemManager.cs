@@ -22,11 +22,11 @@ namespace Lunar.Server.World
             Console.WriteLine("Loading Items...");
 
             var directoryInfo = new DirectoryInfo(Constants.FILEPATH_ITEMS);
-            FileInfo[] files = directoryInfo.GetFiles("*.lua");
+            FileInfo[] files = directoryInfo.GetFiles("*.litm");
 
             foreach (var file in files)
             {
-                ItemDescriptor item = ItemDescriptor.Load(file.Name);
+                ItemDescriptor item = ItemDescriptor.Load(Constants.FILEPATH_ITEMS + file.Name);
                 _items.Add(item.Name, item);
             }
 

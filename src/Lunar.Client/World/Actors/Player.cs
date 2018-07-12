@@ -105,7 +105,7 @@ namespace Lunar.Client.World.Actors
             set
             {
                 _layer = value;
-                this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (CoreConstants.PARTS_PER_LAYER / 2);   // We add .01f to ensure the player is always drawn slightly above the layer on which they exist.
+                this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);   // We add .01f to ensure the player is always drawn slightly above the layer on which they exist.
             }
         }
 

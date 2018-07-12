@@ -16,6 +16,7 @@ namespace Lunar.Editor.Controls
         private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
+        private string _activeScript;
 
         private Project _project;
 
@@ -24,6 +25,8 @@ namespace Lunar.Editor.Controls
         private DockItemEditor()
         {
             InitializeComponent();
+
+            _activeScript = "";
 
             this.txtEditor.Lexer = Lexer.Lua;
 
@@ -117,7 +120,6 @@ namespace Lunar.Editor.Controls
 
         public void Save()
         {
-
             _item.Strength = int.Parse(txtStr.Text);
             _item.Intelligence = int.Parse(txtInt.Text);
             _item.Dexterity = int.Parse(txtDex.Text);
@@ -137,6 +139,11 @@ namespace Lunar.Editor.Controls
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
+
+            if (_item.Scripts.ContainsKey(_activeScript))
+            {
+                _item.Scripts[_activeScript] = txtEditor.Text;
+            }
         }
 
 
@@ -281,7 +288,10 @@ namespace Lunar.Editor.Controls
             else
             {
                 this.txtEditor.Text = "function OnUse(args) \nend";
+                _item.Scripts.Add("OnUse", this.txtEditor.Text);
             }
+
+            _activeScript = "OnUse";
         }
 
         private void onEquipToolStripMenuItem_Click(object sender, EventArgs e)
@@ -299,7 +309,10 @@ namespace Lunar.Editor.Controls
             else
             {
                 this.txtEditor.Text = "function OnEquip(args) \nend";
+                _item.Scripts.Add("OnEqip", this.txtEditor.Text);
             }
+
+            _activeScript = "OnEquip";
         }
 
         private void onAcquiredToolStripMenuItem_Click(object sender, EventArgs e)
@@ -317,7 +330,10 @@ namespace Lunar.Editor.Controls
             else
             {
                 this.txtEditor.Text = "function OnAcquired(args) \nend";
+                _item.Scripts.Add("OnAcquired", this.txtEditor.Text);
             }
+
+            _activeScript = "OnAcquired";
         }
 
         private void onDroppedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -335,7 +351,10 @@ namespace Lunar.Editor.Controls
             else
             {
                 this.txtEditor.Text = "function OnDropped(args) \nend";
+                _item.Scripts.Add("OnDropped", this.txtEditor.Text);
             }
+
+            _activeScript = "OnDropped";
         }
 
         private void onCreatedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -353,7 +372,10 @@ namespace Lunar.Editor.Controls
             else
             {
                 this.txtEditor.Text = "function OnCreated(args) \nend";
+                _item.Scripts.Add("OnCreated", this.txtEditor.Text);
             }
+
+            _activeScript = "OnCreated";
         }
 
     }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lunar.Core
+﻿namespace Lunar.Core
 {
-    public static class CoreConstants
+    public static class EngineConstants
     {
         /// <summary>
         /// Defines the degree to which the ZIndex increases for successive layers.

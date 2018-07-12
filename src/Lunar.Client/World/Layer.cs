@@ -28,7 +28,7 @@ namespace Lunar.Client.World
             _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
             this.Name = name;
             this.LayerIndex = lIndex;
-            this.ZIndex = lIndex * CoreConstants.PARTS_PER_LAYER;
+            this.ZIndex = lIndex * EngineConstants.PARTS_PER_LAYER;
 
             _collisionDescriptors = new Dictionary<Vector2, CollisionDescriptor>();
             _mapObjects = new List<MapObject>();

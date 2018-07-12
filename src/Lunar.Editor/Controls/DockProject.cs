@@ -300,5 +300,30 @@ namespace Lunar.Editor.Controls
                 }
             }
         }
+
+        private void animationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.treeProject.SelectedNodes.Count > 0 && this.treeProject.SelectedNodes[0].Tag is DirectoryInfo)
+            {
+                using (SaveFileDialog dialog = new SaveFileDialog())
+                {
+                    dialog.RestoreDirectory = true;
+                    dialog.InitialDirectory = ((DirectoryInfo)this.treeProject.SelectedNodes[0].Tag).FullName;
+                    dialog.Filter = @"Lunar Engine Animation Files (*.lanim)|*.lanim";
+                    dialog.DefaultExt = ".lanim";
+                    dialog.AddExtension = true;
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string path = dialog.FileName;
+
+                        var file = _project.AddAnimation(path);
+
+                        this.TryAppendFileNode(file);
+
+                        this.File_Created?.Invoke(this, new FileEventArgs(file));
+                    }
+                }
+            }
+        }
     }
 }

@@ -44,7 +44,8 @@ namespace Lunar.Editor.World
             {
                 _layerIndex = value;
                 
-                this.ZIndex = value * CoreConstants.PARTS_PER_LAYER;
+                this.ZIndex = value * EngineConstants.PARTS_PER_LAYER;
+                
             }
         }
 

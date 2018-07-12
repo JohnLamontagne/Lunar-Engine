@@ -38,8 +38,9 @@ namespace Lunar.Editor.Controls
             this.folderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.animationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectExplorerMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,7 +74,8 @@ namespace Lunar.Editor.Controls
             this.folderToolStripMenuItem,
             this.scriptToolStripMenuItem,
             this.mapToolStripMenuItem,
-            this.itemToolStripMenuItem});
+            this.itemToolStripMenuItem,
+            this.animationToolStripMenuItem});
             this.newToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
@@ -103,6 +105,14 @@ namespace Lunar.Editor.Controls
             this.mapToolStripMenuItem.Text = "Map";
             this.mapToolStripMenuItem.Click += new System.EventHandler(this.mapToolStripMenuItem_Click);
             // 
+            // itemToolStripMenuItem
+            // 
+            this.itemToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
+            this.itemToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.itemToolStripMenuItem.Text = "Item";
+            this.itemToolStripMenuItem.Click += new System.EventHandler(this.itemToolStripMenuItem_Click);
+            // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -111,13 +121,13 @@ namespace Lunar.Editor.Controls
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
-            // itemToolStripMenuItem
+            // animationToolStripMenuItem
             // 
-            this.itemToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.itemToolStripMenuItem.Name = "itemToolStripMenuItem";
-            this.itemToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.itemToolStripMenuItem.Text = "Item";
-            this.itemToolStripMenuItem.Click += new System.EventHandler(this.itemToolStripMenuItem_Click);
+            this.animationToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.animationToolStripMenuItem.Name = "animationToolStripMenuItem";
+            this.animationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.animationToolStripMenuItem.Text = "Animation";
+            this.animationToolStripMenuItem.Click += new System.EventHandler(this.animationToolStripMenuItem_Click);
             // 
             // DockProject
             // 
@@ -146,5 +156,6 @@ namespace Lunar.Editor.Controls
         private System.Windows.Forms.ToolStripMenuItem mapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem itemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem animationToolStripMenuItem;
     }
 }

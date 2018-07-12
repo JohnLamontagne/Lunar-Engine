@@ -99,29 +99,7 @@ namespace Lunar.Editor
 
         private void _dockProject_File_Removed(object sender, DockProject.FileEventArgs e)
         {
-            if (e.File.Extension == ".lua")
-            {
-                this.CloseLuaDocument(e.File);
-            }
-            else if (e.File.Extension == ".litm")
-            {
-                this.CloseItemDocument(e.File);
-            }
-        }
-
-        private void CloseLuaDocument(FileInfo file)
-        {
-            // Close the appropiate document
-            foreach (var lDoc in _editorDocuments)
-            {
-                if (lDoc.Tag == file)
-                {
-                    _editorDocuments.Remove(lDoc);
-                    lDoc.Close();
-                    DockPanel.RemoveContent(lDoc);
-                    return;
-                }
-            }
+            this.CloseDocument(e.File);
         }
 
         private void OpenLuaDocument(FileInfo file)
@@ -171,7 +149,30 @@ namespace Lunar.Editor
             DockPanel.AddContent(itemDoc);
         }
 
-        private void CloseItemDocument(FileInfo file)
+        private void OpenAnimationDocument(FileInfo file)
+        {
+            var animDoc = new DockAnimationEditor(_project, file.Name, Icons.document_16xLG, file)
+            {
+                Tag = file
+            };
+
+            // and if there are, just activate it.
+            foreach (var aDoc in _editorDocuments)
+            {
+                if (aDoc.Tag == file)
+                {
+                    this.DockPanel.ActiveContent = aDoc;
+                    return;
+                }
+            }
+
+            animDoc.Enter += AnimationDoc_Enter;
+
+            _editorDocuments.Add(animDoc);
+            DockPanel.AddContent(animDoc);
+        }
+
+        private void CloseDocument(FileInfo file)
         {
             // Close the appropiate document
             foreach (var iDoc in _editorDocuments)
@@ -186,9 +187,15 @@ namespace Lunar.Editor
             }
         }
 
+
         private void ItemDoc_Enter(object sender, EventArgs e)
         {
             _dockTilesetTools.DockGroup.Hide();
+        }
+
+        private void AnimationDoc_Enter(object sender, EventArgs e)
+        {
+            
         }
 
         private void LuaDoc_Enter(object sender, EventArgs e)
@@ -243,6 +250,10 @@ namespace Lunar.Editor
             {
                 this.OpenItemDocument(e.File);    
             }
+            else if (e.File.Extension == ".lanim")
+            {
+                this.OpenAnimationDocument(e.File);
+            }
         }
 
         private void _dockProject_File_Selected(object sender, DockProject.FileEventArgs e)
@@ -258,6 +269,10 @@ namespace Lunar.Editor
             else if (e.File.Extension == ".litm")
             {
                 this.OpenItemDocument(e.File);
+            }
+            else if (e.File.Extension == ".lanim")
+            {
+                this.OpenAnimationDocument(e.File);
             }
         }
 

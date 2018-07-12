@@ -2,6 +2,7 @@
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
 using System;
+using System.IO;
 using Lunar.Core.World;
 
 namespace Lunar.Server.World
@@ -33,12 +34,10 @@ namespace Lunar.Server.World
         public int Health => _health;
         public ItemBehaviorDefinition BehaviorDefinition => _behaviorDefinition;
 
-        public static ItemDescriptor Load(string fileName)
+        public static ItemDescriptor Load(string filePath)
         {
-            string filePath = Constants.FILEPATH_ITEMS + fileName;
-
             string name = "";
-            Sprite sprite = null;
+            string texturePath = null;
             bool stackable = false;
             ItemTypes itemType = ItemTypes.NA;
             EquipmentSlots slotType = EquipmentSlots.NE;
@@ -47,27 +46,91 @@ namespace Lunar.Server.World
             int dexterity = 0;
             int defence = 0;
             int health = 0;
-            ItemBehaviorDefinition behaviorDefinition;
+            ItemBehaviorDefinition behaviorDefinition = null;
 
-            Script script = Server.ServiceLocator.GetService<ScriptManager>().GetScript(Constants.FILEPATH_ITEMS + fileName);
-            var itemDef = script.GetTable("Item");
+            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
+            {
+                using (var binaryReader = new BinaryReader(fileStream))
+                {
+                    name = binaryReader.ReadString();
+                    texturePath = binaryReader.ReadString();
+                    stackable = binaryReader.ReadBoolean();
+                    itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), binaryReader.ReadString());
+                    slotType = (EquipmentSlots)Enum.Parse(typeof(EquipmentSlots), binaryReader.ReadString());
+                    strength = binaryReader.ReadInt32();
+                    intelligence = binaryReader.ReadInt32();
+                    dexterity = binaryReader.ReadInt32();
+                    defence = binaryReader.ReadInt32();
+                    health = binaryReader.ReadInt32();
 
-            name = itemDef["Name"].ToString();
-            sprite = new Sprite(itemDef["Sprite"].ToString());
-            stackable = (bool)itemDef["Stackable"];
-            itemType = (ItemTypes)itemDef["ItemType"];
-            slotType = (EquipmentSlots)itemDef["SlotType"];
-            strength = Convert.ToInt32(itemDef["Strength"]);
-            intelligence = Convert.ToInt32(itemDef["Intelligence"]);
-            dexterity = Convert.ToInt32(itemDef["Dexterity"]);
-            defence = Convert.ToInt32(itemDef["Defence"]);
-            health = Convert.ToInt32(itemDef["Health"]);
-            behaviorDefinition = (ItemBehaviorDefinition)itemDef["BehaviorDefinition"];
+                    int scriptCount = binaryReader.ReadInt32();
+                    behaviorDefinition = new ItemBehaviorDefinition();
+                    for (int i = 0; i < scriptCount; i++)
+                    {
+                        // script type
+                        // script content
+
+                        string scriptActionHook = binaryReader.ReadString();
+                        string scriptContent = binaryReader.ReadString();
+
+                        Script script = new Script(scriptContent, false);
+
+                        switch (scriptActionHook)
+                        {
+                            case "OnAcquired":
+                                behaviorDefinition.OnAcquired = new ScriptAction(new Action<ScriptActionArgs>(
+                                    (args =>
+                                        {
+                                            script.GetFunction("OnAcquired").Call(args);
+                                        }
+                                )));
+                                break;
+
+                            case "OnCreated":
+                                behaviorDefinition.OnCreated = new ScriptAction(new Action<ScriptActionArgs>(
+                                    (args =>
+                                        {
+                                            script.GetFunction("OnCreated").Call(args);
+                                        }
+                                    )));
+                                break;
+
+                            case "OnDropped":
+                                behaviorDefinition.OnDropped = new ScriptAction(new Action<ScriptActionArgs>(
+                                    (args =>
+                                        {
+                                            script.GetFunction("OnDropped").Call(args);
+                                        }
+                                    )));
+                                break;
+
+                            case "OnEquip":
+                                behaviorDefinition.OnEquip = new ScriptAction(new Action<ScriptActionArgs>(
+                                    (args =>
+                                        {
+                                            script.GetFunction("OnEquip").Call(args);
+                                        }
+                                    )));
+                                break;
+
+                            case "OnUse":
+                                behaviorDefinition.OnUse = new ScriptAction(new Action<ScriptActionArgs>(
+                                    (args =>
+                                        {
+                                            script.GetFunction("OnUse").Call(args);
+                                        }
+                                    )));
+                                break;
+                        }
+                    }
+                }
+            }
 
             var desc = new ItemDescriptor()
             {
                 _name = name,
-                _sprite = sprite,
+                _sprite = new Sprite(texturePath),
+                _behaviorDefinition = behaviorDefinition,
                 _stackable = stackable,
                 _itemType = itemType,
                 _slotType = slotType,
@@ -76,10 +139,7 @@ namespace Lunar.Server.World
                 _dexterity = dexterity,
                 _defence = defence,
                 _health = health,
-                _behaviorDefinition = behaviorDefinition
             };
-
-            script.ScriptChanged += desc.ScriptChanged;
 
             return desc;
         }

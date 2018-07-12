@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Content\Graphics\Animation.cs" />
     <Compile Include="Controls\CreateDirectoryDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +97,12 @@
     </Compile>
     <Compile Include="Controls\CreateProjectDialog.Designer.cs">
       <DependentUpon>CreateProjectDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockAnimationEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockAnimationEditor.Designer.cs">
+      <DependentUpon>DockAnimationEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DockItemEditor.cs">
       <SubType>UserControl</SubType>
@@ -214,6 +221,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\CreateProjectDialog.resx">
       <DependentUpon>CreateProjectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockAnimationEditor.resx">
+      <DependentUpon>DockAnimationEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockItemEditor.resx">
       <DependentUpon>DockItemEditor.cs</DependentUpon>

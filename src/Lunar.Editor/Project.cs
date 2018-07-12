@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Lunar.Editor.Utilities;
 using Lunar.Editor.World;
 using System.Xml.Linq;
+using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Editor
 {
@@ -94,6 +95,13 @@ namespace Lunar.Editor
         {
             var item = ItemDescriptor.Create();
             item.Save(filePath);
+            return new FileInfo(filePath);
+        }
+
+        public FileInfo AddAnimation(string filePath)
+        {
+            var animation = AnimationDescription.Create();
+            animation.Save(filePath);
             return new FileInfo(filePath);
         }
 

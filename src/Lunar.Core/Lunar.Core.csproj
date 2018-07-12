@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Lunar.Core</RootNamespace>
     <AssemblyName>Lunar.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatMessageType.cs" />
+    <Compile Include="Content\Graphics\AnimationLayerDefinition.cs" />
+    <Compile Include="Content\Graphics\AnimationDescription.cs" />
     <Compile Include="Content\Graphics\Color.cs" />
     <Compile Include="Content\Graphics\Transform.cs" />
     <Compile Include="CoreConstants.cs" />
