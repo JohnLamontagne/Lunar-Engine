@@ -175,6 +175,7 @@
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="Content\Content.mgcb" />
+    <None Include="Lunar.Client.licenseheader" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
