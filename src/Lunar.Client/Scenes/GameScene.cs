@@ -539,7 +539,7 @@ namespace Lunar.Client.Scenes
 
             Texture2D experienceBarSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/experienceBar.png");
             Texture2D experienceBarPool = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/experiencePool.png");
-            var experienceBar = new StatusBar(experienceBarSprite, experienceBarPool, new Rectangle(8, 31, 440, 23), font)
+            var experienceBar = new StatusBar(experienceBarSprite, experienceBarPool, new Rectangle(8, 31, 440, 13), font)
             {
                 Visible = true,
                 ForeColor = Color.Black,

@@ -69,6 +69,11 @@ namespace Lunar.Server.World.Actors
                     // Whoa, they weren't lying!
                     // Let's go ahead and grant them access.
 
+                    // Check whether they are an administrator (usernamed contained within the admin file)
+                    if (File.ReadAllLines(Constants.FILEPATH_ACCOUNTS + "admins.txt").Contains(username))
+                        playerDescriptor.Admin = true;
+                        
+
                     // First, we'll add them to the list of online players.
                     _players.Add(netConnection.RemoteUniqueIdentifier, new Player(playerDescriptor, netConnection));
 

@@ -59,6 +59,8 @@ namespace Lunar.Server.World.Actors
 
         public long UniqueID => _connection.RemoteUniqueIdentifier;
 
+        public bool Admin => _descriptor.Admin;
+
         public SpriteSheet SpriteSheet
         {
             get => _descriptor.SpriteSheet;

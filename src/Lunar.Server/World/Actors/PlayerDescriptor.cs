@@ -106,6 +106,8 @@ namespace Lunar.Server.World.Actors
             set => _mapID = value;
         }
 
+        public bool Admin { get; set; }
+
         public ActorBehaviorDefinition BehaviorDefinition => _behaviorDefinition;
 
         public PlayerDescriptor(string username, string password)

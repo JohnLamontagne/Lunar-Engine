@@ -157,6 +157,9 @@ namespace Lunar.Server
 
             if (!Directory.Exists(Constants.FILEPATH_NPCS))
                 Directory.CreateDirectory(Constants.FILEPATH_NPCS);
+
+            if (!File.Exists(Constants.FILEPATH_ACCOUNTS + "admins.txt"))
+                File.Create(Constants.FILEPATH_ACCOUNTS + "admins.txt");
         }
     }
 }

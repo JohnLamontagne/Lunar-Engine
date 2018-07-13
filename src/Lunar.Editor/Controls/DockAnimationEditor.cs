@@ -144,7 +144,7 @@ namespace Lunar.Editor.Controls
             {
                 dialog.RestoreDirectory = true;
                 dialog.InitialDirectory = _project.ClientRootDirectory.FullName;
-                dialog.Filter = @"Tileset Files (*.png)|*.png";
+                dialog.Filter = @"Image Files (*.png)|*.png";
                 dialog.DefaultExt = ".png";
                 dialog.AddExtension = true;
 
@@ -234,7 +234,7 @@ namespace Lunar.Editor.Controls
             {
                 dialog.RestoreDirectory = true;
                 dialog.InitialDirectory = _project.ClientRootDirectory.FullName;
-                dialog.Filter = @"Tileset Files (*.png)|*.png";
+                dialog.Filter = @"Image Files (*.png)|*.png";
                 dialog.DefaultExt = ".png";
                 dialog.AddExtension = true;
 
