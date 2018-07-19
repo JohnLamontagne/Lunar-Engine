@@ -1,25 +1,10 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
-using Lunar.Core.World;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Lunar.Editor.World
+namespace Lunar.Core.World
 {
-    class ItemDescriptor
+    public class ItemDescriptor
     {
         private string _name;
         private string _texturePath;
@@ -63,6 +48,8 @@ namespace Lunar.Editor.World
             set => _slotType = value;
         }
 
+        public Dictionary<string, string> Scripts => _scripts;
+
         public int Strength
         {
             get => _strength;
@@ -93,11 +80,50 @@ namespace Lunar.Editor.World
             set => _health = value;
         }
 
-        public Dictionary<string, string> Scripts => _scripts;
-
-        private ItemDescriptor()
+        public void Save(string filePath)
         {
-            _scripts = new Dictionary<string, string>();
+            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
+            {
+                using (var binaryWriter = new BinaryWriter(fileStream))
+                {
+                    binaryWriter.Write(this.Name);
+                    binaryWriter.Write(this.TexturePath);
+                    binaryWriter.Write(this.Stackable);
+                    binaryWriter.Write(this.ItemType.ToString());
+                    binaryWriter.Write(this.SlotType.ToString());
+                    binaryWriter.Write(this.Strength);
+                    binaryWriter.Write(this.Intelligence);
+                    binaryWriter.Write(this.Dexterity);
+                    binaryWriter.Write(this.Defence);
+                    binaryWriter.Write(this.Health);
+                    binaryWriter.Write(this.Scripts.Count);
+                    foreach (var script in this.Scripts)
+                    {
+                        binaryWriter.Write(script.Key);
+                        binaryWriter.Write(script.Value);
+                    }
+
+                }
+            }
+        }
+
+        public static ItemDescriptor Create()
+        {
+            var desc = new ItemDescriptor()
+            {
+                _name = "Blank",
+                _texturePath = null,
+                _stackable = false,
+                _itemType = ItemTypes.NA,
+                _slotType = EquipmentSlots.NE,
+                _strength = 0,
+                _intelligence = 0,
+                _dexterity = 0,
+                _defence = 0,
+                _health = 0,
+            };
+
+            return desc;
         }
 
         public static ItemDescriptor Load(string filePath)
@@ -122,7 +148,7 @@ namespace Lunar.Editor.World
                     texturePath = binaryReader.ReadString();
                     stackable = binaryReader.ReadBoolean();
                     itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), binaryReader.ReadString());
-                    slotType = (EquipmentSlots) Enum.Parse(typeof(EquipmentSlots), binaryReader.ReadString());
+                    slotType = (EquipmentSlots)Enum.Parse(typeof(EquipmentSlots), binaryReader.ReadString());
                     strength = binaryReader.ReadInt32();
                     intelligence = binaryReader.ReadInt32();
                     dexterity = binaryReader.ReadInt32();
@@ -141,6 +167,7 @@ namespace Lunar.Editor.World
             {
                 _name = name,
                 _texturePath = texturePath,
+                _scripts = scripts,
                 _stackable = stackable,
                 _itemType = itemType,
                 _slotType = slotType,
@@ -154,51 +181,6 @@ namespace Lunar.Editor.World
             return desc;
         }
 
-        public static ItemDescriptor Create()
-        {
-            var desc = new ItemDescriptor()
-            {
-                _name = "Blank",
-                _texturePath = null,
-                _stackable = false,
-                _itemType = ItemTypes.NA,
-                _slotType = EquipmentSlots.NE,
-                _strength = 0,
-                _intelligence = 0,
-                _dexterity = 0,
-                _defence = 0,
-                _health = 0,
-            };
-
-            return desc;
-        }
-
-        public void Save(string filePath)
-        {
-            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
-            {
-                using (var binaryWriter = new BinaryWriter(fileStream))
-                {
-                    binaryWriter.Write(this.Name);
-                    binaryWriter.Write(this.TexturePath);
-                    binaryWriter.Write(this.Stackable);
-                    binaryWriter.Write(this.ItemType.ToString());
-                    binaryWriter.Write(this.SlotType.ToString());
-                    binaryWriter.Write(this.Strength);
-                    binaryWriter.Write(this.Intelligence);
-                    binaryWriter.Write(this.Dexterity);
-                    binaryWriter.Write(this.Defence);
-                    binaryWriter.Write(this.Health);
-                    binaryWriter.Write(this.Scripts.Count);
-                    foreach (var script in this.Scripts)
-                    {
-                        binaryWriter.Write(script.Key);
-                        binaryWriter.Write(script.Value);
-                    }
-                       
-                }
-            }
-        }
-
+        public event EventHandler<EventArgs> DefinitionChanged;
     }
 }

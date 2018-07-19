@@ -65,6 +65,9 @@ namespace Lunar.Editor.Controls
             {
                 this.lstLayers.Items.Add(layer.Name, true);
             }
+
+            this.lstLayers.SelectedItem = this.lstLayers.Items[0];
+            this.lstLayers.SetItemChecked(0, true);
         }
 
         public void AddLayer(string layerName)

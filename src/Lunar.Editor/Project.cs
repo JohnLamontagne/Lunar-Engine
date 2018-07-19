@@ -19,6 +19,7 @@ using Lunar.Editor.Utilities;
 using Lunar.Editor.World;
 using System.Xml.Linq;
 using Lunar.Core.Content.Graphics;
+using Lunar.Core.World;
 
 namespace Lunar.Editor
 {

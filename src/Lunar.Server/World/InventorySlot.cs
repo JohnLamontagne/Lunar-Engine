@@ -10,6 +10,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+using Lunar.Server.World;
+
 namespace Lunar.Server.World
 {
     public class InventorySlot

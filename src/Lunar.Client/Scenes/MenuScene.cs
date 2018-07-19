@@ -90,8 +90,16 @@ namespace Lunar.Client.Scenes
             var checkTrueSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/checkTrue.png");
             var checkFalseSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/checkFalse.png");
 
+            var logoSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/logo.png");
+            var picLogo = new Picture(logoSprite)
+            {
+                Position = new Vector2((Settings.ResolutionX / 2f) - logoSprite.Width / 2f, 0),
+                Visible = true
+            };
+            this.GuiManager.AddWidget(picLogo, "picLogo");
+
             var mainMenuContainer = new WidgetContainer(windowBackSprite);
-            mainMenuContainer.Position = new Vector2((Settings.ResolutionX / 2f) - mainMenuContainer.Size.X / 2, ((Settings.ResolutionY / 2f) - mainMenuContainer.Size.Y / 2));
+            mainMenuContainer.Position = new Vector2((Settings.ResolutionX / 2f) - mainMenuContainer.Size.X / 2f, 500);
             mainMenuContainer.Visible = true;
             this.GuiManager.AddWidget(mainMenuContainer, "mainMenuContainer");
 

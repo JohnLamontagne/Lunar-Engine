@@ -104,6 +104,12 @@
     <Compile Include="Controls\DockAnimationEditor.Designer.cs">
       <DependentUpon>DockAnimationEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DockNPCEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockNPCEditor.Designer.cs">
+      <DependentUpon>DockNPCEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DockItemEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -207,7 +213,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\TextureLoader.cs" />
-    <Compile Include="World\ItemDescriptor.cs" />
     <Compile Include="World\Layer.cs" />
     <Compile Include="World\Map.cs" />
     <Compile Include="World\MapObject.cs" />
@@ -224,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockAnimationEditor.resx">
       <DependentUpon>DockAnimationEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockNPCEditor.resx">
+      <DependentUpon>DockNPCEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockItemEditor.resx">
       <DependentUpon>DockItemEditor.cs</DependentUpon>
@@ -282,6 +290,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Lunar.Editor.licenseheader" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

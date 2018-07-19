@@ -106,33 +106,32 @@
     <Compile Include="Utilities\WorldDictionary.cs" />
     <Compile Include="World\Actors\Equipment.cs" />
     <Compile Include="World\Actors\Inventory.cs" />
+    <Compile Include="World\Actors\NPCDefinition.cs" />
     <Compile Include="World\Actors\PacketHandlers\PlayerPacketHandler.cs" />
     <Compile Include="World\BehaviorDefinition\ItemBehaviorDefinition.cs" />
     <Compile Include="World\Dialogue\Dialogue.cs" />
     <Compile Include="World\Actors\IActor.cs" />
     <Compile Include="World\BehaviorDefinition\ActorBehaviorDefinition.cs" />
     <Compile Include="World\Actors\NPC.cs" />
-    <Compile Include="World\Actors\NPCDescriptor.cs" />
     <Compile Include="World\Actors\NPCManager.cs" />
     <Compile Include="World\Actors\Player.cs" />
     <Compile Include="World\Actors\PlayerDescriptor.cs" />
     <Compile Include="World\Actors\PlayerManager.cs" />
+    <Compile Include="World\ItemDefinition.cs" />
     <Compile Include="World\Structure\CollisionDescriptor.cs" />
     <Compile Include="World\Structure\LightInformation.cs" />
     <Compile Include="World\Structure\MapItem.cs" />
     <Compile Include="World\Structure\MapObject.cs" />
     <Compile Include="World\InventorySlot.cs" />
     <Compile Include="World\Item.cs" />
-    <Compile Include="World\ItemDescriptor.cs" />
     <Compile Include="World\ItemManager.cs" />
-    <Compile Include="World\ItemTypes.cs" />
     <Compile Include="World\Structure\Layer.cs" />
     <Compile Include="World\Structure\Map.cs" />
     <Compile Include="World\Structure\MapManager.cs" />
     <Compile Include="World\Structure\MapObjectBehaviorDefinition.cs" />
     <Compile Include="World\Structure\Tile.cs" />
     <Compile Include="World\Structure\TorchMapObject.cs" />
-    <Compile Include="World\WorldManager.cs" />
+    <Compile Include="World\WorldService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -155,6 +154,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\Language\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

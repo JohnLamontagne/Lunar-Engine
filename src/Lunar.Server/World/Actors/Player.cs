@@ -387,10 +387,10 @@ namespace Lunar.Server.World.Actors
             
             this.MapLoaded = false;
            
-            _map?.OnPlayerQuit(this);
+            this.Map?.OnPlayerQuit(this);
             _map = map;
 
-            _map.OnPlayerJoined(this);
+            this.Map?.OnPlayerJoined(this);
 
             this.OnEvent("joinedMap");
         }

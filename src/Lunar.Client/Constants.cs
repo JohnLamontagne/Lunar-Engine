@@ -46,8 +46,8 @@ namespace Lunar.Client
 
         public const int INV_SLOT_OFFSET = 68;
 
-        public const int RESOLUTION_X = 1280;
-        public const int RESOLUTION_Y = 720;
+        public const int RESOLUTION_X = 1600;
+        public const int RESOLUTION_Y = 900;
 
         public const int DIALOGUE_SEP_X = 20;
 

@@ -14,17 +14,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Lunar.Core.Utilities;
+using Lunar.Core.World;
 using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World
 {
     public class ItemManager : IService
     {
-        private Dictionary<string, ItemDescriptor> _items;
+        private Dictionary<string, ItemDefinition> _items;
 
         public ItemManager()
         {
-            _items = new Dictionary<string, ItemDescriptor>();
+            _items = new Dictionary<string, ItemDefinition>();
 
             this.LoadItems();
         }
@@ -38,14 +39,14 @@ namespace Lunar.Server.World
 
             foreach (var file in files)
             {
-                ItemDescriptor item = ItemDescriptor.Load(Constants.FILEPATH_ITEMS + file.Name);
-                _items.Add(item.Name, item);
+                ItemDescriptor itemDescriptor = ItemDescriptor.Load(Constants.FILEPATH_ITEMS + file.Name);
+                _items.Add(itemDescriptor.Name, new ItemDefinition(itemDescriptor));
             }
 
             Console.WriteLine($"Loaded {files.Length} items.");
         }
 
-        public ItemDescriptor GetItem(string itemName)
+        public ItemDefinition GetItem(string itemName)
         {
             if (!_items.ContainsKey(itemName))
             {
@@ -58,7 +59,6 @@ namespace Lunar.Server.World
 
         public void Initalize()
         {
-            throw new NotImplementedException();
         }
     }
 }

@@ -22,7 +22,7 @@ using ScintillaNET;
 
 namespace Lunar.Editor.Controls
 {
-    public partial class DockItemEditor : SavableDocument
+    public partial class DockNPCEditor : SavableDocument
     {
         private FileInfo _file;
         private string _regularDockText;
@@ -34,7 +34,7 @@ namespace Lunar.Editor.Controls
 
         private ItemDescriptor _item;
 
-        private DockItemEditor()
+        private DockNPCEditor()
         {
             InitializeComponent();
 
@@ -71,7 +71,7 @@ namespace Lunar.Editor.Controls
             this.txtEditor.SetKeywords(0, "if then end not function");
         }
 
-        public DockItemEditor(Project project, string text, Image icon, FileInfo file)
+        public DockNPCEditor(Project project, string text, Image icon, FileInfo file)
             : this()
         {
             _project = project;
@@ -90,16 +90,13 @@ namespace Lunar.Editor.Controls
             this.txtName.Text = _item.Name;
             this.radioStackable.Checked = _item.Stackable;
             this.radioNotStackable.Checked = !_item.Stackable;
-            this.cmbType.DataSource = Enum.GetValues(typeof(ItemTypes));
-            this.cmbType.SelectedItem = _item.ItemType;
+            this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
+            this.cmbEquipSlot.SelectedItem = EquipmentSlots.Chest;
             this.txtStr.Text = _item.Strength.ToString();
             this.txtInt.Text = _item.Intelligence.ToString();
             this.txtDef.Text = _item.Defence.ToString();
             this.txtHealth.Text = _item.Health.ToString();
             this.txtDex.Text = _item.Dexterity.ToString();
-            this.cmbEquipmentSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
-            this.cmbEquipmentSlot.SelectedItem = _item.SlotType;
-            this.picTexture.Load(_item.TexturePath);
 
             onUseToolStripMenuItem.Checked = true;
             if (_item.Scripts.ContainsKey("OnUse"))
@@ -132,16 +129,7 @@ namespace Lunar.Editor.Controls
 
         public void Save()
         {
-            _item.Strength = int.Parse(txtStr.Text);
-            _item.Intelligence = int.Parse(txtInt.Text);
-            _item.Dexterity = int.Parse(txtDex.Text);
-            _item.Defence = int.Parse(txtDef.Text);
-            _item.Health = int.Parse(txtHealth.Text);
-            _item.Name = txtName.Text;
-            _item.Stackable = radioStackable.Checked;
-            _item.ItemType = (ItemTypes)cmbType.SelectedItem;
-            _item.SlotType = (EquipmentSlots)cmbEquipmentSlot.SelectedItem;
-
+           
             this.DockText = _regularDockText;
             _unsaved = false;
             _item.Save(_file.FullName);
@@ -185,7 +173,7 @@ namespace Lunar.Editor.Controls
 
                     _item.TexturePath = path;
 
-                    this.picTexture.Load(path);
+                    
                 }
             }
         }
@@ -299,6 +287,7 @@ namespace Lunar.Editor.Controls
             }
             else
             {
+                this.txtEditor.Text = "function OnUse(args) \nend";
                 _item.Scripts.Add("OnUse", this.txtEditor.Text);
             }
 
@@ -319,6 +308,7 @@ namespace Lunar.Editor.Controls
             }
             else
             {
+                this.txtEditor.Text = "function OnEquip(args) \nend";
                 _item.Scripts.Add("OnEqip", this.txtEditor.Text);
             }
 
@@ -339,6 +329,7 @@ namespace Lunar.Editor.Controls
             }
             else
             {
+                this.txtEditor.Text = "function OnAcquired(args) \nend";
                 _item.Scripts.Add("OnAcquired", this.txtEditor.Text);
             }
 
@@ -359,6 +350,7 @@ namespace Lunar.Editor.Controls
             }
             else
             {
+                this.txtEditor.Text = "function OnDropped(args) \nend";
                 _item.Scripts.Add("OnDropped", this.txtEditor.Text);
             }
 
@@ -379,6 +371,7 @@ namespace Lunar.Editor.Controls
             }
             else
             {
+                this.txtEditor.Text = "function OnCreated(args) \nend";
                 _item.Scripts.Add("OnCreated", this.txtEditor.Text);
             }
 

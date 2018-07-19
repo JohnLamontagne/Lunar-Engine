@@ -65,12 +65,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\SubjectEventArgs.cs" />
     <Compile Include="World\Actor\ActorStates.cs" />
+    <Compile Include="World\Actor\Descriptors\NPCDescriptior.cs" />
     <Compile Include="World\Direction.cs" />
     <Compile Include="World\EquipmentSlots.cs" />
+    <Compile Include="World\ItemDescriptor.cs" />
     <Compile Include="World\ItemTypes.cs" />
     <Compile Include="World\Structure\AttributeData.cs" />
     <Compile Include="World\Structure\TileAttributes.cs" />
     <Compile Include="World\Structure\WarpAttributeData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lunar.Core.licenseheader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

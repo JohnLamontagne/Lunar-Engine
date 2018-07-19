@@ -22,6 +22,7 @@ using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Content.Graphics;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Structure;
@@ -30,7 +31,7 @@ using Lunar.Server.World.BehaviorDefinition;
 
 namespace Lunar.Server.World.Actors
 {
-    public class NPC : IActor
+    public sealed class NPC : IActor
     {
         private Map _map;
         private Vector _frameSize;
@@ -81,50 +82,49 @@ namespace Lunar.Server.World.Actors
 
         public event EventHandler<SubjectEventArgs> EventOccured;
 
-        public NPC(NPCDescriptor descriptor, Map map)
+        public NPC(NPCDefinition definition, Map map)
         {
-            Name = descriptor.Name;
+            this.Name = definition.Descriptor.Name;
+
             _map = map;
 
-            this.Sprite = descriptor.Sprite;
-            this.Speed = descriptor.Speed;
-            this.Level = descriptor.Level;
-            this.Health = descriptor.MaximumHealth;
-            this.MaximumHealth = descriptor.MaximumHealth;
-            this.AggresiveRange = descriptor.AggresiveRange;
-            this.CollisionBounds = descriptor.CollisionBounds;
-            this.BehaviorDefinition = descriptor.BehaviorDefinition;
+            this.Sprite = new Sprite(definition.Descriptor.TexturePath);
+            this.Speed = definition.Descriptor.Speed;
+            this.Level = definition.Descriptor.Level;
+            this.Health = definition.Descriptor.MaximumHealth;
+            this.MaximumHealth = definition.Descriptor.MaximumHealth;
+            this.AggresiveRange = definition.Descriptor.AggresiveRange;
+            this.CollisionBounds = definition.Descriptor.CollisionBounds;
+            
             this.Layer = map.Layers.ElementAt(0);
 
-            _frameSize = descriptor.FrameSize;
-            AttackRange = descriptor.AttackRange;
+            _frameSize = definition.Descriptor.FrameSize;
+            AttackRange = definition.Descriptor.AttackRange;
 
-            MaxRoam = descriptor.MaxRoam;
+            MaxRoam = definition.Descriptor.MaxRoam;
             
             _random = new Random();
 
-            UniqueID = this.GetHashCode() + Environment.TickCount;
+            this.UniqueID = this.GetHashCode() + Environment.TickCount;
             _targetPath = new List<Vector>();
 
             _map.AddActor(this);
+
+            this.BehaviorDefinition = definition.BehaviorDefinition;
 
             var npcDataPacket = new Packet(PacketType.NPC_DATA);
             npcDataPacket.Message.Write(this.Pack());
             _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
 
-            this.BehaviorDefinition.OnCreated.Invoke(new ScriptActionArgs(this));
 
-            descriptor.DefinitionChanged += Descriptor_DefinitionChanged;
+            this.BehaviorDefinition.OnCreated.Invoke(new ScriptActionArgs(this));
         }
+
+        
 
         public void OnAttacked(IActor attacker, int damageDelt)
         {
             
-        }
-
-        private void Descriptor_DefinitionChanged(object sender, EventArgs e)
-        {
-            this.BehaviorDefinition = ((NPCDescriptor) sender).BehaviorDefinition;
         }
 
         public void Update(GameTime gameTime)
