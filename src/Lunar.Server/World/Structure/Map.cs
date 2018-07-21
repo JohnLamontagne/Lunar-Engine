@@ -103,23 +103,32 @@ namespace Lunar.Server.World.Structure
 
         private void SendMapItem(MapItem mapItem)
         {
-            var packet = new Packet(PacketType.MAP_ITEM_SPAWN);
+            var packet = new Packet(PacketType.MAP_ITEM_SPAWN, ChannelType.UNASSIGNED);
             packet.Message.Write(mapItem.Position);
             packet.Message.Write(mapItem.Layer.Name);
             packet.Message.Write(mapItem.Item.PackData());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void RemoveItem(Item item)
         {
             var mapItem = _mapItems.FirstOrDefault(mItem => mItem.Item == item);
 
-            var packet = new Packet(PacketType.MAP_ITEM_DESPAWN);
-            packet.Message.Write(mapItem.Position);
-            packet.Message.Write(mapItem.Item.PackData());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            if (mapItem != null)
+            {
+                var packet = new Packet(PacketType.MAP_ITEM_DESPAWN, ChannelType.UNASSIGNED);
+                packet.Message.Write(mapItem.Position);
+                packet.Message.Write(mapItem.Item.PackData());
+                this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
 
-            _mapItems.Remove(mapItem);
+                _mapItems.Remove(mapItem);
+            }
+            else
+            {
+                Logger.LogEvent($"Specified item does not exist on map; cannot remove: {item.Name}", LogTypes.ERROR);
+            }
+
+          
         }
 
         public void AddPlayerStartArea(Vector playerStartArea, Layer layer)
@@ -207,9 +216,9 @@ namespace Lunar.Server.World.Structure
 
         public void OnPlayerQuit(Player player)
         {
-            var packet = new Packet(PacketType.PLAYER_LEFT);
+            var packet = new Packet(PacketType.PLAYER_LEFT, ChannelType.UNASSIGNED);
             packet.Message.Write(player.UniqueID);
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
 
             // Remove the player.
             this.RemoveActor(player.UniqueID);
@@ -218,14 +227,14 @@ namespace Lunar.Server.World.Structure
         public void OnPlayerJoined(Player player)
         {
             // Send map data packet to player.
-            var mapDataPacket = new Packet(PacketType.MAP_DATA);
+            var mapDataPacket = new Packet(PacketType.MAP_DATA, ChannelType.UNASSIGNED);
             mapDataPacket.Message.Write(this.PackData());
-            player.SendPacket(mapDataPacket, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            player.SendPacket(mapDataPacket, NetDeliveryMethod.ReliableOrdered);
 
             // Send the joining player to the current map players.
-            var joiningPlayerDataPacket = new Packet(PacketType.PLAYER_JOINED);
+            var joiningPlayerDataPacket = new Packet(PacketType.PLAYER_JOINED, ChannelType.UNASSIGNED);
             joiningPlayerDataPacket.Message.Write(player.Pack());
-            this.SendPacket(joiningPlayerDataPacket, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(joiningPlayerDataPacket, NetDeliveryMethod.ReliableOrdered);
 
             // Add player to the map
             this.AddActor(player);
@@ -233,19 +242,19 @@ namespace Lunar.Server.World.Structure
             // Send all map players to player.
             foreach (var p in this.GetActors<Player>())
             {
-                var playerDataPacket = new Packet(PacketType.PLAYER_JOINED);
+                var playerDataPacket = new Packet(PacketType.PLAYER_JOINED, ChannelType.UNASSIGNED);
                 playerDataPacket.Message.Write(p.Pack());
 
-                player.SendPacket(playerDataPacket, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                player.SendPacket(playerDataPacket, NetDeliveryMethod.ReliableOrdered);
             }
 
             // Send all npcs to the player
             foreach (var npc in this.GetActors<NPC>())
             {
-                var npcDataPacket = new Packet(PacketType.NPC_DATA);
+                var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
                 npcDataPacket.Message.Write(npc.Pack());
                 
-                player.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                player.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
             }
 
             // Select random starting location
@@ -284,11 +293,11 @@ namespace Lunar.Server.World.Structure
             }
         }
 
-        public void SendPacket(Packet packet, NetDeliveryMethod method, ChannelType channelType)
+        public void SendPacket(Packet packet, NetDeliveryMethod method)
         {
             foreach (var player in this.GetActors<Player>())
             {
-                player.SendPacket(packet, method, channelType);
+                player.SendPacket(packet, method);
                 packet.Reset();
             }
         }

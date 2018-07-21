@@ -10,11 +10,14 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using System;
 using Lunar.Server.Content.Graphics;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
 using System.IO;
 using Lunar.Core.Utilities.Data;
+using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World.Actors
 {
@@ -130,7 +133,7 @@ namespace Lunar.Server.World.Actors
 
             var descriptor = new PlayerDescriptor(name, password)
             {
-                Name= name,
+                Name = name,
                 Password = password,
                 SpriteSheet = new SpriteSheet(new Sprite("chara1.png"), 3, 4, 52, 72),
                 Health = 100,
@@ -140,7 +143,8 @@ namespace Lunar.Server.World.Actors
                 Intelligence = 10,
                 Dexterity = 10,
                 Defense = 10,
-                _behaviorDefinition = behaviorDefinition
+                _behaviorDefinition = behaviorDefinition,
+                _mapID = ""
             };
 
             return descriptor;
@@ -161,45 +165,55 @@ namespace Lunar.Server.World.Actors
             Vector position;
             string mapID;
 
-            using (var fileStream = new FileStream(Constants.FILEPATH_ACCOUNTS + name + ".acc", FileMode.Open))
+            try
             {
-                using (var binaryReader = new BinaryReader(fileStream))
+
+                using (var fileStream = new FileStream(Constants.FILEPATH_ACCOUNTS + name + ".acc", FileMode.Open))
                 {
-                    password = binaryReader.ReadString();
-                    sprite = new SpriteSheet(new Sprite(binaryReader.ReadString()), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
-                    speed = binaryReader.ReadSingle();
-                    maximumHealth = binaryReader.ReadInt32();
-                    health = binaryReader.ReadInt32();
-                    level = binaryReader.ReadInt32();
-                    strength = binaryReader.ReadInt32();
-                    intelligence = binaryReader.ReadInt32();
-                    dexterity = binaryReader.ReadInt32();
-                    defense = binaryReader.ReadInt32();
-                    position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                    mapID = binaryReader.ReadString();
+                    using (var binaryReader = new BinaryReader(fileStream))
+                    {
+                        password = binaryReader.ReadString();
+                        sprite = new SpriteSheet(new Sprite(binaryReader.ReadString()), binaryReader.ReadInt32(),
+                            binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
+                        speed = binaryReader.ReadSingle();
+                        maximumHealth = binaryReader.ReadInt32();
+                        health = binaryReader.ReadInt32();
+                        level = binaryReader.ReadInt32();
+                        strength = binaryReader.ReadInt32();
+                        intelligence = binaryReader.ReadInt32();
+                        dexterity = binaryReader.ReadInt32();
+                        defense = binaryReader.ReadInt32();
+                        position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
+                        mapID = binaryReader.ReadString();
+                    }
                 }
+
+                var script = new Script(Constants.FILEPATH_SCRIPTS + "player.lua");
+                var behaviorDefinition = (ActorBehaviorDefinition) script["BehaviorDefinition"];
+
+                var playerDescriptor = new PlayerDescriptor(name, password)
+                {
+                    SpriteSheet = sprite,
+                    Speed = speed,
+                    Level = level,
+                    Health = health,
+                    MaximumHealth = maximumHealth,
+                    Strength = strength,
+                    Intelligence = intelligence,
+                    Dexterity = dexterity,
+                    Defense = defense,
+                    Position = position,
+                    MapID = mapID,
+                    _behaviorDefinition = behaviorDefinition
+                };
+
+                return playerDescriptor;
             }
-
-            var script = new Script(Constants.FILEPATH_SCRIPTS + "player.lua");
-            var behaviorDefinition = (ActorBehaviorDefinition)script["BehaviorDefinition"];
-
-            var playerDescriptor = new PlayerDescriptor(name, password)
+            catch (Exception ex)
             {
-                SpriteSheet = sprite,
-                Speed = speed,
-                Level = level,
-                Health = health,
-                MaximumHealth = maximumHealth,
-                Strength = strength,
-                Intelligence = intelligence,
-                Dexterity = dexterity,
-                Defense = defense,
-                Position = position,
-                MapID = mapID,
-                _behaviorDefinition = behaviorDefinition
-            };
-
-            return playerDescriptor;
+                Logger.LogEvent($"Failed to register player: {ex.Message}", LogTypes.ERROR);
+                return null;
+            }
         }
 
         public void Save()

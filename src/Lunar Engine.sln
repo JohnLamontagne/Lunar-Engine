@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Graphics", "Lunar.Gra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Server", "Lunar.Server\Lunar.Server.csproj", "{7FD9C949-9921-44D4-8DD8-0C59A3171849}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.UnitTests", "Lunar.UnitTests\Lunar.UnitTests.csproj", "{65E0D8D1-B211-4AD5-9C0E-1B001E673F45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7FD9C949-9921-44D4-8DD8-0C59A3171849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD9C949-9921-44D4-8DD8-0C59A3171849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FD9C949-9921-44D4-8DD8-0C59A3171849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65E0D8D1-B211-4AD5-9C0E-1B001E673F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65E0D8D1-B211-4AD5-9C0E-1B001E673F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65E0D8D1-B211-4AD5-9C0E-1B001E673F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65E0D8D1-B211-4AD5-9C0E-1B001E673F45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

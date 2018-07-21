@@ -18,13 +18,13 @@ namespace Lunar.Server.Net
     public class PacketReceivedEventArgs : EventArgs
     {
         private readonly NetIncomingMessage _message;
-        private readonly NetConnection _connection;
+        private readonly PlayerConnection _connection;
 
-        public NetIncomingMessage Message { get { return _message; } }
+        public NetIncomingMessage Message => _message;
 
-        public NetConnection Connection { get { return _connection; } }
+        public PlayerConnection Connection => _connection;
 
-        public PacketReceivedEventArgs(NetIncomingMessage message, NetConnection connection)
+        public PacketReceivedEventArgs(NetIncomingMessage message, PlayerConnection connection)
         {
             _message = message;
             _connection = connection;

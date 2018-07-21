@@ -37,7 +37,7 @@ namespace Lunar.Server.World.Dialogue
             _scriptedResponses = new Dictionary<string, ScriptAction>();
             _dialogueResponses = new Dictionary<string, Dialogue>();
 
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
+            player.Connection.AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
         }
 
         public void AddResponse(string response, ScriptAction action)
@@ -100,7 +100,7 @@ namespace Lunar.Server.World.Dialogue
 
         public void Start()
         {
-            var packet = new Packet(PacketType.DIALOGUE);
+            var packet = new Packet(PacketType.DIALOGUE, ChannelType.UNASSIGNED);
             packet.Message.Write(_uniqueID);
             packet.Message.Write(_text);
 
@@ -124,13 +124,13 @@ namespace Lunar.Server.World.Dialogue
                 packet.Message.Write(response.Key);
             }
 
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void End()
         {
-            var packet = new Packet(PacketType.DIALOGUE_END);
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            var packet = new Packet(PacketType.DIALOGUE_END, ChannelType.UNASSIGNED);
+            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
     }
 }

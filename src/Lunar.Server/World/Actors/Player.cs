@@ -34,7 +34,7 @@ namespace Lunar.Server.World.Actors
     public class Player : IActor
     {
         private readonly PlayerDescriptor _descriptor;
-        private readonly NetConnection _connection;
+        private readonly PlayerConnection _connection;
         private readonly Inventory _inventory;
         private readonly Equipment _equipment;
         private readonly PlayerPacketHandler _packetHandler;
@@ -63,7 +63,7 @@ namespace Lunar.Server.World.Actors
 
         public string MapID => _map != null ? _map.Name : _descriptor.MapID;
 
-        public long UniqueID => _connection.RemoteUniqueIdentifier;
+        public long UniqueID => _connection.UniqueIdentifier;
 
         public bool Admin => _descriptor.Admin;
 
@@ -84,6 +84,8 @@ namespace Lunar.Server.World.Actors
         public Inventory Inventory => _inventory;
 
         public Equipment Equipment => _equipment;
+
+        public PlayerConnection Connection => _connection;
 
         public IActor Target { get; set; }
 
@@ -194,7 +196,7 @@ namespace Lunar.Server.World.Actors
 
         public ActorBehaviorDefinition BehaviorDefinition => _descriptor.BehaviorDefinition;
 
-        public Player(PlayerDescriptor descriptor, NetConnection connection)
+        public Player(PlayerDescriptor descriptor, PlayerConnection connection)
         {
             _descriptor = descriptor;
             _connection = connection;
@@ -278,7 +280,7 @@ namespace Lunar.Server.World.Actors
 
         public void SendEquipmentUpdate()
         {
-            var packet = new Packet(PacketType.EQUIPMENT_UPDATE);
+            var packet = new Packet(PacketType.EQUIPMENT_UPDATE, ChannelType.UNASSIGNED);
             
             for (int i = 0; i < (int)EquipmentSlots.COUNT; i++)
             {
@@ -293,7 +295,7 @@ namespace Lunar.Server.World.Actors
                 packet.Message.Write(this.Equipment.GetSlot(i).PackData());
             }
 
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
 
@@ -316,7 +318,7 @@ namespace Lunar.Server.World.Actors
 
         public void SendPlayerStats()
         {
-            var packet = new Packet(PacketType.PLAYER_STATS);
+            var packet = new Packet(PacketType.PLAYER_STATS, ChannelType.UNASSIGNED);
             packet.Message.Write(this.UniqueID);
             packet.Message.Write(this.Speed);
             packet.Message.Write(this.Level);
@@ -326,14 +328,14 @@ namespace Lunar.Server.World.Actors
             packet.Message.Write(this.Intelligence + _intelBoost);
             packet.Message.Write(this.Dexterity + _dexBoost);
             packet.Message.Write(this.Defense + _defBoost);
-            this.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void SendPlayerData()
         {
-            var packet = new Packet(PacketType.PLAYER_DATA);
+            var packet = new Packet(PacketType.PLAYER_DATA, ChannelType.UNASSIGNED);
             packet.Message.Write(this.Pack());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void WarpTo(Vector position)
@@ -342,11 +344,11 @@ namespace Lunar.Server.World.Actors
 
             this.Layer.OnPlayerWarped(this);
 
-            var packet = new Packet(PacketType.POSITION_UPDATE);
+            var packet = new Packet(PacketType.POSITION_UPDATE, ChannelType.UNASSIGNED);
             packet.Message.Write(this.UniqueID);
             packet.Message.Write(this.Layer.Name);
             packet.Message.Write(this.Position);
-            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
 
             this.OnEvent("moved");
         }
@@ -356,7 +358,7 @@ namespace Lunar.Server.World.Actors
 
         public void SendInventoryUpdate()
         {
-            var packet = new Packet(PacketType.INVENTORY_UPDATE);
+            var packet = new Packet(PacketType.INVENTORY_UPDATE, ChannelType.UNASSIGNED);
             
             for (int i = 0; i < Settings.MaxInventoryItems; i++)
             {
@@ -373,7 +375,7 @@ namespace Lunar.Server.World.Actors
                 }
             }
 
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
       
@@ -399,18 +401,18 @@ namespace Lunar.Server.World.Actors
         {
             this.JoinMap(map);
 
-            var packet = new Packet(PacketType.AVAILABLE_COMMANDS);
+            var packet = new Packet(PacketType.AVAILABLE_COMMANDS, ChannelType.UNASSIGNED);
             packet.Message.Write(Server.ServiceLocator.GetService<CommandHandler>().Pack());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
 
             this.OnEvent("joinedGame");
         }
 
         public void SendLoadingScreen(bool active = true)
         {
-            var packet = new Packet(PacketType.LOADING_SCREEN);
+            var packet = new Packet(PacketType.LOADING_SCREEN, ChannelType.UNASSIGNED);
             packet.Message.Write(active);
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void LeaveGame()
@@ -514,29 +516,29 @@ namespace Lunar.Server.World.Actors
 
         public void SendMovementPacket()
         {
-            var packet = new Packet(PacketType.PLAYER_MOVING);
+            var packet = new Packet(PacketType.PLAYER_MOVING, ChannelType.UNASSIGNED);
             packet.Message.Write(this.UniqueID);
             packet.Message.Write((byte)this.Direction);
             packet.Message.Write((byte)this.State); // true if moving, false if not
             packet.Message.Write(this.Position);
 
-            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
      
         public void SendChatMessage(string message, ChatMessageType type)
         {
-            var packet = new Packet(PacketType.PLAYER_MSG);
+            var packet = new Packet(PacketType.PLAYER_MSG, ChannelType.UNASSIGNED);
 
             packet.Message.Write((byte)type);
             packet.Message.Write(message);
 
-            _connection.SendMessage(packet.Message, NetDeliveryMethod.Unreliable, (int)ChannelType.UNASSIGNED);
+            this.SendPacket(packet, NetDeliveryMethod.Unreliable);
         }
 
-        public void SendPacket(Packet packet, NetDeliveryMethod method, ChannelType channelType)
+        public void SendPacket(Packet packet, NetDeliveryMethod method)
         {
-            _connection.SendMessage(packet.Message, method, (int)channelType);
+            _connection.SendPacket(packet, method);
         }
 
         public void Save()

@@ -112,9 +112,9 @@ namespace Lunar.Server.World.Actors
 
             this.BehaviorDefinition = definition.BehaviorDefinition;
 
-            var npcDataPacket = new Packet(PacketType.NPC_DATA);
+            var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
             npcDataPacket.Message.Write(this.Pack());
-            _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
 
 
             this.BehaviorDefinition.OnCreated.Invoke(new ScriptActionArgs(this));
@@ -372,7 +372,7 @@ namespace Lunar.Server.World.Actors
 
         private void SendMovementPacket(List<Vector> targetPath)
         {
-            var packet = new Packet(PacketType.NPC_MOVING);
+            var packet = new Packet(PacketType.NPC_MOVING, ChannelType.UNASSIGNED);
             packet.Message.Write(this.UniqueID);
             packet.Message.Write(true);
             packet.Message.Write((int)this.Direction);
@@ -383,7 +383,7 @@ namespace Lunar.Server.World.Actors
                 packet.Message.Write(pos);
             }
 
-            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
         
         /// <summary>
@@ -391,21 +391,21 @@ namespace Lunar.Server.World.Actors
         /// </summary>
         private void SendMovementPacket()
         {
-            var packet = new Packet(PacketType.NPC_MOVING);
+            var packet = new Packet(PacketType.NPC_MOVING, ChannelType.UNASSIGNED);
             packet.Message.Write(this.UniqueID);
             packet.Message.Write(false);
             packet.Message.Write((int)this.Direction);
             packet.Message.Write(this.Position);
 
-            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void WarpTo(Vector position)
         {
             this.Position = position;
-            var npcDataPacket = new Packet(PacketType.NPC_DATA);
+            var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
             npcDataPacket.Message.Write(this.Pack());
-            _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
 
             this.EventOccured?.Invoke(this, new SubjectEventArgs("moved", null));
         }

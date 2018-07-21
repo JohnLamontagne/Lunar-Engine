@@ -14,24 +14,25 @@ using Lidgren.Network;
 using System;
 using System.Collections.Generic;
 using Lunar.Core.Net;
-using Lunar.Core.Utilities;
 
 namespace Lunar.Server.Net
 {
-    public class NetHandler : IService
+    public class NetHandler
     {
         private readonly NetServer _netServer;
         private readonly Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _packetHandlers;
+        private readonly Dictionary<long, PlayerConnection> _connections;
 
         public event EventHandler<ConnectionEventArgs> ConnectionReceived;
 
         public event EventHandler<ConnectionEventArgs> ConnectionLost;
 
-        public NetHandler()
+        public NetHandler(string gameName, int port)
         {
             _packetHandlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
+            _connections = new Dictionary<long, PlayerConnection>();
 
-            var config = new NetPeerConfiguration(Settings.GameName) { Port = Settings.ServerPort };
+            var config = new NetPeerConfiguration(gameName) { Port = port };
             config.DisableMessageType(NetIncomingMessageType.NatIntroductionSuccess);
             config.DisableMessageType(NetIncomingMessageType.Receipt);
             config.DisableMessageType(NetIncomingMessageType.UnconnectedData);
@@ -61,7 +62,7 @@ namespace Lunar.Server.Net
                         {
                             foreach (var handler in _packetHandlers[packetType])
                             {
-                                handler.Invoke(new PacketReceivedEventArgs(message, message.SenderConnection));
+                                handler.Invoke(new PacketReceivedEventArgs(message, _connections[message.SenderConnection.RemoteUniqueIdentifier]));
                                 // Reset the read position.
                                 message.Position = 0;
                                 message.ReadInt16();
@@ -79,11 +80,13 @@ namespace Lunar.Server.Net
                         {
                             case NetConnectionStatus.Connected:
                                 Console.WriteLine("Established connection with: {0}.", message.SenderEndPoint.ToString());
+                                _connections.Add(message.SenderConnection.RemoteUniqueIdentifier, new PlayerConnection(message.SenderConnection, this));
                                 this.ConnectionReceived?.Invoke(this, new ConnectionEventArgs(message.SenderConnection));
                                 break;
 
                             case NetConnectionStatus.Disconnected:
                                 Console.WriteLine("Connection with {0} lost.", message.SenderEndPoint.ToString());
+                                _connections.Remove(message.SenderConnection.RemoteUniqueIdentifier);
                                 this.ConnectionLost?.Invoke(this, new ConnectionEventArgs(message.SenderConnection));
                                 break;
                         }
@@ -120,11 +123,6 @@ namespace Lunar.Server.Net
         public void Start()
         {
             _netServer.Start();
-        }
-
-        public void Initalize()
-        {
-           
         }
     }
 }

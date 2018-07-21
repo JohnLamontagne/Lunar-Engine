@@ -26,9 +26,9 @@ namespace Lunar.Server.Utilities.Commands
         private readonly Dictionary<string, List<ScriptAction>> _scriptedCommandHandlers;
         private Script _script;
 
-        public CommandHandler()
+        public CommandHandler(NetHandler netHandler)
         {
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.CLIENT_COMMAND, this.Handle_ClientCommand);
+            netHandler.AddPacketHandler(PacketType.CLIENT_COMMAND, this.Handle_ClientCommand);
 
             _scriptedCommandHandlers = new Dictionary<string, List<ScriptAction>>();
         }
@@ -71,7 +71,7 @@ namespace Lunar.Server.Utilities.Commands
             if (_scriptedCommandHandlers.ContainsKey(command))
             {
                 // Get the player
-                var player = Server.ServiceLocator.GetService<PlayerManager>().GetPlayer(args.Connection.RemoteUniqueIdentifier);
+                var player = Server.ServiceLocator.GetService<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
 
                 _scriptedCommandHandlers[command].ForEach(a => a.Invoke(new ScriptActionArgs(this, player, cArgs)));
             }

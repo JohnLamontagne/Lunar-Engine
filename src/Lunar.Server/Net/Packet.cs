@@ -18,14 +18,34 @@ namespace Lunar.Server.Net
 {
     public class Packet
     {
+        private static NetHandler _netHandler;
+
         private NetOutgoingMessage _message;
 
-        public NetOutgoingMessage Message {get { return _message; } }
+        public NetOutgoingMessage Message => _message;
 
-        public Packet(PacketType packetType)
+        public ChannelType Channel { get; }
+
+        /// <summary>
+        /// Initalizes with a specified NetHandler object, enabling the creation of packets.
+        /// </summary>
+        /// <param name="netHandler"></param>
+        public static void Initalize(NetHandler netHandler)
         {
-            _message = Server.ServiceLocator.GetService<NetHandler>().ConstructMessage();
+            _netHandler = netHandler;
+        }
+
+        /// <summary>
+        /// Must be initalized with a valid NetHandler object before packets can be created through new()
+        /// </summary>
+        /// <param name="packetType"></param>
+        /// <param name="channel"></param>
+        public Packet(PacketType packetType, ChannelType channel)
+        {
+            _message = _netHandler.ConstructMessage();
             _message.Write((short)packetType);
+
+            this.Channel = channel;
         }
 
         /// <summary>
@@ -35,9 +55,8 @@ namespace Lunar.Server.Net
         {
             var saved = new byte[_message.LengthBytes];
             Buffer.BlockCopy(_message.Data, 0, saved, 0, _message.LengthBytes);
-            var savedBitLength = _message.LengthBits;
 
-            _message = Server.ServiceLocator.GetService<NetHandler>().ConstructMessage();
+            _message = _netHandler.ConstructMessage();
             _message.Write(saved);
         }
     }

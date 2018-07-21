@@ -38,12 +38,22 @@ namespace Lunar.Server.Utilities
 
         private static void TextLog(string logMessage, string filePath)
         {
-            using (var sw = File.AppendText(filePath))
+            try
             {
-                sw.Write("\r\nLog Entry: ");
-                sw.WriteLine("{0} {1}:", DateTime.Now.ToLongTimeString(), DateTime.Now.ToLongDateString());
-                sw.WriteLine("{0}", logMessage);
-                sw.WriteLine(new string('-', logMessage.Length));
+                using (var sw = File.AppendText(filePath))
+                {
+                    sw.Write("\r\nLog Entry: ");
+                    sw.WriteLine("{0} {1}:", DateTime.Now.ToLongTimeString(), DateTime.Now.ToLongDateString());
+                    sw.WriteLine("{0}", logMessage);
+                    sw.WriteLine(new string('-', logMessage.Length));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Core error fault! Could not write to error log file.");
+                Console.WriteLine(ex);
+                Console.WriteLine("Original Error: ");
+                Console.WriteLine(logMessage);
             }
         }
     }

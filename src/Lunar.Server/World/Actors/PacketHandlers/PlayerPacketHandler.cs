@@ -29,23 +29,19 @@ namespace Lunar.Server.World.Actors.PacketHandlers
         public PlayerPacketHandler(Player player)
         {
             _player = player;
-            
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.DROP_ITEM, this.Handle_DropItem);
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.MAP_LOADED, this.Handle_MapLoaded);
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.REQ_USE_ITEM, this.Handle_UseItem);
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.REQ_UNEQUIP_ITEM, this.Handle_UnequipItem);
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.REQ_TARGET, this.Handle_ReqTarget);
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PICKUP_ITEM, this.Handle_PickupItem);
-            Server.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAYER_INTERACT, this.Handle_PlayerInteract);
+
+            player.Connection.AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
+            player.Connection.AddPacketHandler(PacketType.DROP_ITEM, this.Handle_DropItem);
+            player.Connection.AddPacketHandler(PacketType.MAP_LOADED, this.Handle_MapLoaded);
+            player.Connection.AddPacketHandler(PacketType.REQ_USE_ITEM, this.Handle_UseItem);
+            player.Connection.AddPacketHandler(PacketType.REQ_UNEQUIP_ITEM, this.Handle_UnequipItem);
+            player.Connection.AddPacketHandler(PacketType.REQ_TARGET, this.Handle_ReqTarget);
+            player.Connection.AddPacketHandler(PacketType.PICKUP_ITEM, this.Handle_PickupItem);
+            player.Connection.AddPacketHandler(PacketType.PLAYER_INTERACT, this.Handle_PlayerInteract);
         }
 
         private void Handle_PlayerInteract(PacketReceivedEventArgs args)
         {
-            // Ensure we're handling the packet for the correct player!
-            if (_player.UniqueID != args.Connection.RemoteUniqueIdentifier)
-                return;
-
             foreach (var mapObject in _player.Layer.GetCollidingMapObjects(_player.Position, _player.CollisionBounds))
             {
                 mapObject.OnInteract(_player);
@@ -54,10 +50,6 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_ReqTarget(PacketReceivedEventArgs args)
         {
-            // Ensure we're handling the packet for the correct player!
-            if (_player.UniqueID != args.Connection.RemoteUniqueIdentifier)
-                return;
-
             var targetUniqueID = args.Message.ReadInt64();
 
             // Make sure we don't target ourselves
@@ -70,9 +62,9 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             {
                 _player.Target = target;
 
-                var packet = new Packet(PacketType.TARGET_ACQ);
+                var packet = new Packet(PacketType.TARGET_ACQ, ChannelType.UNASSIGNED);
                 packet.Message.Write(target.UniqueID);
-                _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
             }
             else
             {
@@ -82,19 +74,11 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_MapLoaded(PacketReceivedEventArgs args)
         {
-            // Ensure we're handling the packet for the correct player!
-            if (_player.UniqueID != args.Connection.RemoteUniqueIdentifier)
-                return;
-
             _player.MapLoaded = true;
         }
 
         private void Handle_DropItem(PacketReceivedEventArgs args)
         {
-            // Ensure we're handling the packet for the correct player!
-            if (_player.UniqueID != args.Connection.RemoteUniqueIdentifier)
-                return;
-
             int slotNum = args.Message.ReadInt32();
 
             if (_player.Inventory.GetSlot(slotNum) != null)
@@ -107,10 +91,6 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_UseItem(PacketReceivedEventArgs args)
         {
-            // Ensure we're handling the packet for the correct player!
-            if (_player.UniqueID != args.Connection.RemoteUniqueIdentifier)
-                return;
-
             int slotNum = args.Message.ReadInt32();
 
             // Sanity check: is there actually an item in this slot?
@@ -138,7 +118,8 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_PlayerMoving(PacketReceivedEventArgs args)
         {
-            if (_player.UniqueID != args.Connection.RemoteUniqueIdentifier || !_player.MapLoaded) return;
+            if (!_player.MapLoaded)
+                return;
 
             _player.Direction = (Direction)args.Message.ReadByte();
             var wantsToMove = args.Message.ReadBoolean();
@@ -187,7 +168,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
         private void Handle_UnequipItem(PacketReceivedEventArgs args)
         {
             // Ensure we're handling the packet for the correct player!
-            if (_player.UniqueID != args.Connection.RemoteUniqueIdentifier)
+            if (_player.UniqueID != args.Connection.UniqueIdentifier)
                 return;
 
             int slotNum = args.Message.ReadInt32();

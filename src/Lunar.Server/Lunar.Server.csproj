@@ -80,6 +80,7 @@
     <Compile Include="Net\ConnectionEventArgs.cs" />
     <Compile Include="Net\Packet.cs" />
     <Compile Include="Net\PacketReceivedEventArgs.cs" />
+    <Compile Include="Net\PlayerConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
