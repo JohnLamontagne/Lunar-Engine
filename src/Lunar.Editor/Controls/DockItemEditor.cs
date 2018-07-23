@@ -15,6 +15,7 @@ using DarkUI.Forms;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Lunar.Core;
 using Lunar.Core.World;
 using Lunar.Editor.World;
 using Microsoft.Xna.Framework.Graphics;
@@ -144,6 +145,13 @@ namespace Lunar.Editor.Controls
 
             this.DockText = _regularDockText;
             _unsaved = false;
+
+            if (_unsavedDockText != _file.Name)
+            {
+                File.Move(_file.FullName, _file.DirectoryName + "/" + _unsavedDockText);
+                _file = new FileInfo(_file.DirectoryName + "/" + _unsavedDockText);
+            }
+
             _item.Save(_file.FullName);
         }
 
@@ -247,10 +255,10 @@ namespace Lunar.Editor.Controls
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
+            _unsavedDockText = this.txtName.Text + EngineConstants.ITEM_FILE_EXT;
+
             this.DockText = _unsavedDockText;
             _unsaved = true;
-
-            
         }
 
         private void radioStackable_CheckedChanged(object sender, EventArgs e)

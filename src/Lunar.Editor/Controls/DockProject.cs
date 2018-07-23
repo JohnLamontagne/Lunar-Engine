@@ -16,6 +16,7 @@ using System.IO;
 using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Docking;
+using Lunar.Core;
 
 namespace Lunar.Editor.Controls
 {
@@ -37,58 +38,215 @@ namespace Lunar.Editor.Controls
         {
             if (treeProject.SelectedNodes.Count > 0)
             {
-                if (treeProject.SelectedNodes[0].Tag is FileInfo)
+                if (treeProject.SelectedNodes[0].Tag is FileInfo info)
                 {
-                    this.File_Selected?.Invoke(this, new FileEventArgs((FileInfo)treeProject.SelectedNodes[0].Tag));   
+                    this.File_Selected?.Invoke(this, new FileEventArgs(info));
+                }
+                else
+                {
+                    (treeProject.SelectedNodes[0].Tag as Action<DarkTreeNode>)?.Invoke(treeProject.SelectedNodes[0].ParentNode);
                 }
             }
         }
 
-    
+
 
         #endregion
 
-
-        private DarkTreeNode InitalizeProjectDirectory(string rootName, DirectoryInfo rootDirectoryInfo)
+        private DarkTreeNode BuildAnimationTree()
         {
-            var stack = new Stack<DarkTreeNode>();
-            var node = new DarkTreeNode(rootName)
+            var animationPathNode = new DarkTreeNode("Animations")
             {
                 Icon = Icons.folder_closed,
-                ExpandedIcon = Icons.folder_open,
-                Tag = rootDirectoryInfo
+                ExpandedIcon = Icons.folder_open
             };
-            stack.Push(node);
 
-            while (stack.Count > 0)
+            foreach (var animationFile in _project.NPCs)
             {
-                var currentNode = stack.Pop();
-                var directoryInfo = (DirectoryInfo)currentNode.Tag;
-                foreach (var directory in directoryInfo.GetDirectories())
+                var fileNode = new DarkTreeNode(animationFile.Name)
                 {
-                    var childDirectoryNode = new DarkTreeNode(directory.Name)
-                    {
-                        Tag = directory,
-                        Icon = Icons.folder_closed,
-                        ExpandedIcon = Icons.folder_open
-                    };
-                    currentNode.Nodes.Add(childDirectoryNode);
-                    stack.Push(childDirectoryNode);
-                }
-
-                foreach (var file in _project.GetFiles(directoryInfo.FullName))
-                {
-                    DarkTreeNode fileNode = new DarkTreeNode(file.Name)
-                    {
-                        Icon = Icons.document_16xLG,
-                        Tag = file
-                    };
-
-                    currentNode.Nodes.Add(fileNode);
-                }
+                    Tag = animationFile,
+                    Icon = Icons.document_16xLG,
+                };
+                animationPathNode.Nodes.Add(fileNode);
             }
 
-            return node;
+            var addNode = new DarkTreeNode("Add Animation")
+            {
+                Icon = Icons.Plus,
+                Tag = (Action<DarkTreeNode>)((node) =>
+                {
+                    using (SaveFileDialog dialog = new SaveFileDialog())
+                    {
+                        dialog.RestoreDirectory = true;
+                        dialog.InitialDirectory = _project.ServerRootDirectory.FullName + @"\Animations";
+                        dialog.Filter = $@"Lunar Engine Animation Files (*{EngineConstants.ANIM_FILE_EXT})|*{EngineConstants.ANIM_FILE_EXT}";
+                        dialog.DefaultExt = EngineConstants.ANIM_FILE_EXT;
+                        dialog.AddExtension = true;
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string path = dialog.FileName;
+
+                            var file = _project.AddAnimation(path);
+
+                            DarkTreeNode fileNode = new DarkTreeNode(file.Name)
+                            {
+                                Icon = Icons.document_16xLG,
+                                Tag = file
+                            };
+
+                            ((DarkTreeNode)node).Nodes.Insert(((DarkTreeNode)node).Nodes.Count - 1, fileNode);
+
+                            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
+                            ((DarkTreeNode)node).Nodes.Add(new DarkTreeNode());
+                            ((DarkTreeNode)node).Nodes.RemoveAt(((DarkTreeNode)node).Nodes.Count - 1);
+                            // END HACK
+
+                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                        }
+                    }
+                })
+            };
+
+            animationPathNode.Nodes.Add(addNode);
+
+            return animationPathNode;
+        }
+
+        private DarkTreeNode BuildMapTree()
+        {
+            var mapPathNode = new DarkTreeNode("Maps")
+            {
+                Icon = Icons.folder_closed,
+                ExpandedIcon = Icons.folder_open
+            };
+
+            foreach (var mapFile in _project.Maps)
+            {
+                var fileNode = new DarkTreeNode(mapFile.Name)
+                {
+                    Tag = mapFile,
+                    Icon = Icons.document_16xLG,
+                };
+                mapPathNode.Nodes.Add(fileNode);
+            }
+
+            var addNode = new DarkTreeNode("Add Map")
+            {
+                Icon = Icons.Plus,
+                Tag = (Action<DarkTreeNode>) ((node) =>
+                {
+                    using (SaveFileDialog dialog = new SaveFileDialog())
+                    {
+                        dialog.RestoreDirectory = true;
+                        dialog.InitialDirectory = _project.ServerRootDirectory.FullName + @"\Maps";
+                        dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.MAP_FILE_EXT})|*{EngineConstants.MAP_FILE_EXT}";
+                        dialog.DefaultExt = EngineConstants.MAP_FILE_EXT;
+                        dialog.AddExtension = true;
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string path = dialog.FileName;
+
+                            var file = _project.AddMap(path);
+
+                            DarkTreeNode fileNode = new DarkTreeNode(file.Name)
+                            {
+                                Icon = Icons.document_16xLG,
+                                Tag = file
+                            };
+
+                            ((DarkTreeNode)node).Nodes.Insert(((DarkTreeNode)node).Nodes.Count - 1, fileNode);
+
+                            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
+                            ((DarkTreeNode)node).Nodes.Add(new DarkTreeNode());
+                            ((DarkTreeNode)node).Nodes.RemoveAt(((DarkTreeNode)node).Nodes.Count - 1);
+                            // END HACK
+
+                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                        }
+                    }
+                })
+            };
+            
+            mapPathNode.Nodes.Add(addNode);
+
+            return mapPathNode;
+        }
+
+        private DarkTreeNode BuildItemTree()
+        {
+            var itemPathNode = new DarkTreeNode("Items")
+            {
+                Icon = Icons.folder_closed,
+                ExpandedIcon = Icons.folder_open
+            };
+
+            foreach (var itemFile in _project.Items)
+            {
+                var fileNode = new DarkTreeNode(itemFile.Name)
+                {
+                    Tag = itemFile,
+                    Icon = Icons.document_16xLG,
+                };
+                itemPathNode.Nodes.Add(fileNode);
+            }
+
+            var addNode = new DarkTreeNode("Add Item")
+            {
+                Icon = Icons.Plus,
+                Tag = (Action<DarkTreeNode>) ((node) =>
+                {
+                    using (SaveFileDialog dialog = new SaveFileDialog())
+                    {
+                        dialog.InitialDirectory = _project.ServerRootDirectory.FullName + @"\Items";
+                        dialog.RestoreDirectory = true;
+                        dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.ITEM_FILE_EXT})|*{EngineConstants.ITEM_FILE_EXT}";
+                        dialog.DefaultExt = EngineConstants.ITEM_FILE_EXT;
+                        dialog.AddExtension = true;
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string path = dialog.FileName;
+
+                            var file = _project.AddItem(path);
+
+                            DarkTreeNode fileNode = new DarkTreeNode(file.Name)
+                            {
+                                Icon = Icons.document_16xLG,
+                                Tag = file
+                            };
+
+                            ((DarkTreeNode)node).Nodes.Insert(((DarkTreeNode)node).Nodes.Count - 1, fileNode);
+
+                            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
+                            ((DarkTreeNode)node).Nodes.Add(new DarkTreeNode());
+                            ((DarkTreeNode)node).Nodes.RemoveAt(((DarkTreeNode)node).Nodes.Count - 1);
+                            // END HACK
+
+                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                        }
+                    }
+                })
+            };
+
+
+            itemPathNode.Nodes.Add(addNode);
+
+            return itemPathNode;
+        }
+
+        private DarkTreeNode InitalizeProjectTree()
+        {
+            DarkTreeNode projectTreeNode = new DarkTreeNode("Game Data")
+            {
+                Icon = Icons.folder_closed,
+                ExpandedIcon = Icons.folder_open
+            };
+
+            projectTreeNode.Nodes.Add(this.BuildMapTree());
+            projectTreeNode.Nodes.Add(this.BuildItemTree());
+            projectTreeNode.Nodes.Add(this.BuildAnimationTree());
+
+            return projectTreeNode;
         }
 
         public void InitalizeFromProject(Project project)
@@ -103,38 +261,11 @@ namespace Lunar.Editor.Controls
                 ExpandedIcon = Icons.folder_open
             };
 
-            node.Nodes.Add(this.InitalizeProjectDirectory("Client Data", _project.ClientRootDirectory));
-            node.Nodes.Add(this.InitalizeProjectDirectory("Server Data", _project.ServerRootDirectory));
+            node.Nodes.Add(this.InitalizeProjectTree());
 
             treeProject.Nodes.Add(node);
         }
 
-
-        private void mapToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.treeProject.SelectedNodes.Count > 0 && this.treeProject.SelectedNodes[0].Tag is DirectoryInfo)
-            {
-                using (SaveFileDialog dialog = new SaveFileDialog())
-                {
-                    dialog.RestoreDirectory = true;
-                    dialog.InitialDirectory = ((DirectoryInfo)this.treeProject.SelectedNodes[0].Tag).FullName;
-                    dialog.Filter = @"Lunar Engine Map Files (*.rmap)|*.rmap";
-                    dialog.DefaultExt = ".rmap";
-                    dialog.AddExtension = true;
-                    if (dialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string path = dialog.FileName;
-
-                        var file = _project.AddMap(path);
-
-                        this.TryAppendFileNode(file);
-                    
-                        this.File_Created?.Invoke(this, new FileEventArgs(file));
-                    }
-                }
-            }
-
-        }
 
         private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -144,8 +275,8 @@ namespace Lunar.Editor.Controls
                 {
                     dialog.RestoreDirectory = true;
                     dialog.InitialDirectory = ((DirectoryInfo) this.treeProject.SelectedNodes[0].Tag).FullName;
-                    dialog.Filter = @"Lua Script Files (*.lua)|*.lua";
-                    dialog.DefaultExt = ".lua";
+                    dialog.Filter = $@"Lua Script Files (*{EngineConstants.LUA_FILE_EXT})|*{EngineConstants.LUA_FILE_EXT}";
+                    dialog.DefaultExt = EngineConstants.LUA_FILE_EXT;
                     dialog.AddExtension = true;
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
@@ -153,37 +284,12 @@ namespace Lunar.Editor.Controls
 
                         var file = _project.AddScript(path);
 
-                        this.TryAppendFileNode(file);
+                        
                        
                         this.File_Created?.Invoke(this, new FileEventArgs(file));
                     }
                 }
             }
-        }
-
-        private void TryAppendFileNode(FileInfo file)
-        {
-            // Make sure a node for this file does not already exist.
-            foreach (var childNode in this.treeProject.SelectedNodes[0].Nodes)
-            {
-                if (childNode.Tag is FileInfo)
-                {
-                    if (((FileInfo) childNode.Tag).FullName == file.FullName)
-                    {
-                        return;
-                    }
-                }
-            }
-
-            DarkTreeNode fileNode = new DarkTreeNode(file.Name)
-            {
-                Icon = Icons.document_16xLG,
-                Tag = file
-            };
-
-            this.treeProject.SelectedNodes[0].Nodes.Add(fileNode);
-            this.treeProject.SelectNode(fileNode);
-
         }
 
         private void TryAppendDirectoryNode(DirectoryInfo directory)
@@ -288,30 +394,6 @@ namespace Lunar.Editor.Controls
             }
         }
 
-        private void itemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.treeProject.SelectedNodes.Count > 0 && this.treeProject.SelectedNodes[0].Tag is DirectoryInfo)
-            {
-                using (SaveFileDialog dialog = new SaveFileDialog())
-                {
-                    dialog.RestoreDirectory = true;
-                    dialog.InitialDirectory = ((DirectoryInfo)this.treeProject.SelectedNodes[0].Tag).FullName;
-                    dialog.Filter = @"Lunar Engine Item Files (*.litm)|*.litm";
-                    dialog.DefaultExt = ".litm";
-                    dialog.AddExtension = true;
-                    if (dialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string path = dialog.FileName;
-
-                        var file = _project.AddItem(path);
-
-                        this.TryAppendFileNode(file);
-
-                        this.File_Created?.Invoke(this, new FileEventArgs(file));
-                    }
-                }
-            }
-        }
 
         private void animationToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -321,16 +403,14 @@ namespace Lunar.Editor.Controls
                 {
                     dialog.RestoreDirectory = true;
                     dialog.InitialDirectory = ((DirectoryInfo)this.treeProject.SelectedNodes[0].Tag).FullName;
-                    dialog.Filter = @"Lunar Engine Animation Files (*.lanim)|*.lanim";
-                    dialog.DefaultExt = ".lanim";
+                    dialog.Filter = $@"Lunar Engine Animation Files (*{EngineConstants.ANIM_FILE_EXT})|*{EngineConstants.ANIM_FILE_EXT}";
+                    dialog.DefaultExt = EngineConstants.ANIM_FILE_EXT;
                     dialog.AddExtension = true;
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
                         string path = dialog.FileName;
 
                         var file = _project.AddAnimation(path);
-
-                        this.TryAppendFileNode(file);
 
                         this.File_Created?.Invoke(this, new FileEventArgs(file));
                     }

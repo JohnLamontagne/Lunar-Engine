@@ -51,7 +51,7 @@
     <Compile Include="Content\Graphics\AnimationDescription.cs" />
     <Compile Include="Content\Graphics\Color.cs" />
     <Compile Include="Content\Graphics\Transform.cs" />
-    <Compile Include="CoreConstants.cs" />
+    <Compile Include="EngineConstants.cs" />
     <Compile Include="Utilities\IService.cs" />
     <Compile Include="Net\ChannelType.cs" />
     <Compile Include="Net\LidgrenExtensions.cs" />

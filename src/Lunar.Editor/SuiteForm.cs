@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Lunar.Core;
 using Lunar.Editor.Controls;
 using Lunar.Editor.Utilities;
 
@@ -250,19 +251,19 @@ namespace Lunar.Editor
 
         private void _dockProject_File_Created(object sender, DockProject.FileEventArgs e)
         {
-            if (e.File.Extension == ".lua")
+            if (e.File.Extension == EngineConstants.LUA_FILE_EXT)
             {
                 this.OpenLuaDocument(e.File);
             }
-            else if (e.File.Extension == ".rmap")
+            else if (e.File.Extension == EngineConstants.MAP_FILE_EXT)
             {
                 this.OpenMapDocument(e.File);
             }
-            else if (e.File.Extension == ".litm")
+            else if (e.File.Extension == EngineConstants.ITEM_FILE_EXT)
             {
                 this.OpenItemDocument(e.File);    
             }
-            else if (e.File.Extension == ".lanim")
+            else if (e.File.Extension == EngineConstants.ANIM_FILE_EXT)
             {
                 this.OpenAnimationDocument(e.File);
             }
@@ -270,19 +271,19 @@ namespace Lunar.Editor
 
         private void _dockProject_File_Selected(object sender, DockProject.FileEventArgs e)
         {
-            if (e.File.Extension == ".lua")
+            if (e.File.Extension == EngineConstants.LUA_FILE_EXT)
             {
                 this.OpenLuaDocument(e.File);
             }
-            else if (e.File.Extension == ".rmap")
+            else if (e.File.Extension == EngineConstants.MAP_FILE_EXT)
             {
                 this.OpenMapDocument(e.File);
             }
-            else if (e.File.Extension == ".litm")
+            else if (e.File.Extension == EngineConstants.ITEM_FILE_EXT)
             {
                 this.OpenItemDocument(e.File);
             }
-            else if (e.File.Extension == ".lanim")
+            else if (e.File.Extension == EngineConstants.ANIM_FILE_EXT)
             {
                 this.OpenAnimationDocument(e.File);
             }

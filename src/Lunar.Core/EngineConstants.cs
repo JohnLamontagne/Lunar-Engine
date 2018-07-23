@@ -18,5 +18,13 @@ namespace Lunar.Core
         /// Defines the degree to which the ZIndex increases for successive layers.
         /// </summary>
         public const float PARTS_PER_LAYER = .0001f;
+
+        public const string ITEM_FILE_EXT = ".idat";
+
+        public const string MAP_FILE_EXT = ".mdat";
+
+        public const string ANIM_FILE_EXT = ".adat";
+
+        public const string LUA_FILE_EXT = ".lua";
     }
 }
