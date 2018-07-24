@@ -11,10 +11,13 @@
 	limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using Lunar.Server.Utilities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Lunar.Server
 {
@@ -42,6 +45,8 @@ namespace Lunar.Server
 
         public static int MapItemHeight { get; private set; }
 
+        public static Dictionary<string, Role> Roles { get; private set; }
+
         public static void Initalize()
         {
             LoadConfig();
@@ -65,7 +70,11 @@ namespace Lunar.Server
                     new XElement("Tile_Size", 32),
                     new XElement("Map_Item_Width", 32),
                     new XElement("Map_Item_Height", 32)
-                )               
+                ),
+                new XElement("Roles",
+                    new XElement("User", 0),
+                    new XElement("Admin", 1)
+                )
             );
             xml.Save(_filePath);
         }
@@ -94,6 +103,14 @@ namespace Lunar.Server
                 Settings.TileSize = int.Parse(advancedSettings.Elements("Tile_Size").FirstOrDefault().Value);
                 Settings.MapItemWidth = int.Parse(advancedSettings.Elements("Map_Item_Width").FirstOrDefault().Value);
                 Settings.MapItemHeight = int.Parse(advancedSettings.Elements("Map_Item_Height").FirstOrDefault().Value);
+
+                // Get the roles
+                Settings.Roles = new Dictionary<string, Role>();
+                var roleSettings = doc.Elements("Config").Elements("Roles");
+                foreach (var role in roleSettings)
+                {
+                    Settings.Roles.Add(role.Name.ToString(), new Role(role.Name.ToString(), int.Parse(role.Value)));
+                }
             }
             catch (IndexOutOfRangeException ex)
             {

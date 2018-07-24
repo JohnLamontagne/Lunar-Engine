@@ -38,6 +38,7 @@ namespace Lunar.Server.World.Actors
         private Vector _position;
         private string _mapID;
         private ActorBehaviorDefinition _behaviorDefinition;
+        private Role _role;
 
         public string Name
         {
@@ -115,7 +116,11 @@ namespace Lunar.Server.World.Actors
             set => _mapID = value;
         }
 
-        public bool Admin { get; set; }
+        public Role Role
+        {
+            get => _role;
+            set => _role = value;
+        }
 
         public ActorBehaviorDefinition BehaviorDefinition => _behaviorDefinition;
 
@@ -164,7 +169,7 @@ namespace Lunar.Server.World.Actors
             int defense;
             Vector position;
             string mapID;
-
+            Role role;
             try
             {
 
@@ -185,6 +190,7 @@ namespace Lunar.Server.World.Actors
                         defense = binaryReader.ReadInt32();
                         position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                         mapID = binaryReader.ReadString();
+                        role = Settings.Roles?[binaryReader.ReadString()] ?? Role.Default;
                     }
                 }
 
@@ -204,7 +210,8 @@ namespace Lunar.Server.World.Actors
                     Defense = defense,
                     Position = position,
                     MapID = mapID,
-                    _behaviorDefinition = behaviorDefinition
+                    _behaviorDefinition = behaviorDefinition,
+                    Role = role                    
                 };
 
                 return playerDescriptor;
@@ -239,6 +246,7 @@ namespace Lunar.Server.World.Actors
                     binaryWriter.Write(_position.X);
                     binaryWriter.Write(_position.Y);
                     binaryWriter.Write(_mapID);
+                    binaryWriter.Write(_role.Name);
                 }
             }
         }

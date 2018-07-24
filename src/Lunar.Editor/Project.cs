@@ -94,7 +94,7 @@ namespace Lunar.Editor
 
         public FileInfo AddMap(string filePath)
         {
-            var map = new Map(new Vector2(Constants.NEW_MAP_X, Constants.NEW_MAP_Y), "blank");
+            var map = new Map(new Vector2(Constants.NEW_MAP_X, Constants.NEW_MAP_Y), Path.GetFileNameWithoutExtension(filePath));
             map.Save(filePath);
             var mapFile = new FileInfo(filePath);
             _mapFiles.Add(filePath, mapFile);
@@ -104,6 +104,7 @@ namespace Lunar.Editor
         public FileInfo AddItem(string filePath)
         {
             var item = ItemDescriptor.Create();
+            item.Name = Path.GetFileNameWithoutExtension(filePath);
             item.Save(filePath);
             var itemFile = new FileInfo(filePath);
             _itemFiles.Add(filePath, itemFile);
@@ -113,6 +114,7 @@ namespace Lunar.Editor
         public FileInfo AddAnimation(string filePath)
         {
             var animation = AnimationDescription.Create();
+            animation.Name = Path.GetFileNameWithoutExtension(filePath);
             animation.Save(filePath);
             var animationFile = new FileInfo(filePath);
             _animationFiles.Add(filePath, animationFile);

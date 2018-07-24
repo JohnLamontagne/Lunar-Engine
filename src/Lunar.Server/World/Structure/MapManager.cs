@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Lunar.Core;
 using Lunar.Core.Utilities;
 
 namespace Lunar.Server.World.Structure
@@ -33,7 +34,7 @@ namespace Lunar.Server.World.Structure
             Console.WriteLine("Loading Maps...");
 
             DirectoryInfo directoryInfo = new DirectoryInfo(Constants.FILEPATH_MAPS);
-            FileInfo[] files = directoryInfo.GetFiles("*.rmap");
+            FileInfo[] files = directoryInfo.GetFiles($"*{EngineConstants.MAP_FILE_EXT}");
 
             foreach (var file in files)
             {

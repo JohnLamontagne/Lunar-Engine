@@ -97,6 +97,7 @@
     <Compile Include="Utilities\Pathfinding\Pathfinder.cs" />
     <Compile Include="Utilities\Pathfinding\SearchNode.cs" />
     <Compile Include="Utilities\Plugin\PluginManager.cs" />
+    <Compile Include="Utilities\Role.cs" />
     <Compile Include="Utilities\Scripting\Script.cs" />
     <Compile Include="Utilities\Scripting\ScriptAction.cs" />
     <Compile Include="Utilities\Scripting\ScriptActionArgs.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="World\Structure\MapObjectBehaviorDefinition.cs" />
     <Compile Include="World\Structure\Tile.cs" />
     <Compile Include="World\Structure\TorchMapObject.cs" />
-    <Compile Include="World\WorldService.cs" />
+    <Compile Include="World\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

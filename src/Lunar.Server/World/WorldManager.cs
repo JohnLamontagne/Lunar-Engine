@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;

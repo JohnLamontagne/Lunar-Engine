@@ -65,7 +65,7 @@ namespace Lunar.Server.World.Actors
 
         public long UniqueID => _connection.UniqueIdentifier;
 
-        public bool Admin => _descriptor.Admin;
+        public Role Role => _descriptor.Role;
 
         public SpriteSheet SpriteSheet
         {
@@ -545,7 +545,6 @@ namespace Lunar.Server.World.Actors
         {
             _descriptor.Save();
         }
-
 
         public NetBuffer Pack()
         {

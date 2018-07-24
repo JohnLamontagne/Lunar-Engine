@@ -20,6 +20,8 @@ namespace Lunar.Core.Content.Graphics
 
         public AnimationLayerDefinition SubSurfaceAnimation { get; }
 
+        public string Name { get; set; }
+
         private AnimationDescription()
         {
             this.SubSurfaceAnimation = new AnimationLayerDefinition();
@@ -33,6 +35,7 @@ namespace Lunar.Core.Content.Graphics
             {
                 using (BinaryReader binaryReader = new BinaryReader(fileStream))
                 {
+                    animationDescription.Name = binaryReader.ReadString();
                     animationDescription.SubSurfaceAnimation.FrameWidth = binaryReader.ReadInt32();
                     animationDescription.SubSurfaceAnimation.FrameHeight = binaryReader.ReadInt32();
                     animationDescription.SubSurfaceAnimation.FrameTime = binaryReader.ReadInt32();
