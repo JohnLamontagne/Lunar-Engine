@@ -18,6 +18,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Utilities.Services;
+using System.Xml.Linq;
+using Microsoft.Xna.Framework.Content;
+using Lunar.Client.Utilities;
 
 namespace Lunar.Client.GUI
 {
@@ -237,5 +240,53 @@ namespace Lunar.Client.GUI
             if (_activeWidget != null)
                 _activeWidget.Draw(spriteBatch, _widgets.Count);
         }
+
+        public void LoadFromFile(string filePath, ContentManager content)
+        {
+            var doc = XDocument.Load(filePath);
+
+            var fontEntries = doc.Elements("GUI").Elements("Fonts").Elements("font");
+
+            var fonts = new Dictionary<string, SpriteFont>();
+
+            foreach (var fontEntry in fontEntries)
+            {
+                var font = content.Load<SpriteFont>(Constants.FILEPATH_DATA + fontEntry.Value.ToString());
+                fonts.Add(fontEntry.Attribute("name").Value.ToString(), font);
+            }
+
+
+
+            var widgetEntries = doc.Element("GUI").Elements("Widgets");
+
+            foreach (var importElement in widgetEntries.Elements("import"))
+            {
+                this.LoadFromFile(Constants.FILEPATH_DATA + importElement.Attribute("file").Value.ToString(), content);
+            }
+
+            foreach (var buttonElement in widgetEntries.Elements("Button"))
+            {
+                string btnName = buttonElement.Attribute("name").ToString();
+
+                string text = buttonElement.Element("text").Value.ToString();
+                string texturePath = buttonElement.Element("texture").Value.ToString();
+                string fontName = buttonElement.Element("font").Value.ToString();
+                uint.TryParse(buttonElement.Element("fontsize").Value.ToString(), out uint charSize);
+                int.TryParse(buttonElement.Element("position").Element("x").Value.ToString(), out int x);
+                int.TryParse(buttonElement.Element("position").Element("y").Value.ToString(), out int y);
+                var position = new Vector2(x, y);
+
+                Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+                SpriteFont font = fonts[fontName];
+
+                var button = new Button(texture, text, font, charSize)
+                {
+                    Position = position
+                };
+
+                this.AddWidget(button, btnName);
+            }
+        }
+
     }
 }

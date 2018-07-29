@@ -206,21 +206,22 @@ namespace Lunar.Client.GUI.Widgets
         /// </summary>
         internal Button()
         {
+            _textures = new Texture2D[3];
+            _position = new Vector2();
+            _state = WidgetStates.Idle;
+            this.ForeColor = Color.Black;
+            this.Selectable = false;
+            this.Visible = true;
+            this.ZOrder = 1;
         }
 
         public Button(Texture2D idleTexture, string text, SpriteFont font, uint charSize = 15)
+            : this()
         {
-            _textures = new Texture2D[3];
-            _position = new Vector2();
             _textures[0] = idleTexture;
-            _state = WidgetStates.Idle;
             _font = font;
             _charSize = charSize;
             _text = text;
-
-            this.ForeColor = Color.Black;
-
-            this.Selectable = false;
 
             float x = this.Position.X + ((this.IdleTexture.Width) / 2f) - (this.Font.MeasureString(_text).X / 2);
             float y = this.Position.Y + ((this.IdleTexture.Height) / 2f) - (this.Font.MeasureString(_text).Y / 2);
@@ -295,7 +296,7 @@ namespace Lunar.Client.GUI.Widgets
                     break;
             }
 
-            spriteBatch.DrawString(_font, this.Text, _textPosition, this.ForeColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ((float)this.ZOrder / widgetCount) + 0.01f);
+            spriteBatch.DrawString(_font, this.Text, _textPosition, this.ForeColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, Math.Min(((float)this.ZOrder / widgetCount) + 0.01f, 1));
         }
 
         public void BindTo(IWidget widget)
