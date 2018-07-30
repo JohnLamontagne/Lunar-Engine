@@ -39,7 +39,7 @@ namespace Lunar.Client.Net
             _packetHandlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
             _packetCache = new List<Tuple<NetOutgoingMessage, NetDeliveryMethod, ChannelType>>();
 
-            NetPeerConfiguration config = new NetPeerConfiguration(Constants.GAME_NAME);
+            NetPeerConfiguration config = new NetPeerConfiguration(Settings.GameName);
             config.EnableMessageType(NetIncomingMessageType.Data);
             config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
             _client = new NetClient(config);
@@ -48,7 +48,7 @@ namespace Lunar.Client.Net
 
         public void Connect()
         {
-            _client.Connect(Debugger.IsAttached ? "localhost" : Constants.SERVER_IP, Constants.SERVER_PORT);
+            _client.Connect(Debugger.IsAttached ? "localhost" : Settings.IP, Settings.Port);
 
         }
 

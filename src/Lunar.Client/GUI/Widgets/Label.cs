@@ -40,6 +40,8 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
+        public Vector2 Origin { get; set; }
+
         public string Text
         {
             get { return _text; }
@@ -93,6 +95,8 @@ namespace Lunar.Client.GUI.Widgets
             this.Color = Color.White;
             this.Font = font;
             this.Selectable = false;
+            this.Origin = Vector2.Zero;
+            this.Visible = true;
         }
 
         public void OnMouseHover(MouseState mouseState)

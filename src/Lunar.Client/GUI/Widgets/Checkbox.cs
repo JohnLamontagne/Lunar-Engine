@@ -47,6 +47,8 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
+        public Vector2 Origin { get; set; }
+
         public Texture2D CheckedSprite { get; set; }
 
         public Texture2D UncheckedSprite { get; set; }
@@ -58,6 +60,7 @@ namespace Lunar.Client.GUI.Widgets
             this.CheckedSprite = checkedSprite;
             this.UncheckedSprite = uncheckedSprite;
             this.Selectable = true;
+            this.Origin = Vector2.Zero;
 
             _checkBoxArea = new Rectangle((int)this.Position.X, (int)this.Position.Y, this.CheckedSprite.Width, this.CheckedSprite.Height);
         }

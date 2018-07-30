@@ -32,6 +32,7 @@
             this.btnPlayerSpawn = new DarkUI.Controls.DarkRadioButton();
             this.btnNone = new DarkUI.Controls.DarkRadioButton();
             this.btnWarp = new DarkUI.Controls.DarkRadioButton();
+            this.darkRadioButton1 = new DarkUI.Controls.DarkRadioButton();
             this.SuspendLayout();
             // 
             // btnBlocked
@@ -76,10 +77,21 @@
             this.btnWarp.Text = "Warp";
             this.btnWarp.CheckedChanged += new System.EventHandler(this.btnWarp_CheckedChanged);
             // 
+            // darkRadioButton1
+            // 
+            this.darkRadioButton1.AutoSize = true;
+            this.darkRadioButton1.Location = new System.Drawing.Point(59, 139);
+            this.darkRadioButton1.Name = "darkRadioButton1";
+            this.darkRadioButton1.Size = new System.Drawing.Size(83, 17);
+            this.darkRadioButton1.TabIndex = 4;
+            this.darkRadioButton1.Text = "NPC Spawn";
+            this.darkRadioButton1.CheckedChanged += new System.EventHandler(this.darkRadioButton1_CheckedChanged);
+            // 
             // DockMapAttributes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.darkRadioButton1);
             this.Controls.Add(this.btnWarp);
             this.Controls.Add(this.btnNone);
             this.Controls.Add(this.btnPlayerSpawn);
@@ -98,5 +110,6 @@
         private DarkUI.Controls.DarkRadioButton btnPlayerSpawn;
         private DarkUI.Controls.DarkRadioButton btnNone;
         private DarkUI.Controls.DarkRadioButton btnWarp;
+        private DarkUI.Controls.DarkRadioButton darkRadioButton1;
     }
 }

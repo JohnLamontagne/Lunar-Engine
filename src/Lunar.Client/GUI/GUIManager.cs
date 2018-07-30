@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -30,7 +31,7 @@ namespace Lunar.Client.GUI
 
         private IWidget _activeWidget;
 
-        private RenderTarget2D _renderTarget;
+        private readonly RenderTarget2D _renderTarget;
 
         public GUIManager()
         {
@@ -96,8 +97,6 @@ namespace Lunar.Client.GUI
             _activeWidget = null;
             _widgets.Clear();
         }
-
-
 
         public virtual void Update(GameTime gameTime)
         {
@@ -237,8 +236,7 @@ namespace Lunar.Client.GUI
             }
 
             // Active widget is always on top.
-            if (_activeWidget != null)
-                _activeWidget.Draw(spriteBatch, _widgets.Count);
+            _activeWidget?.Draw(spriteBatch, _widgets.Count);
         }
 
         public void LoadFromFile(string filePath, ContentManager content)
@@ -252,40 +250,311 @@ namespace Lunar.Client.GUI
             foreach (var fontEntry in fontEntries)
             {
                 var font = content.Load<SpriteFont>(Constants.FILEPATH_DATA + fontEntry.Value.ToString());
-                fonts.Add(fontEntry.Attribute("name").Value.ToString(), font);
+                fonts.Add(fontEntry.Attribute("name")?.Value.ToString(), font);
             }
 
+            var widgetEntries = doc.Element("GUI")?.Element("Widgets");
 
+            this.LoadWidgets(widgetEntries, fonts, content, this);
+        }
 
-            var widgetEntries = doc.Element("GUI").Elements("Widgets");
+        private void LoadWidgetsFromFileImport(string filePath, Dictionary<string, SpriteFont> fonts,
+            ContentManager content, GUIManager parent)
+        {
+            var doc = XDocument.Load(filePath);
 
+            var widgetEntries = doc.Element("Widgets");
+
+            this.LoadWidgets(widgetEntries, fonts, content, parent);
+        }
+
+        private void LoadWidgets(XElement widgetEntries, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        {
             foreach (var importElement in widgetEntries.Elements("import"))
             {
-                this.LoadFromFile(Constants.FILEPATH_DATA + importElement.Attribute("file").Value.ToString(), content);
+                this.LoadWidgetsFromFileImport(Constants.FILEPATH_DATA + importElement.Attribute("file")?.Value.ToString(), fonts, content, parent);
             }
 
-            foreach (var buttonElement in widgetEntries.Elements("Button"))
+            foreach (var buttonElement in widgetEntries.Elements("button"))
             {
-                string btnName = buttonElement.Attribute("name").ToString();
-
-                string text = buttonElement.Element("text").Value.ToString();
-                string texturePath = buttonElement.Element("texture").Value.ToString();
-                string fontName = buttonElement.Element("font").Value.ToString();
-                uint.TryParse(buttonElement.Element("fontsize").Value.ToString(), out uint charSize);
-                int.TryParse(buttonElement.Element("position").Element("x").Value.ToString(), out int x);
-                int.TryParse(buttonElement.Element("position").Element("y").Value.ToString(), out int y);
-                var position = new Vector2(x, y);
-
-                Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
-                SpriteFont font = fonts[fontName];
-
-                var button = new Button(texture, text, font, charSize)
-                {
-                    Position = position
-                };
-
-                this.AddWidget(button, btnName);
+                this.LoadButtonFromXML(buttonElement, fonts, content, parent);
             }
+
+            foreach (var labelElement in widgetEntries.Elements("label"))
+            {
+                this.LoadLabelFromXML(labelElement, fonts, parent);
+            }
+
+            foreach (var checkboxElement in widgetEntries.Elements("checkbox"))
+            {
+                this.LoadCheckboxFromXML(checkboxElement, fonts, content, parent);
+            }
+
+            foreach (var picElement in widgetEntries.Elements("picture"))
+            {
+                this.LoadPictureFromXML(picElement, content, parent);
+            }
+
+            foreach (var containerElement in widgetEntries.Elements("container"))
+            {
+                this.LoadWidgetContainerFromXML(containerElement, fonts, content, parent);
+            }
+
+            foreach (var textboxElement in widgetEntries.Elements("textbox"))
+            {
+                this.LoadTextboxFromXML(textboxElement, fonts, content, parent);
+            }
+
+            foreach (var chatboxElement in widgetEntries.Elements("chatbox"))
+            {
+                this.LoadChatboxFromXML(chatboxElement, fonts, content, parent);
+            }
+        }
+
+        private void LoadChatboxFromXML(XElement chatboxElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        {
+            string chatboxName = chatboxElement.Attribute("name")?.Value.ToString();
+
+            string texturePath = chatboxElement.Element("texture")?.Value.ToString();
+            string fontName = chatboxElement.Element("font")?.Value.ToString();
+
+            int.TryParse(chatboxElement.Element("padding")?.Element("x")?.Value.ToString(), out int offX);
+            int.TryParse(chatboxElement.Element("padding")?.Element("y")?.Value.ToString(), out int offY);
+
+            int.TryParse(chatboxElement.Element("maxlines")?.Value.ToString(), out int maxLines);
+
+            var texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+
+            var position = this.ParsePosition(chatboxElement.Element("position")?.Element("x")?.Value.ToString(),
+                chatboxElement.Element("position")?.Element("y")?.Value.ToString());
+
+            SpriteFont font = fonts[fontName];
+            var chatBox = new Chatbox(texture, font, maxLines)
+            {
+                Position = position,
+                ChatOffset = new Vector2(offX, offY)
+            };
+
+            parent.AddWidget(chatBox, chatboxName);
+        }
+
+        private void LoadTextboxFromXML(XElement textboxElement, Dictionary<string, SpriteFont> fonts,
+            ContentManager content, GUIManager parent)
+        {
+            string textboxName = textboxElement.Attribute("name")?.Value.ToString();
+
+            string text = textboxElement.Element("text")?.Value.ToString() ?? "";
+            string texturePath = textboxElement.Element("texture")?.Value.ToString();
+            string fontName = textboxElement.Element("font")?.Value.ToString();
+
+            uint.TryParse(textboxElement.Element("fontsize")?.Value.ToString(), out uint charSize);
+
+            int.TryParse(textboxElement.Element("padding")?.Element("x")?.Value.ToString(), out int offX);
+            int.TryParse(textboxElement.Element("padding")?.Element("y")?.Value.ToString(), out int offY);
+            Vector2 textOffset = new Vector2(offX, offY);
+
+            var color = this.ParseColor(textboxElement.Element("color"));
+
+            float.TryParse(textboxElement.Element("origin")?.Element("x")?.Value.ToString(), out float originX);
+            float.TryParse(textboxElement.Element("origin")?.Element("y")?.Value.ToString(), out float originY);
+            Vector2 origin = new Vector2(originX, originY);
+
+            string mask = textboxElement.Element("origin")?.Element("x")?.Value.ToString() ?? null;
+
+            var texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+           
+            
+            var position = this.ParsePosition(textboxElement.Element("position")?.Element("x")?.Value.ToString(),
+                textboxElement.Element("position")?.Element("y")?.Value.ToString());
+
+            SpriteFont font = fonts[fontName];
+            var textBox = new Textbox(texture, font, textOffset, charSize)
+            {
+                Text = text,
+                Position = position,
+                ForeColor = color,
+                Origin = origin,
+                Mask = mask
+            };
+
+            parent.AddWidget(textBox, textboxName);
+        }
+
+        private void LoadWidgetContainerFromXML(XElement containerElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        {
+            string containerName = containerElement.Attribute("name")?.Value.ToString();
+
+            string texturePath = containerElement.Element("texture")?.Value.ToString();
+
+            var position = this.ParsePosition(containerElement.Element("position")?.Element("x")?.Value.ToString(),
+                containerElement.Element("position")?.Element("y")?.Value.ToString());
+
+            float.TryParse(containerElement.Element("origin")?.Element("x")?.Value.ToString(), out float originX);
+            float.TryParse(containerElement.Element("origin")?.Element("y")?.Value.ToString(), out float originY);
+            Vector2 origin = new Vector2(originX, originY);
+
+            Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+
+            var container = new WidgetContainer(texture)
+            {
+                Position = position,
+                Origin = origin
+            };
+
+            // load its children
+            this.LoadWidgets(containerElement.Element("Widgets"), fonts, content, container);
+
+            parent.AddWidget(container, containerName);
+        }
+
+        private void LoadPictureFromXML(XElement picElement, ContentManager content, GUIManager parent)
+        {
+            string picName = picElement.Attribute("name")?.Value.ToString();
+
+            string texturePath = picElement.Element("texture")?.Value.ToString();
+
+            var position = this.ParsePosition(picElement.Element("position")?.Element("x")?.Value.ToString(),
+                picElement.Element("position")?.Element("y")?.Value.ToString());
+
+            float.TryParse(picElement.Element("origin")?.Element("x")?.Value.ToString(), out float originX);
+            float.TryParse(picElement.Element("origin")?.Element("y")?.Value.ToString(), out float originY);
+            Vector2 origin = new Vector2(originX, originY);
+
+            Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+
+            var pic = new Picture(texture)
+            {
+                Position = position,
+                Origin = origin
+            };
+
+            parent.AddWidget(pic, picName);
+        }
+
+        private void LoadCheckboxFromXML(XElement chkElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        {
+            string chkBoxName = chkElement.Attribute("name")?.Value.ToString();
+
+            string checkedTexturePath = chkElement.Element("texture")?.Value.ToString();
+            string uncheckedTexturePath = chkElement.Element("texture")?.Value.ToString();
+            string fontName = chkElement.Element("font")?.Value.ToString();
+
+            var position = this.ParsePosition(chkElement.Element("position")?.Element("x")?.Value.ToString(),
+                chkElement.Element("position")?.Element("y")?.Value.ToString());
+
+            Texture2D checkedTexture = content.LoadTexture2D(Constants.FILEPATH_DATA + checkedTexturePath);
+            Texture2D uncheckedTexture = content.LoadTexture2D(Constants.FILEPATH_DATA + uncheckedTexturePath);
+            SpriteFont font = fonts[fontName];
+
+            var chkBox = new Checkbox(checkedTexture, uncheckedTexture)
+            {
+                Position = position
+            };
+
+            parent.AddWidget(chkBox, chkBoxName);
+
+        }
+
+        private void LoadLabelFromXML(XElement lblElement, Dictionary<string, SpriteFont> fonts, GUIManager parent)
+        {
+            string lblName = lblElement.Attribute("name")?.Value.ToString();
+
+            string text = lblElement.Element("text")?.Value.ToString() ?? "";
+            string fontName = lblElement.Element("font")?.Value.ToString();
+            uint.TryParse(lblElement.Element("fontsize")?.Value.ToString(), out uint charSize);
+
+            var color = this.ParseColor(lblElement.Element("color"));
+
+            var position = this.ParsePosition(lblElement.Element("position")?.Element("x")?.Value.ToString(),
+                lblElement.Element("position")?.Element("y")?.Value.ToString());
+
+            SpriteFont font = fonts[fontName];
+            var label = new Label(font) 
+            {
+                Text = text,
+                Position = position,
+                Color = color,
+                ZOrder = 1
+            };
+
+            parent.AddWidget(label, lblName);
+        }
+
+        private void LoadButtonFromXML(XElement buttonElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        {
+            string btnName = buttonElement.Attribute("name")?.Value.ToString();
+
+            string text = buttonElement.Element("text")?.Value.ToString() ?? "";
+
+            string texturePath = buttonElement.Element("texture")?.Value.ToString();
+            string fontName = buttonElement.Element("font")?.Value.ToString();
+            uint.TryParse(buttonElement.Element("fontsize")?.Value.ToString(), out uint charSize);
+
+            var position = this.ParsePosition(buttonElement.Element("position")?.Element("x")?.Value.ToString(),
+                buttonElement.Element("position")?.Element("y")?.Value.ToString());
+
+            Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+            
+            SpriteFont font = fonts[fontName];
+
+            var button = new Button(texture, text, font, charSize)
+            {
+                Position = position
+            };
+
+            parent.AddWidget(button, btnName);
+        }
+
+        private Color ParseColor(XElement colorElement)
+        {
+            if (colorElement?.Value == null)
+                return Color.White;
+
+            // Try to get the color if the user has specified a valid one
+            var colorType = typeof(Color).GetProperty(colorElement.Value.ToString(),
+                BindingFlags.Static | BindingFlags.Public);
+
+            if (colorType != null)
+            {
+                Color color = new Color();
+                return (Color)colorType.GetValue(color, null);
+            }
+            else
+            {
+                float.TryParse(colorElement.Element("r")?.Value.ToString(), out float r);
+                float.TryParse(colorElement.Element("g")?.Value.ToString(), out float g);
+                float.TryParse(colorElement.Element("b")?.Value.ToString(), out float b);
+                float.TryParse(colorElement.Element("a")?.Value.ToString(), out float a);
+                return new Color(new Vector4(r, g, b, a));
+            }
+        }
+
+        private Vector2 ParsePosition(string posX, string posY)
+        {
+            float x = 0;
+            float y = 0;
+
+            if (posX.Contains("%"))
+            {
+                float.TryParse(posX.Replace("%", ""), out float pX);
+                x = Settings.ResolutionX * (pX / 100f);
+            }
+            else
+            {
+                float.TryParse(posX, out x);
+            }
+
+            if (posY.Contains("%"))
+            {
+                float.TryParse(posY.Replace("%", ""), out float pY);
+                y = Settings.ResolutionY * (pY / 100f);
+            }
+            else
+            {
+                float.TryParse(posY, out y);
+            }
+
+            return new Vector2(x, y);
         }
 
     }

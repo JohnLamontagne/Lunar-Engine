@@ -1,6 +1,6 @@
 ﻿namespace Lunar.Editor.Controls
 {
-    partial class TileAttributeDialog
+    partial class WarpAttributeDialog
     {
         /// <summary> 
         /// Required designer variable.

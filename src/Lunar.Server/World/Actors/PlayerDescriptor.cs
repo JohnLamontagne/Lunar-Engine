@@ -149,8 +149,9 @@ namespace Lunar.Server.World.Actors
                 Dexterity = 10,
                 Defense = 10,
                 _behaviorDefinition = behaviorDefinition,
-                _mapID = ""
-            };
+                _mapID = Settings.StartingMap,
+                _role = Settings.DefaultRole
+        };
 
             return descriptor;
         }
@@ -190,7 +191,7 @@ namespace Lunar.Server.World.Actors
                         defense = binaryReader.ReadInt32();
                         position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                         mapID = binaryReader.ReadString();
-                        role = Settings.Roles?[binaryReader.ReadString()] ?? Role.Default;
+                        role = Settings.Roles?[binaryReader.ReadString()] ?? Settings.DefaultRole;
                     }
                 }
 

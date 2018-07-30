@@ -42,7 +42,8 @@ namespace Lunar.Client.Scenes
 
         protected override void OnEnter()
         {
-            this.InitalizeInterface();
+            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/menu_interface.xml", this.ContentManager);
+            this.HookInterfaceEvents();
 
             base.OnEnter();
         }
@@ -81,113 +82,14 @@ namespace Lunar.Client.Scenes
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("passwordLoginTextbox").Sprite = textboxPassSprite;
         }
 
-        private void InitalizeInterface()
+        private void HookInterfaceEvents()
         {
-            var font = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/interfaceFont");
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userLoginTextbox").Text_Entered += UserLoginTextbox_Text_Entered;
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userPasswordTextbox").Text_Entered += PasswordLoginTextbox_Text_Entered;
 
-            var menuButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/menuButton.png");
-            var windowBackSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/menuWindow.png");
-            var checkTrueSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/checkTrue.png");
-            var checkFalseSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/checkFalse.png");
-
-            var logoSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/logo.png");
-            var picLogo = new Picture(logoSprite)
-            {
-                Position = new Vector2((Settings.ResolutionX / 2f) - logoSprite.Width / 2f, 0),
-                Visible = true
-            };
-            this.GuiManager.AddWidget(picLogo, "picLogo");
-
-            var mainMenuContainer = new WidgetContainer(windowBackSprite);
-            mainMenuContainer.Position = new Vector2((Settings.ResolutionX / 2f) - mainMenuContainer.Size.X / 2f, 500);
-            mainMenuContainer.Visible = true;
-            this.GuiManager.AddWidget(mainMenuContainer, "mainMenuContainer");
-
-            var lblMenuTitle = new Label(font)
-            {
-                Text = "Main Menu",
-                Visible = true,
-                Position = new Vector2(mainMenuContainer.Position.X + 60, mainMenuContainer.Position.Y + 15)
-            };
-            mainMenuContainer.AddWidget(lblMenuTitle, "lblMenuTitle");
-
-            var statusLabel = new Label(font)
-            {
-                Position = new Vector2(mainMenuContainer.Position.X + 40, mainMenuContainer.Position.Y + 185),
-                Color = Color.Red,
-                Visible= true,
-                ZOrder = 1
-            };
-            mainMenuContainer.AddWidget(statusLabel, "lblStatus");
-
-            var loginButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/loginButton.png");
-            var loginButton = new Button(loginButtonSprite, "Login", font)
-            {
-                Position = new Vector2(mainMenuContainer.Position.X + 30, mainMenuContainer.Position.Y + 205),
-                ZOrder = 1
-               
-            };
-            loginButton.Clicked += loginButton_ButtonClicked;
-            loginButton.Visible = true;
-            mainMenuContainer.AddWidget(loginButton, "btnLogin");
-
-            var registerButton = new Button(menuButtonSprite, "Register", font)
-            {
-                Position = new Vector2(mainMenuContainer.Position.X + 275, mainMenuContainer.Position.Y + 60),
-                Visible = true,
-                ZOrder = 1,
-            };
-            registerButton.Clicked += registerButton_ButtonClicked;
-            mainMenuContainer.AddWidget(registerButton, "btnRegister");
-
-            var websiteButton = new Button(menuButtonSprite, "Website", font)
-            {
-                Position = new Vector2(mainMenuContainer.Position.X + 275, mainMenuContainer.Position.Y + 120),
-                ZOrder = 1
-            };
-            websiteButton.Clicked += WebsiteButton_Clicked;
-            websiteButton.Visible = true;
-            mainMenuContainer.AddWidget(websiteButton, "btnSubmitRegistration");
-
-
-            var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/textUser.png");
-            var userLoginTextbox = new Textbox(textboxUserSprite, font, new Vector2(12, 8))
-            {
-                Position = new Vector2(mainMenuContainer.Position.X + 30, mainMenuContainer.Position.Y + 50),
-                Visible = true,
-                ZOrder=1,
-            };
-            userLoginTextbox.Text_Entered += UserLoginTextbox_Text_Entered;
-            mainMenuContainer.AddWidget(userLoginTextbox, "userLoginTextbox");
-            
-            var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/textPass.png");
-            var passwordLoginTextbox = new Textbox(textboxPassSprite, font, new Vector2(12, 8))
-            {
-                Position = new Vector2(mainMenuContainer.Position.X + 30, mainMenuContainer.Position.Y + 115),
-                Mask = "*",
-                Visible = true,
-                ZOrder = 1,
-            };
-            passwordLoginTextbox.Text_Entered += PasswordLoginTextbox_Text_Entered;
-            mainMenuContainer.AddWidget(passwordLoginTextbox, "passwordLoginTextbox");
-
-            var muteMusicCheckbox = new Checkbox(checkTrueSprite, checkFalseSprite)
-            {
-                Position = new Vector2(Settings.ResolutionX - (checkTrueSprite.Width * 2), Settings.ResolutionY - (checkTrueSprite.Height * 2)),
-                Visible = true, 
-                ZOrder = 1,
-            };
-            this.GuiManager.AddWidget(muteMusicCheckbox, "muteMusicCheckbox");
-            muteMusicCheckbox.Clicked += MuteMusicCheckbox_Clicked;
-
-            var labelMuteMusic = new Label(font)
-            {
-                Text = "Mute Music: ",
-                Position = new Vector2(muteMusicCheckbox.Position.X - 90, muteMusicCheckbox.Position.Y + (checkTrueSprite.Height / 4f)),
-                Visible = true,
-                ZOrder = 1
-            };
-            this.GuiManager.AddWidget(labelMuteMusic, "labelMuteMusic");
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnLogin").Clicked += loginButton_ButtonClicked;
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnRegister").Clicked += registerButton_ButtonClicked;
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnWebsite").Clicked += WebsiteButton_Clicked;
 
         }
 
@@ -220,7 +122,7 @@ namespace Lunar.Client.Scenes
             var registerMenuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
 
             if (!string.IsNullOrEmpty(registerMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text) &&
-                !string.IsNullOrEmpty(registerMenuContainer.GetWidget<Textbox>("passwordLoginTextbox").Text))
+                !string.IsNullOrEmpty(registerMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text))
             {
                 if (!netHandler.Connected)
                 {
@@ -228,7 +130,7 @@ namespace Lunar.Client.Scenes
 
                     var packet = new Packet(PacketType.REGISTER);
                     packet.Message.Write(registerMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
-                    packet.Message.Write(registerMenuContainer.GetWidget<Textbox>("passwordLoginTextbox").Text);
+                    packet.Message.Write(registerMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
                     netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
                 }
 
@@ -251,10 +153,10 @@ namespace Lunar.Client.Scenes
                 failure = true;
             }
 
-            if (string.IsNullOrEmpty(loginMenuContainer.GetWidget<Textbox>("passwordLoginTextbox").Text))
+            if (string.IsNullOrEmpty(loginMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text))
             {
                 var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/passInputError.png");
-                loginMenuContainer.GetWidget<Textbox>("passwordLoginTextbox").Sprite = textboxPassSprite;
+                loginMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Sprite = textboxPassSprite;
 
                 failure = true;
             }
@@ -266,16 +168,10 @@ namespace Lunar.Client.Scenes
 
                 var packet = new Packet(PacketType.LOGIN);
                 packet.Message.Write(loginMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
-                packet.Message.Write(loginMenuContainer.GetWidget<Textbox>("passwordLoginTextbox").Text);
+                packet.Message.Write(loginMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
                 netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
             }
             
-        }
-
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch drawer)

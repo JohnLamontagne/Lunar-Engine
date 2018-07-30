@@ -137,6 +137,8 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
+        public Vector2 Origin { get; set; }
+
         public Color ForeColor { get; set; }
 
         public Texture2D IdleTexture
@@ -213,6 +215,7 @@ namespace Lunar.Client.GUI.Widgets
             this.Selectable = false;
             this.Visible = true;
             this.ZOrder = 1;
+            this.Origin = Vector2.Zero;
         }
 
         public Button(Texture2D idleTexture, string text, SpriteFont font, uint charSize = 15)

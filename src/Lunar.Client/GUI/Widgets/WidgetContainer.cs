@@ -40,8 +40,10 @@ namespace Lunar.Client.GUI.Widgets
 
         public int ZOrder { get; set; }
 
+        public Vector2 Origin { get; set; }
+
         public Vector2 Position {
-            get { return _position; }
+            get => _position;
             set
             {
                 // Update the child elements
@@ -60,7 +62,7 @@ namespace Lunar.Client.GUI.Widgets
 
         public Texture2D BackSprite
         {
-            get { return _backSprite; }
+            get => _backSprite;
             set
             {
                 _backSprite = value;
@@ -70,17 +72,14 @@ namespace Lunar.Client.GUI.Widgets
 
         public Rectangle Area
         {
-            get { return _area; }
-            set { _area = value; }
+            get => _area;
+            set => _area = value;
         }
 
 
         public Vector2 Size
         {
-            get
-            {
-                return _size;
-            }
+            get => _size;
             set
             {
                 _size = value;
@@ -101,6 +100,8 @@ namespace Lunar.Client.GUI.Widgets
             this.Selectable = true;
 
             this.Area = new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)this.Size.X, (int)this.Size.Y);
+            this.Visible = true;
+            this.Origin = Vector2.Zero;
         }
 
         public WidgetContainer(Vector2 size)
@@ -109,6 +110,8 @@ namespace Lunar.Client.GUI.Widgets
             this.Selectable = true;
 
             this.Area = new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)this.Size.X, (int)this.Size.Y);
+            this.Visible = true;
+            this.Origin = Vector2.Zero;
         }
 
         public void OnMouseHover(MouseState mouseState)
@@ -164,12 +167,6 @@ namespace Lunar.Client.GUI.Widgets
             base.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-        
-            base.Draw(spriteBatch);
-        }
-
         public bool Contains(Point point)
         {
             return this.Area.Contains(point) || _widgets.Values.Any(widget => widget.Contains(point));
@@ -192,7 +189,7 @@ namespace Lunar.Client.GUI.Widgets
             this.Begin(spriteBatch);
 
             if (this.BackSprite != null)
-                spriteBatch.Draw(this.BackSprite, this.Position, null, Color.White, 0f, Vector2.Zero, new Vector2(_size.X / this.BackSprite.Width, _size.Y / this.BackSprite.Height), SpriteEffects.None, (float)this.ZOrder / widgetCount);
+                spriteBatch.Draw(this.BackSprite, this.Position - this.Origin, null, Color.White, 0f, Vector2.Zero, new Vector2(_size.X / this.BackSprite.Width, _size.Y / this.BackSprite.Height), SpriteEffects.None, (float)this.ZOrder / widgetCount);
 
             this.Draw(spriteBatch);
 

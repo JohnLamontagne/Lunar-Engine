@@ -55,7 +55,7 @@ namespace Lunar.Editor.Controls
         /// <summary>
         /// Used when selecting tiles for attribute data.
         /// </summary>
-        private TileAttributeDialog _tileAttributeDialog;
+        private WarpAttributeDialog _tileAttributeDialog;
 
         private PlacementMode _prevPlacementMode;
 
@@ -112,7 +112,7 @@ namespace Lunar.Editor.Controls
 
         private void DockMapAttributesOnSelectingTile(object sender, EventArgs eventArgs)
         {
-            _tileAttributeDialog = (TileAttributeDialog) sender;
+            _tileAttributeDialog = (WarpAttributeDialog) sender;
             _prevPlacementMode = _placementMode;
             _placementMode = PlacementMode.Picking_Tile;
 

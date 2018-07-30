@@ -184,11 +184,11 @@
     </Compile>
     <Compile Include="Controls\ScriptFileNameEditor.cs" />
     <Compile Include="Controls\SpriteFileNameEditor.cs" />
-    <Compile Include="Controls\TileAttributeDialog.cs">
+    <Compile Include="Controls\WarpAttributeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\TileAttributeDialog.Designer.cs">
-      <DependentUpon>TileAttributeDialog.cs</DependentUpon>
+    <Compile Include="Controls\WarpAttributeDialog.Designer.cs">
+      <DependentUpon>WarpAttributeDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\View.cs">
       <SubType>UserControl</SubType>
@@ -266,8 +266,8 @@
     <EmbeddedResource Include="Controls\DockProject.resx">
       <DependentUpon>DockProject.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TileAttributeDialog.resx">
-      <DependentUpon>TileAttributeDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\WarpAttributeDialog.resx">
+      <DependentUpon>WarpAttributeDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\View.resx">
       <DependentUpon>View.cs</DependentUpon>

@@ -29,6 +29,8 @@ namespace Lunar.Client.GUI.Widgets
 
         public Vector2 Position { get { return _container.Position; } set { _container.Position = value; } }
 
+        public Vector2 Origin { get; set; }
+
         public Vector2 ChatOffset { get; set; }
 
         public bool Selectable { get; set; }
@@ -76,6 +78,7 @@ namespace Lunar.Client.GUI.Widgets
             this.Font = font;
             this.MaxEntries = maxEntries;
             this.Selectable = true;
+            this.Origin = Vector2.Zero;
         }
 
         public void Clear()

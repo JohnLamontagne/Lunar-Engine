@@ -47,6 +47,8 @@ namespace Lunar.Server
 
         public static Dictionary<string, Role> Roles { get; private set; }
 
+        public static Role DefaultRole { get; private set; }
+
         public static void Initalize()
         {
             LoadConfig();
@@ -74,7 +76,8 @@ namespace Lunar.Server
                 new XElement("Roles",
                     new XElement("User", 0),
                     new XElement("Admin", 1)
-                )
+                ),
+                new XElement("Default Role", "User")
             );
             xml.Save(_filePath);
         }
@@ -106,11 +109,15 @@ namespace Lunar.Server
 
                 // Get the roles
                 Settings.Roles = new Dictionary<string, Role>();
-                var roleSettings = doc.Elements("Config").Elements("Roles");
-                foreach (var role in roleSettings)
+                var roleSettings = doc.Elements("Config").Elements("Roles").FirstOrDefault();
+                foreach (var role in roleSettings.Elements())
                 {
                     Settings.Roles.Add(role.Name.ToString(), new Role(role.Name.ToString(), int.Parse(role.Value)));
                 }
+
+                Settings.DefaultRole =
+                    Settings.Roles[doc.Elements("Config").Elements("DefaultRole").FirstOrDefault().Value.ToString()] ??
+                    Role.Default;
             }
             catch (IndexOutOfRangeException ex)
             {

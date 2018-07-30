@@ -71,6 +71,7 @@
     <Compile Include="World\ItemDescriptor.cs" />
     <Compile Include="World\ItemTypes.cs" />
     <Compile Include="World\Structure\AttributeData.cs" />
+    <Compile Include="World\Structure\NPCSpawnAttributeData.cs" />
     <Compile Include="World\Structure\TileAttributes.cs" />
     <Compile Include="World\Structure\WarpAttributeData.cs" />
   </ItemGroup>

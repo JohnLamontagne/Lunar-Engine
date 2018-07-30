@@ -29,6 +29,8 @@ namespace Lunar.Client.GUI.Widgets
 
         Vector2 Position { get; set; }
 
+        Vector2 Origin { get; set; }
+
         string Tag { get; set; }
 
         void Update(GameTime gameTime);

@@ -74,7 +74,7 @@ namespace Lunar.Client.Scenes
 
             var lblLoading = new Label(loadingFont)
             {
-                Text = $"Loading {Constants.GAME_NAME} ...",
+                Text = $"Loading {Settings.GameName} ...",
                 Visible = true,
                 ZOrder = 1
             };

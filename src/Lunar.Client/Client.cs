@@ -49,9 +49,7 @@ namespace Lunar.Client
 
         public Client()
         {
-            Settings.ResolutionX = Constants.RESOLUTION_X;
-            Settings.ResolutionY = Constants.RESOLUTION_Y;
-            Settings.DisplayNetworkMessages = false;
+            Settings.Initalize();
 
             _graphics = new GraphicsDeviceManager(this)
             {
@@ -100,7 +98,7 @@ namespace Lunar.Client
             Console.SetOut(_consoleRedirector);
 
 
-            Window.Title = Constants.GAME_NAME;
+            Window.Title = Settings.GameName;
 
             base.Initialize();
         }

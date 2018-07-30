@@ -23,7 +23,7 @@ namespace Lunar.Editor.Controls
     {
         public TileAttributes Attribute { get; private set; }
         public AttributeData AttributeData { get; private set; }
-        private TileAttributeDialog _tileAttributeDialog;
+        private WarpAttributeDialog _tileAttributeDialog;
 
         public Map MapSubject { get; private set; }
 
@@ -55,7 +55,7 @@ namespace Lunar.Editor.Controls
             this.AttributeData = new AttributeData();
         }
 
-        private void btnPlayerSpawn_CheckedChanged(object sender, System.EventArgs e)
+        private void btnPlayerSpawn_CheckedChanged(object sender, EventArgs e)
         {
             if (!((DarkRadioButton)sender).Checked)
                 return;
@@ -64,25 +64,42 @@ namespace Lunar.Editor.Controls
             this.AttributeData = new AttributeData();
         }
 
-        private void btnWarp_CheckedChanged(object sender, System.EventArgs e)
+        private void btnWarp_CheckedChanged(object sender, EventArgs e)
         {
             if (!((DarkRadioButton)sender).Checked)
                 return;
 
             this.Attribute = TileAttributes.Warp;
 
-            _tileAttributeDialog = new TileAttributeDialog(this.ParentForm, this.MapSubject);
+            _tileAttributeDialog = new WarpAttributeDialog(this.ParentForm, this.MapSubject);
             _tileAttributeDialog.SelectTile += (o, args) => this.SelectingTile?.Invoke(o, args);
+            _tileAttributeDialog.Submitted += WarpDialog_Submitted;
             _tileAttributeDialog.Show(this.ParentForm);
-            _tileAttributeDialog.Submitted += Dialog_Submitted;
-
         }
 
-        private void Dialog_Submitted(object sender, EventArgs e)
+        private void WarpDialog_Submitted(object sender, EventArgs e)
         {
             this.AttributeData = new WarpAttributeData(_tileAttributeDialog.WarpX, _tileAttributeDialog.WarpY, _tileAttributeDialog.WarpMapID, _tileAttributeDialog.WarpLayerName);
         }
 
         public event EventHandler<EventArgs> SelectingTile;
+
+        private void darkRadioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!((DarkRadioButton)sender).Checked)
+                return;
+
+            this.Attribute = TileAttributes.Warp;
+
+            _tileAttributeDialog = new WarpAttributeDialog(this.ParentForm, this.MapSubject);
+            _tileAttributeDialog.SelectTile += (o, args) => this.SelectingTile?.Invoke(o, args);
+            _tileAttributeDialog.Submitted += NPCSpawnDialog_Submitted;
+            _tileAttributeDialog.Show(this.ParentForm);
+        }
+
+        private void NPCSpawnDialog_Submitted(object sender, EventArgs e)
+        {
+            this.AttributeData = new WarpAttributeData(_tileAttributeDialog.WarpX, _tileAttributeDialog.WarpY, _tileAttributeDialog.WarpMapID, _tileAttributeDialog.WarpLayerName);
+        }
     }
 }

@@ -27,13 +27,6 @@ namespace Lunar.Client
         public static readonly string FILEPATH_SFX = FILEPATH_DATA + "sfx/";
         public static readonly string FILEPATH_MUSIC = FILEPATH_DATA + "music/";
 
-
-        public const string SERVER_IP = "localhost";
-
-        public const int SERVER_PORT = 25566;
-
-        public const string GAME_NAME = "Lunar Engine";
-
         public const int CLICK_TIMER_DELAY = 500;
 
         public const int TILE_WIDTH = 32;
@@ -45,9 +38,6 @@ namespace Lunar.Client
         public const int INVENTORY_OFFSET_Y = 50;
 
         public const int INV_SLOT_OFFSET = 68;
-
-        public const int RESOLUTION_X = 1600;
-        public const int RESOLUTION_Y = 900;
 
         public const int DIALOGUE_SEP_X = 20;
 

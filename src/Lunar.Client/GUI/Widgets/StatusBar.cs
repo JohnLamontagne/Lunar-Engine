@@ -67,6 +67,8 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
+        public Vector2 Origin { get; set; }
+
         public Vector2 TextOffset
         {
             get { return _textOffset; }
@@ -121,6 +123,7 @@ namespace Lunar.Client.GUI.Widgets
             this.TextOffset = Vector2.Zero;
             this.ForeColor = Color.White;
             this.Selectable = true;
+            this.Origin = Vector2.Zero;
         }
 
         public void Update(GameTime gameTime)

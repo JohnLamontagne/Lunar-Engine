@@ -17,7 +17,7 @@ using Lunar.Editor.World;
 
 namespace Lunar.Editor.Controls
 {
-    public partial class TileAttributeDialog : DarkDialog
+    public partial class WarpAttributeDialog : DarkDialog
     {
         private Map _mapSubject;
         private Form _parentForm;
@@ -51,7 +51,7 @@ namespace Lunar.Editor.Controls
             set => this.txtWarpLayer.Text = value;
         }
 
-        public TileAttributeDialog(Form parentForm, Map mapSubject)
+        public WarpAttributeDialog(Form parentForm, Map mapSubject)
         {
             _parentForm = parentForm;
 

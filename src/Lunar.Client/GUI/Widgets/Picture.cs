@@ -61,12 +61,16 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
+        public Vector2 Origin { get; set; }
+
         public bool Selected { get; set; }
 
         public bool Selectable { get; set; }
 
         public Picture(Texture2D sprite)
         {
+            this.Visible = true;
+            this.Origin = Vector2.Zero;
             this.Sprite = sprite;
             this.Scale = new Vector2(1f);
 
@@ -90,9 +94,7 @@ namespace Lunar.Client.GUI.Widgets
         public virtual void Draw(SpriteBatch spriteBatch, int widgetCount)
         {
             if (this.Visible)
-                spriteBatch.Draw(this.Sprite, this.Position, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, (float)this.ZOrder / widgetCount);
-
-            spriteBatch.Draw(this.Sprite, this.Position, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, (float)this.ZOrder / widgetCount);
+                spriteBatch.Draw(this.Sprite, this.Position - this.Origin, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, (float)this.ZOrder / widgetCount);
         }
 
         public bool Contains(Point point)
