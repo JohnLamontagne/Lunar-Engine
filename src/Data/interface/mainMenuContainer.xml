@@ -1,0 +1,71 @@
+
+<Widgets>
+	<label name="lblMenuTitle">
+		<text>Main Menu</text>
+		<position>
+			<x>40%</x>
+			<y>56.90%</y>
+		</position>
+		<font>interfaceFont</font>
+	</label>
+	<label name="lblStatus">
+		<position>
+			<x>50%</x>
+			<y>50%</y>
+		</position>
+		<color>Red</color>
+		<font>interfaceFont</font>
+	</label>
+	<button name="btnLogin">
+		<texture>gfx/Interface/loginButton.png</texture>
+		<font>interfaceFont</font>
+		<text>Login</text>
+		<position>
+			<x>38%</x>
+			<y>75%</y>
+		</position>
+	</button>
+	<button name="btnRegister">
+		<texture>gfx/Interface/menuButton.png</texture>
+		<font>interfaceFont</font>
+		<text>Register</text>
+		<position>
+			<x>53%</x>
+			<y>64%</y>
+		</position>
+	</button>
+	<button name="btnWebsite">
+		<texture>gfx/Interface/menuButton.png</texture>
+		<font>interfaceFont</font>
+		<text>Website</text>
+		<position>
+			<x>53%</x>
+			<y>70%</y>
+		</position>
+	</button>
+	<textbox name="userLoginTextbox">
+		<texture>gfx/Interface/textUser.png</texture>
+		<font>interfaceFont</font>
+		<position>
+			<x>38%</x>
+			<y>60%</y>
+		</position>
+		<padding>
+			<x>12</x>
+			<y>8</y>
+		</padding>
+	</textbox>
+	<textbox name="userPasswordTextbox">
+		<texture>gfx/Interface/textPass.png</texture>
+		<font>interfaceFont</font>
+		<mask>*</mask>
+		<position>
+			<x>38%</x>
+			<y>67%</y>
+		</position>
+		<padding>
+			<x>12</x>
+			<y>8</y>
+		</padding>
+	</textbox>
+</Widgets>

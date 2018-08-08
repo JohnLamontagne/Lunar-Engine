@@ -234,6 +234,67 @@ namespace Lunar.Editor.Controls
             return itemPathNode;
         }
 
+        private DarkTreeNode BuildNPCTree()
+        {
+            var npcPathNode = new DarkTreeNode("Npcs")
+            {
+                Icon = Icons.folder_closed,
+                ExpandedIcon = Icons.folder_open
+            };
+
+            foreach (var npcFile in _project.NPCs)
+            {
+                var fileNode = new DarkTreeNode(npcFile.Name)
+                {
+                    Tag = npcFile,
+                    Icon = Icons.document_16xLG,
+                };
+                npcPathNode.Nodes.Add(fileNode);
+            }
+
+            var addNode = new DarkTreeNode("Add NPC")
+            {
+                Icon = Icons.Plus,
+                Tag = (Action<DarkTreeNode>)((node) =>
+                {
+                    using (SaveFileDialog dialog = new SaveFileDialog())
+                    {
+                        dialog.InitialDirectory = _project.ServerRootDirectory.FullName + @"\Npcs";
+                        dialog.RestoreDirectory = true;
+                        dialog.Filter = $@"Lunar Engine NPC Files (*{EngineConstants.NPC_FILE_EXT})|*{EngineConstants.NPC_FILE_EXT}";
+                        dialog.DefaultExt = EngineConstants.NPC_FILE_EXT;
+                        dialog.AddExtension = true;
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string path = dialog.FileName;
+
+                            var file = _project.AddNPC(path);
+
+                            DarkTreeNode fileNode = new DarkTreeNode(file.Name)
+                            {
+                                Icon = Icons.document_16xLG,
+                                Tag = file
+                            };
+
+                            ((DarkTreeNode)node).Nodes.Insert(((DarkTreeNode)node).Nodes.Count - 1, fileNode);
+
+                            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
+                            ((DarkTreeNode)node).Nodes.Add(new DarkTreeNode());
+                            ((DarkTreeNode)node).Nodes.RemoveAt(((DarkTreeNode)node).Nodes.Count - 1);
+                            // END HACK
+
+                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                        }
+                    }
+                })
+            };
+
+
+            npcPathNode.Nodes.Add(addNode);
+
+            return npcPathNode;
+        }
+
         private DarkTreeNode InitalizeProjectTree()
         {
             DarkTreeNode projectTreeNode = new DarkTreeNode("Game Data")
@@ -245,6 +306,7 @@ namespace Lunar.Editor.Controls
             projectTreeNode.Nodes.Add(this.BuildMapTree());
             projectTreeNode.Nodes.Add(this.BuildItemTree());
             projectTreeNode.Nodes.Add(this.BuildAnimationTree());
+            projectTreeNode.Nodes.Add(this.BuildNPCTree());
 
             return projectTreeNode;
         }

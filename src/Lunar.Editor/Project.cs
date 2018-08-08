@@ -21,6 +21,7 @@ using System.Xml.Linq;
 using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.World;
+using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Editor
 {
@@ -121,6 +122,16 @@ namespace Lunar.Editor
             return animationFile;
         }
 
+        public FileInfo AddNPC(string filePath)
+        {
+            var item = NPCDescriptor.Create();
+            item.Name = Path.GetFileNameWithoutExtension(filePath);
+            item.Save(filePath);
+            var itemFile = new FileInfo(filePath);
+            _itemFiles.Add(filePath, itemFile);
+            return itemFile;
+        }
+
         public void DeleteFile(string filePath)
         {
             // TODO: implement
@@ -153,9 +164,16 @@ namespace Lunar.Editor
             Directory.Delete(directoryPath);
         }
 
+      
         private void LoadContents(DirectoryInfo projectDirectory)
         {
+
             var mapDirectory = new DirectoryInfo(projectDirectory.FullName + "/Maps/");
+
+            if (!mapDirectory.Exists)
+            {
+                Directory.CreateDirectory(mapDirectory.FullName);
+            }
 
             // Load all of the map files
             foreach (var file in mapDirectory.GetFiles("*" + EngineConstants.MAP_FILE_EXT, SearchOption.AllDirectories))
@@ -165,10 +183,28 @@ namespace Lunar.Editor
 
             var itemDirectory = new DirectoryInfo(projectDirectory.FullName + "/Items/");
 
-            // Load all of the map files
+            if (!itemDirectory.Exists)
+            {
+                Directory.CreateDirectory(itemDirectory.FullName);
+            }
+
+            // Load all of the item files
             foreach (var file in itemDirectory.GetFiles("*" + EngineConstants.ITEM_FILE_EXT, SearchOption.AllDirectories))
             {
                 _itemFiles.Add(file.FullName, file);
+            }
+
+            var npcDirectory = new DirectoryInfo(projectDirectory.FullName + "/Npcs/");
+
+            if (!npcDirectory.Exists)
+            {
+                Directory.CreateDirectory(npcDirectory.FullName);
+            }
+
+            // Load all of the item files
+            foreach (var file in npcDirectory.GetFiles("*" + EngineConstants.NPC_FILE_EXT, SearchOption.AllDirectories))
+            {
+                _npcFiles.Add(file.FullName, file);
             }
 
         }

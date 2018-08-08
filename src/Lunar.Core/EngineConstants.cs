@@ -26,5 +26,7 @@ namespace Lunar.Core
         public const string ANIM_FILE_EXT = ".adat";
 
         public const string LUA_FILE_EXT = ".lua";
+
+        public const string NPC_FILE_EXT = ".ndat";
     }
 }

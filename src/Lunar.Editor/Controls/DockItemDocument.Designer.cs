@@ -1,6 +1,6 @@
 ﻿namespace Lunar.Editor.Controls
 {
-    partial class DockItemEditor
+    partial class DockItemDocument
     {
         /// <summary> 
         /// Required designer variable.

@@ -23,7 +23,7 @@ using ScintillaNET;
 
 namespace Lunar.Editor.Controls
 {
-    public partial class DockItemEditor : SavableDocument
+    public partial class DockItemDocument : SavableDocument
     {
         private FileInfo _file;
         private string _regularDockText;
@@ -35,7 +35,7 @@ namespace Lunar.Editor.Controls
 
         private ItemDescriptor _item;
 
-        private DockItemEditor()
+        private DockItemDocument()
         {
             InitializeComponent();
 
@@ -72,7 +72,7 @@ namespace Lunar.Editor.Controls
             this.txtEditor.SetKeywords(0, "if then end not function");
         }
 
-        public DockItemEditor(Project project, string text, Image icon, FileInfo file)
+        public DockItemDocument(Project project, string text, Image icon, FileInfo file)
             : this()
         {
             _project = project;

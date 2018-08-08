@@ -141,7 +141,7 @@ namespace Lunar.Editor
 
         private void OpenItemDocument(FileInfo file)
         {
-            var itemDoc = new DockItemEditor(_project, file.Name, Icons.document_16xLG, file)
+            var itemDoc = new DockItemDocument(_project, file.Name, Icons.document_16xLG, file)
             {
                 Tag = file
             };
@@ -208,7 +208,7 @@ namespace Lunar.Editor
 
         private void AnimationDoc_Enter(object sender, EventArgs e)
         {
-            
+            _dockTilesetTools.DockGroup.Hide();
         }
 
         private void LuaDoc_Enter(object sender, EventArgs e)
@@ -239,6 +239,34 @@ namespace Lunar.Editor
             DockPanel.AddContent(mapDoc);
         }
 
+        private void OpenNPCDocument(FileInfo file)
+        {
+            var npcDoc = new DockNPCEditor(_project, file.Name, Icons.document_16xLG, file);
+            {
+                Tag = file.Name;
+            };
+
+            // Make sure there isn't already an open document of this file
+            foreach (var nDoc in _editorDocuments)
+            {
+                if (nDoc.Tag == file)
+                {
+                    this.DockPanel.ActiveContent = nDoc;
+                    return;
+                }
+            }
+
+            npcDoc.Enter += NPCDoc_Enter;
+
+            _editorDocuments.Add(npcDoc);
+            DockPanel.AddContent(npcDoc);
+        }
+
+        private void NPCDoc_Enter(object sender, EventArgs e)
+        {
+            _dockTilesetTools.DockGroup.Hide();
+        }
+
         private void MapDoc_Enter(object sender, EventArgs e)
         {
             _dockTilesetTools.DockGroup?.Show();
@@ -267,6 +295,10 @@ namespace Lunar.Editor
             {
                 this.OpenAnimationDocument(e.File);
             }
+            else if (e.File.Extension == EngineConstants.NPC_FILE_EXT)
+            {
+                this.OpenNPCDocument(e.File);
+            }
         }
 
         private void _dockProject_File_Selected(object sender, DockProject.FileEventArgs e)
@@ -286,6 +318,10 @@ namespace Lunar.Editor
             else if (e.File.Extension == EngineConstants.ANIM_FILE_EXT)
             {
                 this.OpenAnimationDocument(e.File);
+            }
+            else if (e.File.Extension == EngineConstants.NPC_FILE_EXT)
+            {
+                this.OpenNPCDocument(e.File);
             }
         }
 

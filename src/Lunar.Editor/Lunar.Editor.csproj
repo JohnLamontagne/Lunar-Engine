@@ -110,11 +110,11 @@
     <Compile Include="Controls\DockNPCEditor.Designer.cs">
       <DependentUpon>DockNPCEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DockItemEditor.cs">
+    <Compile Include="Controls\DockItemDocument.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\DockItemEditor.Designer.cs">
-      <DependentUpon>DockItemEditor.cs</DependentUpon>
+    <Compile Include="Controls\DockItemDocument.Designer.cs">
+      <DependentUpon>DockItemDocument.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DockMapAttributes.cs">
       <SubType>UserControl</SubType>
@@ -233,8 +233,8 @@
     <EmbeddedResource Include="Controls\DockNPCEditor.resx">
       <DependentUpon>DockNPCEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DockItemEditor.resx">
-      <DependentUpon>DockItemEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\DockItemDocument.resx">
+      <DependentUpon>DockItemDocument.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockLUADocument.resx">
       <DependentUpon>DockLUADocument.cs</DependentUpon>

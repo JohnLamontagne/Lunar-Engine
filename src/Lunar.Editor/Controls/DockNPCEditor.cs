@@ -15,7 +15,9 @@ using DarkUI.Forms;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Lunar.Core.Utilities.Data;
 using Lunar.Core.World;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Editor.World;
 using Microsoft.Xna.Framework.Graphics;
 using ScintillaNET;
@@ -32,7 +34,7 @@ namespace Lunar.Editor.Controls
 
         private Project _project;
 
-        private ItemDescriptor _item;
+        private NPCDescriptor _npc;
 
         private DockNPCEditor()
         {
@@ -85,28 +87,36 @@ namespace Lunar.Editor.Controls
 
             _file = file;
 
-            _item = ItemDescriptor.Load(file.FullName);
+            _npc = NPCDescriptor.Load(file.FullName);
 
-            this.txtName.Text = _item.Name;
-            this.radioStackable.Checked = _item.Stackable;
-            this.radioNotStackable.Checked = !_item.Stackable;
-            this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
-            this.cmbEquipSlot.SelectedItem = EquipmentSlots.Chest;
-            this.txtStr.Text = _item.Strength.ToString();
-            this.txtInt.Text = _item.Intelligence.ToString();
-            this.txtDef.Text = _item.Defence.ToString();
-            this.txtHealth.Text = _item.Health.ToString();
-            this.txtDex.Text = _item.Dexterity.ToString();
+            this.txtName.Text = _npc.Name;
+            this.radAggressive.Checked = _npc.Aggressive;
+            this.radUnaggressive.Checked = !_npc.Aggressive;
+            this.txtStr.Text = _npc.Strength.ToString();
+            this.txtInt.Text = _npc.Intelligence.ToString();
+            this.txtDef.Text = _npc.Defence.ToString();
+            this.txtHealth.Text = _npc.Health.ToString();
+            this.txtDex.Text = _npc.Dexterity.ToString();
+            this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
+            this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
+            this.txtColLeft.Text = _npc.CollisionBounds.Left.ToString();
+            this.txtColTop.Text = _npc.CollisionBounds.Top.ToString();
+            this.txtColWidth.Text = _npc.CollisionBounds.Width.ToString();
+            this.txtColHeight.Text = _npc.CollisionBounds.Height.ToString();
+            this.txtMaxRoam.Text = _npc.MaxRoam.X.ToString();
 
-            onUseToolStripMenuItem.Checked = true;
-            if (_item.Scripts.ContainsKey("OnUse"))
+            if (File.Exists(_npc.TexturePath))
             {
-                this.txtEditor.Text = _item.Scripts["OnUse"];
+                this.picSpriteSheet.Load(_npc.TexturePath);
+                this.picCollisionPreview.Load(_npc.TexturePath);
+
+                if (_npc.FrameSize == Vector.Zero)
+                    _npc.FrameSize = new Vector(this.picSpriteSheet.Image.Width, this.picSpriteSheet.Image.Height);
+
+                this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
+                this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
             }
-            else
-            {
-                this.txtEditor.Text = "function OnUse(args) \n end";
-            }
+                
         }
 
         public override void Close()
@@ -132,7 +142,7 @@ namespace Lunar.Editor.Controls
            
             this.DockText = _regularDockText;
             _unsaved = false;
-            _item.Save(_file.FullName);
+            _npc.Save(_file.FullName);
         }
 
         private void txtEditor_TextChanged(object sender, System.EventArgs e)
@@ -140,9 +150,9 @@ namespace Lunar.Editor.Controls
             this.DockText = _unsavedDockText;
             _unsaved = true;
 
-            if (_item.Scripts.ContainsKey(_activeScript))
+            if (_npc.Scripts.ContainsKey(_activeScript))
             {
-                _item.Scripts[_activeScript] = txtEditor.Text;
+                _npc.Scripts[_activeScript] = txtEditor.Text;
             }
         }
 
@@ -171,9 +181,7 @@ namespace Lunar.Editor.Controls
 
                     string path = dialog.FileName; 
 
-                    _item.TexturePath = path;
-
-                    
+                    _npc.TexturePath = path;
                 }
             }
         }
@@ -197,41 +205,7 @@ namespace Lunar.Editor.Controls
             }
         }
 
-        private void txtStr_TextChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-
-        }
-
-        private void txtInt_TextChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-
-        }
-
-        private void txtDex_TextChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-
-        }
-
-        private void txtDef_TextChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-
-        }
-
-        private void txtHealth_TextChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-
-            
-        }
+      
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
@@ -281,14 +255,13 @@ namespace Lunar.Editor.Controls
             onDroppedToolStripMenuItem.Checked = false;
             onCreatedToolStripMenuItem.Checked = false;
 
-            if (_item.Scripts.ContainsKey("OnUse"))
+            if (_npc.Scripts.ContainsKey("OnUse"))
             {
-                this.txtEditor.Text = _item.Scripts["OnUse"];
+                this.txtEditor.Text = _npc.Scripts["OnUse"];
             }
             else
             {
-                this.txtEditor.Text = "function OnUse(args) \nend";
-                _item.Scripts.Add("OnUse", this.txtEditor.Text);
+                _npc.Scripts.Add("OnUse", this.txtEditor.Text);
             }
 
             _activeScript = "OnUse";
@@ -302,14 +275,13 @@ namespace Lunar.Editor.Controls
             onDroppedToolStripMenuItem.Checked = false;
             onCreatedToolStripMenuItem.Checked = false;
 
-            if (_item.Scripts.ContainsKey("OnEquip"))
+            if (_npc.Scripts.ContainsKey("OnEquip"))
             {
-                this.txtEditor.Text = _item.Scripts["OnEqip"];
+                this.txtEditor.Text = _npc.Scripts["OnEqip"];
             }
             else
             {
-                this.txtEditor.Text = "function OnEquip(args) \nend";
-                _item.Scripts.Add("OnEqip", this.txtEditor.Text);
+                _npc.Scripts.Add("OnEqip", this.txtEditor.Text);
             }
 
             _activeScript = "OnEquip";
@@ -323,14 +295,13 @@ namespace Lunar.Editor.Controls
             onDroppedToolStripMenuItem.Checked = false;
             onCreatedToolStripMenuItem.Checked = false;
 
-            if (_item.Scripts.ContainsKey("OnAcquired"))
+            if (_npc.Scripts.ContainsKey("OnAcquired"))
             {
-                this.txtEditor.Text = _item.Scripts["OnAcquired"];
+                this.txtEditor.Text = _npc.Scripts["OnAcquired"];
             }
             else
             {
-                this.txtEditor.Text = "function OnAcquired(args) \nend";
-                _item.Scripts.Add("OnAcquired", this.txtEditor.Text);
+                _npc.Scripts.Add("OnAcquired", this.txtEditor.Text);
             }
 
             _activeScript = "OnAcquired";
@@ -344,14 +315,13 @@ namespace Lunar.Editor.Controls
             onUseToolStripMenuItem.Checked = false;
             onCreatedToolStripMenuItem.Checked = false;
 
-            if (_item.Scripts.ContainsKey("OnDropped"))
+            if (_npc.Scripts.ContainsKey("OnDropped"))
             {
-                this.txtEditor.Text = _item.Scripts["OnDropped"];
+                this.txtEditor.Text = _npc.Scripts["OnDropped"];
             }
             else
             {
-                this.txtEditor.Text = "function OnDropped(args) \nend";
-                _item.Scripts.Add("OnDropped", this.txtEditor.Text);
+                _npc.Scripts.Add("OnDropped", this.txtEditor.Text);
             }
 
             _activeScript = "OnDropped";
@@ -365,18 +335,189 @@ namespace Lunar.Editor.Controls
             onEquipToolStripMenuItem.Checked = false;
             onUseToolStripMenuItem.Checked = false;
 
-            if (_item.Scripts.ContainsKey("OnCreated"))
+            if (_npc.Scripts.ContainsKey("OnCreated"))
             {
-                this.txtEditor.Text = _item.Scripts["OnCreated"];
+                this.txtEditor.Text = _npc.Scripts["OnCreated"];
             }
             else
             {
-                this.txtEditor.Text = "function OnCreated(args) \nend";
-                _item.Scripts.Add("OnCreated", this.txtEditor.Text);
+                _npc.Scripts.Add("OnCreated", this.txtEditor.Text);
             }
 
             _activeScript = "OnCreated";
         }
 
+        private void txtColTop_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtColTop.Text, out int newTop);
+
+            _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, newTop, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
+
+            this.picCollisionPreview.Invalidate();
+        }
+
+        private void txtColHeight_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtColHeight.Text, out int newHeight);
+
+            _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, _npc.CollisionBounds.Top, _npc.CollisionBounds.Width, newHeight);
+
+            this.picCollisionPreview.Invalidate();
+        }
+
+        private void txtColLeft_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtColLeft.Text, out int newLeft);
+
+            _npc.CollisionBounds = new Rect(newLeft, _npc.CollisionBounds.Top, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
+
+            this.picCollisionPreview.Invalidate();
+        }
+
+        private void txtColWidth_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtColWidth.Text, out int newWidth);
+
+            _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, _npc.CollisionBounds.Top, newWidth, _npc.CollisionBounds.Height);
+
+            this.picCollisionPreview.Invalidate();
+        }
+
+        private void txtStr_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtStr.Text, out int newStr);
+
+            _npc.Strength = newStr;
+        }
+
+        private void txtInt_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtInt.Text, out int newInt);
+
+            _npc.Intelligence = newInt;
+        }
+
+        private void txtDex_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtDex.Text, out int newDex);
+
+            _npc.Dexterity = newDex;
+        }
+
+        private void txtDef_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtDef.Text, out int newDef);
+
+            _npc.Defence = newDef;
+        }
+
+        private void txtHealth_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtHealth.Text, out int newHealth);
+
+            _npc.Health = newHealth;
+        }
+
+        private void picSpriteSheet_Paint(object sender, PaintEventArgs e)
+        {
+            const string notLoadedMessage = "Load Spritesheet Image";
+
+            if (string.IsNullOrEmpty(_npc.TexturePath))
+            {
+                e.Graphics.DrawString(notLoadedMessage, DefaultFont, Brushes.White, new Point((int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(notLoadedMessage, DefaultFont).Width / 2f),
+                    (int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(notLoadedMessage, DefaultFont).Height / 2f)));
+            }
+            else
+            {
+                float factor_x = this.picSpriteSheet.Image.Width / (float)this.picSpriteSheet.Width;
+                float factor_y = this.picSpriteSheet.Image.Height / (float)this.picSpriteSheet.Height;
+
+                for (int x = (int)_npc.FrameSize.X; x < this.picSpriteSheet.Image.Width; x += (int)_npc.FrameSize.X)
+                {
+                    e.Graphics.DrawLine(new Pen(Color.Red, 3), new Point((int)(x / factor_x), 0), new Point((int)(x / factor_x), this.picSpriteSheet.Height));
+                }
+
+                for (int y = (int)_npc.FrameSize.Y; y < this.picSpriteSheet.Image.Height; y += (int)_npc.FrameSize.Y)
+                {
+                    e.Graphics.DrawLine(new Pen(Color.Red, 3), new Point(0, (int)(y / factor_y)), new Point(this.picSpriteSheet.Width, (int)(y / factor_y)));
+                }
+            }
+        }
+
+        private void picCollisionPreview_Paint(object sender, PaintEventArgs e)
+        {
+            if (string.IsNullOrEmpty(_npc.TexturePath))
+                return;
+
+            float factor_x = this.picSpriteSheet.Image.Width / (float)this.picSpriteSheet.Width;
+            float factor_y = this.picSpriteSheet.Image.Height / (float)this.picSpriteSheet.Height;
+
+
+            for (int x = 0; x < this.picSpriteSheet.Image.Width; x += (int) _npc.FrameSize.X)
+            {
+                for (int y = 0; y < this.picSpriteSheet.Image.Height; y += (int) _npc.FrameSize.Y)
+                {
+                    Color color = Color.FromArgb(122, Color.Red);
+                    e.Graphics.FillRectangle(new SolidBrush(color), new Rectangle((int)((x + _npc.CollisionBounds.Left) / factor_x), 
+                        (int)((y + _npc.CollisionBounds.Top) / factor_y), (int)(_npc.CollisionBounds.Width / factor_x), (int)(_npc.CollisionBounds.Height / factor_y)));
+                }
+            }
+
+           
+        }
+
+        private void picSpriteSheet_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_npc.TexturePath))
+                return;
+
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.RestoreDirectory = true;
+                dialog.InitialDirectory = _project.ClientRootDirectory.FullName;
+                dialog.Filter = @"Tileset Files (*.png)|*.png";
+                dialog.DefaultExt = ".png";
+                dialog.AddExtension = true;
+                dialog.Multiselect = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = dialog.FileName;
+
+                    _npc.TexturePath = path;
+                    
+                    this.picSpriteSheet.Load(path);
+                    _npc.FrameSize = new Vector(this.picSpriteSheet.Image.Width, this.picSpriteSheet.Image.Height);
+                    this.picSpriteSheet.Refresh();
+
+                    this.picCollisionPreview.Load(path);
+                }
+            }
+        }
+
+        private void txtFrameWidth_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtFrameWidth.Text, out int newWidth);
+
+            _npc.FrameSize = new Vector(newWidth, _npc.FrameSize.Y);
+
+            this.picSpriteSheet.Invalidate();
+        }
+
+        private void txtFrameHeight_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtFrameHeight.Text, out int newHeight);
+
+            _npc.FrameSize = new Vector(_npc.FrameSize.X, newHeight);
+
+            this.picSpriteSheet.Invalidate();
+        }
+
+        private void txtMaxRoam_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(this.txtMaxRoam.Text, out int newMaxRoam);
+
+            _npc.MaxRoam = new Vector(newMaxRoam, newMaxRoam);
+        }
     }
 }
