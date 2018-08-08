@@ -17,7 +17,7 @@ Licensed under the Apache License, Version 2.0 (the "License").
 
 Website & Community
 -------
-https://www.mmorpgcreation.com
+https://www.rpgorigin.com
 
 Multimedia
 -------
