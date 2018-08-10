@@ -15,6 +15,7 @@ using DarkUI.Forms;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Lunar.Core;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
@@ -133,22 +134,27 @@ namespace Lunar.Editor.Controls
 
         private void DockItemEditor_Load(object sender, System.EventArgs e)
         {
-            this.DockText = _regularDockText;
-            _unsaved = false;
+            this.MarkUnsaved();
         }
 
-        public void Save()
+        public override void Save()
         {
-           
             this.DockText = _regularDockText;
             _unsaved = false;
+
+            if (_npc.Name + EngineConstants.NPC_FILE_EXT != _file.Name)
+            {
+                File.Move(_file.FullName, _file.DirectoryName + "/" + _npc.Name + EngineConstants.NPC_FILE_EXT);
+
+                _file = _project.ChangeNPC(_file.FullName, _file.DirectoryName + "\\" + _npc.Name + EngineConstants.NPC_FILE_EXT);
+            }
+
             _npc.Save(_file.FullName);
         }
 
         private void txtEditor_TextChanged(object sender, System.EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
             if (_npc.Scripts.ContainsKey(_activeScript))
             {
@@ -209,32 +215,30 @@ namespace Lunar.Editor.Controls
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            _npc.Name = txtName.Text;
 
-            
+            this.DockText = _npc.Name + EngineConstants.ITEM_FILE_EXT;
+            _unsavedDockText = _npc.Name + EngineConstants.ITEM_FILE_EXT + "*";
+
+            this.MarkUnsaved();
         }
 
         private void radioStackable_CheckedChanged(object sender, EventArgs e)
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
-
         }
 
         private void radioNotStackable_CheckedChanged(object sender, EventArgs e)
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
-
-            
         }
 
         private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
-
         }
 
 
@@ -242,8 +246,6 @@ namespace Lunar.Editor.Controls
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
-
-            
         }
 
         private void onUseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -349,6 +351,8 @@ namespace Lunar.Editor.Controls
 
         private void txtColTop_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtColTop.Text, out int newTop);
 
             _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, newTop, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
@@ -358,6 +362,8 @@ namespace Lunar.Editor.Controls
 
         private void txtColHeight_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtColHeight.Text, out int newHeight);
 
             _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, _npc.CollisionBounds.Top, _npc.CollisionBounds.Width, newHeight);
@@ -367,6 +373,8 @@ namespace Lunar.Editor.Controls
 
         private void txtColLeft_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtColLeft.Text, out int newLeft);
 
             _npc.CollisionBounds = new Rect(newLeft, _npc.CollisionBounds.Top, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
@@ -376,6 +384,8 @@ namespace Lunar.Editor.Controls
 
         private void txtColWidth_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtColWidth.Text, out int newWidth);
 
             _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, _npc.CollisionBounds.Top, newWidth, _npc.CollisionBounds.Height);
@@ -385,6 +395,8 @@ namespace Lunar.Editor.Controls
 
         private void txtStr_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtStr.Text, out int newStr);
 
             _npc.Strength = newStr;
@@ -392,6 +404,8 @@ namespace Lunar.Editor.Controls
 
         private void txtInt_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtInt.Text, out int newInt);
 
             _npc.Intelligence = newInt;
@@ -399,6 +413,8 @@ namespace Lunar.Editor.Controls
 
         private void txtDex_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtDex.Text, out int newDex);
 
             _npc.Dexterity = newDex;
@@ -406,6 +422,8 @@ namespace Lunar.Editor.Controls
 
         private void txtDef_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtDef.Text, out int newDef);
 
             _npc.Defence = newDef;
@@ -413,6 +431,8 @@ namespace Lunar.Editor.Controls
 
         private void txtHealth_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtHealth.Text, out int newHealth);
 
             _npc.Health = newHealth;
@@ -491,12 +511,16 @@ namespace Lunar.Editor.Controls
                     this.picSpriteSheet.Refresh();
 
                     this.picCollisionPreview.Load(path);
+
+                    this.MarkUnsaved();
                 }
             }
         }
 
         private void txtFrameWidth_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtFrameWidth.Text, out int newWidth);
 
             _npc.FrameSize = new Vector(newWidth, _npc.FrameSize.Y);
@@ -506,6 +530,8 @@ namespace Lunar.Editor.Controls
 
         private void txtFrameHeight_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtFrameHeight.Text, out int newHeight);
 
             _npc.FrameSize = new Vector(_npc.FrameSize.X, newHeight);
@@ -515,9 +541,19 @@ namespace Lunar.Editor.Controls
 
         private void txtMaxRoam_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(this.txtMaxRoam.Text, out int newMaxRoam);
 
             _npc.MaxRoam = new Vector(newMaxRoam, newMaxRoam);
         }
+
+        private void MarkUnsaved()
+        {
+            this.DockText = _unsavedDockText;
+            _unsaved = true;
+        }
+
+
     }
 }

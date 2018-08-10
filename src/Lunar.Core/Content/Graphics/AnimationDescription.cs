@@ -68,6 +68,8 @@ namespace Lunar.Core.Content.Graphics
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
                 {
+                    binaryWriter.Write(this.Name);
+
                     binaryWriter.Write(this.SubSurfaceAnimation.FrameWidth);
                     binaryWriter.Write(this.SubSurfaceAnimation.FrameHeight);
                     binaryWriter.Write(this.SubSurfaceAnimation.FrameTime);

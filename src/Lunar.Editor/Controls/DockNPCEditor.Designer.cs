@@ -31,6 +31,19 @@
             this.darkToolStrip1 = new DarkUI.Controls.DarkToolStrip();
             this.buttonSave = new System.Windows.Forms.ToolStripButton();
             this.darkSectionPanel1 = new DarkUI.Controls.DarkSectionPanel();
+            this.txtMaxRoam = new DarkUI.Controls.DarkTextBox();
+            this.darkLabel15 = new DarkUI.Controls.DarkLabel();
+            this.darkSectionPanel2 = new DarkUI.Controls.DarkSectionPanel();
+            this.txtHealth = new DarkUI.Controls.DarkTextBox();
+            this.txtDef = new DarkUI.Controls.DarkTextBox();
+            this.txtDex = new DarkUI.Controls.DarkTextBox();
+            this.txtStr = new DarkUI.Controls.DarkTextBox();
+            this.txtInt = new DarkUI.Controls.DarkTextBox();
+            this.darkLabel8 = new DarkUI.Controls.DarkLabel();
+            this.darkLabel7 = new DarkUI.Controls.DarkLabel();
+            this.darkLabel6 = new DarkUI.Controls.DarkLabel();
+            this.darkLabel5 = new DarkUI.Controls.DarkLabel();
+            this.darkLabel4 = new DarkUI.Controls.DarkLabel();
             this.darkLabel2 = new DarkUI.Controls.DarkLabel();
             this.radUnaggressive = new DarkUI.Controls.DarkRadioButton();
             this.radAggressive = new DarkUI.Controls.DarkRadioButton();
@@ -65,21 +78,9 @@
             this.darkLabel11 = new DarkUI.Controls.DarkLabel();
             this.darkLabel10 = new DarkUI.Controls.DarkLabel();
             this.darkLabel9 = new DarkUI.Controls.DarkLabel();
-            this.darkSectionPanel2 = new DarkUI.Controls.DarkSectionPanel();
-            this.txtHealth = new DarkUI.Controls.DarkTextBox();
-            this.txtDef = new DarkUI.Controls.DarkTextBox();
-            this.txtDex = new DarkUI.Controls.DarkTextBox();
-            this.txtStr = new DarkUI.Controls.DarkTextBox();
-            this.txtInt = new DarkUI.Controls.DarkTextBox();
-            this.darkLabel8 = new DarkUI.Controls.DarkLabel();
-            this.darkLabel7 = new DarkUI.Controls.DarkLabel();
-            this.darkLabel6 = new DarkUI.Controls.DarkLabel();
-            this.darkLabel5 = new DarkUI.Controls.DarkLabel();
-            this.darkLabel4 = new DarkUI.Controls.DarkLabel();
-            this.txtMaxRoam = new DarkUI.Controls.DarkTextBox();
-            this.darkLabel15 = new DarkUI.Controls.DarkLabel();
             this.darkToolStrip1.SuspendLayout();
             this.darkSectionPanel1.SuspendLayout();
+            this.darkSectionPanel2.SuspendLayout();
             this.darkSectionPanel3.SuspendLayout();
             this.darkMenuStrip1.SuspendLayout();
             this.darkSectionPanel4.SuspendLayout();
@@ -87,7 +88,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.picSpriteSheet)).BeginInit();
             this.darkSectionPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCollisionPreview)).BeginInit();
-            this.darkSectionPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // darkToolStrip1
@@ -131,6 +131,150 @@
             this.darkSectionPanel1.SectionHeader = "Core Properties";
             this.darkSectionPanel1.Size = new System.Drawing.Size(409, 377);
             this.darkSectionPanel1.TabIndex = 2;
+            // 
+            // txtMaxRoam
+            // 
+            this.txtMaxRoam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtMaxRoam.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtMaxRoam.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtMaxRoam.Location = new System.Drawing.Point(94, 123);
+            this.txtMaxRoam.Name = "txtMaxRoam";
+            this.txtMaxRoam.Size = new System.Drawing.Size(51, 23);
+            this.txtMaxRoam.TabIndex = 18;
+            this.txtMaxRoam.TextChanged += new System.EventHandler(this.txtMaxRoam_TextChanged);
+            // 
+            // darkLabel15
+            // 
+            this.darkLabel15.AutoSize = true;
+            this.darkLabel15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel15.Location = new System.Drawing.Point(13, 125);
+            this.darkLabel15.Name = "darkLabel15";
+            this.darkLabel15.Size = new System.Drawing.Size(66, 15);
+            this.darkLabel15.TabIndex = 17;
+            this.darkLabel15.Text = "Max Roam:";
+            // 
+            // darkSectionPanel2
+            // 
+            this.darkSectionPanel2.Controls.Add(this.txtHealth);
+            this.darkSectionPanel2.Controls.Add(this.txtDef);
+            this.darkSectionPanel2.Controls.Add(this.txtDex);
+            this.darkSectionPanel2.Controls.Add(this.txtStr);
+            this.darkSectionPanel2.Controls.Add(this.txtInt);
+            this.darkSectionPanel2.Controls.Add(this.darkLabel8);
+            this.darkSectionPanel2.Controls.Add(this.darkLabel7);
+            this.darkSectionPanel2.Controls.Add(this.darkLabel6);
+            this.darkSectionPanel2.Controls.Add(this.darkLabel5);
+            this.darkSectionPanel2.Controls.Add(this.darkLabel4);
+            this.darkSectionPanel2.Location = new System.Drawing.Point(13, 219);
+            this.darkSectionPanel2.Name = "darkSectionPanel2";
+            this.darkSectionPanel2.SectionHeader = "Stat Information";
+            this.darkSectionPanel2.Size = new System.Drawing.Size(383, 136);
+            this.darkSectionPanel2.TabIndex = 15;
+            // 
+            // txtHealth
+            // 
+            this.txtHealth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtHealth.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtHealth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtHealth.Location = new System.Drawing.Point(220, 63);
+            this.txtHealth.Name = "txtHealth";
+            this.txtHealth.Size = new System.Drawing.Size(51, 23);
+            this.txtHealth.TabIndex = 19;
+            this.txtHealth.TextChanged += new System.EventHandler(this.txtHealth_TextChanged);
+            // 
+            // txtDef
+            // 
+            this.txtDef.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtDef.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDef.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtDef.Location = new System.Drawing.Point(220, 30);
+            this.txtDef.Name = "txtDef";
+            this.txtDef.Size = new System.Drawing.Size(51, 23);
+            this.txtDef.TabIndex = 18;
+            this.txtDef.TextChanged += new System.EventHandler(this.txtDef_TextChanged);
+            // 
+            // txtDex
+            // 
+            this.txtDex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtDex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtDex.Location = new System.Drawing.Point(83, 102);
+            this.txtDex.Name = "txtDex";
+            this.txtDex.Size = new System.Drawing.Size(51, 23);
+            this.txtDex.TabIndex = 17;
+            this.txtDex.TextChanged += new System.EventHandler(this.txtDex_TextChanged);
+            // 
+            // txtStr
+            // 
+            this.txtStr.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtStr.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtStr.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtStr.Location = new System.Drawing.Point(83, 30);
+            this.txtStr.Name = "txtStr";
+            this.txtStr.Size = new System.Drawing.Size(51, 23);
+            this.txtStr.TabIndex = 16;
+            this.txtStr.TextChanged += new System.EventHandler(this.txtStr_TextChanged);
+            // 
+            // txtInt
+            // 
+            this.txtInt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtInt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtInt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtInt.Location = new System.Drawing.Point(83, 65);
+            this.txtInt.Name = "txtInt";
+            this.txtInt.Size = new System.Drawing.Size(51, 23);
+            this.txtInt.TabIndex = 15;
+            this.txtInt.TextChanged += new System.EventHandler(this.txtInt_TextChanged);
+            // 
+            // darkLabel8
+            // 
+            this.darkLabel8.AutoSize = true;
+            this.darkLabel8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel8.Location = new System.Drawing.Point(163, 65);
+            this.darkLabel8.Name = "darkLabel8";
+            this.darkLabel8.Size = new System.Drawing.Size(45, 15);
+            this.darkLabel8.TabIndex = 14;
+            this.darkLabel8.Text = "Health:";
+            // 
+            // darkLabel7
+            // 
+            this.darkLabel7.AutoSize = true;
+            this.darkLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel7.Location = new System.Drawing.Point(163, 32);
+            this.darkLabel7.Name = "darkLabel7";
+            this.darkLabel7.Size = new System.Drawing.Size(53, 15);
+            this.darkLabel7.TabIndex = 13;
+            this.darkLabel7.Text = "Defence:";
+            // 
+            // darkLabel6
+            // 
+            this.darkLabel6.AutoSize = true;
+            this.darkLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel6.Location = new System.Drawing.Point(11, 104);
+            this.darkLabel6.Name = "darkLabel6";
+            this.darkLabel6.Size = new System.Drawing.Size(56, 15);
+            this.darkLabel6.TabIndex = 12;
+            this.darkLabel6.Text = "Dexterity:";
+            // 
+            // darkLabel5
+            // 
+            this.darkLabel5.AutoSize = true;
+            this.darkLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel5.Location = new System.Drawing.Point(11, 67);
+            this.darkLabel5.Name = "darkLabel5";
+            this.darkLabel5.Size = new System.Drawing.Size(71, 15);
+            this.darkLabel5.TabIndex = 11;
+            this.darkLabel5.Text = "Intelligence:";
+            // 
+            // darkLabel4
+            // 
+            this.darkLabel4.AutoSize = true;
+            this.darkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel4.Location = new System.Drawing.Point(11, 32);
+            this.darkLabel4.Name = "darkLabel4";
+            this.darkLabel4.Size = new System.Drawing.Size(55, 15);
+            this.darkLabel4.TabIndex = 10;
+            this.darkLabel4.Text = "Strength:";
             // 
             // darkLabel2
             // 
@@ -301,6 +445,7 @@
             this.cmbEquipSlot.Name = "cmbEquipSlot";
             this.cmbEquipSlot.Size = new System.Drawing.Size(132, 23);
             this.cmbEquipSlot.TabIndex = 11;
+            this.cmbEquipSlot.SelectedIndexChanged += new System.EventHandler(this.cmbEquipmentSlot_SelectedIndexChanged);
             // 
             // lstItems
             // 
@@ -489,145 +634,6 @@
             this.darkLabel9.TabIndex = 4;
             this.darkLabel9.Text = "Top:";
             // 
-            // darkSectionPanel2
-            // 
-            this.darkSectionPanel2.Controls.Add(this.txtHealth);
-            this.darkSectionPanel2.Controls.Add(this.txtDef);
-            this.darkSectionPanel2.Controls.Add(this.txtDex);
-            this.darkSectionPanel2.Controls.Add(this.txtStr);
-            this.darkSectionPanel2.Controls.Add(this.txtInt);
-            this.darkSectionPanel2.Controls.Add(this.darkLabel8);
-            this.darkSectionPanel2.Controls.Add(this.darkLabel7);
-            this.darkSectionPanel2.Controls.Add(this.darkLabel6);
-            this.darkSectionPanel2.Controls.Add(this.darkLabel5);
-            this.darkSectionPanel2.Controls.Add(this.darkLabel4);
-            this.darkSectionPanel2.Location = new System.Drawing.Point(13, 219);
-            this.darkSectionPanel2.Name = "darkSectionPanel2";
-            this.darkSectionPanel2.SectionHeader = "Stat Information";
-            this.darkSectionPanel2.Size = new System.Drawing.Size(383, 136);
-            this.darkSectionPanel2.TabIndex = 15;
-            // 
-            // txtHealth
-            // 
-            this.txtHealth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtHealth.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtHealth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtHealth.Location = new System.Drawing.Point(220, 63);
-            this.txtHealth.Name = "txtHealth";
-            this.txtHealth.Size = new System.Drawing.Size(51, 23);
-            this.txtHealth.TabIndex = 19;
-            // 
-            // txtDef
-            // 
-            this.txtDef.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtDef.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDef.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDef.Location = new System.Drawing.Point(220, 30);
-            this.txtDef.Name = "txtDef";
-            this.txtDef.Size = new System.Drawing.Size(51, 23);
-            this.txtDef.TabIndex = 18;
-            // 
-            // txtDex
-            // 
-            this.txtDex.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtDex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDex.Location = new System.Drawing.Point(83, 102);
-            this.txtDex.Name = "txtDex";
-            this.txtDex.Size = new System.Drawing.Size(51, 23);
-            this.txtDex.TabIndex = 17;
-            // 
-            // txtStr
-            // 
-            this.txtStr.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtStr.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtStr.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtStr.Location = new System.Drawing.Point(83, 30);
-            this.txtStr.Name = "txtStr";
-            this.txtStr.Size = new System.Drawing.Size(51, 23);
-            this.txtStr.TabIndex = 16;
-            // 
-            // txtInt
-            // 
-            this.txtInt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtInt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtInt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtInt.Location = new System.Drawing.Point(83, 65);
-            this.txtInt.Name = "txtInt";
-            this.txtInt.Size = new System.Drawing.Size(51, 23);
-            this.txtInt.TabIndex = 15;
-            // 
-            // darkLabel8
-            // 
-            this.darkLabel8.AutoSize = true;
-            this.darkLabel8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel8.Location = new System.Drawing.Point(163, 65);
-            this.darkLabel8.Name = "darkLabel8";
-            this.darkLabel8.Size = new System.Drawing.Size(45, 15);
-            this.darkLabel8.TabIndex = 14;
-            this.darkLabel8.Text = "Health:";
-            // 
-            // darkLabel7
-            // 
-            this.darkLabel7.AutoSize = true;
-            this.darkLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel7.Location = new System.Drawing.Point(163, 32);
-            this.darkLabel7.Name = "darkLabel7";
-            this.darkLabel7.Size = new System.Drawing.Size(53, 15);
-            this.darkLabel7.TabIndex = 13;
-            this.darkLabel7.Text = "Defence:";
-            // 
-            // darkLabel6
-            // 
-            this.darkLabel6.AutoSize = true;
-            this.darkLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel6.Location = new System.Drawing.Point(11, 104);
-            this.darkLabel6.Name = "darkLabel6";
-            this.darkLabel6.Size = new System.Drawing.Size(56, 15);
-            this.darkLabel6.TabIndex = 12;
-            this.darkLabel6.Text = "Dexterity:";
-            // 
-            // darkLabel5
-            // 
-            this.darkLabel5.AutoSize = true;
-            this.darkLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel5.Location = new System.Drawing.Point(11, 67);
-            this.darkLabel5.Name = "darkLabel5";
-            this.darkLabel5.Size = new System.Drawing.Size(71, 15);
-            this.darkLabel5.TabIndex = 11;
-            this.darkLabel5.Text = "Intelligence:";
-            // 
-            // darkLabel4
-            // 
-            this.darkLabel4.AutoSize = true;
-            this.darkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel4.Location = new System.Drawing.Point(11, 32);
-            this.darkLabel4.Name = "darkLabel4";
-            this.darkLabel4.Size = new System.Drawing.Size(55, 15);
-            this.darkLabel4.TabIndex = 10;
-            this.darkLabel4.Text = "Strength:";
-            // 
-            // txtMaxRoam
-            // 
-            this.txtMaxRoam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtMaxRoam.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtMaxRoam.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtMaxRoam.Location = new System.Drawing.Point(94, 123);
-            this.txtMaxRoam.Name = "txtMaxRoam";
-            this.txtMaxRoam.Size = new System.Drawing.Size(51, 23);
-            this.txtMaxRoam.TabIndex = 18;
-            this.txtMaxRoam.TextChanged += new System.EventHandler(this.txtMaxRoam_TextChanged);
-            // 
-            // darkLabel15
-            // 
-            this.darkLabel15.AutoSize = true;
-            this.darkLabel15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel15.Location = new System.Drawing.Point(13, 125);
-            this.darkLabel15.Name = "darkLabel15";
-            this.darkLabel15.Size = new System.Drawing.Size(66, 15);
-            this.darkLabel15.TabIndex = 17;
-            this.darkLabel15.Text = "Max Roam:";
-            // 
             // DockNPCEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -647,6 +653,8 @@
             this.darkToolStrip1.PerformLayout();
             this.darkSectionPanel1.ResumeLayout(false);
             this.darkSectionPanel1.PerformLayout();
+            this.darkSectionPanel2.ResumeLayout(false);
+            this.darkSectionPanel2.PerformLayout();
             this.darkSectionPanel3.ResumeLayout(false);
             this.darkSectionPanel3.PerformLayout();
             this.darkMenuStrip1.ResumeLayout(false);
@@ -659,8 +667,6 @@
             this.darkSectionPanel6.ResumeLayout(false);
             this.darkSectionPanel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCollisionPreview)).EndInit();
-            this.darkSectionPanel2.ResumeLayout(false);
-            this.darkSectionPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }

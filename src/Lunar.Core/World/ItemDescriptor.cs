@@ -80,6 +80,11 @@ namespace Lunar.Core.World
             set => _health = value;
         }
 
+        public ItemDescriptor()
+        {
+            _scripts = new Dictionary<string, string>();
+        }
+
         public void Save(string filePath)
         {
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
@@ -112,7 +117,7 @@ namespace Lunar.Core.World
             var desc = new ItemDescriptor()
             {
                 _name = "Blank",
-                _texturePath = null,
+                _texturePath = "",
                 _stackable = false,
                 _itemType = ItemTypes.NA,
                 _slotType = EquipmentSlots.NE,

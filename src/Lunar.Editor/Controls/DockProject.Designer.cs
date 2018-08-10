@@ -34,10 +34,6 @@ namespace Lunar.Editor.Controls
         {
             this.treeProject = new DarkUI.Controls.DarkTreeView();
             this.projectExplorerMenu = new DarkUI.Controls.DarkContextMenu();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.folderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.animationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectExplorerMenu.SuspendLayout();
             this.SuspendLayout();
@@ -61,45 +57,9 @@ namespace Lunar.Editor.Controls
             this.projectExplorerMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.projectExplorerMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.projectExplorerMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.projectExplorerMenu.Name = "darkContextMenu1";
-            this.projectExplorerMenu.Size = new System.Drawing.Size(108, 48);
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.folderToolStripMenuItem,
-            this.scriptToolStripMenuItem,
-            this.animationToolStripMenuItem});
-            this.newToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.newToolStripMenuItem.Text = "New";
-            // 
-            // folderToolStripMenuItem
-            // 
-            this.folderToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.folderToolStripMenuItem.Name = "folderToolStripMenuItem";
-            this.folderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.folderToolStripMenuItem.Text = "Folder";
-            this.folderToolStripMenuItem.Click += new System.EventHandler(this.folderToolStripMenuItem_Click);
-            // 
-            // scriptToolStripMenuItem
-            // 
-            this.scriptToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
-            this.scriptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.scriptToolStripMenuItem.Text = "Script";
-            this.scriptToolStripMenuItem.Click += new System.EventHandler(this.scriptToolStripMenuItem_Click);
-            // 
-            // animationToolStripMenuItem
-            // 
-            this.animationToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.animationToolStripMenuItem.Name = "animationToolStripMenuItem";
-            this.animationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.animationToolStripMenuItem.Text = "Animation";
-            this.animationToolStripMenuItem.Click += new System.EventHandler(this.animationToolStripMenuItem_Click);
+            this.projectExplorerMenu.Size = new System.Drawing.Size(108, 26);
             // 
             // deleteToolStripMenuItem
             // 
@@ -130,10 +90,6 @@ namespace Lunar.Editor.Controls
 
         private DarkTreeView treeProject;
         private DarkContextMenu projectExplorerMenu;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem scriptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem animationToolStripMenuItem;
     }
 }

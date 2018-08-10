@@ -22,6 +22,7 @@ using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Editor.Controls;
 
 namespace Lunar.Editor
 {
@@ -99,7 +100,22 @@ namespace Lunar.Editor
             map.Save(filePath);
             var mapFile = new FileInfo(filePath);
             _mapFiles.Add(filePath, mapFile);
+
+            this.MapAdded?.Invoke(this, new FileEventArgs(mapFile));
+
             return mapFile;
+        }
+
+        public void RemoveMap(string filePath)
+        {
+            if (!_mapFiles.ContainsKey(filePath))
+                return;
+
+            this.MapDeleted?.Invoke(this, new FileEventArgs(_mapFiles[filePath]));
+
+            File.Delete(filePath);
+
+            _mapFiles.Remove(filePath);
         }
 
         public FileInfo AddItem(string filePath)
@@ -108,8 +124,33 @@ namespace Lunar.Editor
             item.Name = Path.GetFileNameWithoutExtension(filePath);
             item.Save(filePath);
             var itemFile = new FileInfo(filePath);
-            _itemFiles.Add(filePath, itemFile);
+
+            if (!_itemFiles.ContainsKey(filePath))
+                _itemFiles.Add(filePath, itemFile);
+
+            this.ItemAdded?.Invoke(this, new FileEventArgs(itemFile));
+
             return itemFile;
+        }
+
+        public void AddItem(FileInfo file)
+        {
+            if (!_itemFiles.ContainsKey(file.FullName))
+                _itemFiles.Add(file.FullName, file);
+
+            this.ItemAdded?.Invoke(this, new FileEventArgs(file));
+        }
+
+        public void RemoveItem(string filePath)
+        {
+            if (!_itemFiles.ContainsKey(filePath))
+                return;
+
+            this.ItemDeleted?.Invoke(this, new FileEventArgs(_itemFiles[filePath]));
+
+            File.Delete(filePath);
+
+            _itemFiles.Remove(filePath);
         }
 
         public FileInfo AddAnimation(string filePath)
@@ -119,27 +160,71 @@ namespace Lunar.Editor
             animation.Save(filePath);
             var animationFile = new FileInfo(filePath);
             _animationFiles.Add(filePath, animationFile);
+
+            this.AnimationAdded?.Invoke(this, new FileEventArgs(animationFile));
+
             return animationFile;
+        }
+
+        public void RemoveAnimations(string filePath)
+        {
+            if (!_animationFiles.ContainsKey(filePath))
+                return;
+
+            this.AnimationDeleted?.Invoke(this, new FileEventArgs(_animationFiles[filePath]));
+
+            File.Delete(filePath);
+
+            _animationFiles.Remove(filePath);
         }
 
         public FileInfo AddNPC(string filePath)
         {
-            var item = NPCDescriptor.Create();
-            item.Name = Path.GetFileNameWithoutExtension(filePath);
-            item.Save(filePath);
-            var itemFile = new FileInfo(filePath);
-            _itemFiles.Add(filePath, itemFile);
-            return itemFile;
+            var npc = NPCDescriptor.Create();
+            npc.Name = Path.GetFileNameWithoutExtension(filePath);
+            npc.Save(filePath);
+            var npcFile = new FileInfo(filePath);
+            _npcFiles.Add(filePath, npcFile);
+
+            this.NPCAdded?.Invoke(this, new FileEventArgs(npcFile));
+
+            return npcFile;
         }
 
-        public void DeleteFile(string filePath)
+        public void AddNPC(FileInfo file)
         {
-            // TODO: implement
+            if (!_npcFiles.ContainsKey(file.FullName))
+                _npcFiles.Add(file.FullName, file);
+
+            this.NPCAdded?.Invoke(this, new FileEventArgs(file));
+        }
+
+        public FileInfo ChangeNPC(string oldFilePath, string newFilePath)
+        {
+            var oldFile = _npcFiles[oldFilePath];
+            _npcFiles.Remove(oldFilePath);
+            var file = new FileInfo(newFilePath);
+            _npcFiles.Add(newFilePath, new FileInfo(newFilePath));
+
+            this.NPCChanged?.Invoke(this, new GameFileChangedEventArgs(oldFile, file));
+
+            return file;
+        }
+
+        public void RemoveNPC(string filePath)
+        {
+            if (!_npcFiles.ContainsKey(filePath))
+                return;
+
+            this.NPCDeleted?.Invoke(this, new FileEventArgs(_npcFiles[filePath]));
+
+            File.Delete(filePath);
+
+            _npcFiles.Remove(filePath);
         }
 
         public DirectoryInfo AddDirectory(string directoryPath)
         {
-
             DirectoryInfo directoryInfo = Directory.CreateDirectory(directoryPath);
 
             _directories.Add(directoryInfo);
@@ -220,5 +305,16 @@ namespace Lunar.Editor
             xml.Save(_projectPath);
         }
 
+        public event EventHandler<FileEventArgs> ItemDeleted;
+        public event EventHandler<FileEventArgs> NPCDeleted;
+        public event EventHandler<FileEventArgs> AnimationDeleted;
+        public event EventHandler<FileEventArgs> MapDeleted;
+
+        public event EventHandler<GameFileChangedEventArgs> NPCChanged;
+
+        public event EventHandler<FileEventArgs> ItemAdded;
+        public event EventHandler<FileEventArgs> NPCAdded;
+        public event EventHandler<FileEventArgs> AnimationAdded;
+        public event EventHandler<FileEventArgs> MapAdded;
     }
 }

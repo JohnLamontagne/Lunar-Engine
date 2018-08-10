@@ -196,7 +196,9 @@
     <Compile Include="Controls\View.Designer.cs">
       <DependentUpon>View.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameFileChangedEventArgs.cs" />
     <Compile Include="Project.cs" />
+    <Compile Include="FileEventArgs.cs" />
     <Compile Include="SuiteForm.cs">
       <SubType>Form</SubType>
     </Compile>

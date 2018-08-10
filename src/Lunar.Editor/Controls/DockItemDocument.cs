@@ -26,7 +26,6 @@ namespace Lunar.Editor.Controls
     public partial class DockItemDocument : SavableDocument
     {
         private FileInfo _file;
-        private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
         private string _activeScript;
@@ -48,7 +47,7 @@ namespace Lunar.Editor.Controls
             this.txtEditor.Styles[Style.Default].Font = "Consolas";
             this.txtEditor.Styles[Style.Default].Size = 12;
 
-            this.txtEditor.Styles[Style.Default].BackColor = Color.FromArgb(29, 31, 33);
+            this.txtEditor.Styles[Style.Default].BackColor = Color.FromArgb(1, 36, 76);
             this.txtEditor.Styles[Style.Default].ForeColor = Color.FromArgb(197, 200, 198);
 
             this.txtEditor.StyleClearAll();
@@ -77,10 +76,7 @@ namespace Lunar.Editor.Controls
         {
             _project = project;
 
-            _regularDockText = text;
-            _unsavedDockText = text + "*";
-
-
+        
             DockText = text;
             Icon = icon;
 
@@ -91,16 +87,24 @@ namespace Lunar.Editor.Controls
             this.txtName.Text = _item.Name;
             this.radioStackable.Checked = _item.Stackable;
             this.radioNotStackable.Checked = !_item.Stackable;
+
             this.cmbType.DataSource = Enum.GetValues(typeof(ItemTypes));
             this.cmbType.SelectedItem = _item.ItemType;
+
             this.txtStr.Text = _item.Strength.ToString();
             this.txtInt.Text = _item.Intelligence.ToString();
             this.txtDef.Text = _item.Defence.ToString();
             this.txtHealth.Text = _item.Health.ToString();
             this.txtDex.Text = _item.Dexterity.ToString();
+
             this.cmbEquipmentSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
             this.cmbEquipmentSlot.SelectedItem = _item.SlotType;
-            this.picTexture.Load(_item.TexturePath);
+
+            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            _unsavedDockText = _item.Name + EngineConstants.ITEM_FILE_EXT + "*";
+
+            if (File.Exists(_item.TexturePath))
+                this.picTexture.Load(_item.TexturePath);
 
             onUseToolStripMenuItem.Checked = true;
             if (_item.Scripts.ContainsKey("OnUse"))
@@ -111,6 +115,9 @@ namespace Lunar.Editor.Controls
             {
                 this.txtEditor.Text = "function OnUse(args) \n end";
             }
+
+            if (_item.ItemType != ItemTypes.Equipment)
+                this.panelEquipment.Enabled = false;
         }
 
         public override void Close()
@@ -127,29 +134,21 @@ namespace Lunar.Editor.Controls
 
         private void DockItemEditor_Load(object sender, System.EventArgs e)
         {
-            this.DockText = _regularDockText;
+            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
             _unsaved = false;
         }
 
-        public void Save()
+        public override void Save()
         {
-            _item.Strength = int.Parse(txtStr.Text);
-            _item.Intelligence = int.Parse(txtInt.Text);
-            _item.Dexterity = int.Parse(txtDex.Text);
-            _item.Defence = int.Parse(txtDef.Text);
-            _item.Health = int.Parse(txtHealth.Text);
-            _item.Name = txtName.Text;
-            _item.Stackable = radioStackable.Checked;
-            _item.ItemType = (ItemTypes)cmbType.SelectedItem;
-            _item.SlotType = (EquipmentSlots)cmbEquipmentSlot.SelectedItem;
-
-            this.DockText = _regularDockText;
+            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
             _unsaved = false;
 
-            if (_unsavedDockText != _file.Name)
+            if (_item.Name + EngineConstants.ITEM_FILE_EXT != _file.Name)
             {
-                File.Move(_file.FullName, _file.DirectoryName + "/" + _unsavedDockText);
-                _file = new FileInfo(_file.DirectoryName + "/" + _unsavedDockText);
+                File.Move(_file.FullName, _file.DirectoryName + "/" + _item.Name + EngineConstants.ITEM_FILE_EXT);
+                _project.RemoveItem(_file.FullName);
+                _file = new FileInfo(_file.DirectoryName + "/" + _item.Name + EngineConstants.ITEM_FILE_EXT);
+                _project.AddItem(_file);
             }
 
             _item.Save(_file.FullName);
@@ -157,8 +156,7 @@ namespace Lunar.Editor.Controls
 
         private void txtEditor_TextChanged(object sender, System.EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
             if (_item.Scripts.ContainsKey(_activeScript))
             {
@@ -219,77 +217,91 @@ namespace Lunar.Editor.Controls
 
         private void txtStr_TextChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
+            int.TryParse(txtStr.Text, out int newStr);
+
+            _item.Strength = newStr;
         }
 
         private void txtInt_TextChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
+            int.TryParse(txtInt.Text, out int newInt);
+
+            _item.Intelligence = newInt;
         }
 
         private void txtDex_TextChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
+            int.TryParse(txtDex.Text, out int newDex);
+
+            _item.Dexterity = newDex;
         }
 
         private void txtDef_TextChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
+            int.TryParse(txtDef.Text, out int newDef);
+
+            _item.Defence = newDef;
         }
 
         private void txtHealth_TextChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
-            
+            int.TryParse(txtHealth.Text, out int newHealth);
+
+            _item.Health = newHealth;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            _unsavedDockText = this.txtName.Text + EngineConstants.ITEM_FILE_EXT;
+            _item.Name = txtName.Text;
 
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            _unsavedDockText = _item.Name + EngineConstants.ITEM_FILE_EXT + "*";
+
+            this.MarkUnsaved();
         }
 
         private void radioStackable_CheckedChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
+            _item.Stackable = radioStackable.Checked;
         }
 
         private void radioNotStackable_CheckedChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
-            
+            _item.Stackable = !radioNotStackable.Checked;
         }
 
         private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
+            _item.ItemType = (ItemTypes)this.cmbType.SelectedItem;
+
+            if (_item.ItemType != ItemTypes.Equipment)
+                this.panelEquipment.Enabled = false;
+            else
+                this.panelEquipment.Enabled = true;
         }
 
 
         private void cmbEquipmentSlot_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.MarkUnsaved();
 
-            
+            _item.SlotType = (EquipmentSlots) cmbEquipmentSlot.SelectedItem;
         }
 
         private void onUseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -393,5 +405,56 @@ namespace Lunar.Editor.Controls
             _activeScript = "OnCreated";
         }
 
+        private void MarkUnsaved()
+        {
+            this.DockText = _unsavedDockText;
+            _unsaved = true;
+        }
+
+        private void panelEquipment_EnabledChanged(object sender, EventArgs e)
+        {
+            foreach (Control child in panelEquipment.Controls)
+                child.Enabled = panelEquipment.Enabled;
+        }
+
+        private void txtStr_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtInt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtDex_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtDef_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtHealth_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

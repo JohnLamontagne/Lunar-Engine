@@ -110,7 +110,7 @@ namespace Lunar.Editor
            
         }
 
-        private void _dockProject_File_Removed(object sender, DockProject.FileEventArgs e)
+        private void _dockProject_File_Removed(object sender, FileEventArgs e)
         {
             this.CloseDocument(e.File);
         }
@@ -241,15 +241,16 @@ namespace Lunar.Editor
 
         private void OpenNPCDocument(FileInfo file)
         {
-            var npcDoc = new DockNPCEditor(_project, file.Name, Icons.document_16xLG, file);
+            var npcDoc = new DockNPCEditor(_project, file.Name, Icons.document_16xLG, file)
             {
-                Tag = file.Name;
+                Tag = file.Name
             };
+
 
             // Make sure there isn't already an open document of this file
             foreach (var nDoc in _editorDocuments)
             {
-                if (nDoc.Tag == file)
+                if ((string)nDoc.Tag == file.Name)
                 {
                     this.DockPanel.ActiveContent = nDoc;
                     return;
@@ -277,7 +278,7 @@ namespace Lunar.Editor
             _dockMapAttributes.SetMapSubject(((DockMapDocument)sender).Map);
         }
 
-        private void _dockProject_File_Created(object sender, DockProject.FileEventArgs e)
+        private void _dockProject_File_Created(object sender, FileEventArgs e)
         {
             if (e.File.Extension == EngineConstants.LUA_FILE_EXT)
             {
@@ -301,7 +302,7 @@ namespace Lunar.Editor
             }
         }
 
-        private void _dockProject_File_Selected(object sender, DockProject.FileEventArgs e)
+        private void _dockProject_File_Selected(object sender, FileEventArgs e)
         {
             if (e.File.Extension == EngineConstants.LUA_FILE_EXT)
             {
