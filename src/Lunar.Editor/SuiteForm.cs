@@ -82,9 +82,10 @@ namespace Lunar.Editor
 
             _editorDocuments = new List<SavableDocument>();
 
-            _dockProject.File_Created += _dockProject_File_Created;
-            _dockProject.File_Selected += _dockProject_File_Selected;
-            _dockProject.File_Removed += _dockProject_File_Removed;
+            _dockProject.FileCreated += _dockProject_File_Created;
+            _dockProject.FileSelected += _dockProject_File_Selected;
+            _dockProject.FileRemoved += _dockProject_File_Removed;
+            _dockProject.FileChanged += DockProjectOnFileChanged;
 
          
             this.DockPanel.AddContent(_dockProject);
@@ -108,6 +109,17 @@ namespace Lunar.Editor
             // Check window menu items which are contained in the dock panel
             BuildWindowMenu();
            
+        }
+
+        private void DockProjectOnFileChanged(object sender, GameFileChangedEventArgs e)
+        {
+            foreach (var editor in _editorDocuments)
+            {
+                if (((FileInfo)editor.Tag).Name == e.OldFile.Name)
+                {
+                    editor.Tag = e.NewFile;
+                }
+            }
         }
 
         private void _dockProject_File_Removed(object sender, FileEventArgs e)
@@ -243,14 +255,14 @@ namespace Lunar.Editor
         {
             var npcDoc = new DockNPCEditor(_project, file.Name, Icons.document_16xLG, file)
             {
-                Tag = file.Name
+                Tag = file
             };
 
 
             // Make sure there isn't already an open document of this file
             foreach (var nDoc in _editorDocuments)
             {
-                if ((string)nDoc.Tag == file.Name)
+                if (((FileInfo)nDoc.Tag).Name == file.Name)
                 {
                     this.DockPanel.ActiveContent = nDoc;
                     return;

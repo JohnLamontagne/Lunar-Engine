@@ -38,6 +38,7 @@ namespace Lunar.Server.World.Actors
                 return _players[uniqueID];
         }
 
+      
         public Player GetPlayer(string name)
         {
             return _players.Values.FirstOrDefault(p => p.Name == name);
@@ -76,7 +77,8 @@ namespace Lunar.Server.World.Actors
                         
 
                     // First, we'll add them to the list of online players.
-                    _players.Add(connection.UniqueIdentifier, new Player(playerDescriptor, connection));
+                    var player = new Player(playerDescriptor, connection);
+                    _players.Add(player.UniqueID, player);
 
                     // Now we'll go ahead and tell their client to make whatever preperations that it needs to.
                     // We'll also tell them their super duper unique id.
@@ -129,7 +131,7 @@ namespace Lunar.Server.World.Actors
             var player = new Player(descriptor, connection);
             player.Save();
 
-            _players.Add(connection.UniqueIdentifier, player);
+            _players.Add(player.UniqueID, player);
 
             // Notify them that they successfully registered.
             var successPacket = new Packet(PacketType.REGISTER_SUCCESS, ChannelType.UNASSIGNED);

@@ -21,7 +21,7 @@ namespace Lunar.Server.Utilities.Plugin
 {
     public class PluginManager : IService
     {
-        private List<Plugin> _plugins;
+        private readonly List<Plugin> _plugins;
 
         public PluginManager()
         {
@@ -40,26 +40,39 @@ namespace Lunar.Server.Utilities.Plugin
             {
                 if (file.EndsWith(".dll"))
                 {
-                    Assembly.LoadFile(Path.GetFullPath(file));
+                    this.LoadPlugin(file);
                 }
             }
 
-            Type pluginType = typeof(Plugin);
-
-            // Get all types that implement Plugin
-            Type[] pluginTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .Where(p => pluginType.IsAssignableFrom(p) && !pluginType.IsAbstract && p.IsClass)
-                .ToArray();
-
-            foreach (var type in pluginTypes)
-            {
-                var plugin = (Plugin)Activator.CreateInstance(type);
-                plugin.Initalize();
-                _plugins.Add(plugin);
-            }
-
             Console.WriteLine("Loaded {0} plugins.", _plugins.Count);
+        }
+
+        private void LoadPlugin(string path)
+        {
+            try
+            {
+                Assembly.LoadFile(Path.GetFullPath(path));
+
+                Type pluginType = typeof(Plugin);
+
+                // Get all types that implement Plugin
+                Type[] pluginTypes = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(a => a.GetTypes())
+                    .Where(p => pluginType.IsAssignableFrom(p) && !pluginType.IsAbstract && p.IsClass)
+                    .ToArray();
+
+                foreach (var type in pluginTypes)
+                {
+                    var plugin = (Plugin) Activator.CreateInstance(type);
+                    plugin.Initalize();
+                    _plugins.Add(plugin);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent($"Could not load plugin: {ex.Message}", LogTypes.ERROR, Environment.StackTrace);
+            }
+           
         }
 
         public void Initalize()

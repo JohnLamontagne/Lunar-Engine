@@ -40,6 +40,8 @@ namespace Lunar.Server.World.Actors
         private Random _random;
         private long _nextMoveTime;
 
+        private int _health;
+
         public string Name { get; }
 
         public Sprite Sprite { get; set; }
@@ -48,7 +50,19 @@ namespace Lunar.Server.World.Actors
 
         public int Level { get; set; }
 
-        public int Health { get; set; }
+        public int Health
+        {
+            get => _health;
+            set
+            {
+                _health = value;
+
+                if (!this.Alive)
+                {
+                    this.Died?.Invoke(this, new EventArgs());
+                }
+            }
+        }
 
         public int MaximumHealth { get; set; }
 
@@ -80,7 +94,10 @@ namespace Lunar.Server.World.Actors
 
         public bool Attackable => true;
 
+        public bool Alive => this.Health > 0;
+
         public event EventHandler<SubjectEventArgs> EventOccured;
+
 
         public NPC(NPCDefinition definition, Map map)
         {
@@ -105,7 +122,7 @@ namespace Lunar.Server.World.Actors
             
             _random = new Random();
 
-            this.UniqueID = this.GetHashCode() + Environment.TickCount;
+            this.UniqueID = Guid.NewGuid().GetHashCode();
             _targetPath = new List<Vector>();
 
             _map.AddActor(this);
@@ -117,7 +134,7 @@ namespace Lunar.Server.World.Actors
             _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
 
 
-            this.BehaviorDefinition.OnCreated.Invoke(new ScriptActionArgs(this));
+            this.BehaviorDefinition.OnCreated?.Invoke(new ScriptActionArgs(this));
         }
 
         
@@ -137,7 +154,7 @@ namespace Lunar.Server.World.Actors
             this.ProcessMovement(gameTime);
             this.ProcessCombat(gameTime);
 
-            this.BehaviorDefinition.Update.Invoke(new ScriptActionArgs(this, new object[] { gameTime }));
+            this.BehaviorDefinition.Update?.Invoke(new ScriptActionArgs(this, new object[] { gameTime }));
         }
 
         private void ProcessCombat(GameTime gameTime)
@@ -429,5 +446,7 @@ namespace Lunar.Server.World.Actors
 
             return netBuffer;
         }
+
+        public event EventHandler Died;
     }
 }

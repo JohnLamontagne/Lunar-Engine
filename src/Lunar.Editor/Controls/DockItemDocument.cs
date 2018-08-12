@@ -16,6 +16,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Lunar.Core;
+using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using Lunar.Editor.World;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,6 +27,7 @@ namespace Lunar.Editor.Controls
     public partial class DockItemDocument : SavableDocument
     {
         private FileInfo _file;
+        private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
         private string _activeScript;
@@ -82,7 +84,7 @@ namespace Lunar.Editor.Controls
 
             _file = file;
 
-            _item = ItemDescriptor.Load(file.FullName);
+            _item = _project.LoadItem(file.FullName);
 
             this.txtName.Text = _item.Name;
             this.radioStackable.Checked = _item.Stackable;
@@ -100,21 +102,15 @@ namespace Lunar.Editor.Controls
             this.cmbEquipmentSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
             this.cmbEquipmentSlot.SelectedItem = _item.SlotType;
 
-            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
-            _unsavedDockText = _item.Name + EngineConstants.ITEM_FILE_EXT + "*";
+            _regularDockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            this.DockText = _regularDockText;
+            _unsavedDockText = _regularDockText + "*";
 
-            if (File.Exists(_item.TexturePath))
-                this.picTexture.Load(_item.TexturePath);
+            if (File.Exists(_project.ClientRootDirectory + "/" + _item.TexturePath))
+                this.picTexture.Load(_project.ClientRootDirectory + "/" + _item.TexturePath);
 
             onUseToolStripMenuItem.Checked = true;
-            if (_item.Scripts.ContainsKey("OnUse"))
-            {
-                this.txtEditor.Text = _item.Scripts["OnUse"];
-            }
-            else
-            {
-                this.txtEditor.Text = "function OnUse(args) \n end";
-            }
+            this.txtEditor.Text = _item.Scripts.ContainsKey("OnUse") ? _item.Scripts["OnUse"] : "";
 
             if (_item.ItemType != ItemTypes.Equipment)
                 this.panelEquipment.Enabled = false;
@@ -140,15 +136,16 @@ namespace Lunar.Editor.Controls
 
         public override void Save()
         {
-            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            _regularDockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+
+            this.DockText = _regularDockText;
             _unsaved = false;
 
             if (_item.Name + EngineConstants.ITEM_FILE_EXT != _file.Name)
             {
                 File.Move(_file.FullName, _file.DirectoryName + "/" + _item.Name + EngineConstants.ITEM_FILE_EXT);
-                _project.RemoveItem(_file.FullName);
-                _file = new FileInfo(_file.DirectoryName + "/" + _item.Name + EngineConstants.ITEM_FILE_EXT);
-                _project.AddItem(_file);
+
+                _file = _project.ChangeItem(_file.FullName, _file.DirectoryName + "\\" + _item.Name + EngineConstants.ITEM_FILE_EXT);
             }
 
             _item.Save(_file.FullName);
@@ -170,8 +167,6 @@ namespace Lunar.Editor.Controls
             this.Save();
         }
 
-       
-
         private void picTexture_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
@@ -189,7 +184,7 @@ namespace Lunar.Editor.Controls
 
                     string path = dialog.FileName; 
 
-                    _item.TexturePath = path;
+                    _item.TexturePath = HelperFunctions.MakeRelative(path, _project.ClientRootDirectory.FullName + "/"); ;
 
                     this.picTexture.Load(path);
                 }
@@ -264,8 +259,9 @@ namespace Lunar.Editor.Controls
         {
             _item.Name = txtName.Text;
 
-            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
-            _unsavedDockText = _item.Name + EngineConstants.ITEM_FILE_EXT + "*";
+            _regularDockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            this.DockText = _regularDockText;
+            _unsavedDockText = _regularDockText + "*";
 
             this.MarkUnsaved();
         }

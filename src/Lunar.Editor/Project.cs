@@ -41,10 +41,20 @@ namespace Lunar.Editor
         private readonly Dictionary<string, FileInfo> _npcFiles;
         private readonly Dictionary<string, FileInfo> _animationFiles;
 
-        public IEnumerable<FileInfo> Maps => _mapFiles.Values;
-        public IEnumerable<FileInfo> Items => _itemFiles.Values;
-        public IEnumerable<FileInfo> Animations => _animationFiles.Values;
-        public IEnumerable<FileInfo> NPCs => _npcFiles.Values;
+        private readonly Dictionary<string, Map> _maps;
+        private readonly Dictionary<string, ItemDescriptor> _items;
+        private readonly Dictionary<string, NPCDescriptor> _npcs;
+        private readonly Dictionary<string, AnimationDescription> _animations;
+
+        public Dictionary<string, Map> Maps => _maps;
+        public Dictionary<string, ItemDescriptor> Items => _items;
+        public Dictionary<string, NPCDescriptor> NPCs => _npcs;
+        public Dictionary<string, AnimationDescription> Animations => _animations;
+
+        public IEnumerable<FileInfo> MapFiles => _mapFiles.Values;
+        public IEnumerable<FileInfo> ItemFiles => _itemFiles.Values;
+        public IEnumerable<FileInfo> AnimationFiles => _animationFiles.Values;
+        public IEnumerable<FileInfo> NPCFiles => _npcFiles.Values;
 
         public IEnumerable<DirectoryInfo> Directories => _directories;
 
@@ -60,6 +70,11 @@ namespace Lunar.Editor
             _npcFiles = new Dictionary<string, FileInfo>();
             _itemFiles = new Dictionary<string, FileInfo>();
             _animationFiles = new Dictionary<string, FileInfo>();
+
+            _maps = new Dictionary<string, Map>();
+            _items = new Dictionary<string, ItemDescriptor>();
+            _npcs= new Dictionary<string, NPCDescriptor>();
+            _animations = new Dictionary<string, AnimationDescription>();
 
             _directories = new List<DirectoryInfo>();
 
@@ -106,10 +121,41 @@ namespace Lunar.Editor
             return mapFile;
         }
 
+        public Map LoadMap(string filePath, TextureLoader textureLoader)
+        {
+            var map = Map.Load(filePath, this, textureLoader);
+
+            if (!_maps.ContainsKey(filePath))
+                _maps.Add(filePath, map);
+            else
+                _maps[filePath] = map;
+
+            return map;
+        }
+
+        public FileInfo ChangeMap(string oldFilePath, string newFilePath)
+        {
+            var oldFile = _mapFiles[oldFilePath];
+            _mapFiles.Remove(oldFilePath);
+            var file = new FileInfo(newFilePath);
+            _mapFiles.Add(newFilePath, new FileInfo(newFilePath));
+
+            var map = _maps[oldFilePath];
+            _maps.Remove(oldFilePath);
+            _maps.Add(newFilePath, map);
+
+            this.MapChanged?.Invoke(this, new GameFileChangedEventArgs(oldFile, file));
+
+            return file;
+        }
+
         public void RemoveMap(string filePath)
         {
             if (!_mapFiles.ContainsKey(filePath))
                 return;
+
+            if (_maps.ContainsKey(filePath))
+                _maps.Remove(filePath);
 
             this.MapDeleted?.Invoke(this, new FileEventArgs(_mapFiles[filePath]));
 
@@ -133,6 +179,17 @@ namespace Lunar.Editor
             return itemFile;
         }
 
+        public ItemDescriptor LoadItem(string filePath)
+        {
+            if (_items.ContainsKey(filePath))
+                return _items[filePath];
+
+            var item = ItemDescriptor.Load(filePath);
+            _items.Add(filePath, item);
+
+            return item;
+        }
+
         public void AddItem(FileInfo file)
         {
             if (!_itemFiles.ContainsKey(file.FullName))
@@ -141,10 +198,29 @@ namespace Lunar.Editor
             this.ItemAdded?.Invoke(this, new FileEventArgs(file));
         }
 
+        public FileInfo ChangeItem(string oldFilePath, string newFilePath)
+        {
+            var oldFile = _itemFiles[oldFilePath];
+            _itemFiles.Remove(oldFilePath);
+            var file = new FileInfo(newFilePath);
+            _itemFiles.Add(newFilePath, new FileInfo(newFilePath));
+
+            var item = _items[oldFilePath];
+            _items.Remove(oldFilePath);
+            _items.Add(newFilePath, item);
+
+            this.ItemChanged?.Invoke(this, new GameFileChangedEventArgs(oldFile, file));
+
+            return file;
+        }
+
         public void RemoveItem(string filePath)
         {
             if (!_itemFiles.ContainsKey(filePath))
                 return;
+
+            if (_items.ContainsKey(filePath))
+                _items.Remove(filePath);
 
             this.ItemDeleted?.Invoke(this, new FileEventArgs(_itemFiles[filePath]));
 
@@ -166,10 +242,40 @@ namespace Lunar.Editor
             return animationFile;
         }
 
+        public AnimationDescription LoadAnimation(string filePath)
+        {
+            if (_animations.ContainsKey(filePath))
+                return _animations[filePath];
+
+            var animation = AnimationDescription.Load(filePath);
+            _animations.Add(filePath, animation);
+
+            return animation;
+        }
+
+        public FileInfo ChangeAnimation(string oldFilePath, string newFilePath)
+        {
+            var oldFile = _animationFiles[oldFilePath];
+            _animationFiles.Remove(oldFilePath);
+            var file = new FileInfo(newFilePath);
+            _animationFiles.Add(newFilePath, new FileInfo(newFilePath));
+
+            var animation = _animations[oldFilePath];
+            _animations.Remove(oldFilePath);
+            _animations.Add(newFilePath, animation);
+
+            this.AnimationChanged?.Invoke(this, new GameFileChangedEventArgs(oldFile, file));
+
+            return file;
+        }
+
         public void RemoveAnimations(string filePath)
         {
             if (!_animationFiles.ContainsKey(filePath))
                 return;
+
+            if (_animations.ContainsKey(filePath))
+                _animations.Remove(filePath);
 
             this.AnimationDeleted?.Invoke(this, new FileEventArgs(_animationFiles[filePath]));
 
@@ -191,20 +297,28 @@ namespace Lunar.Editor
             return npcFile;
         }
 
-        public void AddNPC(FileInfo file)
+        public NPCDescriptor LoadNPC(string filePath)
         {
-            if (!_npcFiles.ContainsKey(file.FullName))
-                _npcFiles.Add(file.FullName, file);
+            if (_npcs.ContainsKey(filePath))
+                return _npcs[filePath];
 
-            this.NPCAdded?.Invoke(this, new FileEventArgs(file));
+            var npc = NPCDescriptor.Load(filePath);
+            _npcs.Add(filePath, npc);
+
+            return npc;
         }
 
         public FileInfo ChangeNPC(string oldFilePath, string newFilePath)
         {
             var oldFile = _npcFiles[oldFilePath];
             _npcFiles.Remove(oldFilePath);
+        
             var file = new FileInfo(newFilePath);
             _npcFiles.Add(newFilePath, new FileInfo(newFilePath));
+
+            var npc = _npcs[oldFilePath];
+            _npcs.Remove(oldFilePath);
+            _npcs.Add(newFilePath, npc);
 
             this.NPCChanged?.Invoke(this, new GameFileChangedEventArgs(oldFile, file));
 
@@ -215,6 +329,9 @@ namespace Lunar.Editor
         {
             if (!_npcFiles.ContainsKey(filePath))
                 return;
+
+            if (_npcs.ContainsKey(filePath))
+                _npcs.Remove(filePath);
 
             this.NPCDeleted?.Invoke(this, new FileEventArgs(_npcFiles[filePath]));
 
@@ -277,6 +394,7 @@ namespace Lunar.Editor
             foreach (var file in itemDirectory.GetFiles("*" + EngineConstants.ITEM_FILE_EXT, SearchOption.AllDirectories))
             {
                 _itemFiles.Add(file.FullName, file);
+                this.LoadItem(file.FullName);
             }
 
             var npcDirectory = new DirectoryInfo(projectDirectory.FullName + "/Npcs/");
@@ -290,6 +408,7 @@ namespace Lunar.Editor
             foreach (var file in npcDirectory.GetFiles("*" + EngineConstants.NPC_FILE_EXT, SearchOption.AllDirectories))
             {
                 _npcFiles.Add(file.FullName, file);
+                this.LoadNPC(file.FullName);
             }
 
         }
@@ -311,6 +430,9 @@ namespace Lunar.Editor
         public event EventHandler<FileEventArgs> MapDeleted;
 
         public event EventHandler<GameFileChangedEventArgs> NPCChanged;
+        public event EventHandler<GameFileChangedEventArgs> AnimationChanged;
+        public event EventHandler<GameFileChangedEventArgs> ItemChanged;
+        public event EventHandler<GameFileChangedEventArgs> MapChanged;
 
         public event EventHandler<FileEventArgs> ItemAdded;
         public event EventHandler<FileEventArgs> NPCAdded;

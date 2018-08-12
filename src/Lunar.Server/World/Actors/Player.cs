@@ -213,7 +213,7 @@ namespace Lunar.Server.World.Actors
 
             if (this.BehaviorDefinition == null)
             {
-                Logger.LogEvent("Error hooking player behavior definition!", LogTypes.ERROR);
+                Logger.LogEvent("Error hooking player behavior definition!", LogTypes.ERROR, Environment.StackTrace);
             }
             else
             {
@@ -282,7 +282,7 @@ namespace Lunar.Server.World.Actors
         {
             var packet = new Packet(PacketType.EQUIPMENT_UPDATE, ChannelType.UNASSIGNED);
             
-            for (int i = 0; i < (int)EquipmentSlots.COUNT; i++)
+            for (int i = 0; i < Enum.GetNames(typeof(EquipmentSlots)).Length; i++)
             {
                 if (this.Equipment.GetSlot(i) == null)
                 {

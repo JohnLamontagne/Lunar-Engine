@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Lunar.Core;
 using Lunar.Core.Utilities;
 using Lunar.Core.World.Actor;
 using Lunar.Core.World.Actor.Descriptors;
@@ -35,11 +36,11 @@ namespace Lunar.Server.World.Actors
             Console.WriteLine("Loading NPCs...");
 
             var directoryInfo = new DirectoryInfo(Constants.FILEPATH_NPCS);
-            FileInfo[] files = directoryInfo.GetFiles("*.lnpc");
+            FileInfo[] files = directoryInfo.GetFiles("*" + EngineConstants.NPC_FILE_EXT);
 
             foreach (var file in files)
             {
-                NPCDescriptor npcDesc = NPCDescriptor.Load(file.Name);
+                NPCDescriptor npcDesc = NPCDescriptor.Load(file.FullName);
                 _npcs.Add(npcDesc.Name, new NPCDefinition(npcDesc));
             }
 
@@ -48,7 +49,7 @@ namespace Lunar.Server.World.Actors
 
         public NPCDefinition GetNPC(string npcName)
         {
-            return _npcs[npcName];
+            return _npcs[npcName] ?? null;
         }
 
         public void Initalize()

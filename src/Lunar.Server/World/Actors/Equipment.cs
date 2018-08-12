@@ -10,6 +10,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lunar.Core;
@@ -27,7 +29,7 @@ namespace Lunar.Server.World.Actors
         public Equipment(Player player)
         {
             _player = player;
-            _equipment = new Item[(int)EquipmentSlots.COUNT];
+            _equipment = new Item[Enum.GetNames(typeof(EquipmentSlots)).Length];
         }
 
         public Item GetSlot(int slotNum)

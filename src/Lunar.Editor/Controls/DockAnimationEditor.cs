@@ -15,6 +15,7 @@ using DarkUI.Forms;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Editor.Content.Graphics;
@@ -26,8 +27,8 @@ namespace Lunar.Editor.Controls
 {
     public partial class DockAnimationEditor : SavableDocument
     {
-        private readonly FileInfo _file;
-        private readonly string _regularDockText;
+        private  FileInfo _file;
+        private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
         private string _activeScript;
@@ -62,7 +63,7 @@ namespace Lunar.Editor.Controls
 
             _file = file;
 
-            _animationDescription = AnimationDescription.Load(file.FullName);
+            _animationDescription = _project.LoadAnimation(file.FullName);
 
             this.txtSurfaceTexPath.Text = _animationDescription.SurfaceAnimation.TexturePath;
             this.txtSurfaceFrameTime.Text = _animationDescription.SurfaceAnimation.FrameTime.ToString();
@@ -125,29 +126,29 @@ namespace Lunar.Editor.Controls
 
         private void DockItemEditor_Load(object sender, System.EventArgs e)
         {
-            this.DockText = _regularDockText;
-            _unsaved = false;
+            this.MarkUnsaved();
         }
 
-        public void Save()
+        public override void Save()
         {
+            _regularDockText = _animationDescription.Name + EngineConstants.ANIM_FILE_EXT;
+
             this.DockText = _regularDockText;
             _unsaved = false;
+
+            if (_animationDescription.Name + EngineConstants.ITEM_FILE_EXT != _file.Name)
+            {
+                File.Move(_file.FullName, _file.DirectoryName + "/" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
+
+                _file = _project.ChangeItem(_file.FullName, _file.DirectoryName + "\\" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
+            }
+
             _animationDescription.Save(_file.FullName);
         }
 
         private void buttonSave_Click(object sender, System.EventArgs e)
         {
             this.Save();
-        }
-
-        private void DockItemEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-            if ((Control.ModifierKeys & Keys.Control) == Keys.Control && e.KeyCode == Keys.S)
-            {
-                this.Save();
-                e.SuppressKeyPress = true;
-            }
         }
 
         private void btnSelectSurfaceTex_Click(object sender, EventArgs e)
@@ -174,12 +175,16 @@ namespace Lunar.Editor.Controls
                     this.txtSurfaceFrameWidth.Text = animTexture.Width.ToString();
                     this.txtSurfaceFrameHeight.Text = animTexture.Height.ToString();
                     this.txtSurfaceTexPath.Text = _animationDescription.SurfaceAnimation.TexturePath;
+
+                    this.MarkUnsaved();
                 }
             }
         }
 
         private void surfaceAnimView_Load(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             _surfaceAnimationTextureLoader = new TextureLoader(this.surfaceAnimView.GraphicsDevice);
 
             if (File.Exists(_project.ClientRootDirectory + "/" + _animationDescription.SubSurfaceAnimation.TexturePath))
@@ -188,6 +193,8 @@ namespace Lunar.Editor.Controls
 
         private void subSurfaceAnimView_Load(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             _subSurfaceAnimationTextureLoader = new TextureLoader(this.subSurfaceAnimView.GraphicsDevice);
 
             if (File.Exists(_project.ClientRootDirectory + "/" + _animationDescription.SubSurfaceAnimation.TexturePath))
@@ -197,6 +204,8 @@ namespace Lunar.Editor.Controls
 
         private void txtSurfaceFrameTime_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSurfaceFrameTime.Text, out int frameTime);
 
             _animationDescription.SurfaceAnimation.FrameTime = frameTime;
@@ -212,6 +221,8 @@ namespace Lunar.Editor.Controls
 
         private void txtSurfaceFrameWidth_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSurfaceFrameWidth.Text, out int frameWidth);
 
             _animationDescription.SurfaceAnimation.FrameWidth = frameWidth;
@@ -227,6 +238,8 @@ namespace Lunar.Editor.Controls
 
         private void txtSurfaceFrameHeight_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSurfaceFrameHeight.Text, out int frameHeight);
 
             _animationDescription.SurfaceAnimation.FrameHeight = frameHeight;
@@ -264,12 +277,16 @@ namespace Lunar.Editor.Controls
                     this.txtSubSurfaceFrameWidth.Text = animTexture.Width.ToString();
                     this.txtSubSurfaceFrameHeight.Text = animTexture.Height.ToString();
                     this.txtSubSurfaceTexPath.Text = _animationDescription.SubSurfaceAnimation.TexturePath;
+
+                    this.MarkUnsaved();
                 }
             }
         }
 
         private void txtSubSurfaceFrameTime_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSubSurfaceFrameTime.Text, out int frameTime);
 
             _animationDescription.SubSurfaceAnimation.FrameTime = frameTime;
@@ -285,6 +302,8 @@ namespace Lunar.Editor.Controls
 
         private void txtSubSurfaceFrameWidth_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSubSurfaceFrameWidth.Text, out int frameWidth);
 
             _animationDescription.SubSurfaceAnimation.FrameWidth = frameWidth;
@@ -300,6 +319,8 @@ namespace Lunar.Editor.Controls
 
         private void txtSubSurfaceFrameHeight_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSubSurfaceFrameHeight.Text, out int frameHeight);
 
             _animationDescription.SubSurfaceAnimation.FrameHeight = frameHeight;
@@ -315,6 +336,8 @@ namespace Lunar.Editor.Controls
 
         private void txtSurfaceLoopCount_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSubSurfaceFrameHeight.Text, out int loopCount);
 
             _animationDescription.SubSurfaceAnimation.LoopCount = loopCount;
@@ -330,6 +353,8 @@ namespace Lunar.Editor.Controls
 
         private void txtSubSurfaceLoopCount_TextChanged(object sender, EventArgs e)
         {
+            this.MarkUnsaved();
+
             int.TryParse(txtSubSurfaceFrameHeight.Text, out int frameHeight);
 
             _animationDescription.SubSurfaceAnimation.FrameHeight = frameHeight;
@@ -341,6 +366,12 @@ namespace Lunar.Editor.Controls
             {
                 e.Handled = true;
             }
+        }
+
+        private void MarkUnsaved()
+        {
+            this.DockText = _unsavedDockText;
+            _unsaved = true;
         }
     }
 }

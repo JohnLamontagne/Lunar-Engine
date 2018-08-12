@@ -10,6 +10,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using System;
 using System.Linq;
 using Lidgren.Network;
 using Lunar.Core;
@@ -97,7 +99,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             if (_player.Inventory.GetSlot(slotNum) == null)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to equip bad item! User: {_player.Name} SlotNum: {slotNum}.", LogTypes.GAME);
+                Logger.LogEvent($"Player attempted to equip bad item! User: {_player.Name} SlotNum: {slotNum}.", LogTypes.GAME, Environment.StackTrace);
 
                 return;
             }
@@ -167,17 +169,13 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_UnequipItem(PacketReceivedEventArgs args)
         {
-            // Ensure we're handling the packet for the correct player!
-            if (_player.UniqueID != args.Connection.UniqueIdentifier)
-                return;
-
             int slotNum = args.Message.ReadInt32();
 
             // Sanity check: is there actually an item in this slot?
             if (_player.Equipment.GetSlot(slotNum) == null)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to unequip bad item! User: {_player.Name} SlotNum: {slotNum}.", LogTypes.GAME);
+                Logger.LogEvent($"Player attempted to unequip bad item! User: {_player.Name} SlotNum: {slotNum}.", LogTypes.GAME, Environment.StackTrace);
 
                 return;
             }
@@ -187,7 +185,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             if (item.ItemType != ItemTypes.Equipment || item.SlotType == EquipmentSlots.NE)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to unequip unequippable item! User: {_player.Name} SlotNum: {slotNum}.", LogTypes.GAME);
+                Logger.LogEvent($"Player attempted to unequip unequippable item! User: {_player.Name} SlotNum: {slotNum}.", LogTypes.GAME, Environment.StackTrace);
 
                 return;
             }

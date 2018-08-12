@@ -20,6 +20,7 @@ using System.Linq;
 using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Forms;
+using Lunar.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Core.Utilities.Logic;
@@ -95,6 +96,7 @@ namespace Lunar.Editor.Controls
             _dockTilesetTools = dockTilesetTools;
             _dockMapObject = dockMapObject;
             _dockMapAttributes = dockMapAttributes;
+            _dockMapAttributes.SetProject(project);
 
             _dockTilesetTools.Tileset_Loaded += _tilesetTools_Tileset_Loaded;
             _dockTilesetTools.Tileset_Unloaded += _tilesetTools_Tileset_Unloaded;
@@ -180,6 +182,7 @@ namespace Lunar.Editor.Controls
             }
 
             _map.Tilesets.Remove(tilesetName);
+            this.MarkUnsaved();
         }
 
 
@@ -191,12 +194,14 @@ namespace Lunar.Editor.Controls
                 mapTilesetTexture.Tag = HelperFunctions.MakeRelative(e.TilesetPath, _project.ClientRootDirectory.FullName + "/");
 
                 _map.Tilesets.Add(Path.GetFileName(e.TilesetPath), mapTilesetTexture);
+
+                this.MarkUnsaved();
             }
         }
 
         private void LoadMapDocument()
         {
-            _map = Map.Load(_file.FullName, _project, _mapTextureLoader);
+            _map = _project.LoadMap(_file.FullName, _mapTextureLoader);
             _map.Map_Resized += _map_Map_Resized;
 
             this.scrollX.Maximum = Math.Max(((int)_map.Dimensions.X * Constants.TILE_SIZE) - this.mapView.Width, 0);
@@ -243,6 +248,9 @@ namespace Lunar.Editor.Controls
                                     break;
                                 case TileAttributes.Warp:
                                     attributeSprite.Color = new Color(Color.Purple, 100);
+                                    break;
+                                case TileAttributes.NPCSpawn:
+                                    attributeSprite.Color = new Color(Color.DarkGreen, 100);
                                     break;
                             }
 
@@ -302,9 +310,19 @@ namespace Lunar.Editor.Controls
 
         public override void Save()
         {
-            _map.Save(_file.FullName);
+            _regularDockText = _map.Name + EngineConstants.MAP_FILE_EXT;
+
             this.DockText = _regularDockText;
             _unsaved = false;
+
+            if (_map.Name + EngineConstants.MAP_FILE_EXT != _file.Name)
+            {
+                File.Move(_file.FullName, _file.DirectoryName + "/" + _map.Name + EngineConstants.MAP_FILE_EXT);
+
+                _file = _project.ChangeItem(_file.FullName, _file.DirectoryName + "\\" + _map.Name + EngineConstants.MAP_FILE_EXT);
+            }
+
+            _map.Save(_file.FullName);
         }
 
 
@@ -560,6 +578,8 @@ namespace Lunar.Editor.Controls
                 layer.GetTile(mapX, mapY).Attribute = TileAttributes.None;
 
                 _tileAttributeSprites.Remove(new Vector3(mapX, mapY, layer.ZIndex));
+
+                this.MarkUnsaved();
             }
         }
 
@@ -604,6 +624,9 @@ namespace Lunar.Editor.Controls
                     case TileAttributes.Warp:
                         attributeSprite.Color = new Color(Color.Purple, 100);
                         break;
+                    case TileAttributes.NPCSpawn:
+                        attributeSprite.Color = new Color(Color.DarkGreen, 100);
+                        break;
                     default:
                         attributeSprite.Color = Color.Transparent;
                         break;
@@ -615,6 +638,8 @@ namespace Lunar.Editor.Controls
                     _tileAttributeSprites.Add(locationKey, attributeSprite);
                 else
                     _tileAttributeSprites[locationKey] = attributeSprite;
+
+                this.MarkUnsaved();
             }
         }
 
@@ -641,6 +666,8 @@ namespace Lunar.Editor.Controls
             _map.Layers[_dockLayers.SelectedLayer].MapObjects.Add(mapObject);
 
             _dockMapObject.SetSubject(new MapObjectPropertiesHelper(mapObject, _mapTextureLoader, _project));
+
+            this.MarkUnsaved();
         }
 
         private void RemoveTile(int mapX, int mapY)
@@ -652,8 +679,7 @@ namespace Lunar.Editor.Controls
             {
                 _map.Layers[_dockLayers.SelectedLayer].SetTile(mapX, mapY, new Tile());
 
-                _unsaved = true;
-                this.DockText = _unsavedDockText;
+                this.MarkUnsaved();
             }
         }
 
@@ -706,8 +732,7 @@ namespace Lunar.Editor.Controls
                 tSetY = _dockTilesetTools.SelectRectangle.Y;
             }
 
-            _unsaved = true;
-            this.DockText = _unsavedDockText;
+            this.MarkUnsaved();
         }
 
         private void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, Color color, int lineWidth)
@@ -861,6 +886,12 @@ namespace Lunar.Editor.Controls
         private void buttonSave_Click(object sender, EventArgs e)
         {
             this.Save();
+        }
+
+        private void MarkUnsaved()
+        {
+            this.DockText = _unsavedDockText;
+            _unsaved = true;
         }
 
         private enum PlacementMode

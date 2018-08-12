@@ -17,6 +17,7 @@ namespace Lunar.Core.World.Structure
         None,
         Blocked,
         PlayerSpawn,
-        Warp
+        Warp,
+        NPCSpawn
     }
 }

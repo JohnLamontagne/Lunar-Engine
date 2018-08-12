@@ -26,7 +26,6 @@ namespace Lunar.Core.World
         Boots,
         Chest,
         Legs,
-        Shoulder,
-        COUNT
+        Shoulder
     }
 }

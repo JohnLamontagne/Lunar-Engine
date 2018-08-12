@@ -279,23 +279,23 @@ namespace Lunar.Client.World.Actors
         public void Unpack(NetBuffer buffer, ContentManager contentManager)
         {
             _name = buffer.ReadString();
+            string texturePath = buffer.ReadString();
 
             var sprite = new Sprite(
-                contentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Characters/" + buffer.ReadString()));
-            int horizontalFrames = buffer.ReadInt32();
-            int verticalFrames = buffer.ReadInt32();
-            int frameWidth = buffer.ReadInt32();
-            int frameHeight = buffer.ReadInt32();
-            this.SpriteSheet = new SpriteSheet(sprite, horizontalFrames, verticalFrames, frameWidth, frameHeight);
-
-
+                contentManager.LoadTexture2D(Constants.FILEPATH_DATA + texturePath));
             this.Speed = buffer.ReadFloat();
+            
+           
             this.Health = buffer.ReadInt32();
             this.MaximumHealth = buffer.ReadInt32();
             this.Level = buffer.ReadInt32();        
-            this.Position = new Vector2(buffer.ReadFloat(), buffer.ReadFloat());
+            Vector2 position = new Vector2(buffer.ReadFloat(), buffer.ReadFloat());
             _frameSize = new Vector2(buffer.ReadFloat(), buffer.ReadFloat());
             _collisionBounds = new Rectangle(buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32());
+
+            this.SpriteSheet = new SpriteSheet(sprite, (int)(sprite.Texture.Width / _frameSize.X), (int)(sprite.Texture.Height / _frameSize.Y), (int)_frameSize.X, (int)_frameSize.Y);
+
+            this.Position = position;
 
             var layerName = buffer.ReadString();
             _layer = Client.ServiceLocator.GetService<WorldManager>().Map.GetLayer(layerName);

@@ -40,7 +40,7 @@ namespace Lunar.Editor.Controls
             {
                 if (treeProject.SelectedNodes[0].Tag is FileInfo info)
                 {
-                    this.File_Selected?.Invoke(this, new FileEventArgs(info));
+                    this.FileSelected?.Invoke(this, new FileEventArgs(info));
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace Lunar.Editor.Controls
                 ExpandedIcon = Icons.folder_open
             };
 
-            foreach (var animationFile in _project.Animations)
+            foreach (var animationFile in _project.AnimationFiles)
             {
                 var fileNode = new DarkTreeNode(animationFile.Name)
                 {
@@ -87,7 +87,7 @@ namespace Lunar.Editor.Controls
 
                             var file = _project.AddAnimation(path);
 
-                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                            this.FileCreated?.Invoke(this, new FileEventArgs(file));
                         }
                     }
                 })
@@ -106,7 +106,7 @@ namespace Lunar.Editor.Controls
                 ExpandedIcon = Icons.folder_open
             };
 
-            foreach (var mapFile in _project.Maps)
+            foreach (var mapFile in _project.MapFiles)
             {
                 var fileNode = new DarkTreeNode(mapFile.Name)
                 {
@@ -134,7 +134,7 @@ namespace Lunar.Editor.Controls
 
                             var file = _project.AddMap(path);
 
-                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                            this.FileCreated?.Invoke(this, new FileEventArgs(file));
                         }
                     }
                 })
@@ -153,7 +153,7 @@ namespace Lunar.Editor.Controls
                 ExpandedIcon = Icons.folder_open
             };
 
-            foreach (var itemFile in _project.Items)
+            foreach (var itemFile in _project.ItemFiles)
             {
                 var fileNode = new DarkTreeNode(itemFile.Name)
                 {
@@ -181,7 +181,7 @@ namespace Lunar.Editor.Controls
 
                             var file = _project.AddItem(path);
 
-                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                            this.FileCreated?.Invoke(this, new FileEventArgs(file));
                         }
                     }
                 })
@@ -201,7 +201,7 @@ namespace Lunar.Editor.Controls
                 ExpandedIcon = Icons.folder_open
             };
 
-            foreach (var npcFile in _project.NPCs)
+            foreach (var npcFile in _project.NPCFiles)
             {
                 var fileNode = new DarkTreeNode(npcFile.Name)
                 {
@@ -229,7 +229,7 @@ namespace Lunar.Editor.Controls
 
                             var file = _project.AddNPC(path);
 
-                            this.File_Created?.Invoke(this, new FileEventArgs(file));
+                            this.FileCreated?.Invoke(this, new FileEventArgs(file));
                         }
                     }
                 })
@@ -262,6 +262,7 @@ namespace Lunar.Editor.Controls
 
             _project.ItemAdded += ProjectOnItemAdded;
             _project.ItemDeleted += ProjectOnItemDeleted;
+            _project.ItemChanged += ProjectOnItemChanged;
 
             _project.NPCAdded += ProjectOnNpcAdded;
             _project.NPCDeleted += ProjectOnNpcDeleted;
@@ -269,9 +270,11 @@ namespace Lunar.Editor.Controls
 
             _project.MapAdded += ProjectOnMapAdded;
             _project.MapDeleted += ProjectOnMapDeleted;
+            _project.MapChanged += ProjectOnMapChanged;
 
             _project.AnimationAdded += ProjectOnAnimationAdded;
             _project.AnimationDeleted += ProjectOnAnimationDeleted;
+            _project.AnimationChanged += ProjectOnAnimationChanged;
 
 
             treeProject.Nodes.Clear();
@@ -287,51 +290,87 @@ namespace Lunar.Editor.Controls
             treeProject.Nodes.Add(node);
         }
 
+        private void ProjectOnItemChanged(object sender, GameFileChangedEventArgs args)
+        {
+            var nodeToChange = treeProject.FindNode($"Default\\Game Data\\Items\\{args.OldFile.Name}");
+            nodeToChange.Tag = args.NewFile;
+            this.UpdateNode(nodeToChange, args.NewFile.Name);
+
+            this.FileChanged?.Invoke(this, args);
+        }
+
+        private void ProjectOnAnimationChanged(object sender, GameFileChangedEventArgs args)
+        {
+            var nodeToChange = treeProject.FindNode($"Default\\Game Data\\Animations\\{args.OldFile.Name}");
+            nodeToChange.Tag = args.NewFile;
+            this.UpdateNode(nodeToChange, args.NewFile.Name);
+
+            this.FileChanged?.Invoke(this, args);
+        }
+
+        private void ProjectOnMapChanged(object sender, GameFileChangedEventArgs args)
+        {
+            var nodeToChange = treeProject.FindNode($"Default\\Game Data\\Maps\\{args.OldFile.Name}");
+            nodeToChange.Tag = args.NewFile;
+            this.UpdateNode(nodeToChange, args.NewFile.Name);
+
+            this.FileChanged?.Invoke(this, args);
+        }
+
         private void ProjectOnNpcChanged(object sender, GameFileChangedEventArgs args)
         {
             var nodeToChange = treeProject.FindNode($"Default\\Game Data\\Npcs\\{args.OldFile.Name}");
-            nodeToChange.Text = args.NewFile.Name;
+            nodeToChange.Tag = args.NewFile;
+            this.UpdateNode(nodeToChange, args.NewFile.Name);
+
+            this.FileChanged?.Invoke(this, args);
+        }
+
+        private void UpdateNode(DarkTreeNode nodeToChange, string newName)
+        {
+            nodeToChange.Text = newName;
 
             // ANOTHER FUCKING HACK, THANKS DarkUI
             var parentNode = nodeToChange.ParentNode;
             int oldIndex = parentNode.Nodes.IndexOf(nodeToChange);
             parentNode.Nodes.Remove(nodeToChange);
             parentNode.Nodes.Insert(oldIndex, nodeToChange);
+
+            parentNode.Nodes.Add(new DarkTreeNode());
+            parentNode.Nodes.RemoveAt(parentNode.Nodes.Count - 1);
         }
 
         private void ProjectOnAnimationDeleted(object sender, FileEventArgs args)
         {
             var nodeToDelete = treeProject.FindNode($"Default\\Game Data\\Animations\\{args.File.Name}");
 
-            this.File_Removed?.Invoke(this, new FileEventArgs(args.File));
+            this.FileRemoved?.Invoke(this, new FileEventArgs(args.File));
 
             nodeToDelete?.ParentNode.Nodes.Remove(nodeToDelete);
         }
 
         private void ProjectOnAnimationAdded(object sender, FileEventArgs args)
         {
-
             DarkTreeNode fileNode = new DarkTreeNode(args.File.Name)
             {
                 Icon = Icons.document_16xLG,
                 Tag = args.File
             };
 
+            var addNode = treeProject.FindNode($"Default\\Game Data\\Animations\\Add Animation");
+            treeProject.Nodes.Remove(addNode);
+
             var animationsNode = treeProject.FindNode($"Default\\Game Data\\Animations");
 
-            animationsNode.Nodes.Insert(animationsNode.Nodes.Count - 1, fileNode);
-
-            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
-            animationsNode.Nodes.Add(new DarkTreeNode());
-            animationsNode.Nodes.Remove(animationsNode.Nodes[animationsNode.Nodes.Count - 1]);
-            // END HACK
+            animationsNode.Nodes.Add(fileNode);
+            animationsNode.Nodes.Add(addNode);
         }
 
         private void ProjectOnMapDeleted(object sender, FileEventArgs args)
         {
             var nodeToDelete = treeProject.FindNode($"Default\\Game Data\\Maps\\{args.File.Name}");
 
-            this.File_Removed?.Invoke(this, new FileEventArgs(args.File));
+            this.FileRemoved?.Invoke(this, new FileEventArgs(args.File));
 
             nodeToDelete?.ParentNode.Nodes.Remove(nodeToDelete);
         }
@@ -346,12 +385,11 @@ namespace Lunar.Editor.Controls
 
             var mapsNode = treeProject.FindNode($"Default\\Game Data\\Maps");
 
-            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
-            var tmpNode = mapsNode.Nodes[mapsNode.Nodes.Count - 1];
-            mapsNode.Nodes.Remove(mapsNode.Nodes[mapsNode.Nodes.Count - 1]);
+            var addNode = treeProject.FindNode($"Default\\Game Data\\Maps\\Add Map");
+            mapsNode.Nodes.Remove(addNode);
+
             mapsNode.Nodes.Add(fileNode);
-            mapsNode.Nodes.Add(tmpNode);
-            // END HACK
+            mapsNode.Nodes.Add(addNode);
 
         }
 
@@ -359,7 +397,7 @@ namespace Lunar.Editor.Controls
         {
             var nodeToDelete = treeProject.FindNode($"Default\\Game Data\\Npcs\\{args.File.Name}");
 
-            this.File_Removed?.Invoke(this, new FileEventArgs(args.File));
+            this.FileRemoved?.Invoke(this, new FileEventArgs(args.File));
 
             nodeToDelete?.ParentNode.Nodes.Remove(nodeToDelete);
         }
@@ -374,19 +412,18 @@ namespace Lunar.Editor.Controls
 
             var npcsNode = treeProject.FindNode($"Default\\Game Data\\Npcs");
 
-            npcsNode.Nodes.Insert(npcsNode.Nodes.Count - 1, fileNode);
+            var addNode = treeProject.FindNode($"Default\\Game Data\\Npcs\\Add NPC");
+            npcsNode.Nodes.Remove(addNode);
 
-            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
-            npcsNode.Nodes.Add(new DarkTreeNode());
-            npcsNode.Nodes.Remove(npcsNode.Nodes[npcsNode.Nodes.Count - 1]);
-            // END HACK
+            npcsNode.Nodes.Add(fileNode);
+            npcsNode.Nodes.Add(addNode);
         }
 
         private void ProjectOnItemDeleted(object sender, FileEventArgs args)
         {
             var nodeToDelete = treeProject.FindNode($"Default\\Game Data\\Items\\{args.File.Name}");
 
-            this.File_Removed?.Invoke(this, new FileEventArgs(args.File));
+            this.FileRemoved?.Invoke(this, new FileEventArgs(args.File));
 
             nodeToDelete?.ParentNode.Nodes.Remove(nodeToDelete);
         }
@@ -401,35 +438,11 @@ namespace Lunar.Editor.Controls
 
             var itemsNode = treeProject.FindNode($"Default\\Game Data\\Items");
 
-            itemsNode.Nodes.Insert(itemsNode.Nodes.Count - 1, fileNode);
+            var addNode = treeProject.FindNode($"Default\\Game Data\\Items\\Add Item");
+            itemsNode.Nodes.Remove(addNode);
 
-            // HACK BECAUSE ROBIN DIDN'T IMPLEMENT DarkTreeNode.Insert() properly!!!!!!!!!!!!!!!!!!!!
-            itemsNode.Nodes.Add(new DarkTreeNode());
-            itemsNode.Nodes.Remove(itemsNode.Nodes[itemsNode.Nodes.Count - 1]);
-            // END HACK
-        }
-
-        private void scriptToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.treeProject.SelectedNodes.Count > 0 && this.treeProject.SelectedNodes[0].Tag is DirectoryInfo)
-            {
-                using (SaveFileDialog dialog = new SaveFileDialog())
-                {
-                    dialog.RestoreDirectory = true;
-                    dialog.InitialDirectory = ((DirectoryInfo) this.treeProject.SelectedNodes[0].Tag).FullName;
-                    dialog.Filter = $@"Lua Script Files (*{EngineConstants.LUA_FILE_EXT})|*{EngineConstants.LUA_FILE_EXT}";
-                    dialog.DefaultExt = EngineConstants.LUA_FILE_EXT;
-                    dialog.AddExtension = true;
-                    if (dialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string path = dialog.FileName;
-
-                        var file = _project.AddScript(path);
-
-                        this.File_Created?.Invoke(this, new FileEventArgs(file));
-                    }
-                }
-            }
+            itemsNode.Nodes.Add(fileNode);
+            itemsNode.Nodes.Add(addNode);
         }
 
         private void TryAppendDirectoryNode(DirectoryInfo directory)
@@ -485,10 +498,12 @@ namespace Lunar.Editor.Controls
             }
         }
 
-        public event EventHandler<FileEventArgs> File_Selected;
+        public event EventHandler<FileEventArgs> FileSelected;
 
-        public event EventHandler<FileEventArgs> File_Created;
+        public event EventHandler<FileEventArgs> FileCreated;
 
-        public event EventHandler<FileEventArgs> File_Removed;
+        public event EventHandler<GameFileChangedEventArgs> FileChanged;
+
+        public event EventHandler<FileEventArgs> FileRemoved;
     }
 }

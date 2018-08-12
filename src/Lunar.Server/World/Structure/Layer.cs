@@ -306,6 +306,7 @@ namespace Lunar.Server.World.Structure
                     {
                         _tiles[x, y] = new Tile(new Vector(x * Settings.TileSize, y * Settings.TileSize));
                         _tiles[x, y].Load(bR, new Vector(x * Settings.TileSize, y * Settings.TileSize));
+                        _tiles[x, y].NPCSpawnerEvent += OnNpcSpawnerEvent;
                     }
                 }
             }
@@ -317,5 +318,14 @@ namespace Lunar.Server.World.Structure
                 _mapObjects.Add(mapObject);
             }
         }
+
+
+        private void OnNpcSpawnerEvent(object sender, Tile.NPCSpawnerEventArgs e)
+        {
+            this.NPCSpawnerEvent?.Invoke(this, e);
+        }
+
+        public event EventHandler<Tile.NPCSpawnerEventArgs> NPCSpawnerEvent;
+
     }
 }

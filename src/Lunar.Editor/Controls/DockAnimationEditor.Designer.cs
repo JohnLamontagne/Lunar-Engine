@@ -58,6 +58,8 @@
             this.surfaceAnimView = new Lunar.Editor.Controls.View();
             this.darkSectionPanel4 = new DarkUI.Controls.DarkSectionPanel();
             this.subSurfaceAnimView = new Lunar.Editor.Controls.View();
+            this.darkLabel11 = new DarkUI.Controls.DarkLabel();
+            this.darkLabel12 = new DarkUI.Controls.DarkLabel();
             this.darkToolStrip1.SuspendLayout();
             this.darkSectionPanel1.SuspendLayout();
             this.darkSectionPanel2.SuspendLayout();
@@ -93,6 +95,7 @@
             // 
             // darkSectionPanel1
             // 
+            this.darkSectionPanel1.Controls.Add(this.darkLabel11);
             this.darkSectionPanel1.Controls.Add(this.txtSurfaceLoopCount);
             this.darkSectionPanel1.Controls.Add(this.darkLabel9);
             this.darkSectionPanel1.Controls.Add(this.btnSelectSurfaceTex);
@@ -115,7 +118,7 @@
             this.txtSurfaceLoopCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtSurfaceLoopCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSurfaceLoopCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtSurfaceLoopCount.Location = new System.Drawing.Point(116, 219);
+            this.txtSurfaceLoopCount.Location = new System.Drawing.Point(116, 213);
             this.txtSurfaceLoopCount.Name = "txtSurfaceLoopCount";
             this.txtSurfaceLoopCount.Size = new System.Drawing.Size(76, 23);
             this.txtSurfaceLoopCount.TabIndex = 20;
@@ -126,7 +129,7 @@
             // 
             this.darkLabel9.AutoSize = true;
             this.darkLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel9.Location = new System.Drawing.Point(10, 221);
+            this.darkLabel9.Location = new System.Drawing.Point(12, 215);
             this.darkLabel9.Name = "darkLabel9";
             this.darkLabel9.Size = new System.Drawing.Size(73, 15);
             this.darkLabel9.TabIndex = 19;
@@ -134,7 +137,7 @@
             // 
             // btnSelectSurfaceTex
             // 
-            this.btnSelectSurfaceTex.Location = new System.Drawing.Point(288, 43);
+            this.btnSelectSurfaceTex.Location = new System.Drawing.Point(291, 47);
             this.btnSelectSurfaceTex.Name = "btnSelectSurfaceTex";
             this.btnSelectSurfaceTex.Padding = new System.Windows.Forms.Padding(5);
             this.btnSelectSurfaceTex.Size = new System.Drawing.Size(30, 20);
@@ -146,7 +149,7 @@
             // 
             this.darkLabel1.AutoSize = true;
             this.darkLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel1.Location = new System.Drawing.Point(10, 42);
+            this.darkLabel1.Location = new System.Drawing.Point(12, 47);
             this.darkLabel1.Name = "darkLabel1";
             this.darkLabel1.Size = new System.Drawing.Size(75, 15);
             this.darkLabel1.TabIndex = 17;
@@ -157,7 +160,7 @@
             this.txtSurfaceFrameHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtSurfaceFrameHeight.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSurfaceFrameHeight.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtSurfaceFrameHeight.Location = new System.Drawing.Point(116, 178);
+            this.txtSurfaceFrameHeight.Location = new System.Drawing.Point(116, 172);
             this.txtSurfaceFrameHeight.Name = "txtSurfaceFrameHeight";
             this.txtSurfaceFrameHeight.Size = new System.Drawing.Size(76, 23);
             this.txtSurfaceFrameHeight.TabIndex = 13;
@@ -168,7 +171,7 @@
             // 
             this.darkLabel5.AutoSize = true;
             this.darkLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel5.Location = new System.Drawing.Point(10, 180);
+            this.darkLabel5.Location = new System.Drawing.Point(12, 174);
             this.darkLabel5.Name = "darkLabel5";
             this.darkLabel5.Size = new System.Drawing.Size(82, 15);
             this.darkLabel5.TabIndex = 12;
@@ -179,7 +182,7 @@
             this.txtSurfaceFrameWidth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtSurfaceFrameWidth.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSurfaceFrameWidth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtSurfaceFrameWidth.Location = new System.Drawing.Point(116, 136);
+            this.txtSurfaceFrameWidth.Location = new System.Drawing.Point(116, 130);
             this.txtSurfaceFrameWidth.Name = "txtSurfaceFrameWidth";
             this.txtSurfaceFrameWidth.Size = new System.Drawing.Size(76, 23);
             this.txtSurfaceFrameWidth.TabIndex = 11;
@@ -190,7 +193,7 @@
             // 
             this.darkLabel4.AutoSize = true;
             this.darkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel4.Location = new System.Drawing.Point(10, 138);
+            this.darkLabel4.Location = new System.Drawing.Point(12, 132);
             this.darkLabel4.Name = "darkLabel4";
             this.darkLabel4.Size = new System.Drawing.Size(78, 15);
             this.darkLabel4.TabIndex = 10;
@@ -201,7 +204,7 @@
             this.txtSurfaceFrameTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtSurfaceFrameTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSurfaceFrameTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtSurfaceFrameTime.Location = new System.Drawing.Point(116, 95);
+            this.txtSurfaceFrameTime.Location = new System.Drawing.Point(116, 89);
             this.txtSurfaceFrameTime.Name = "txtSurfaceFrameTime";
             this.txtSurfaceFrameTime.Size = new System.Drawing.Size(76, 23);
             this.txtSurfaceFrameTime.TabIndex = 9;
@@ -212,7 +215,7 @@
             // 
             this.darkLabel3.AutoSize = true;
             this.darkLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel3.Location = new System.Drawing.Point(10, 97);
+            this.darkLabel3.Location = new System.Drawing.Point(12, 91);
             this.darkLabel3.Name = "darkLabel3";
             this.darkLabel3.Size = new System.Drawing.Size(100, 15);
             this.darkLabel3.TabIndex = 8;
@@ -224,13 +227,14 @@
             this.txtSurfaceTexPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSurfaceTexPath.Enabled = false;
             this.txtSurfaceTexPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtSurfaceTexPath.Location = new System.Drawing.Point(88, 40);
+            this.txtSurfaceTexPath.Location = new System.Drawing.Point(91, 44);
             this.txtSurfaceTexPath.Name = "txtSurfaceTexPath";
             this.txtSurfaceTexPath.Size = new System.Drawing.Size(194, 23);
             this.txtSurfaceTexPath.TabIndex = 5;
             // 
             // darkSectionPanel2
             // 
+            this.darkSectionPanel2.Controls.Add(this.darkLabel12);
             this.darkSectionPanel2.Controls.Add(this.txtSubSurfaceLoopCount);
             this.darkSectionPanel2.Controls.Add(this.darkLabel10);
             this.darkSectionPanel2.Controls.Add(this.txtSubSurfaceFrameHeight);
@@ -413,6 +417,26 @@
             this.subSurfaceAnimView.TabIndex = 16;
             this.subSurfaceAnimView.Load += new System.EventHandler(this.subSurfaceAnimView_Load);
             // 
+            // darkLabel11
+            // 
+            this.darkLabel11.AutoSize = true;
+            this.darkLabel11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel11.Location = new System.Drawing.Point(198, 221);
+            this.darkLabel11.Name = "darkLabel11";
+            this.darkLabel11.Size = new System.Drawing.Size(71, 15);
+            this.darkLabel11.TabIndex = 21;
+            this.darkLabel11.Text = "0 for infinity";
+            // 
+            // darkLabel12
+            // 
+            this.darkLabel12.AutoSize = true;
+            this.darkLabel12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel12.Location = new System.Drawing.Point(201, 215);
+            this.darkLabel12.Name = "darkLabel12";
+            this.darkLabel12.Size = new System.Drawing.Size(71, 15);
+            this.darkLabel12.TabIndex = 25;
+            this.darkLabel12.Text = "0 for infinity";
+            // 
             // DockAnimationEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -426,7 +450,6 @@
             this.Name = "DockAnimationEditor";
             this.Size = new System.Drawing.Size(841, 689);
             this.Load += new System.EventHandler(this.DockItemEditor_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DockItemEditor_KeyDown);
             this.darkToolStrip1.ResumeLayout(false);
             this.darkToolStrip1.PerformLayout();
             this.darkSectionPanel1.ResumeLayout(false);
@@ -470,5 +493,7 @@
         private DarkUI.Controls.DarkLabel darkLabel9;
         private DarkUI.Controls.DarkTextBox txtSubSurfaceLoopCount;
         private DarkUI.Controls.DarkLabel darkLabel10;
+        private DarkUI.Controls.DarkLabel darkLabel11;
+        private DarkUI.Controls.DarkLabel darkLabel12;
     }
 }

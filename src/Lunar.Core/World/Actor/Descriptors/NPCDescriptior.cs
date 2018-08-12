@@ -144,6 +144,10 @@ namespace Lunar.Core.World.Actor.Descriptors
 
             return desc;
         }
-        
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

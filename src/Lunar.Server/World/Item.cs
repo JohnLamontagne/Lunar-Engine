@@ -10,6 +10,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using System;
 using Lidgren.Network;
 using Lunar.Core.World;
 using Lunar.Server.Content.Graphics;
@@ -60,7 +62,7 @@ namespace Lunar.Server.World
         {
             if (itemDef == null)
             {
-                Logger.LogEvent("Null item definition!", LogTypes.ERROR);
+                Logger.LogEvent("Null item definition!", LogTypes.ERROR, Environment.StackTrace);
 
                 this.Name = "Null";
                 this.Sprite = new Sprite("nullItem");

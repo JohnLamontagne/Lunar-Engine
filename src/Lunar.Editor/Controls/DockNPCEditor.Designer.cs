@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DockNPCEditor));
             this.darkToolStrip1 = new DarkUI.Controls.DarkToolStrip();
             this.buttonSave = new System.Windows.Forms.ToolStripButton();
             this.darkSectionPanel1 = new DarkUI.Controls.DarkSectionPanel();
@@ -108,7 +109,7 @@
             // 
             this.buttonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.buttonSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.buttonSave.Image = global::Lunar.Editor.Icons.document_16xLG;
+            this.buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("buttonSave.Image")));
             this.buttonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(23, 25);
@@ -296,7 +297,7 @@
             this.radUnaggressive.TabIndex = 7;
             this.radUnaggressive.TabStop = true;
             this.radUnaggressive.Text = "False";
-            this.radUnaggressive.CheckedChanged += new System.EventHandler(this.radioNotStackable_CheckedChanged);
+            this.radUnaggressive.CheckedChanged += new System.EventHandler(this.radUnaggressive_CheckedChanged);
             // 
             // radAggressive
             // 
@@ -306,7 +307,7 @@
             this.radAggressive.Size = new System.Drawing.Size(48, 19);
             this.radAggressive.TabIndex = 6;
             this.radAggressive.Text = "True";
-            this.radAggressive.CheckedChanged += new System.EventHandler(this.radioStackable_CheckedChanged);
+            this.radAggressive.CheckedChanged += new System.EventHandler(this.radAggressive_CheckedChanged);
             // 
             // darkLabel1
             // 
@@ -419,6 +420,7 @@
             this.darkSectionPanel4.Controls.Add(this.darkLabel3);
             this.darkSectionPanel4.Controls.Add(this.cmbEquipSlot);
             this.darkSectionPanel4.Controls.Add(this.lstItems);
+            this.darkSectionPanel4.Enabled = false;
             this.darkSectionPanel4.Location = new System.Drawing.Point(428, 33);
             this.darkSectionPanel4.Name = "darkSectionPanel4";
             this.darkSectionPanel4.SectionHeader = "Equipment Information";
@@ -438,6 +440,7 @@
             // cmbEquipSlot
             // 
             this.cmbEquipSlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEquipSlot.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEquipSlot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbEquipSlot.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEquipSlot.FormattingEnabled = true;
@@ -454,6 +457,7 @@
             this.lstItems.Size = new System.Drawing.Size(173, 187);
             this.lstItems.TabIndex = 0;
             this.lstItems.Text = "darkListView1";
+            this.lstItems.SelectedIndicesChanged += new System.EventHandler(this.lstItems_SelectedIndicesChanged);
             // 
             // darkSectionPanel5
             // 

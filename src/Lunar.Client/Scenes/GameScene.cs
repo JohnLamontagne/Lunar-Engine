@@ -236,7 +236,7 @@ namespace Lunar.Client.Scenes
 
             equipmentContainer.ClearWidgets();
             
-            for (int i = 0; i < (int)EquipmentSlots.COUNT; i++)
+            for (int i = 0; i < Enum.GetNames(typeof(EquipmentSlots)).Length; i++)
             {
                 bool hasItem = args.Message.ReadBoolean();
 

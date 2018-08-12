@@ -219,7 +219,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Failed to register player: {ex.Message}", LogTypes.ERROR);
+                Logger.LogEvent($"Failed to register player: {ex.Message}", LogTypes.ERROR, Environment.StackTrace);
                 return null;
             }
         }

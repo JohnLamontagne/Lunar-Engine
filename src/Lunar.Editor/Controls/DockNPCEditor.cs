@@ -15,8 +15,10 @@ using DarkUI.Forms;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using DarkUI.Controls;
 using Lunar.Core;
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Editor.World;
@@ -88,11 +90,13 @@ namespace Lunar.Editor.Controls
 
             _file = file;
 
-            _npc = NPCDescriptor.Load(file.FullName);
+            _npc = _project.LoadNPC(file.FullName);
 
             this.txtName.Text = _npc.Name;
+
             this.radAggressive.Checked = _npc.Aggressive;
             this.radUnaggressive.Checked = !_npc.Aggressive;
+
             this.txtStr.Text = _npc.Strength.ToString();
             this.txtInt.Text = _npc.Intelligence.ToString();
             this.txtDef.Text = _npc.Defence.ToString();
@@ -106,10 +110,13 @@ namespace Lunar.Editor.Controls
             this.txtColHeight.Text = _npc.CollisionBounds.Height.ToString();
             this.txtMaxRoam.Text = _npc.MaxRoam.X.ToString();
 
-            if (File.Exists(_npc.TexturePath))
+            this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
+            this.cmbEquipSlot.SelectedItem = EquipmentSlots.MainArm;
+
+            if (File.Exists(_project.ClientRootDirectory + "/" + _npc.TexturePath))
             {
-                this.picSpriteSheet.Load(_npc.TexturePath);
-                this.picCollisionPreview.Load(_npc.TexturePath);
+                this.picSpriteSheet.Load(_project.ClientRootDirectory + "/" + _npc.TexturePath);
+                this.picCollisionPreview.Load(_project.ClientRootDirectory + "/" + _npc.TexturePath);
 
                 if (_npc.FrameSize == Vector.Zero)
                     _npc.FrameSize = new Vector(this.picSpriteSheet.Image.Width, this.picSpriteSheet.Image.Height);
@@ -139,6 +146,8 @@ namespace Lunar.Editor.Controls
 
         public override void Save()
         {
+            _regularDockText = _npc.Name + EngineConstants.NPC_FILE_EXT;
+
             this.DockText = _regularDockText;
             _unsaved = false;
 
@@ -182,8 +191,7 @@ namespace Lunar.Editor.Controls
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    this.DockText = _unsavedDockText;
-                    _unsaved = true;
+                    this.MarkUnsaved();
 
                     string path = dialog.FileName; 
 
@@ -211,41 +219,39 @@ namespace Lunar.Editor.Controls
             }
         }
 
-      
-
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             _npc.Name = txtName.Text;
 
-            this.DockText = _npc.Name + EngineConstants.ITEM_FILE_EXT;
-            _unsavedDockText = _npc.Name + EngineConstants.ITEM_FILE_EXT + "*";
+            this.DockText = _npc.Name + EngineConstants.NPC_FILE_EXT;
+            _unsavedDockText = _npc.Name + EngineConstants.NPC_FILE_EXT + "*";
 
             this.MarkUnsaved();
         }
 
-        private void radioStackable_CheckedChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-        }
-
-        private void radioNotStackable_CheckedChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-        }
-
-        private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
-        }
-
+       
 
         private void cmbEquipmentSlot_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.DockText = _unsavedDockText;
-            _unsaved = true;
+            this.lstItems.Items.Clear();
+
+            this.lstItems.Items.Add(new DarkListItem("Nothing"));
+
+            // Update the item list with all items that are equippable to that slot
+            foreach (var item in _project.Items.Values)
+            {
+                if (item.SlotType == (EquipmentSlots) this.cmbEquipSlot.SelectedItem)
+                {
+                    var itemEntry = new DarkListItem(item.Name)
+                    {
+                        Tag = item
+                    };
+
+                    this.lstItems.Items.Add(itemEntry);
+                }
+            }
+
+            this.MarkUnsaved();
         }
 
         private void onUseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -504,7 +510,7 @@ namespace Lunar.Editor.Controls
                 {
                     string path = dialog.FileName;
 
-                    _npc.TexturePath = path;
+                    _npc.TexturePath = HelperFunctions.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
                     
                     this.picSpriteSheet.Load(path);
                     _npc.FrameSize = new Vector(this.picSpriteSheet.Image.Width, this.picSpriteSheet.Image.Height);
@@ -552,8 +558,24 @@ namespace Lunar.Editor.Controls
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
+
+            
         }
 
+        private void lstItems_SelectedIndicesChanged(object sender, EventArgs e)
+        {
+        }
 
+        private void radAggressive_CheckedChanged(object sender, EventArgs e)
+        {
+            _npc.Aggressive = this.radAggressive.Checked;
+           this.MarkUnsaved();
+        }
+
+        private void radUnaggressive_CheckedChanged(object sender, EventArgs e)
+        {
+            _npc.Aggressive = !this.radUnaggressive.Checked;
+            this.MarkUnsaved();
+        }
     }
 }

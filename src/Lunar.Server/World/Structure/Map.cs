@@ -125,7 +125,7 @@ namespace Lunar.Server.World.Structure
             }
             else
             {
-                Logger.LogEvent($"Specified item does not exist on map; cannot remove: {item.Name}", LogTypes.ERROR);
+                Logger.LogEvent($"Specified item does not exist on map; cannot remove: {item.Name}", LogTypes.ERROR, Environment.StackTrace);
             }
 
           
@@ -277,7 +277,7 @@ namespace Lunar.Server.World.Structure
         {
             if (!_actors.ContainsKey(actorID))
             {
-                Logger.LogEvent($"Actor {actorID} does not exist in map!", LogTypes.ERROR);
+                Logger.LogEvent($"Actor {actorID} does not exist in map!", LogTypes.ERROR, Environment.StackTrace);
                 return;;
             }
 
@@ -354,6 +354,18 @@ namespace Lunar.Server.World.Structure
 
                         var layer = new Layer(map.Dimensions, layerName, lIndex);
                         layer.Load(bR);
+                        layer.NPCSpawnerEvent += (sender, args) =>
+                        {
+                            var npcDesc = Server.ServiceLocator.GetService<NPCManager>().GetNPC(args.Name);
+                            NPC npc = new NPC(npcDesc, map)
+                            {
+                                Layer = (Layer) sender
+                            };
+                            npc.WarpTo(args.Position);
+
+                            // This allows the tile spawner to keep track of npcs that exist, and respawn if neccessary (i.e., they die).
+                            args.HeartbeatListener.NPCs.Add(npc);
+                        };
 
                         map.AddLayer(layerName, layer);
                     }

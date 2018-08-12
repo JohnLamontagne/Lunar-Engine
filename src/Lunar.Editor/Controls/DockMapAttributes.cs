@@ -24,12 +24,20 @@ namespace Lunar.Editor.Controls
         public TileAttributes Attribute { get; private set; }
         public AttributeData AttributeData { get; private set; }
         private WarpAttributeDialog _tileAttributeDialog;
+        private NPCSpawnDialog _npcSpawnAttributeDialog;
 
         public Map MapSubject { get; private set; }
+
+        public Project Project { get; private set; }
 
         public DockMapAttributes()
         {
             InitializeComponent();
+        }
+
+        public void SetProject(Project project)
+        {
+            this.Project = project;
         }
 
         public void SetMapSubject(Map map)
@@ -77,6 +85,24 @@ namespace Lunar.Editor.Controls
             _tileAttributeDialog.Show(this.ParentForm);
         }
 
+        private void btnNPCSpawn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!((DarkRadioButton)sender).Checked)
+                return;
+
+            this.Attribute = TileAttributes.NPCSpawn;
+
+            _npcSpawnAttributeDialog = new NPCSpawnDialog(this.ParentForm, this.Project);
+            _npcSpawnAttributeDialog.SelectTile += (o, args) => this.SelectingTile?.Invoke(o, args);
+            _npcSpawnAttributeDialog.Submitted += NpcSpawnAttributeDialogOnSubmitted;
+            _npcSpawnAttributeDialog.Show(this.ParentForm);
+        }
+
+        private void NpcSpawnAttributeDialogOnSubmitted(object sender, EventArgs e)
+        {
+            this.AttributeData = new NPCSpawnAttributeData(_npcSpawnAttributeDialog.NPC, _npcSpawnAttributeDialog.RespawnTime, _npcSpawnAttributeDialog.MaxSpawns);
+        }
+
         private void WarpDialog_Submitted(object sender, EventArgs e)
         {
             this.AttributeData = new WarpAttributeData(_tileAttributeDialog.WarpX, _tileAttributeDialog.WarpY, _tileAttributeDialog.WarpMapID, _tileAttributeDialog.WarpLayerName);
@@ -84,22 +110,12 @@ namespace Lunar.Editor.Controls
 
         public event EventHandler<EventArgs> SelectingTile;
 
-        private void darkRadioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!((DarkRadioButton)sender).Checked)
-                return;
-
-            this.Attribute = TileAttributes.Warp;
-
-            _tileAttributeDialog = new WarpAttributeDialog(this.ParentForm, this.MapSubject);
-            _tileAttributeDialog.SelectTile += (o, args) => this.SelectingTile?.Invoke(o, args);
-            _tileAttributeDialog.Submitted += NPCSpawnDialog_Submitted;
-            _tileAttributeDialog.Show(this.ParentForm);
-        }
 
         private void NPCSpawnDialog_Submitted(object sender, EventArgs e)
         {
             this.AttributeData = new WarpAttributeData(_tileAttributeDialog.WarpX, _tileAttributeDialog.WarpY, _tileAttributeDialog.WarpMapID, _tileAttributeDialog.WarpLayerName);
         }
+
+       
     }
 }
