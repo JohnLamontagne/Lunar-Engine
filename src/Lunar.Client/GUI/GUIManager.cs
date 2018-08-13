@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -270,6 +271,9 @@ namespace Lunar.Client.GUI
 
         private void LoadWidgets(XElement widgetEntries, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
         {
+            if (widgetEntries == null)
+                return;
+
             foreach (var importElement in widgetEntries.Elements("import"))
             {
                 this.LoadWidgetsFromFileImport(Constants.FILEPATH_DATA + importElement.Attribute("file")?.Value.ToString(), fonts, content, parent);
@@ -283,6 +287,11 @@ namespace Lunar.Client.GUI
             foreach (var labelElement in widgetEntries.Elements("label"))
             {
                 this.LoadLabelFromXML(labelElement, fonts, parent);
+            }
+
+            foreach (var sbElement in widgetEntries.Elements("statusbar"))
+            {
+                this.LoadStatusBarFromXML(sbElement, fonts, content, parent);
             }
 
             foreach (var checkboxElement in widgetEntries.Elements("checkbox"))
@@ -323,19 +332,74 @@ namespace Lunar.Client.GUI
 
             int.TryParse(chatboxElement.Element("maxlines")?.Value.ToString(), out int maxLines);
 
+            int.TryParse(chatboxElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
             var texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
             var position = this.ParsePosition(chatboxElement.Element("position")?.Element("x")?.Value.ToString(),
                 chatboxElement.Element("position")?.Element("y")?.Value.ToString());
 
+            if (!bool.TryParse(chatboxElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
             SpriteFont font = fonts[fontName];
             var chatBox = new Chatbox(texture, font, maxLines)
             {
                 Position = position,
-                ChatOffset = new Vector2(offX, offY)
+                ChatOffset = new Vector2(offX, offY),
+                ZOrder = zOrder,
+                Visible = visible
             };
 
             parent.AddWidget(chatBox, chatboxName);
+        }
+
+        private void LoadStatusBarFromXML(XElement sbElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        {
+            string sbName = sbElement.Attribute("name")?.Value.ToString();
+
+            string text = sbElement.Element("text")?.Value.ToString() ?? "";
+            string fontName = sbElement.Element("font")?.Value.ToString();
+            uint.TryParse(sbElement.Element("fontsize")?.Value.ToString(), out uint charSize);
+
+            string texturePath = sbElement.Element("backSprite").Value.ToString();
+            string texturePath2 = sbElement.Element("fillSprite").Value.ToString();
+
+            var color = this.ParseColor(sbElement.Element("color"));
+
+            var position = this.ParsePosition(sbElement.Element("position")?.Element("x")?.Value.ToString(),
+                                              sbElement.Element("position")?.Element("y")?.Value.ToString());
+
+            var fillPosition = this.ParsePosition(sbElement.Element("fillPosition")?.Element("x")?.Value.ToString(),
+                                              sbElement.Element("fillPosition")?.Element("y")?.Value.ToString());
+
+            int.TryParse(sbElement.Element("padding")?.Element("x")?.Value.ToString(), out int offX);
+            int.TryParse(sbElement.Element("padding")?.Element("y")?.Value.ToString(), out int offY);
+
+            int.TryParse(sbElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            Texture2D backSprite = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+            Texture2D fillSprite = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath2);
+
+            if (!bool.TryParse(sbElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
+            SpriteFont font = fonts[fontName];
+            var _statusbar = new StatusBar(backSprite, fillSprite, new Rectangle(Convert.ToInt32(fillPosition.X), Convert.ToInt32(fillPosition.Y), fillSprite.Width, fillSprite.Height), font)
+            {
+                Text = text,
+                Position = position,
+                ForeColor = color,
+                Visible = visible,
+                TextOffset = new Vector2(offX, offY),
+                ZOrder = zOrder
+            };
+
+            parent.AddWidget(_statusbar, sbName);
         }
 
         private void LoadTextboxFromXML(XElement textboxElement, Dictionary<string, SpriteFont> fonts,
@@ -353,6 +417,16 @@ namespace Lunar.Client.GUI
             int.TryParse(textboxElement.Element("padding")?.Element("y")?.Value.ToString(), out int offY);
             Vector2 textOffset = new Vector2(offX, offY);
 
+            float.TryParse(textboxElement.Element("scale")?.Element("x")?.Value.ToString(), out float scaleX);
+            float.TryParse(textboxElement.Element("scale")?.Element("y")?.Value.ToString(), out float scaleY);
+
+            if (scaleX <= 0)
+                scaleX = 1;
+            if (scaleY <= 0)
+                scaleY = 1;
+
+            Vector2 scale = new Vector2(scaleX, scaleY);
+
             var color = this.ParseColor(textboxElement.Element("color"));
 
             float.TryParse(textboxElement.Element("origin")?.Element("x")?.Value.ToString(), out float originX);
@@ -367,6 +441,13 @@ namespace Lunar.Client.GUI
             var position = this.ParsePosition(textboxElement.Element("position")?.Element("x")?.Value.ToString(),
                 textboxElement.Element("position")?.Element("y")?.Value.ToString());
 
+            int.TryParse(textboxElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            if (!bool.TryParse(textboxElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
             SpriteFont font = fonts[fontName];
             var textBox = new Textbox(texture, font, textOffset, charSize)
             {
@@ -374,7 +455,10 @@ namespace Lunar.Client.GUI
                 Position = position,
                 ForeColor = color,
                 Origin = origin,
-                Mask = mask
+                Mask = mask,
+                ZOrder = zOrder,
+                Visible = visible,
+                Scale = scale,
             };
 
             parent.AddWidget(textBox, textboxName);
@@ -395,13 +479,25 @@ namespace Lunar.Client.GUI
 
             Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
+            int.TryParse(containerElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            bool.TryParse(containerElement.Element("draggable")?.Value, out bool draggable);
+
+            if (!bool.TryParse(containerElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
             var container = new WidgetContainer(texture)
             {
                 Position = position,
-                Origin = origin
+                Origin = origin,
+                ZOrder = zOrder,
+                Draggable = draggable,
+                Visible = visible
             };
 
-            // load its children
+            // load its children if it has them
             this.LoadWidgets(containerElement.Element("Widgets"), fonts, content, container);
 
             parent.AddWidget(container, containerName);
@@ -422,10 +518,19 @@ namespace Lunar.Client.GUI
 
             Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
+            int.TryParse(picElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            if (!bool.TryParse(picElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
             var pic = new Picture(texture)
             {
                 Position = position,
-                Origin = origin
+                Origin = origin,
+                ZOrder = zOrder,
+                Visible = visible
             };
 
             parent.AddWidget(pic, picName);
@@ -446,9 +551,18 @@ namespace Lunar.Client.GUI
             Texture2D uncheckedTexture = content.LoadTexture2D(Constants.FILEPATH_DATA + uncheckedTexturePath);
             SpriteFont font = fonts[fontName];
 
+            int.TryParse(chkElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            if (!bool.TryParse(chkElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
             var chkBox = new Checkbox(checkedTexture, uncheckedTexture)
             {
-                Position = position
+                Position = position,
+                ZOrder = zOrder,
+                Visible = visible
             };
 
             parent.AddWidget(chkBox, chkBoxName);
@@ -468,13 +582,21 @@ namespace Lunar.Client.GUI
             var position = this.ParsePosition(lblElement.Element("position")?.Element("x")?.Value.ToString(),
                 lblElement.Element("position")?.Element("y")?.Value.ToString());
 
+            int.TryParse(lblElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            if (!bool.TryParse(lblElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
             SpriteFont font = fonts[fontName];
             var label = new Label(font) 
             {
                 Text = text,
                 Position = position,
                 Color = color,
-                ZOrder = 1
+                ZOrder = zOrder,
+                Visible = visible
             };
 
             parent.AddWidget(label, lblName);
@@ -497,9 +619,18 @@ namespace Lunar.Client.GUI
             
             SpriteFont font = fonts[fontName];
 
+            int.TryParse(buttonElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            if (!bool.TryParse(buttonElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
             var button = new Button(texture, text, font, charSize)
             {
-                Position = position
+                Position = position,
+                ZOrder = zOrder,
+                Visible = visible
             };
 
             parent.AddWidget(button, btnName);
@@ -534,7 +665,11 @@ namespace Lunar.Client.GUI
             float x = 0;
             float y = 0;
 
-            if (posX.Contains("%"))
+            if (posX == null)
+            {
+                x = 0;
+            }
+            else if (posX.Contains("%"))
             {
                 float.TryParse(posX.Replace("%", ""), out float pX);
                 x = Settings.ResolutionX * (pX / 100f);
@@ -544,7 +679,11 @@ namespace Lunar.Client.GUI
                 float.TryParse(posX, out x);
             }
 
-            if (posY.Contains("%"))
+            if (posY == null)
+            {
+                y = 0;
+            }
+            else if (posY.Contains("%"))
             {
                 float.TryParse(posY.Replace("%", ""), out float pY);
                 y = Settings.ResolutionY * (pY / 100f);
@@ -556,6 +695,5 @@ namespace Lunar.Client.GUI
 
             return new Vector2(x, y);
         }
-
     }
 }

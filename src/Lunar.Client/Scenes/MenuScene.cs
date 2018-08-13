@@ -42,7 +42,7 @@ namespace Lunar.Client.Scenes
 
         protected override void OnEnter()
         {
-            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/menu_interface.xml", this.ContentManager);
+            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/menu/menu_interface.xml", this.ContentManager);
             this.HookInterfaceEvents();
 
             base.OnEnter();

@@ -149,7 +149,7 @@ namespace Lunar.Client.Scenes
 
             _target = _worldManager.Map.GetEntity(uniqueID);
 
-            enemyPortraitContainer.GetWidget<Picture>("enemyIndicatorPicture").Visible = _target is NPC;
+            enemyPortraitContainer.GetWidget<Picture>("portraitGraphic").Visible = _target is NPC;
             
 
             enemyPortraitContainer.GetWidget<StatusBar>("targetHealthBar").Value = ((float)_target.Health / (float)_target.MaximumHealth) * 100f;
@@ -191,6 +191,9 @@ namespace Lunar.Client.Scenes
                 {
                     this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Value = player.Health;
                     this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text = $"HP {player.Health}/{player.MaximumHealth}";
+                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").TextOffset =
+                        new Vector2(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Width - this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Font.MeasureString(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text).X,
+                            this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Height / 2f);
 
                     var characterWindow = this.GuiManager.GetWidget<WidgetContainer>("characterWindow");
 
@@ -452,232 +455,42 @@ namespace Lunar.Client.Scenes
 
         public void InitalizeInterface()
         {
-            var font = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/interfaceFont");
-            var chatFont = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/chatFont");
-            var idleButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/idleButton.png");
-            var hoverButtonSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/hoverButton.png");
-            var backBar = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/statusBar.png");
-            var windowBackSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/windowBack.png");
-            
+            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/game/game_interface.xml", this.ContentManager);
 
-            var chatBack = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/chat.png");
-            var chat = new Chatbox(chatBack, chatFont, 12)
-            {
-                Position = new Vector2(0, 630 - chatBack.Height),
-                Draggable = true,
-                ChatOffset = new Vector2(30, chatBack.Height - 15),
-                Visible = true
-            };
-            this.GuiManager.AddWidget(chat, "chatbox");
+            var chat = this.GuiManager.GetWidget<Chatbox>("chatbox");
+            var messageEntry = this.GuiManager.GetWidget<Textbox>("messageEntry");
+            var logoutButton = this.GuiManager.GetWidget<Button>("btnLogout");
+            var toggleInventoryButton = this.GuiManager.GetWidget<Button>("btnInventory");
+            var toggleCharacterWindowButton = this.GuiManager.GetWidget<Button>("btnCharacter");
+            var healthStatusBar = this.GuiManager.GetWidget<StatusBar>("healthStatusBar");
+            var manaStatusBar = this.GuiManager.GetWidget<StatusBar>("manaStatusBar");
+            var targetHealthBar = this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer").GetWidget<StatusBar>("targetHealthBar");
 
-            var messageEntrySprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/textboxNormal.png");
-            var messageEntry = new Textbox(messageEntrySprite, chatFont, new Vector2(12, 0))
-            {
-                Position = new Vector2(17, (chat.Position.Y + chatBack.Height)),
-                Scale =
-                    new Vector2(
-                        HelperFunctions.RoundDown((float)chatBack.Width / (float)messageEntrySprite.Width, 1), 1)
-            };
             messageEntry.BindTo(chat);
             messageEntry.Visible = true;
             messageEntry.ReturnPressed += messageEntry_ReturnPressed;
-            this.GuiManager.AddWidget(messageEntry, "messageEntry");
-
-            var logoutButton = new Button(idleButtonSprite, "Logout", font)
-            {
-                HoverSprite = hoverButtonSprite,
-                Position = new Vector2(1020, 640),
-                Visible = true
-            };
+            
             logoutButton.Clicked += logoutButton_ButtonClicked;
-            this.GuiManager.AddWidget(logoutButton, "btnLogout");
 
-            var toggleInventoryButton = new Button(idleButtonSprite, "Inventory", font)
-            {
-                HoverSprite = hoverButtonSprite,
-                Position = new Vector2(1020, 520),
-                Visible = true
-            };
             toggleInventoryButton.Clicked += toggleInventoryButton_ButtonClicked;
-            this.GuiManager.AddWidget(toggleInventoryButton, "toggleInventoryButton");
 
-            var toggleCharacterWindowButton = new Button(idleButtonSprite, "Character", font)
-            {
-                HoverSprite = hoverButtonSprite,
-                Position = new Vector2(1020, 580),
-                Visible = true
-            };
             toggleCharacterWindowButton.Clicked += toggleCharacterWindowButton_ButtonClicked;
-            this.GuiManager.AddWidget(toggleCharacterWindowButton, "toggleCharacterWindowButton");
 
-            Texture2D healthFillSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/healthFillSprite.png");
-            var healthStatusBar = new StatusBar(backBar, healthFillSprite, new Rectangle(7, 7, healthFillSprite.Width, healthFillSprite.Height), font)
-            {
-                Visible = true,
-                ForeColor = Color.Black,
-                Position = new Vector2(25, 5),
-                Text = "HP: 100/100",
-                Value = 100
-            };
+
             healthStatusBar.TextOffset =
-                new Vector2(healthFillSprite.Width - font.MeasureString(healthStatusBar.Text).X,
-                    healthFillSprite.Height / 2f);
+                new Vector2(healthStatusBar.FillSprite.Width - healthStatusBar.Font.MeasureString(healthStatusBar.Text).X,
+                    healthStatusBar.FillSprite.Height / 2f);
 
-            this.GuiManager.AddWidget(healthStatusBar, "healthStatusBar");
 
-            Texture2D manaFillSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/manaFillSprite.png");
-            var manaStatusBar = new StatusBar(backBar, manaFillSprite, new Rectangle(7, 7, manaFillSprite.Width, manaFillSprite.Height), font)
-            {
-                Visible = true,
-                ForeColor = Color.Black,
-                Position = new Vector2(25, 35),
-                Text = "MP: 100/100",
-                Value = 100
-            };
             manaStatusBar.TextOffset =
-               new Vector2(manaFillSprite.Width - font.MeasureString(manaStatusBar.Text).X,
-                   manaFillSprite.Height / 2f);
-
-            this.GuiManager.AddWidget(manaStatusBar, "manaStatusBar");
-
-            Texture2D inventoryBackSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/inventory.png");
-            var inventoryWidget = new WidgetContainer(inventoryBackSprite)
-            {
-                Visible = false,
-                Position = new Vector2(500, 400),
-                Draggable = true
-            };
-            this.GuiManager.AddWidget(inventoryWidget, "inventoryWidget");
-
-            Texture2D experienceBarSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/experienceBar.png");
-            Texture2D experienceBarPool = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/experiencePool.png");
-            var experienceBar = new StatusBar(experienceBarSprite, experienceBarPool, new Rectangle(8, 31, 440, 13), font)
-            {
-                Visible = true,
-                ForeColor = Color.Black,
-                Position = new Vector2(chat.Position.X, chat.Position.Y - 50),
-                Value = 50
-            };
-            this.GuiManager.AddWidget(experienceBar, "experienceBar");
+               new Vector2(manaStatusBar.FillSprite.Width - manaStatusBar.Font.MeasureString(manaStatusBar.Text).X,
+                   manaStatusBar.FillSprite.Height / 2f);
 
 
-            var characterWindowSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/statScreen.png");
-            var characterWindow = new WidgetContainer(characterWindowSprite)
-            {
-                Visible = false,
-                Position = new Vector2(300, 200),
-                Draggable = true
-            };
-            this.GuiManager.AddWidget(characterWindow, "characterWindow");
-
-            var equipmentContainer = new WidgetContainer(characterWindow.Size)
-            {
-                Visible = true,
-                Position = characterWindow.Position,
-                ZOrder = 1
-            };
-            characterWindow.AddWidget(equipmentContainer, "equipmentContainer");
-
-            var charWindowNameLabel = new Label(font)
-            {
-                Position = new Vector2(characterWindow.Position.X + 170, characterWindow.Position.Y + 65),
-                Visible= true,
-                Text = "Player Name",
-                ZOrder  = 1
-            };
-            characterWindow.AddWidget(charWindowNameLabel, "charWindowNameLabel");
-
-            var charStatsHeaderLabel = new Label(font)
-            {
-                Position = new Vector2(characterWindow.Position.X + 410, characterWindow.Position.Y + 110),
-                Visible = true,
-                Text = "Character Stats:"
-            };
-            characterWindow.AddWidget(charStatsHeaderLabel, "charStatsHeaderLabel");
-
-            var charHealthLabel = new Label(font)
-            {
-                Position = new Vector2(characterWindow.Position.X + 390, characterWindow.Position.Y + 150),
-                Visible = true,
-                Text = "Health: 0/0"
-            };
-            characterWindow.AddWidget(charHealthLabel, "charHealthLabel");
-
-            var charStrengthLabel = new Label(font)
-            {
-                Position = new Vector2(characterWindow.Position.X + 390, characterWindow.Position.Y + 175),
-                Visible = true,
-                Text = "Strength: 0"
-            };
-            characterWindow.AddWidget(charStrengthLabel, "charStrengthLabel");
-
-            var charIntLabel = new Label(font)
-            {
-                Position = new Vector2(characterWindow.Position.X + 390, characterWindow.Position.Y + 200),
-                Visible = true,
-                Text = "Intelligence: 0"
-            };
-            characterWindow.AddWidget(charIntLabel, "charIntLabel");
-
-            var charDexLabel = new Label(font)
-            {
-                Position = new Vector2(characterWindow.Position.X + 390, characterWindow.Position.Y + 225),
-                Visible = true,
-                Text = "Dexterity: 0"
-            };
-            characterWindow.AddWidget(charDexLabel, "charDexLabel");
-
-            var charDefLabel = new Label(font)
-            {
-                Position = new Vector2(characterWindow.Position.X + 390, characterWindow.Position.Y + 250),
-                Visible = true,
-                Text = "Defence: 0"
-            };
-            characterWindow.AddWidget(charDefLabel, "charDefLabel");
-
-
-
-            var targetPortrait = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/portrait.png");
-            var targetPortraitContainer = new WidgetContainer(targetPortrait)
-            {
-                Position = new Vector2(Settings.ResolutionX - (healthStatusBar.BackSprite.Width + targetPortrait.Width), 5),
-                Visible = false,
-                ZOrder = 1
-            };
-            this.GuiManager.AddWidget(targetPortraitContainer, "targetPortraitContainer");
-
-            var targetHealthBar = new StatusBar(backBar, healthFillSprite, new Rectangle(7, 7, healthFillSprite.Width, healthFillSprite.Height), font)
-            {
-                Visible = true,
-                ForeColor = Color.Black,
-                Position = new Vector2(targetPortraitContainer.Position.X + 75, targetPortraitContainer.Position.Y + 25),
-                Text = "HP: 100/100",
-                Value = 100,
-                ZOrder = 0
-            };
             targetHealthBar.TextOffset =
-                new Vector2(healthFillSprite.Width - font.MeasureString(targetHealthBar.Text).X,
-                    healthFillSprite.Height / 2f);
+                new Vector2(targetHealthBar.FillSprite.Width - targetHealthBar.Font.MeasureString(targetHealthBar.Text).X,
+                    targetHealthBar.FillSprite.Height / 2f);
 
-            targetPortraitContainer.AddWidget(targetHealthBar, "targetHealthBar");
-
-            var enemyIndicatorSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/enemyIndicator.png");
-            var enemyIndicatorPicture = new Picture(enemyIndicatorSprite)
-            {
-                Visible = false,
-                Position = new Vector2(targetPortraitContainer.Position.X + 50, targetPortraitContainer.Position.Y + 25),
-                ZOrder = 2
-            };
-            targetPortraitContainer.AddWidget(enemyIndicatorPicture, "enemyIndicatorPicture");
-
-            var dialogueWindow = new WidgetContainer(windowBackSprite)
-            {
-                Visible = false,
-                Size = new Vector2(characterWindow.Size.X, 200),
-                Position = new Vector2(400, 450),
-                Draggable = true
-            };
-            this.GuiManager.AddWidget(dialogueWindow, "dialogueWindow");
         }
 
         private void toggleCharacterWindowButton_ButtonClicked(object sender, EventArgs e)

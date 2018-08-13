@@ -1,0 +1,41 @@
+<Widgets>
+		<picture name="portraitGraphic">
+			<texture>gfx/Interface/portrait.png</texture>
+			<position>
+				<x>0</x>
+				<y>0</y>
+			</position>
+			<visible>true</visible>
+		</picture>
+		
+		<statusbar name="targetHealthBar">
+			<font>interfaceFont</font>
+			<backSprite>gfx/Interface/statusBar.png</backSprite>
+			<fillSprite>gfx/Interface/healthFillSprite.png</fillSprite>
+			<color>Black</color>
+			<position>
+				<x>75</x>
+				<y>25</y>
+			</position>
+			<fillPosition>
+				<x>7</x>
+				<y>7</y>
+			</fillPosition>
+			<text>HP: 100/Test</text>
+			<value>100</value>
+		</statusbar>
+		
+		<picture name="enemyIndicator">
+			<texture>gfx/Interface/enemyIndicator.png</texture>
+			<position>
+				<x>50</x>
+				<y>25</y>
+			</position>
+			<visible>true</visible>
+		</picture>
+		
+	
+	
+	
+
+</Widgets>

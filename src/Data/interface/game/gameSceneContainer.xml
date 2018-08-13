@@ -1,0 +1,125 @@
+<Widgets>
+	<button name="btnInventory">
+		<texture>gfx/Interface/idleButton.png</texture>
+		<font>chatFont</font>
+		<text>Inventory</text>
+		<position>
+			<x>75%</x>
+			<y>75%</y>
+		</position>
+	</button>
+
+	<button name="btnLogout">
+		<texture>gfx/Interface/idleButton.png</texture>
+		<font>chatFont</font>
+		<text>Logout</text>
+		<position>
+			<x>75%</x>
+			<y>87%</y>
+		</position>
+	</button>
+
+	<button name="btnCharacter">
+		<texture>gfx/Interface/idleButton.png</texture>
+		<font>chatFont</font>
+		<text>Character</text>
+		<position>
+			<x>75%</x>
+			<y>81%</y>
+		</position>
+	</button>
+
+	<chatbox name="chatbox">
+		<texture>gfx/Interface/chat.png</texture>
+		<font>chatFont</font>
+		<position>
+			<x>2%</x>
+			<y>67%</y>
+		</position>
+		<maxlines>12</maxlines>
+		<visible>true</visible>
+		<padding>
+			<x>30</x>
+			<y>223</y>
+		</padding>
+	</chatbox>
+
+	<textbox name="messageEntry">
+		<texture>gfx/Interface/textboxNormal.png</texture>
+		<font>chatFont</font>
+		<position>
+			<x>3%</x>
+			<y>93.5%</y>
+		</position>
+		<scale>
+			<x>1.6</x>
+			<y>1</y>
+		</scale>
+		<padding>
+			<x>12</x>
+			<y>0</y>
+		</padding>
+	</textbox>
+
+	<statusbar name="healthStatusBar">
+		<font>interfaceFont</font>
+		<backSprite>gfx/Interface/statusBar.png</backSprite>
+		<fillSprite>gfx/Interface/healthFillSprite.png</fillSprite>
+		<color>Black</color>
+		<position>
+			<x>5%</x>
+			<y>5%</y>
+		</position>
+		<fillPosition>
+			<x>7</x>
+			<y>7</y>
+		</fillPosition>
+		<padding>
+			<x>7</x>
+			<y>7</y>
+		</padding>
+
+		<text></text>
+	</statusbar>
+
+	<statusbar name="manaStatusBar">
+		<font>interfaceFont</font>
+		<backSprite>gfx/Interface/statusBar.png</backSprite>
+		<fillSprite>gfx/Interface/manaFillSprite.png</fillSprite>
+		<color>Black</color>
+		<position>
+			<x>5%</x>
+			<y>8%</y>
+		</position>
+		<padding>
+			<x>7</x>
+			<y>7</y>
+		</padding>
+		<fillPosition>
+			<x>7</x>
+			<y>7</y>
+		</fillPosition>
+		<text></text>
+		<padding>
+			<x>7</x>
+			<y>7</y>
+		</padding>
+
+	</statusbar>
+
+	<statusbar name="experienceBar">
+		<font>interfaceFont</font>
+		<backSprite>gfx/Interface/experienceBar.png</backSprite>
+		<fillSprite>gfx/Interface/experiencePool.png</fillSprite>
+		<color>Black</color>
+		<position>
+			<x>2%</x>
+			<y>62%</y>
+		</position>
+		<fillPosition>
+			<x>8</x>
+			<y>31</y>
+		</fillPosition>
+		<text></text>
+	</statusbar>
+</Widgets>

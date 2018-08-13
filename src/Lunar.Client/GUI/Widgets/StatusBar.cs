@@ -102,6 +102,12 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
+        public SpriteFont Font
+        {
+            get => _label.Font;
+            set => _label.Font = value;
+        }
+
         public bool Selectable { get; set; }
 
         public event EventHandler<WidgetClickedEventArgs> Clicked;
