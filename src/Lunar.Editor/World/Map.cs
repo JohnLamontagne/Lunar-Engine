@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using DarkUI.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Editor.Utilities;
@@ -134,9 +135,20 @@ namespace Lunar.Editor.World
                     for (int i = 0; i < tilesetCount; i++)
                     {
                         string tilesetPath = bR.ReadString();
-                        Texture2D tileset = textureLoader.LoadFromFile(project.ClientRootDirectory + "/" + tilesetPath);
-                        tileset.Tag = tilesetPath;
-                        map.Tilesets.Add(Path.GetFileName(tilesetPath), tileset);
+
+                        if (File.Exists(project.ClientRootDirectory + "/" + tilesetPath))
+                        {
+                            Texture2D tileset = textureLoader.LoadFromFile(project.ClientRootDirectory + "/" + tilesetPath);
+                            tileset.Tag = tilesetPath;
+                            map.Tilesets.Add(Path.GetFileName(tilesetPath), tileset);
+                        }
+                        else
+                        {
+                            DarkMessageBox.ShowError($"Could not load tileset {tilesetPath}!", "Error loading tileset!",
+                                DarkDialogButton.Ok);
+                        }
+
+                        
                     }
 
                     map.Name = bR.ReadString();

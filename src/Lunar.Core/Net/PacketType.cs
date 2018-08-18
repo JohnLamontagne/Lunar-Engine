@@ -74,6 +74,8 @@ namespace Lunar.Core.Net
 
         REQ_TARGET,
 
+        DESELECT_TARGET,
+
         TARGET_ACQ,
 
         DIALOGUE,

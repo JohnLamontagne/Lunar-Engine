@@ -26,6 +26,8 @@ namespace Lunar.Client
 
         public static string GameName { get; set; }
 
+        public static string Website { get; set; }
+
         public static int ResolutionX { get; set; }
         public static int ResolutionY { get; set; }
 
@@ -45,7 +47,8 @@ namespace Lunar.Client
                 new XElement("General",
                     new XElement("Game_Name", "Lunar Engine"),
                     new XElement("IP", "127.0.0.1"),
-                    new XElement("Port", 25566)                
+                    new XElement("Port", 25566),
+                    new XElement("Website", "https://www.rpgorigin.com")
                 ),
                 new XElement("Display",
                     new XElement("Resolution_X", 1600),
@@ -69,8 +72,10 @@ namespace Lunar.Client
 
                 var generalSettings = doc.Elements("Config").Elements("General");
                 Settings.GameName = generalSettings.Elements("Game_Name").FirstOrDefault().Value;
+                Settings.Website = generalSettings.Elements("Website").FirstOrDefault().Value;
                 Settings.Port = int.Parse(generalSettings.Elements("Port").FirstOrDefault().Value);
                 Settings.IP = generalSettings.Elements("IP").FirstOrDefault().Value;
+
 
                 var displaySettings = doc.Elements("Config").Elements("Display");
                 Settings.ResolutionX = int.Parse(displaySettings.Elements("Resolution_X").FirstOrDefault().Value);
@@ -78,6 +83,7 @@ namespace Lunar.Client
 
                 var advancedSettings = doc.Elements("Config").Elements("Advanced");
                 Settings.DisplayNetworkMessages = bool.Parse(advancedSettings.Elements("DisplayNetworkMessages").FirstOrDefault().Value);
+
 
             }
             catch (IndexOutOfRangeException ex)

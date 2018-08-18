@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config>
+  <General>
+    <Port>25566</Port>
+    <Game_Name>Lunar Engine</Game_Name>
+    <Welcome_Message>Welcome to Lunar Engine!</Welcome_Message>
+  </General>
+  <Gameplay>
+    <Starting_Map>default</Starting_Map>
+    <Max_Inventory_Slots>30</Max_Inventory_Slots>
+    <NPC_Rest_Period>400</NPC_Rest_Period>
+    <Max_Level>100</Max_Level>
+  </Gameplay>
+  <Advanced>
+    <Tick_Rate>120</Tick_Rate>
+    <Tile_Size>32</Tile_Size>
+    <Map_Item_Width>32</Map_Item_Width>
+    <Map_Item_Height>32</Map_Item_Height>
+  </Advanced>
+  <Roles>
+    <User>0</User>
+    <Admin>1</Admin>
+  </Roles>
+  <DefaultRole>User</DefaultRole>
+</Config>

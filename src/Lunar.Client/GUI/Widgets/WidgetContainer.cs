@@ -196,6 +196,44 @@ namespace Lunar.Client.GUI.Widgets
             this.End(spriteBatch);
         }
 
+        protected override Vector2 ParsePosition(string posX, string posY)
+        {
+            float x = 0;
+            float y = 0;
+
+            if (posX == null)
+            {
+                x = 0;
+            }
+            else if (posX.Contains("%"))
+            {
+                float.TryParse(posX.Replace("%", ""), out float pX);
+                x = this.Size.Y * (pX / 100f);
+            }
+            else
+            {
+                float.TryParse(posX, out x);
+                x += this.Position.X;
+            }
+
+            if (posY == null)
+            {
+                y = 0;
+            }
+            else if (posY.Contains("%"))
+            {
+                float.TryParse(posY.Replace("%", ""), out float pY);
+                y = this.Size.Y * (pY / 100f);
+            }
+            else
+            {
+                float.TryParse(posY, out y);
+                y += this.Position.Y;
+            }
+
+            return new Vector2(x, y);
+        }
+
         public bool Selected { get; set; }
     }
 }

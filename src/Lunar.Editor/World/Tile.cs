@@ -118,7 +118,7 @@ namespace Lunar.Editor.World
 
             int attributeDataLength = bR.ReadInt32();
             byte[] attributeData = bR.ReadBytes(attributeDataLength);
-         //   this.AttributeData = AttributeData.Deserialize(attributeData);
+            this.AttributeData = AttributeData.Deserialize(attributeData);
 
             if (bR.ReadBoolean())
             {
@@ -128,15 +128,21 @@ namespace Lunar.Editor.World
                 string spriteName = bR.ReadString();
                 float zIndex = bR.ReadSingle();
 
-                _sprite = new Sprite(tilesets[Path.GetFileName(spriteName)])
+                if (tilesets.ContainsKey(Path.GetFileName(spriteName)))
                 {
-                    LayerDepth = zIndex, 
-                    Position = tilePosition
-                };
+                    _sprite = new Sprite(tilesets[Path.GetFileName(spriteName)])
+                    {
+                        LayerDepth = zIndex,
+                        Position = tilePosition
+                    };
+                }
 
                 this.Color = new Color(bR.ReadByte(), bR.ReadByte(), bR.ReadByte(), bR.ReadByte());
 
-                this.Sprite.SourceRectangle = new Rectangle(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32());
+                var rectangle = new Rectangle(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32());
+
+                if (_sprite != null)
+                    _sprite.SourceRectangle = rectangle;
 
                 this.FrameCount = bR.ReadInt32();
             }

@@ -1,0 +1,1012 @@
+
+Log Entry: 00:37:49 Thursday, 02 November 2017:
+Error: Item ss does not exist.
+------------------------------
+
+Log Entry: 00:37:49 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:38:15 Thursday, 02 November 2017:
+Error: Item s does not exist.
+-----------------------------
+
+Log Entry: 00:38:15 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:38:43 Thursday, 02 November 2017:
+Error: Item ss does not exist.
+------------------------------
+
+Log Entry: 00:38:43 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:38:56 Thursday, 02 November 2017:
+Error: Item ss does not exist.
+------------------------------
+
+Log Entry: 00:38:56 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:58:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:40:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:48:46 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 02:02:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:44:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:44:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:44:57 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:45:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:45:41 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:46:03 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:46:29 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:46:55 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:47:15 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:47:46 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:48:09 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:48:35 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:52:26 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:53:02 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:53:17 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:00:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:01:59 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:03:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:07:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:18:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:24:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:46:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:50:00 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:02:56 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:06:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:11:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:13:18 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:13:51 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:14:59 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:16:51 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:17:09 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:17:25 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:18:37 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:19:24 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:19:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:20:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:20:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:21:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:23:26 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:23:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:24:46 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:25:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:03 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:22 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:40 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:58 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:28:58 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:29:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:29:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:30:07 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:30:27 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:30:52 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:31:14 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:32:01 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:32:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:32:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:35:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:36:13 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:37:16 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:44:26 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:45:20 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:47:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:48:09 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:48:44 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:49:15 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:57:48 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:59:06 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 15:00:37 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 16:59:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 16:59:52 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:04:04 Thursday, 02 November 2017:
+Error: Item asdfasdf does not exist.
+------------------------------------
+
+Log Entry: 17:04:04 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 17:04:39 Thursday, 02 November 2017:
+Error: Item ruby_ring does not exist.
+-------------------------------------
+
+Log Entry: 17:04:39 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 17:17:23 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:24:12 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:24:25 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:27:18 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:27:50 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:29:06 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:29:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:50:42 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:54:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:38:05 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:38:23 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:38:38 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:39:42 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:40:47 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:41:21 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:51:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:53:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:54:50 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:55:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:57:08 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:58:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:59:28 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:00:23 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:01:57 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:03:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:12:37 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:14:57 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:15:37 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:16:22 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:17:22 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:18:14 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:18:35 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:28:47 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:29:47 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:30:08 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:30:25 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:30:56 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:31:27 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:31:53 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 11:48:47 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:51:15 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:52:11 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:53:07 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:54:24 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:59:59 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:20:19 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:37:08 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:40:45 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:41:46 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:45:05 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:59:58 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:04:16 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:43:08 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:43:58 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:45:02 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:47:59 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:48:45 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:03:21 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:07:00 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:07:03 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:09:10 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:12:23 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:12:58 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:14:16 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:17:11 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:17:29 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:21:10 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:21:39 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 22:06:14 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 21:43:21 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 23:36:13 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 23:38:25 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 23:42:50 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:37:05 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:38:00 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:38:37 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:48:23 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:58:22 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:59:27 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:12:50 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:13:35 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:19:18 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:21:33 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:23:44 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:32:37 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:33:17 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:35:45 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:38:14 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:43:30 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:45:54 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:52:56 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 02:36:22 Saturday, 25 November 2017:
+Error: Player 1 stepped on warp tile where destination does not exist!.
+-----------------------------------------------------------------------
+
+Log Entry: 02:36:27 Saturday, 25 November 2017:
+Error: Player 1 stepped on warp tile where destination does not exist!.
+-----------------------------------------------------------------------
+
+Log Entry: 16:25:12 Saturday, 02 December 2017:
+Error: Actor 6927021018005606939 does not exist in map!.
+--------------------------------------------------------
+
+Log Entry: 16:25:32 Saturday, 02 December 2017:
+Error: Actor 6927021018005606939 does not exist in map!.
+--------------------------------------------------------
+
+Log Entry: 22:33:18 Wednesday, 06 December 2017:
+Error: Actor 7971306566047587905 does not exist in map!.
+--------------------------------------------------------
+
+Log Entry: 00:10:17 Thursday, 15 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:11:13 Thursday, 15 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:11:26 Thursday, 15 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 18:23:08 Sunday, 18 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 18:38:02 Sunday, 18 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 18:38:28 Sunday, 18 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 20:01:05 Wednesday, 06 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 20:02:21 Wednesday, 06 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 16:51:39 Saturday, 23 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 16:53:37 Saturday, 23 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:51:35 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:58:41 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:04:02 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:06:42 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:11:56 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:14:18 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:15:31 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:17:17 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:18:23 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:16:35 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:23:49 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:26:04 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:43:10 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:44:15 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:44:45 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:45:09 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:50:25 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:50:30 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 16:27:46 Monday, 09 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 16:27:46 Monday, 09 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 16:29:30 Monday, 09 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 16:29:30 Monday, 09 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 16:29:51 Monday, 09 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 16:29:51 Monday, 09 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 23:19:24 Tuesday, 10 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 23:19:24 Tuesday, 10 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 14:36:28 Wednesday, 11 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 14:36:28 Wednesday, 11 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 14:58:34 Wednesday, 11 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 14:58:34 Wednesday, 11 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:03:27 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:03:27 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:07:30 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:07:30 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:09:03 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:09:03 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:09:15 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:09:15 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:09:55 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:09:55 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:11:16 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:11:16 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:17:04 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:17:04 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:19:53 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:19:53 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:20:34 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:20:34 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:21:16 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:21:16 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:21:30 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:21:30 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:21:59 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:21:59 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:22:13 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:22:13 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:22:46 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:22:46 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:12:40 Wednesday, 25 July 2018:
+Error: Failed to register player: Unable to read beyond the end of the stream..
+-------------------------------------------------------------------------------
+
+Log Entry: 22:12:44 Wednesday, 25 July 2018:
+Error: Failed to register player: Unable to read beyond the end of the stream..
+-------------------------------------------------------------------------------
+
+Log Entry: 22:12:45 Wednesday, 25 July 2018:
+Error: Failed to register player: Unable to read beyond the end of the stream..
+-------------------------------------------------------------------------------

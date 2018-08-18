@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Graphics;
@@ -300,7 +301,7 @@ namespace Lunar.Client.World.Actors
             var layerName = buffer.ReadString();
             _layer = Client.ServiceLocator.GetService<WorldManager>().Map.GetLayer(layerName);
 
-            this.SpriteSheet.Sprite.LayerDepth = this.Layer.ZIndex + .01f;
+            this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);
             this.SpriteSheet.HorizontalFrameIndex = 1;
             this.SpriteSheet.VerticalFrameIndex = (int) this.Direction;
 

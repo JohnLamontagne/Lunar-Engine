@@ -22,7 +22,7 @@ namespace Lunar.Server
 
         public static readonly string FILEPATH_SCRIPTS = FILEPATH_DATA + "/Scripts/";
 
-        public static readonly string FILEPATH_PLUGINS = FILEPATH_PLUGINS + "/Plugins/";
+        public static readonly string FILEPATH_PLUGINS = FILEPATH_DATA + "/Plugins/";
 
         public static readonly string FILEPATH_NPCS = FILEPATH_DATA + "/Npcs/";
 

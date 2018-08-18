@@ -14,7 +14,38 @@ namespace Lunar.Server.World.Actors
         public NPCDefinition(NPCDescriptor descriptor)
         {
             this.Descriptor = descriptor;
-            this.InitalizeScripts(descriptor);
+
+            Script script = new Script(Constants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
+
+            this.InitalizeDefaultBehavior();
+
+            //this.InitalizeScripts(descriptor);
+        }
+
+        private void InitalizeDefaultBehavior()
+        {
+            _behaviorDefinition = new ActorBehaviorDefinition();
+
+            Script script = new Script(Constants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
+
+            this.BehaviorDefinition.Attack = new ScriptFunction(args => script.GetFunction("Attack").Call(args));
+            this.BehaviorDefinition.OnCreated = new ScriptAction((args => script.GetFunction("OnCreated").Call(args)));
+            this.BehaviorDefinition.Attacked = new ScriptAction((args =>
+                    {
+                        script.GetFunction("Attacked").Call(args);
+                    }
+                ));
+            this.BehaviorDefinition.OnDeath = new ScriptAction((args =>
+                    {
+                        script.GetFunction("OnDeath").Call(args);
+                    }
+                ));
+
+            this.BehaviorDefinition.Update = new ScriptAction((args =>
+                    {
+                        script.GetFunction("Update").Call(args);
+                    }
+                ));
         }
 
         private void InitalizeScripts(NPCDescriptor descriptor)
@@ -29,7 +60,7 @@ namespace Lunar.Server.World.Actors
 
                 switch (scriptActionHook)
                 {
-                    case "OnAcquired":
+                    case "OnAttack":
                         this.BehaviorDefinition.Attack = new ScriptFunction(args => script.GetFunction("Attack").Call(args));
                         break;
 
@@ -41,7 +72,7 @@ namespace Lunar.Server.World.Actors
                         ));
                         break;
 
-                    case "OnDropped":
+                    case "OnAttacked":
                         this.BehaviorDefinition.Attacked = new ScriptAction((args =>
                             {
                                 script.GetFunction("Attacked").Call(args);
@@ -49,7 +80,7 @@ namespace Lunar.Server.World.Actors
                         ));
                         break;
 
-                    case "OnEquip":
+                    case "OnDeath":
                         this.BehaviorDefinition.OnDeath = new ScriptAction((args =>
                             {
                                 script.GetFunction("OnDeath").Call(args);
@@ -57,7 +88,7 @@ namespace Lunar.Server.World.Actors
                         ));
                         break;
 
-                    case "OnUse":
+                    case "OnUpdate":
                         this.BehaviorDefinition.Update = new ScriptAction((args =>
                             {
                                 script.GetFunction("Update").Call(args);

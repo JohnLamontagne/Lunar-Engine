@@ -79,7 +79,7 @@ namespace Lunar.Client.Scenes
 
 
             var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/passInputError.png");
-            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("passwordLoginTextbox").Sprite = textboxPassSprite;
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userPasswordTextbox").Sprite = textboxPassSprite;
         }
 
         private void HookInterfaceEvents()
@@ -107,7 +107,7 @@ namespace Lunar.Client.Scenes
 
         private void WebsiteButton_Clicked(object sender, WidgetClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.mmorpgcreation.com");
+            System.Diagnostics.Process.Start(Settings.Website);
         }
 
         private void MuteMusicCheckbox_Clicked(object sender, WidgetClickedEventArgs e)

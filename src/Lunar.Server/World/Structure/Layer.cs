@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Logic;
@@ -228,13 +229,12 @@ namespace Lunar.Server.World.Structure
         public bool CheckCollision(Vector position, Rect collisionBounds)
         {
 
-            if (position.X < 0 || position.Y < 0 ||
-                position.X >= (_tiles.GetLength(0) * Settings.TileSize) || position.Y >= (_tiles.GetLength(1) * Settings.TileSize))
-                return true;
-
             Rect collisionArea = new Rect((int)(position.X + collisionBounds.Left), (int)(position.Y + collisionBounds.Top),
                 collisionBounds.Width, collisionBounds.Height);
 
+            if (collisionArea.Left < 0 || collisionArea.Top < 0 ||
+                collisionArea.Left + collisionArea.Width >= (_tiles.GetLength(0) * EngineConstants.TILE_WIDTH) || collisionArea.Top + collisionArea.Height >= (_tiles.GetLength(1) * EngineConstants.TILE_HEIGHT))
+                return true;
 
             foreach (var collisionDescriptor in _collisionDescriptors.Values)
             {

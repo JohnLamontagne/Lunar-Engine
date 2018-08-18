@@ -28,5 +28,9 @@ namespace Lunar.Core
         public const string LUA_FILE_EXT = ".lua";
 
         public const string NPC_FILE_EXT = ".ndat";
+
+        public const int TILE_WIDTH = 32;
+
+        public const int TILE_HEIGHT = 32;
     }
 }

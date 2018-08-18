@@ -93,13 +93,12 @@ namespace Lunar.Client.World
 
         public bool CheckCollision(Vector2 position, Rectangle collisionBounds)
         {
-
-            if (position.X < 0 || position.Y < 0 ||
-                position.X >= (_tiles.GetLength(0) * Constants.TILE_WIDTH) || position.Y >= (_tiles.GetLength(1) * Constants.TILE_HEIGHT))
-                return true;
-
             Rectangle collisionArea = new Rectangle((int)(position.X + collisionBounds.Left), (int)(position.Y + collisionBounds.Top),
                collisionBounds.Width, collisionBounds.Height);
+
+            if (collisionArea.Left < 0 || collisionArea.Top < 0 ||
+                collisionArea.Left + collisionArea.Width >= (_tiles.GetLength(0) * EngineConstants.TILE_WIDTH) || collisionArea.Top + collisionArea.Height >= (_tiles.GetLength(1) * EngineConstants.TILE_HEIGHT))
+                return true;
 
 
             foreach (var collisionDescriptor in _collisionDescriptors.Values)

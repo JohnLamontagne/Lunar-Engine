@@ -29,9 +29,6 @@ namespace Lunar.Client
 
         public const int CLICK_TIMER_DELAY = 500;
 
-        public const int TILE_WIDTH = 32;
-        public const int TILE_HEIGHT = 32;
-
         public const int MAX_INVENTORY = 30;
 
         public const int INVENTORY_OFFSET_X = 40;

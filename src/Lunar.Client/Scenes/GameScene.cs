@@ -189,11 +189,15 @@ namespace Lunar.Client.Scenes
 
                 if ((Player)e.Args[0] == ((WorldManager)sender).Player)
                 {
-                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Value = player.Health;
+                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Value = (player.Health / player.MaximumHealth) * 100;
                     this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text = $"HP {player.Health}/{player.MaximumHealth}";
                     this.GuiManager.GetWidget<StatusBar>("healthStatusBar").TextOffset =
                         new Vector2(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Width - this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Font.MeasureString(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text).X,
                             this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Height / 2f);
+
+                    this.GuiManager.GetWidget<StatusBar>("experienceBar").Value = (player.Experience / player.NextLevelExperience) * 100;
+
+                    this.GuiManager.GetWidget<Label>("lblExperience").Text = $"{player.Experience}/{player.NextLevelExperience}";
 
                     var characterWindow = this.GuiManager.GetWidget<WidgetContainer>("characterWindow");
 
@@ -203,6 +207,8 @@ namespace Lunar.Client.Scenes
                     characterWindow.GetWidget<Label>("charIntLabel").Text = "Intelligence: " + player.Intelligence;
                     characterWindow.GetWidget<Label>("charDexLabel").Text = "Dexterity: " + player.Dexterity;
                     characterWindow.GetWidget<Label>("charDefLabel").Text = "Defence: " + player.Strength;
+
+                    characterWindow.GetWidget<Label>("charLevelLabel").Text = "Level: " + player.Level;
 
                     if (!characterWindow.WidgetExists("characterPicture"))
                     {
@@ -411,22 +417,34 @@ namespace Lunar.Client.Scenes
 
             if (_worldManager.Map != null)
             {
+                bool foundTarget = false;
+
                 foreach (var entity in _worldManager.Map.GetEntities())
                 {
                     int left = (int)(entity.Position.X);
                     int top = (int)(entity.Position.Y);
 
-                    var entitySpace = new Rectangle(left, top, entity.SpriteSheet.Sprite.SourceRectangle.Width, entity.SpriteSheet.Sprite.SourceRectangle.Height);
+                    var entitySpace = new Rectangle(left, top, (int)entity.SpriteSheet.FrameSize.X, (int)entity.SpriteSheet.FrameSize.Y);
 
                     if (entitySpace.Contains(worldPos))
                     {
-                        var packet = new Packet(PacketType.REQ_TARGET);
-                        packet.Message.Write(entity.UniqueID);
-                        Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                        var selectPacket = new Packet(PacketType.REQ_TARGET);
+                        selectPacket.Message.Write(entity.UniqueID);
+                        Client.ServiceLocator.GetService<NetHandler>().SendMessage(selectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+
+                        foundTarget = true;
                     }
                 }
+
+                if (!foundTarget)
+                {
+                    // If we reached this point there is no valid target. We should deselect the NPC and hide the target portrait.
+                    this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer").Visible = false;
+
+                    var deselectPacket = new Packet(PacketType.DESELECT_TARGET);
+                    Client.ServiceLocator.GetService<NetHandler>().SendMessage(deselectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                }
             }
-            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

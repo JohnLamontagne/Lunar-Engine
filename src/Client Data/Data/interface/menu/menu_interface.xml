@@ -1,0 +1,45 @@
+<GUI>
+	<Fonts>
+		<font name="interfaceFont">gfx/Fonts/interfaceFont</font>
+	</Fonts>
+	<Widgets>
+		<picture name="background">
+			<texture>gfx/Interface/background.png</texture>
+			<position>
+				<x>0%</x>
+				<y>0%</y>
+			</position>
+			<visible>true</visible>
+			<origin>
+				<x>0</x>
+				<y>0</y>
+			</origin>
+			<display>Stretch</display>
+		</picture>
+		<container name="mainMenuContainer">
+			<texture>gfx/Interface/menuWindow.png</texture>
+			<position>
+				<x>50%</x>
+				<y>50%</y>
+			</position>
+			<visible>true</visible>
+			<origin>
+				<x>226.5</x>
+				<y>133</y>
+			</origin>
+			<Widgets>
+				<import file="interface/menu/mainMenuContainer.xml" />
+			</Widgets>
+		</container>
+
+		<label name="lblVersion">
+			<text>Version 0.2</text>
+			<position>
+				<x>90%</x>
+				<y>95%</y>
+			</position>
+			<font>interfaceFont</font>
+			<zorder>1</zorder>
+		</label>
+	</Widgets>
+</GUI>

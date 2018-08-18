@@ -1,0 +1,34 @@
+<GUI>
+	<Fonts>
+		<font name="interfaceFont">gfx/Fonts/interfaceFont</font>
+		<font name="chatFont">gfx/Fonts/chatFont</font>
+		<font name="experienceFont">gfx/Fonts/experienceFont</font>
+	</Fonts>
+	<Widgets>
+			<import file="interface/game/gameSceneContainer.xml" />
+
+			<import file="interface/game/gameInvContainer.xml" />
+
+			<container name="characterWindow">
+				<position>
+					<x>50%</x>
+					<y>25%</y>
+				</position>
+
+				<visible>false</visible>
+				<draggable>true</draggable>
+
+				<Widgets>
+					<import file="interface/game/gameCharContainer.xml" />
+				</Widgets>
+				<texture>gfx/Interface/statScreen.png</texture>
+			</container>		
+			
+			<container name="targetPortraitContainer">
+				<visible>false</visible>
+				<Widgets>
+					<import file="interface/game/targetContainer.xml" />
+				</Widgets>
+			</container>
+	</Widgets>
+</GUI>

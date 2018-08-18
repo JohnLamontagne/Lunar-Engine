@@ -83,7 +83,7 @@ namespace Lunar.Server.World.Structure
                 if (_nextNPCSpawnTime <= gameTime.TotalElapsedTime && _heartbeatListener.NPCs.Count <= attributeData.MaxSpawns)
                 {
                     this.NPCSpawnerEvent?.Invoke(this, new NPCSpawnerEventArgs(attributeData.NPCID, attributeData.MaxSpawns, this.Position, _heartbeatListener));
-                    _nextNPCSpawnTime = ((NPCSpawnAttributeData)this.AttributeData).RespawnTime;
+                    _nextNPCSpawnTime = ((NPCSpawnAttributeData)this.AttributeData).RespawnTime * 1000;
                 }
             }
         }

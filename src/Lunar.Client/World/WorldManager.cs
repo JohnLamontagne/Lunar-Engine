@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
 using Lunar.Client.World.Actors;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.World;
@@ -169,7 +170,7 @@ namespace Lunar.Client.World
 
             _mapLoaded = true;
 
-            _camera.Bounds = new Rectangle(_map.Bounds.X * Constants.TILE_WIDTH, _map.Bounds.Y * Constants.TILE_HEIGHT, _map.Bounds.Width * Constants.TILE_WIDTH, _map.Bounds.Height * Constants.TILE_HEIGHT);
+            _camera.Bounds = new Rectangle(_map.Bounds.X * EngineConstants.TILE_WIDTH, _map.Bounds.Y * EngineConstants.TILE_HEIGHT, _map.Bounds.Width * EngineConstants.TILE_WIDTH, _map.Bounds.Height * EngineConstants.TILE_HEIGHT);
 
             this.EventOccured?.Invoke(this, new SubjectEventArgs("finishedLoadingMap", new object[] { _map }));
         }

@@ -62,6 +62,7 @@
     <Compile Include="GUI\Widgets\Button.cs" />
     <Compile Include="GUI\Widgets\Chatbox.cs" />
     <Compile Include="GUI\Widgets\Checkbox.cs" />
+    <Compile Include="GUI\Widgets\DisplayMode.cs" />
     <Compile Include="GUI\Widgets\IWidget.cs" />
     <Compile Include="GUI\Widgets\Label.cs" />
     <Compile Include="GUI\Widgets\Picture.cs" />
@@ -208,7 +209,7 @@
 
 xcopy "$(ProjectDir)..\libs\MonoGame.Penumbra.dll" "$(ProjectDir)$(OutDir)" /Y /E
 
-xcopy "$(ProjectDir)..\Data\*.*" "$(ProjectDir)$(OutDir)\Data\" /Y /E</PostBuildEvent>
+xcopy "$(ProjectDir)..\Client Data\Data\*.*" "$(ProjectDir)$(OutDir)\Data\" /Y /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

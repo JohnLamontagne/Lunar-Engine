@@ -91,6 +91,8 @@ namespace Lunar.Editor
             this.DockPanel.AddContent(_dockProject);
             this.DockPanel.AddContent(_dockTilesetTools);
 
+            this.DockPanel.ContentRemoved += DockPanelOnContentRemoved;
+
             _dockTilesetTools.DockRegion.Size = new Size(_dockTilesetTools.Width, _dockTilesetTools.DockRegion.Height);
 
             this.DockPanel.AddContent(_dockLayers, _dockTilesetTools.DockGroup);
@@ -105,10 +107,14 @@ namespace Lunar.Editor
 
             _dockTilesetTools.DockGroup.Hide();
 
-
             // Check window menu items which are contained in the dock panel
             BuildWindowMenu();
-           
+        }
+
+        private void DockPanelOnContentRemoved(object sender, DockContentEventArgs e)
+        {
+            if (e.Content is DockMapDocument)
+                _dockTilesetTools.DockGroup.Hide();
         }
 
         private void DockProjectOnFileChanged(object sender, GameFileChangedEventArgs e)

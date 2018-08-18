@@ -134,14 +134,14 @@ namespace Lunar.Server.World.Actors
             _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
 
 
-            this.BehaviorDefinition.OnCreated?.Invoke(new ScriptActionArgs(this));
+            this.BehaviorDefinition?.OnCreated?.Invoke(new ScriptActionArgs(this));
         }
 
         
 
         public void OnAttacked(IActor attacker, int damageDelt)
         {
-            
+            this.BehaviorDefinition?.Attacked?.Invoke(new ScriptActionArgs(this, attacker, damageDelt));
         }
 
         public void Update(GameTime gameTime)
@@ -154,7 +154,7 @@ namespace Lunar.Server.World.Actors
             this.ProcessMovement(gameTime);
             this.ProcessCombat(gameTime);
 
-            this.BehaviorDefinition.Update?.Invoke(new ScriptActionArgs(this, new object[] { gameTime }));
+            this.BehaviorDefinition?.Update?.Invoke(new ScriptActionArgs(this, new object[] { gameTime }));
         }
 
         private void ProcessCombat(GameTime gameTime)

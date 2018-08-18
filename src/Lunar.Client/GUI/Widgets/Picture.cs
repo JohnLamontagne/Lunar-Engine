@@ -41,7 +41,7 @@ namespace Lunar.Client.GUI.Widgets
 
         public Vector2 Position
         {
-            get { return _position; }
+            get => _position;
             set
             {
                 _position = value;
@@ -52,7 +52,7 @@ namespace Lunar.Client.GUI.Widgets
 
         public Vector2 Scale
         {
-            get { return _scale; }
+            get => _scale;
             set
             {
                 _scale = value;
@@ -60,6 +60,8 @@ namespace Lunar.Client.GUI.Widgets
                 _area = new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)(this.Sprite.Width * this.Scale.X), (int)(this.Sprite.Height * this.Scale.Y));
             }
         }
+
+        public DisplayWidgetMode DisplayMode { get; set; }
 
         public Vector2 Origin { get; set; }
 
@@ -73,6 +75,8 @@ namespace Lunar.Client.GUI.Widgets
             this.Origin = Vector2.Zero;
             this.Sprite = sprite;
             this.Scale = new Vector2(1f);
+
+            this.DisplayMode = DisplayWidgetMode.Normal;
 
             _previousState = WidgetStates.Idle;
 

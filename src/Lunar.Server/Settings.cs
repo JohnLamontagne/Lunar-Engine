@@ -23,7 +23,8 @@ namespace Lunar.Server
 {
     public static class Settings
     {
-        private static readonly string _filePath = Constants.FILEPATH_DATA + "config.xml";
+        private static readonly string _filePathConfig = Constants.FILEPATH_DATA + "config.xml";
+        private static readonly string _filePathExperience = Constants.FILEPATH_DATA + "experience.txt";
 
         public static string GameName { get; private set; }
 
@@ -49,6 +50,10 @@ namespace Lunar.Server
 
         public static Role DefaultRole { get; private set; }
 
+        public static int MaxLevel { get; private set; }
+
+        public static int[] ExperienceThreshhold { get; private set; }
+
         public static void Initalize()
         {
             LoadConfig();
@@ -65,7 +70,8 @@ namespace Lunar.Server
                 new XElement("Gameplay",
                     new XElement("Starting_Map", "default"),
                     new XElement("Max_Inventory_Slots", 30),
-                    new XElement("NPC_Rest_Period", 400)
+                    new XElement("NPC_Rest_Period", 400),
+                    new XElement("Max_Level", 100)
                 ),
                 new XElement("Advanced", 
                     new XElement("Tick_Rate", 60),
@@ -79,17 +85,17 @@ namespace Lunar.Server
                 ),
                 new XElement("Default Role", "User")
             );
-            xml.Save(_filePath);
+            xml.Save(_filePathConfig);
         }
 
         private static void LoadConfig()
         {
-            if (!File.Exists(_filePath))
+            if (!File.Exists(_filePathConfig))
                 CreateConfig();
 
             try
             {
-                var doc = XDocument.Load(_filePath);
+                var doc = XDocument.Load(_filePathConfig);
 
                 var generalSettings = doc.Elements("Config").Elements("General");
                 Settings.ServerPort = int.Parse(generalSettings.Elements("Port").FirstOrDefault().Value);
@@ -100,6 +106,7 @@ namespace Lunar.Server
                 Settings.StartingMap = gameplaySettings.Elements("Starting_Map").FirstOrDefault().Value;
                 Settings.MaxInventoryItems = int.Parse(gameplaySettings.Elements("Max_Inventory_Slots").FirstOrDefault().Value);
                 Settings.NPCRestPeriod = int.Parse(gameplaySettings.Elements("NPC_Rest_Period").FirstOrDefault().Value);
+                Settings.MaxLevel = int.Parse(gameplaySettings.Elements("Max_Level").FirstOrDefault().Value);
 
                 var advancedSettings = doc.Elements("Config").Elements("Advanced");
                 Settings.TickRate = int.Parse(advancedSettings.Elements("Tick_Rate").FirstOrDefault().Value);
@@ -118,6 +125,8 @@ namespace Lunar.Server
                 Settings.DefaultRole =
                     Settings.Roles[doc.Elements("Config").Elements("DefaultRole").FirstOrDefault().Value.ToString()] ??
                     Role.Default;
+
+                Settings.LoadExperienceChart();
             }
             catch (IndexOutOfRangeException ex)
             {
@@ -135,7 +144,29 @@ namespace Lunar.Server
                     Environment.Exit(0);
                 }
             }
+        }
 
+        private static void LoadExperienceChart()
+        {
+            Console.WriteLine("Loading experience chart...");
+
+            var lines = File.ReadAllLines(_filePathExperience);
+            Settings.ExperienceThreshhold = new int[Settings.MaxLevel];
+            int i = 0;
+            foreach (var line in lines)
+            {
+                if (i >= Settings.ExperienceThreshhold.Length)
+                {
+                    Logger.LogEvent("Experience chart exceeds maximum level!", LogTypes.ERROR, Environment.StackTrace);
+                    return;
+                }
+
+                int.TryParse(line, out int xp);
+
+                Settings.ExperienceThreshhold[i++] = xp;
+            }
+
+            Console.WriteLine($"Loaded experience config for {Settings.MaxLevel} levels.");
         }
     }
 }

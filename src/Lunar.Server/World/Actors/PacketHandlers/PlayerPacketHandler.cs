@@ -38,8 +38,14 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             player.Connection.AddPacketHandler(PacketType.REQ_USE_ITEM, this.Handle_UseItem);
             player.Connection.AddPacketHandler(PacketType.REQ_UNEQUIP_ITEM, this.Handle_UnequipItem);
             player.Connection.AddPacketHandler(PacketType.REQ_TARGET, this.Handle_ReqTarget);
+            player.Connection.AddPacketHandler(PacketType.DESELECT_TARGET, this.Handle_DeselectTarget);
             player.Connection.AddPacketHandler(PacketType.PICKUP_ITEM, this.Handle_PickupItem);
             player.Connection.AddPacketHandler(PacketType.PLAYER_INTERACT, this.Handle_PlayerInteract);
+        }
+
+        private void Handle_DeselectTarget(PacketReceivedEventArgs obj)
+        {
+            _player.Target = null;
         }
 
         private void Handle_PlayerInteract(PacketReceivedEventArgs args)
@@ -47,6 +53,15 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             foreach (var mapObject in _player.Layer.GetCollidingMapObjects(_player.Position, _player.CollisionBounds))
             {
                 mapObject.OnInteract(_player);
+            }
+
+            // Try to attack the target
+            if (_player.Target != null)
+            {
+                if (_player.Target.Attackable)
+                {
+                    _player.Target.OnAttacked(_player, (int)(_player.Strength * new Random().NextDouble()));
+                }
             }
         }
 

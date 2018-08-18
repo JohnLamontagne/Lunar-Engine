@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config>
+  <General>
+    <Game_Name>Lunar Engine</Game_Name>
+    <Website>https://www.rpgorigin.com</Website>
+    <IP>127.0.0.1</IP>
+    <Port>25566</Port>
+  </General>
+  <Display>
+    <Resolution_X>1400</Resolution_X>
+    <Resolution_Y>900</Resolution_Y>
+  </Display>
+  <Advanced>
+    <DisplayNetworkMessages>true</DisplayNetworkMessages>
+  </Advanced>
+</Config>

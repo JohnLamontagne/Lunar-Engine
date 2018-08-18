@@ -37,6 +37,8 @@ namespace Lunar.Client.World.Actors
         private string _name;
         private float _speed;
         private int _level;
+        private int _experience;
+        private int _nextLevelExperience;
         private int _health;
         private int _maximumHealth;
         private int _strength;
@@ -64,6 +66,10 @@ namespace Lunar.Client.World.Actors
         public float Speed => _speed;
 
         public int Level => _level;
+
+        public int Experience => _experience;
+
+        public int NextLevelExperience => _nextLevelExperience;
 
         public int Health => _health;
 
@@ -396,6 +402,8 @@ namespace Lunar.Client.World.Actors
             _name = buffer.ReadString();
             _speed = buffer.ReadFloat();
             _level = buffer.ReadInt32();
+            _experience = buffer.ReadInt32();
+            _nextLevelExperience = buffer.ReadInt32();
             _health = buffer.ReadInt32();
             _maximumHealth = buffer.ReadInt32();
             _strength = buffer.ReadInt32();

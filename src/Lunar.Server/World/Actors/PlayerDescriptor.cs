@@ -28,6 +28,7 @@ namespace Lunar.Server.World.Actors
         private SpriteSheet _spriteSheet;
         private float _speed;
         private int _level;
+        private int _experience;
         private int _health;
         private int _vitality;
         private int _maximumHealth;
@@ -68,6 +69,12 @@ namespace Lunar.Server.World.Actors
         {
             get => _level;
             set => _level = value;
+        }
+
+        public int Experience
+        {
+            get => _experience;
+            set => _experience = value;
         }
 
         public int Health
@@ -143,6 +150,8 @@ namespace Lunar.Server.World.Actors
                 SpriteSheet = new SpriteSheet(new Sprite("chara1.png"), 3, 4, 52, 72),
                 Health = 100,
                 MaximumHealth = 100,
+                Level = 1,
+                Experience = 0,
                 Speed = .1f,
                 Strength = 10,
                 Intelligence = 10,

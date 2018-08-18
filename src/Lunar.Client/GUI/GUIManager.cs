@@ -23,6 +23,7 @@ using Lunar.Client.Utilities.Services;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework.Content;
 using Lunar.Client.Utilities;
+using DisplayMode = Microsoft.Xna.Framework.Graphics.DisplayMode;
 
 namespace Lunar.Client.GUI
 {
@@ -336,7 +337,7 @@ namespace Lunar.Client.GUI
 
             var texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
-            var position = this.ParsePosition(chatboxElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(chatboxElement.Element("position")?.Element("x")?.Value.ToString(),
                 chatboxElement.Element("position")?.Element("y")?.Value.ToString());
 
             if (!bool.TryParse(chatboxElement.Element("visible")?.Value, out bool visible))
@@ -369,10 +370,10 @@ namespace Lunar.Client.GUI
 
             var color = this.ParseColor(sbElement.Element("color"));
 
-            var position = this.ParsePosition(sbElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(sbElement.Element("position")?.Element("x")?.Value.ToString(),
                                               sbElement.Element("position")?.Element("y")?.Value.ToString());
 
-            var fillPosition = this.ParsePosition(sbElement.Element("fillPosition")?.Element("x")?.Value.ToString(),
+            var fillPosition = parent.ParsePosition(sbElement.Element("fillPosition")?.Element("x")?.Value.ToString(),
                                               sbElement.Element("fillPosition")?.Element("y")?.Value.ToString());
 
             int.TryParse(sbElement.Element("padding")?.Element("x")?.Value.ToString(), out int offX);
@@ -433,12 +434,12 @@ namespace Lunar.Client.GUI
             float.TryParse(textboxElement.Element("origin")?.Element("y")?.Value.ToString(), out float originY);
             Vector2 origin = new Vector2(originX, originY);
 
-            string mask = textboxElement.Element("origin")?.Element("x")?.Value.ToString() ?? null;
+            string mask = textboxElement.Element("mask")?.Value.ToString() ?? null;
 
             var texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
            
             
-            var position = this.ParsePosition(textboxElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(textboxElement.Element("position")?.Element("x")?.Value.ToString(),
                 textboxElement.Element("position")?.Element("y")?.Value.ToString());
 
             int.TryParse(textboxElement.Element("zorder")?.Value.ToString(), out int zOrder);
@@ -470,7 +471,7 @@ namespace Lunar.Client.GUI
 
             string texturePath = containerElement.Element("texture")?.Value.ToString();
 
-            var position = this.ParsePosition(containerElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(containerElement.Element("position")?.Element("x")?.Value.ToString(),
                 containerElement.Element("position")?.Element("y")?.Value.ToString());
 
             float.TryParse(containerElement.Element("origin")?.Element("x")?.Value.ToString(), out float originX);
@@ -509,7 +510,7 @@ namespace Lunar.Client.GUI
 
             string texturePath = picElement.Element("texture")?.Value.ToString();
 
-            var position = this.ParsePosition(picElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(picElement.Element("position")?.Element("x")?.Value.ToString(),
                 picElement.Element("position")?.Element("y")?.Value.ToString());
 
             float.TryParse(picElement.Element("origin")?.Element("x")?.Value.ToString(), out float originX);
@@ -519,6 +520,21 @@ namespace Lunar.Client.GUI
             Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
             int.TryParse(picElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            Enum.TryParse(picElement.Element("display")?.Value.ToString(), out DisplayWidgetMode displayMode);
+
+            Vector2 scale = Vector2.One;
+            if (displayMode == DisplayWidgetMode.Stretch)
+            {
+                if (parent is WidgetContainer container)
+                {
+                    scale = container.Size / new Vector2(texture.Width, texture.Height);
+                }
+                else
+                {
+                    scale = new Vector2(Settings.ResolutionX, Settings.ResolutionY) / new Vector2(texture.Width, texture.Height);
+                }
+            }
 
             if (!bool.TryParse(picElement.Element("visible")?.Value, out bool visible))
             {
@@ -530,7 +546,9 @@ namespace Lunar.Client.GUI
                 Position = position,
                 Origin = origin,
                 ZOrder = zOrder,
-                Visible = visible
+                Visible = visible,
+                DisplayMode = displayMode,
+                Scale = scale
             };
 
             parent.AddWidget(pic, picName);
@@ -544,7 +562,7 @@ namespace Lunar.Client.GUI
             string uncheckedTexturePath = chkElement.Element("texture")?.Value.ToString();
             string fontName = chkElement.Element("font")?.Value.ToString();
 
-            var position = this.ParsePosition(chkElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(chkElement.Element("position")?.Element("x")?.Value.ToString(),
                 chkElement.Element("position")?.Element("y")?.Value.ToString());
 
             Texture2D checkedTexture = content.LoadTexture2D(Constants.FILEPATH_DATA + checkedTexturePath);
@@ -579,7 +597,7 @@ namespace Lunar.Client.GUI
 
             var color = this.ParseColor(lblElement.Element("color"));
 
-            var position = this.ParsePosition(lblElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(lblElement.Element("position")?.Element("x")?.Value.ToString(),
                 lblElement.Element("position")?.Element("y")?.Value.ToString());
 
             int.TryParse(lblElement.Element("zorder")?.Value.ToString(), out int zOrder);
@@ -612,7 +630,7 @@ namespace Lunar.Client.GUI
             string fontName = buttonElement.Element("font")?.Value.ToString();
             uint.TryParse(buttonElement.Element("fontsize")?.Value.ToString(), out uint charSize);
 
-            var position = this.ParsePosition(buttonElement.Element("position")?.Element("x")?.Value.ToString(),
+            var position = parent.ParsePosition(buttonElement.Element("position")?.Element("x")?.Value.ToString(),
                 buttonElement.Element("position")?.Element("y")?.Value.ToString());
 
             Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
@@ -660,7 +678,7 @@ namespace Lunar.Client.GUI
             }
         }
 
-        private Vector2 ParsePosition(string posX, string posY)
+        protected virtual Vector2 ParsePosition(string posX, string posY)
         {
             float x = 0;
             float y = 0;

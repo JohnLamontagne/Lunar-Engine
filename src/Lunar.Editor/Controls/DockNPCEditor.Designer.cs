@@ -334,6 +334,7 @@
             // 
             this.darkSectionPanel3.Controls.Add(this.txtEditor);
             this.darkSectionPanel3.Controls.Add(this.darkMenuStrip1);
+            this.darkSectionPanel3.Enabled = false;
             this.darkSectionPanel3.Location = new System.Drawing.Point(855, 31);
             this.darkSectionPanel3.Name = "darkSectionPanel3";
             this.darkSectionPanel3.SectionHeader = "Scripting Information";

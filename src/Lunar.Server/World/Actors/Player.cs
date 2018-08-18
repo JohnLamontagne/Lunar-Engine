@@ -43,7 +43,6 @@ namespace Lunar.Server.World.Actors
 
         private Rect _collisionBounds;
 
-        private Layer _layer;
         private Map _map;
 
         // Boosted stats
@@ -73,11 +72,7 @@ namespace Lunar.Server.World.Actors
             set => _descriptor.SpriteSheet = value;
         }
 
-        public Layer Layer
-        {
-            get => _layer;
-            set => _layer = value;
-        }
+        public Layer Layer { get; set; }
 
         public bool MapLoaded { get; set; }
 
@@ -96,7 +91,7 @@ namespace Lunar.Server.World.Actors
 
         public float Speed
         {
-            get => _descriptor.Speed;
+            get => _descriptor.Speed + _speedBoost;
             set
             {
                 _descriptor.Speed = value;
@@ -109,14 +104,33 @@ namespace Lunar.Server.World.Actors
             get => _descriptor.Level;
             set
             {
+                if (value > Settings.MaxLevel)
+                    return;
+
                 _descriptor.Level = value;
                 this.SendPlayerStats();
+
+                this.SendChatMessage($"Congratulations, {this.Name}! You are now level {this.Level}", ChatMessageType.Announcement);
+            }
+        }
+
+        public int Experience
+        {
+            get => _descriptor.Experience;
+            set
+            {
+                _descriptor.Experience = value;
+
+                if (this.Level + 1 < Settings.ExperienceThreshhold.Length && _descriptor.Experience > Settings.ExperienceThreshhold[this.Level + 1])
+                {
+                    this.Level++;
+                }
             }
         }
 
         public int Strength
         {
-            get => _descriptor.Strength;
+            get => _descriptor.Strength + _strengthBoost;
             set
             {
                 _descriptor.Strength = value;
@@ -126,7 +140,7 @@ namespace Lunar.Server.World.Actors
 
         public int Intelligence
         {
-            get => _descriptor.Intelligence;
+            get => _descriptor.Intelligence + _intelBoost;
             set
             {
                 _descriptor.Intelligence = value;
@@ -136,7 +150,7 @@ namespace Lunar.Server.World.Actors
 
         public int Dexterity
         {
-            get => _descriptor.Dexterity;
+            get => _descriptor.Dexterity + _dexBoost;
             set
             {
                 _descriptor.Dexterity = value;
@@ -146,7 +160,7 @@ namespace Lunar.Server.World.Actors
 
         public int Defense
         {
-            get => _descriptor.Defense;
+            get => _descriptor.Defense + _defBoost;
             set
             {
                 _descriptor.Defense = value;
@@ -554,12 +568,18 @@ namespace Lunar.Server.World.Actors
             buffer.Write(this.Name);
             buffer.Write(this.Speed);
             buffer.Write(this.Level);
+            buffer.Write(this.Experience);
+
+            buffer.Write(Settings.ExperienceThreshhold.Length > this.Level + 1
+                ? Settings.ExperienceThreshhold[this.Level + 1]
+                : 0);
+
             buffer.Write(this.Health);
             buffer.Write(this.MaximumHealth);
-            buffer.Write(this.Strength + _strengthBoost);
-            buffer.Write(this.Intelligence + _intelBoost);
-            buffer.Write(this.Dexterity + _dexBoost);
-            buffer.Write(this.Defense + _defBoost);
+            buffer.Write(this.Strength);
+            buffer.Write(this.Intelligence);
+            buffer.Write(this.Dexterity);
+            buffer.Write(this.Defense);
             buffer.Write(this.Position);
             buffer.Write(this.SpriteSheet.Pack());
             buffer.Write(this.CollisionBounds);
