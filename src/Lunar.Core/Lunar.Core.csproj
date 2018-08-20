@@ -66,6 +66,7 @@
     <Compile Include="Utilities\SubjectEventArgs.cs" />
     <Compile Include="World\Actor\ActorStates.cs" />
     <Compile Include="World\Actor\Descriptors\NPCDescriptior.cs" />
+    <Compile Include="World\Actor\IAction.cs" />
     <Compile Include="World\Direction.cs" />
     <Compile Include="World\EquipmentSlots.cs" />
     <Compile Include="World\ItemDescriptor.cs" />

@@ -16,7 +16,6 @@ namespace Lunar.Server.Utilities
 {
     public class GameTime
     {
-
         private readonly Stopwatch _runningStopWatch;
         private readonly Stopwatch _updateStopWatch;
 

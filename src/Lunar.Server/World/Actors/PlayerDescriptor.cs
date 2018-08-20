@@ -83,7 +83,9 @@ namespace Lunar.Server.World.Actors
             set => _health = value;
         }
 
-        public int Strength { get => _strength;
+        public int Strength
+        {
+            get => _strength;
             set => _strength = value;
         }
 
@@ -160,7 +162,7 @@ namespace Lunar.Server.World.Actors
                 _behaviorDefinition = behaviorDefinition,
                 _mapID = Settings.StartingMap,
                 _role = Settings.DefaultRole
-        };
+            };
 
             return descriptor;
         }
@@ -205,7 +207,7 @@ namespace Lunar.Server.World.Actors
                 }
 
                 var script = new Script(Constants.FILEPATH_SCRIPTS + "player.lua");
-                var behaviorDefinition = (ActorBehaviorDefinition) script["BehaviorDefinition"];
+                var behaviorDefinition = (ActorBehaviorDefinition)script["BehaviorDefinition"];
 
                 var playerDescriptor = new PlayerDescriptor(name, password)
                 {
@@ -221,7 +223,7 @@ namespace Lunar.Server.World.Actors
                     Position = position,
                     MapID = mapID,
                     _behaviorDefinition = behaviorDefinition,
-                    Role = role                    
+                    Role = role
                 };
 
                 return playerDescriptor;

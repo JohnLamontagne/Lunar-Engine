@@ -363,8 +363,6 @@ namespace Lunar.Server.World.Structure
                             };
                             npc.WarpTo(args.Position);
 
-                            Console.WriteLine("asdlfjasldkfjalksjdf");
-
                             // This allows the tile spawner to keep track of npcs that exist, and respawn if neccessary (i.e., they die).
                             args.HeartbeatListener.NPCs.Add(npc);
                         };

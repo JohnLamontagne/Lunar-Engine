@@ -367,9 +367,6 @@ namespace Lunar.Server.World.Actors
             this.OnEvent("moved");
         }
 
-
-
-
         public void SendInventoryUpdate()
         {
             var packet = new Packet(PacketType.INVENTORY_UPDATE, ChannelType.UNASSIGNED);

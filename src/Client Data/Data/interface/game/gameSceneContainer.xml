@@ -48,8 +48,8 @@
 		<texture>gfx/Interface/textboxNormal.png</texture>
 		<font>chatFont</font>
 		<position>
-			<x>2%</x>
-			<y>93.5%</y>
+			<x>1.7%</x>
+			<y>88.5%</y>
 		</position>
 		<scale>
 			<x>1.6</x>

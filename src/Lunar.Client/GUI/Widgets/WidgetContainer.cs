@@ -213,7 +213,6 @@ namespace Lunar.Client.GUI.Widgets
             else
             {
                 float.TryParse(posX, out x);
-                x += this.Position.X;
             }
 
             if (posY == null)
@@ -228,10 +227,9 @@ namespace Lunar.Client.GUI.Widgets
             else
             {
                 float.TryParse(posY, out y);
-                y += this.Position.Y;
             }
 
-            return new Vector2(x, y);
+            return new Vector2(x + this.Position.X, y + this.Position.Y);
         }
 
         public bool Selected { get; set; }

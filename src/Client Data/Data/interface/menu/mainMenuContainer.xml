@@ -11,8 +11,8 @@
 
 	<label name="lblStatus">
 		<position>
-			<x>50%</x>
-			<y>37%</y>
+			<x>0</x>
+			<y>-100</y>
 		</position>
 		<color>Red</color>
 		<font>interfaceFont</font>

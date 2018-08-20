@@ -67,7 +67,9 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
-        public bool Draggable { get { return _container.Draggable; } set { _container.Draggable = value; } }
+        public bool Draggable { get => _container.Draggable;
+            set => _container.Draggable = value;
+        }
 
         public int MaxEntries { get; set; }
 
