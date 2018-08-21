@@ -136,6 +136,9 @@ namespace Lunar.Server
                         gameTime.Update();
                     }
                 }
+
+                // Save the game world
+                Server.ServiceLocator.GetService<WorldManager>().Save();
             });
 
             _netThread.Start();

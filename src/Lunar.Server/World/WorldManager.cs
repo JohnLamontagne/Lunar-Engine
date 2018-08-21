@@ -137,6 +137,11 @@ namespace Lunar.Server.World
             }
         }
 
+        public void Save()
+        {
+            Server.ServiceLocator.GetService<PlayerManager>().Save();
+        }
+
         public void Initalize()
         {
         }

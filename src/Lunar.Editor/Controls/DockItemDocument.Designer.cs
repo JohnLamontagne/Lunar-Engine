@@ -33,7 +33,6 @@
             this.darkSectionPanel1 = new DarkUI.Controls.DarkSectionPanel();
             this.picTexture = new System.Windows.Forms.PictureBox();
             this.darkLabel9 = new DarkUI.Controls.DarkLabel();
-            this.cmbType = new System.Windows.Forms.ComboBox();
             this.darkLabel3 = new DarkUI.Controls.DarkLabel();
             this.darkLabel2 = new DarkUI.Controls.DarkLabel();
             this.radioNotStackable = new DarkUI.Controls.DarkRadioButton();
@@ -63,6 +62,7 @@
             this.darkLabel6 = new DarkUI.Controls.DarkLabel();
             this.darkLabel5 = new DarkUI.Controls.DarkLabel();
             this.darkLabel4 = new DarkUI.Controls.DarkLabel();
+            this.cmbType = new System.Windows.Forms.ComboBox();
             this.darkToolStrip1.SuspendLayout();
             this.darkSectionPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picTexture)).BeginInit();
@@ -134,19 +134,6 @@
             this.darkLabel9.Size = new System.Drawing.Size(47, 15);
             this.darkLabel9.TabIndex = 11;
             this.darkLabel9.Text = "Picture:";
-            // 
-            // cmbType
-            // 
-            this.cmbType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbType.FormattingEnabled = true;
-            this.cmbType.Location = new System.Drawing.Point(94, 116);
-            this.cmbType.Name = "cmbType";
-            this.cmbType.Size = new System.Drawing.Size(133, 23);
-            this.cmbType.TabIndex = 10;
-            this.cmbType.SelectedIndexChanged += new System.EventHandler(this.cmbType_SelectedIndexChanged);
             // 
             // darkLabel3
             // 
@@ -460,6 +447,19 @@
             this.darkLabel4.TabIndex = 10;
             this.darkLabel4.Text = "Strength:";
             // 
+            // cmbType
+            // 
+            this.cmbType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbType.FormattingEnabled = true;
+            this.cmbType.Location = new System.Drawing.Point(94, 116);
+            this.cmbType.Name = "cmbType";
+            this.cmbType.Size = new System.Drawing.Size(133, 23);
+            this.cmbType.TabIndex = 10;
+            this.cmbType.SelectedIndexChanged += new System.EventHandler(this.cmbType_SelectedIndexChanged);
+            // 
             // DockItemDocument
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -499,7 +499,6 @@
         private DarkUI.Controls.DarkLabel darkLabel2;
         private DarkUI.Controls.DarkRadioButton radioNotStackable;
         private DarkUI.Controls.DarkRadioButton radioStackable;
-        private System.Windows.Forms.ComboBox cmbType;
         private DarkUI.Controls.DarkLabel darkLabel3;
         private DarkUI.Controls.DarkSectionPanel darkSectionPanel3;
         private ScintillaNET.Scintilla txtEditor;
@@ -526,5 +525,6 @@
         private DarkUI.Controls.DarkLabel darkLabel6;
         private DarkUI.Controls.DarkLabel darkLabel5;
         private DarkUI.Controls.DarkLabel darkLabel4;
+        private System.Windows.Forms.ComboBox cmbType;
     }
 }

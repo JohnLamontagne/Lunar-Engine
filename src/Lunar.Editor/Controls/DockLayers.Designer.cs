@@ -96,6 +96,7 @@ namespace Lunar.Editor.Controls
             this.buttonRemoveLayer.Size = new System.Drawing.Size(23, 25);
             this.buttonRemoveLayer.Text = "toolStripButton2";
             this.buttonRemoveLayer.ToolTipText = "Remove Layer";
+            this.buttonRemoveLayer.Click += new System.EventHandler(this.buttonRemoveLayer_Click);
             // 
             // DockLayers
             // 

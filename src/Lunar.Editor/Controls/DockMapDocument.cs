@@ -52,15 +52,12 @@ namespace Lunar.Editor.Controls
         private DockMapObjectProperties _dockMapObject;
         private DockMapAttributes _dockMapAttributes;
 
-
         /// <summary>
         /// Used when selecting tiles for attribute data.
         /// </summary>
         private WarpAttributeDialog _tileAttributeDialog;
 
         private PlacementMode _prevPlacementMode;
-
-
         private PlacementMode _placementMode;
         private bool _mapDragging;
 
@@ -103,6 +100,8 @@ namespace Lunar.Editor.Controls
 
             _dockMapAttributes.SelectingTile += DockMapAttributesOnSelectingTile;
 
+            _dockLayers.LayersUpdated += DockLayersOnLayersUpdated;
+
             this.mapToolStrip.Items[1].Image = Icons.BrushSelected;
             this.mapView.Cursor = new Cursor(Icons.Brush.GetHicon());
             _placementMode = PlacementMode.Paint;
@@ -110,6 +109,32 @@ namespace Lunar.Editor.Controls
             this.mapView.Resize += MapView_Resize;
 
             _tileAttributeSprites = new Dictionary<Vector3, Sprite>();
+
+            
+        }
+
+        private void UpdateQuickLayerSelection()
+        {
+            if (_map.Layers.Values.Count <= 0)
+            {
+                this.cmbQuickLayer.Items.Clear();
+                return;
+            }
+                
+
+            this.cmbQuickLayer.Items.Clear();
+
+            foreach (var layer in _map.Layers)
+            {
+                this.cmbQuickLayer.Items.Add(layer.Key);
+            }
+
+            this.cmbQuickLayer.SelectedItem = this.cmbQuickLayer.Items[0];
+        }
+
+        private void DockLayersOnLayersUpdated(object sender, EventArgs e)
+        {
+            this.UpdateQuickLayerSelection();
         }
 
         private void DockMapAttributesOnSelectingTile(object sender, EventArgs eventArgs)
@@ -211,7 +236,8 @@ namespace Lunar.Editor.Controls
             this.mapView.OnUpdate = OnMapUpdate;
 
             _dockLayers.SetMapSubject(_map);
-            
+
+            this.UpdateQuickLayerSelection();
 
             foreach (var layer in _map.Layers.Values.OrderBy(l => l.ZIndex))
             {
@@ -904,6 +930,11 @@ namespace Lunar.Editor.Controls
             Place_Attribute,
             Picking_Tile,
             Erase
+        }
+
+        private void cmbQuickLayer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _dockLayers.SelectedLayer = this.cmbQuickLayer.SelectedItem.ToString();
         }
     }
 }

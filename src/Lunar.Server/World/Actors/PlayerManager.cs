@@ -38,6 +38,11 @@ namespace Lunar.Server.World.Actors
                 return _players[uniqueID];
         }
 
+        public void Save()
+        {
+            foreach (var player in _players.Values)
+                player.Save();
+        }
       
         public Player GetPlayer(string name)
         {

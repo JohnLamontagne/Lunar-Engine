@@ -59,6 +59,8 @@ namespace Lunar.Client
 
             _graphics.PreparingDeviceSettings += _graphics_PreparingDeviceSettings;
 
+
+
             Content.RootDirectory = "Content";
 
         }
@@ -76,13 +78,13 @@ namespace Lunar.Client
         /// </summary>
         protected override void Initialize()
         {
+            Window.Title = Settings.GameName;
+
             Client.ServiceLocator.RegisterService(new GraphicsDeviceService(this.GraphicsDevice));
             Client.ServiceLocator.RegisterService(new ContentManagerService(this.Content));
             Client.ServiceLocator.RegisterService(new LightManagerService(new PenumbraComponent(this)));
             Client.ServiceLocator.RegisterService(new NetHandler());
             Client.ServiceLocator.RegisterService(new SceneManager());
-
-            
             Client.ServiceLocator.GetService<LightManagerService>().Component.Initialize();
 
             _camera = new Camera(new Rectangle(0, 0, Settings.ResolutionX, Settings.ResolutionY));
@@ -97,8 +99,7 @@ namespace Lunar.Client
             _consoleRedirector = new ConsoleRedirector(_consoleComponent);
             Console.SetOut(_consoleRedirector);
 
-
-            Window.Title = Settings.GameName;
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             base.Initialize();
         }
@@ -121,7 +122,6 @@ namespace Lunar.Client
 
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(this.GraphicsDevice);
-
 
             _cursorSprite = this.Content.LoadTexture2D(Constants.FILEPATH_GFX + "cursor.png");
         }
@@ -176,6 +176,7 @@ namespace Lunar.Client
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, _camera.GetTransformation());
+
 
             Client.ServiceLocator.GetService<SceneManager>().Draw(gameTime, _spriteBatch);
 

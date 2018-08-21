@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using Lunar.Server.Utilities;
+using Lunar.Server.World.Actors;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Lunar.Server
@@ -24,7 +25,8 @@ namespace Lunar.Server
     public static class Settings
     {
         private static readonly string _filePathConfig = Constants.FILEPATH_DATA + "config.xml";
-        private static readonly string _filePathExperience = Constants.FILEPATH_DATA + "experience.txt";
+        private static readonly string _filePathExperience = Constants.FILEPATH_DATA + "experience.conf";
+        private static readonly string _filePathUserPermissions = Constants.FILEPATH_DATA + "user_permissions.xml";
 
         public static string GameName { get; private set; }
 
@@ -57,6 +59,8 @@ namespace Lunar.Server
         public static void Initalize()
         {
             LoadConfig();
+            LoadExperienceChart();
+            LoadUserPermissions();
         }
 
         private static void CreateConfig()
@@ -125,8 +129,6 @@ namespace Lunar.Server
                 Settings.DefaultRole =
                     Settings.Roles[doc.Elements("Config").Elements("DefaultRole").FirstOrDefault().Value.ToString()] ??
                     Role.Default;
-
-                Settings.LoadExperienceChart();
             }
             catch (IndexOutOfRangeException ex)
             {
@@ -143,6 +145,37 @@ namespace Lunar.Server
                     Thread.Sleep(1000);
                     Environment.Exit(0);
                 }
+            }
+        }
+
+        private static void LoadUserPermissions()
+        {
+            if (!File.Exists(_filePathUserPermissions))
+                return;
+
+            try
+            {
+                var doc = XDocument.Load(_filePathUserPermissions);
+
+                foreach (var element in doc.Elements("Permissions").Elements())
+                {
+                    string userName = element.Attribute("name").Value;
+                    string roleName = element.Attribute("role").Value;
+
+                    Role role = Settings.Roles[roleName] ?? Role.Default;
+
+                    var player = PlayerDescriptor.Load(userName);
+
+                    if (player != null)
+                    {
+                        player.Role = role;
+                        player.Save();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error loading user permissions!");
             }
         }
 

@@ -43,6 +43,7 @@
             this.scrollY = new DarkUI.Controls.DarkScrollBar();
             this.scrollX = new DarkUI.Controls.DarkScrollBar();
             this.mapView = new Lunar.Editor.Controls.View();
+            this.cmbQuickLayer = new System.Windows.Forms.ToolStripComboBox();
             this.mapToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,6 +61,7 @@
             this.toolStripSeparator1,
             this.toolSelectObjectButton,
             this.buttonMapObject,
+            this.cmbQuickLayer,
             this.toolStripSeparator2,
             this.buttonSave});
             this.mapToolStrip.Location = new System.Drawing.Point(0, 0);
@@ -223,6 +225,16 @@
             this.mapView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseMove);
             this.mapView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseUp);
             // 
+            // cmbQuickLayer
+            // 
+            this.cmbQuickLayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbQuickLayer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbQuickLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbQuickLayer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.cmbQuickLayer.Name = "cmbQuickLayer";
+            this.cmbQuickLayer.Size = new System.Drawing.Size(121, 28);
+            this.cmbQuickLayer.SelectedIndexChanged += new System.EventHandler(this.cmbQuickLayer_SelectedIndexChanged);
+            // 
             // DockMapDocument
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,5 +268,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton buttonSave;
         private System.Windows.Forms.ToolStripButton buttonAttribute;
+        private System.Windows.Forms.ToolStripComboBox cmbQuickLayer;
     }
 }

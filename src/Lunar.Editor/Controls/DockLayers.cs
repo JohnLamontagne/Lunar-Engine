@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DarkUI.Docking;
+using DarkUI.Forms;
 using Lunar.Editor.World;
 
 namespace Lunar.Editor.Controls
@@ -35,6 +36,17 @@ namespace Lunar.Editor.Controls
                     return lstLayers.SelectedItem.ToString();
                 else
                     return "null";
+            }
+            set
+            {
+                if (this.lstLayers.Items.Contains(value))
+                {
+                    this.lstLayers.SelectedItem = value;
+                }
+                else
+                {
+                    DarkMessageBox.ShowError("Selected layer does not exist!", "Error!", DarkDialogButton.Ok);
+                }
             }
         }
 
@@ -83,6 +95,22 @@ namespace Lunar.Editor.Controls
             this.lstLayers.SetItemChecked(this.lstLayers.Items.Count - 1, true);
 
             _map.Layers.Add(layerName, new Layer(_map.Dimensions, layerName, _map.Layers.Count + 1));
+
+            this.LayersUpdated?.Invoke(this, new EventArgs());
+        }
+
+        public void RemoveLayer(string layerName)
+        {
+            if (!_map.Layers.ContainsKey(layerName))
+            {
+                return;
+            }
+
+            this.lstLayers.Items.Remove(layerName);
+
+            _map.Layers.Remove(layerName);
+
+            this.LayersUpdated?.Invoke(this, new EventArgs());
         }
 
         private void buttonAddLayer_Click(object sender, EventArgs e)
@@ -143,6 +171,16 @@ namespace Lunar.Editor.Controls
             _indexBefore = this.lstLayers.SelectedIndex;
             _dragDrop = false;
             this.lstLayers.DoDragDrop(this.lstLayers.SelectedItem, DragDropEffects.Move);
+        }
+
+        public event EventHandler LayersUpdated;
+
+        private void buttonRemoveLayer_Click(object sender, EventArgs e)
+        {
+            if (this.lstLayers.SelectedItem != null)
+            {
+                this.RemoveLayer(this.lstLayers.SelectedItem.ToString());
+            }
         }
     }
 }
