@@ -22,7 +22,6 @@ using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
-using Lunar.Editor.Controls;
 
 namespace Lunar.Editor
 {

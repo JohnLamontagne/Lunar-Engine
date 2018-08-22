@@ -71,7 +71,6 @@
     <Compile Include="World\Actor\Descriptors\IActorDescriptor.cs" />
     <Compile Include="World\Actor\Descriptors\NPCDescriptior.cs" />
     <Compile Include="World\Actor\Descriptors\PlayerDescriptor.cs" />
-    <Compile Include="World\Actor\IAction.cs" />
     <Compile Include="World\Actor\Stats.cs" />
     <Compile Include="World\Direction.cs" />
     <Compile Include="World\EquipmentSlots.cs" />

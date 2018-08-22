@@ -77,8 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Content\Graphics\Sprite.cs" />
-    <Compile Include="Content\Graphics\SpriteSheet.cs" />
     <Compile Include="Net\NetHandler.cs" />
     <Compile Include="Net\ConnectionEventArgs.cs" />
     <Compile Include="Net\Packet.cs" />
@@ -108,11 +106,18 @@
     <Compile Include="Utilities\Scripting\ScriptUtilities.cs" />
     <Compile Include="Net\WebCommunicator.cs" />
     <Compile Include="Utilities\WorldDictionary.cs" />
-    <Compile Include="World\Actors\Equipment.cs" />
-    <Compile Include="World\Actors\Inventory.cs" />
+    <Compile Include="World\Actors\Actions\Player\PlayerDropItemAction.cs" />
+    <Compile Include="World\Actors\Actions\Player\PlayerInteractAction.cs" />
+    <Compile Include="World\Actors\Actions\Player\PlayerPickupItemAction.cs" />
+    <Compile Include="World\Actors\Actions\Player\PlayerUnequipItemAction.cs" />
+    <Compile Include="World\Actors\Actions\Player\PlayerUseItemAction.cs" />
+    <Compile Include="World\Actors\Components\ActionProcessor.cs" />
+    <Compile Include="World\Actors\Components\Equipment.cs" />
+    <Compile Include="World\Actors\Components\Inventory.cs" />
+    <Compile Include="World\Actors\IAction.cs" />
     <Compile Include="World\Actors\NPCDefinition.cs" />
     <Compile Include="World\Actors\PacketHandlers\PlayerPacketHandler.cs" />
-    <Compile Include="World\Actors\PlayerNetworkComponent.cs" />
+    <Compile Include="World\Actors\Components\PlayerNetworkComponent.cs" />
     <Compile Include="World\BehaviorDefinition\ItemBehaviorDefinition.cs" />
     <Compile Include="World\Dialogue\Dialogue.cs" />
     <Compile Include="World\Actors\IActor.cs" />

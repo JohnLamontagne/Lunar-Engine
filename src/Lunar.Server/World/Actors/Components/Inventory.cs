@@ -12,7 +12,7 @@
 */
 using Lunar.Core;
 
-namespace Lunar.Server.World.Actors
+namespace Lunar.Server.World.Actors.Components
 {
     public class Inventory
     {

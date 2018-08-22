@@ -17,7 +17,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Lidgren.Network;
-using Lunar.Server.Content.Graphics;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities.Data;
@@ -29,13 +28,13 @@ namespace Lunar.Server.World.Structure
 {
     public class Tile
     {
-        private Sprite _sprite;
+        private SpriteInfo _sprite;
         private Rect _collisionArea;
 
         
         private NPCHeartbeatListener _heartbeatListener;
 
-        private int _nextNPCSpawnTime;
+        private long _nextNPCSpawnTime;
 
         public Vector Position { get; }
 
@@ -57,7 +56,7 @@ namespace Lunar.Server.World.Structure
 
         public AttributeData AttributeData { get; private set; }
 
-        public Tile(Sprite sprite)
+        public Tile(SpriteInfo sprite)
         {
             _sprite = sprite;
 
@@ -83,7 +82,8 @@ namespace Lunar.Server.World.Structure
                 if (_nextNPCSpawnTime <= gameTime.TotalElapsedTime && _heartbeatListener.NPCs.Count <= attributeData.MaxSpawns)
                 {
                     this.NPCSpawnerEvent?.Invoke(this, new NPCSpawnerEventArgs(attributeData.NPCID, attributeData.MaxSpawns, this.Position, _heartbeatListener));
-                    _nextNPCSpawnTime = ((NPCSpawnAttributeData)this.AttributeData).RespawnTime * 1000;
+
+                    _nextNPCSpawnTime = gameTime.TotalElapsedTime + ((NPCSpawnAttributeData)this.AttributeData).RespawnTime * 1000;
                 }
             }
         }
@@ -176,7 +176,7 @@ namespace Lunar.Server.World.Structure
                 string spriteName = bR.ReadString();
                 float zIndex = bR.ReadSingle(); // We can throw this away
 
-                _sprite = new Sprite(spriteName)
+                _sprite = new SpriteInfo(spriteName)
                 {
                     Transform =
                     {

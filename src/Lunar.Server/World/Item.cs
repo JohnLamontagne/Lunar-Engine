@@ -13,9 +13,9 @@
 
 using System;
 using Lidgren.Network;
+using Lunar.Core.Content.Graphics;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
-using Lunar.Server.Content.Graphics;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
@@ -26,7 +26,7 @@ namespace Lunar.Server.World
     public class Item
     {
         private string _name;
-        private Sprite _sprite;
+        private SpriteInfo _sprite;
         private bool _stackable;
         private EquipmentSlots _slotType;
         private ItemTypes _itemType;
@@ -39,7 +39,7 @@ namespace Lunar.Server.World
 
         public string Name { get { return _name; } set { _name = value; } }
 
-        public Sprite Sprite { get { return _sprite; } set { _sprite = value; } }
+        public SpriteInfo Sprite { get { return _sprite; } set { _sprite = value; } }
 
         public bool Stackable {  get { return _stackable; } set { _stackable = value; } }
 
@@ -66,12 +66,12 @@ namespace Lunar.Server.World
                 Logger.LogEvent("Null item definition!", LogTypes.ERROR, Environment.StackTrace);
 
                 this.Name = "Null";
-                this.Sprite = new Sprite("nullItem");
+                this.Sprite = new SpriteInfo("nullItem");
                 return;
             }
 
             this.Name = itemDef.Descriptor.Name;
-            this.Sprite = new Sprite(itemDef.Descriptor.TexturePath);
+            this.Sprite = new SpriteInfo(itemDef.Descriptor.TexturePath);
             this.Stackable = itemDef.Descriptor.Stackable;
             this.ItemType = itemDef.Descriptor.ItemType;
             this.SlotType = itemDef.Descriptor.SlotType;

@@ -21,8 +21,6 @@ using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
-using Lunar.Editor.World;
-using Microsoft.Xna.Framework.Graphics;
 using ScintillaNET;
 
 namespace Lunar.Editor.Controls

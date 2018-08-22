@@ -14,7 +14,6 @@ using Lunar.Server.World.Structure;
 using System;
 using System.Collections.Generic;
 using Lunar.Core.Utilities.Data;
-using Lunar.Core.World;
 
 namespace Lunar.Server.Utilities.Pathfinding
 {

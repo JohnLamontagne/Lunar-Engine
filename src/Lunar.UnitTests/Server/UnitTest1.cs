@@ -1,7 +1,5 @@
 ﻿using System.IO;
-using Lidgren.Network;
-using Lunar.Client;
-using Lunar.Core.Utilities;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Net;
 using Lunar.Server.World.Actors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

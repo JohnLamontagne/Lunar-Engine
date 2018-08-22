@@ -35,5 +35,9 @@ namespace Lunar.Server
         public const int MAP_ITEM_WIDTH = 32;
 
         public const int MAP_ITEM_HEIGHT = 32;
+
+        public const int MAX_QUEUED_ACTIONS = 10;
+
+        public const int ACTIONS_PER_SECOND = 5;
     }
 }

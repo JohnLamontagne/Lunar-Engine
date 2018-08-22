@@ -12,7 +12,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -28,7 +27,6 @@ using Lunar.Editor.Utilities;
 using Lunar.Editor.World;
 using Color = Microsoft.Xna.Framework.Color;
 using Keys = System.Windows.Forms.Keys;
-using Lunar.Core.World;
 using Lunar.Core.World.Structure;
 using Lunar.Graphics;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;

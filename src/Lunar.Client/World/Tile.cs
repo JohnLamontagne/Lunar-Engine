@@ -10,7 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System.IO;
+
 using Lidgren.Network;
 using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
@@ -18,7 +18,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
 using Lunar.Client.Utilities.Services;
 using Lunar.Core;
-using Lunar.Core.World;
 
 namespace Lunar.Client.World
 {

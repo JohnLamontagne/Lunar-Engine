@@ -12,7 +12,6 @@
 */
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Core.World.Structure;

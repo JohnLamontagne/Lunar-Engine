@@ -10,7 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using Lunar.Server.Content.Graphics;
+
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
 using System;
@@ -19,7 +19,6 @@ using System.IO;
 using Lidgren.Network;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
-using Lunar.Core.World;
 using Lunar.Server.Utilities;
 using Lunar.Core.Net;
 using Lunar.Core.World.Actor.Descriptors;
@@ -36,7 +35,7 @@ namespace Lunar.Server.World.Structure
         protected List<IActor<IActorDescriptor>> InteractingEntities { get { return _interactingEntities; } }
 
         public Vector Position { get; set; }
-        public Sprite Sprite { get; set; }
+        public SpriteInfo Sprite { get; set; }
         public bool Interactable { get; set; }
         public Layer Layer { get; set; }
         public CollisionDescriptor CollisionDescriptor { get; set; }
@@ -158,7 +157,7 @@ namespace Lunar.Server.World.Structure
             if (bR.ReadBoolean())
             {
                 string texturePath = bR.ReadString();
-                mapObject.Sprite = new Sprite(texturePath)
+                mapObject.Sprite = new SpriteInfo(texturePath)
                 {
                     Transform =
                     {

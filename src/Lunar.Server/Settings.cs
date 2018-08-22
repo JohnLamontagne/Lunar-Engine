@@ -19,8 +19,6 @@ using System.Xml.Linq;
 using Lunar.Core.Utilities;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
-using Lunar.Server.World.Actors;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Lunar.Server
 {

@@ -18,8 +18,6 @@ using System.Windows.Forms;
 using Lunar.Core;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
-using Lunar.Editor.World;
-using Microsoft.Xna.Framework.Graphics;
 using ScintillaNET;
 
 namespace Lunar.Editor.Controls

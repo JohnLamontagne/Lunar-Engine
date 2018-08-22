@@ -4,7 +4,7 @@ using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Server.Net;
 
-namespace Lunar.Server.World.Actors
+namespace Lunar.Server.World.Actors.Components
 {
     public class PlayerNetworkComponent
     {

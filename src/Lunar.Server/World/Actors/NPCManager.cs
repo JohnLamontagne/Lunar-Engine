@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System.IO;
 using Lunar.Core;
 using Lunar.Core.Utilities;
-using Lunar.Core.World.Actor;
 using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Server.World.Actors

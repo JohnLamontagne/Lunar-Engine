@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -23,7 +22,6 @@ using Lunar.Client.Utilities.Services;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework.Content;
 using Lunar.Client.Utilities;
-using DisplayMode = Microsoft.Xna.Framework.Graphics.DisplayMode;
 
 namespace Lunar.Client.GUI
 {

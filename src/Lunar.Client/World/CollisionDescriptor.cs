@@ -12,7 +12,6 @@
 */
 using Microsoft.Xna.Framework;
 using Lunar.Client.World.Actors;
-using Lunar.Core.World;
 
 namespace Lunar.Client.World
 {

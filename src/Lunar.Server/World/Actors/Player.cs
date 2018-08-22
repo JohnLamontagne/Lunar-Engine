@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 using Lidgren.Network;
-using Lunar.Server.Content.Graphics;
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
@@ -28,6 +27,7 @@ using Lunar.Core.World;
 using Lunar.Core.World.Actor;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities.Commands;
+using Lunar.Server.World.Actors.Components;
 using Lunar.Server.World.Actors.PacketHandlers;
 
 namespace Lunar.Server.World.Actors
@@ -40,6 +40,7 @@ namespace Lunar.Server.World.Actors
         private readonly Equipment _equipment;
         private readonly PlayerPacketHandler _packetHandler;
         private readonly PlayerNetworkComponent _networkComponent;
+        private readonly ActionProcessor<Player> _actionProcessor;
 
         private IActor<IActorDescriptor> _lastAttacker;
 
@@ -61,6 +62,8 @@ namespace Lunar.Server.World.Actors
         public PlayerDescriptor Descriptor => _descriptor;
 
         public PlayerNetworkComponent NetworkComponent => _networkComponent;
+
+        public ActionProcessor<Player> ActionProcessor => _actionProcessor;
 
         public Map Map => _map;
 
@@ -117,6 +120,7 @@ namespace Lunar.Server.World.Actors
             _equipment = new Equipment(this);
             _packetHandler = new PlayerPacketHandler(this);
             _networkComponent = new PlayerNetworkComponent(this);
+            _actionProcessor = new ActionProcessor<Player>(this);
 
             _eventHandlers = new Dictionary<string, List<ScriptAction>>();
             _eventHandlers = new Dictionary<string, List<ScriptAction>>();
@@ -254,6 +258,8 @@ namespace Lunar.Server.World.Actors
             packet.Message.Write(Server.ServiceLocator.GetService<CommandHandler>().Pack());
             this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
 
+            this.SendChatMessage(Settings.WelcomeMessage, ChatMessageType.Announcement);
+
             this.OnEvent("joinedGame");
         }
 
@@ -313,6 +319,8 @@ namespace Lunar.Server.World.Actors
         {
             if (!this.InLoadingScreen)
             {
+                _actionProcessor.Update(gameTime);
+
                 if (this.Descriptor.Stats.Health <= 0)
                 {
                     this.OnDeath();

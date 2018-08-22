@@ -14,7 +14,6 @@ using System;
 using System.Windows.Forms;
 using DarkUI.Forms;
 using Lunar.Core.World.Actor.Descriptors;
-using Lunar.Editor.World;
 
 namespace Lunar.Editor.Controls
 {

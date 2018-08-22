@@ -18,7 +18,6 @@ using DarkUI.Controls;
 using DarkUI.Docking;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Lunar.Core.Utilities.Logic;
 using Lunar.Editor.Utilities;
 using Lunar.Editor.World;
 using Color = Microsoft.Xna.Framework.Color;

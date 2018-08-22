@@ -11,11 +11,11 @@
 	limitations under the License.
 */
 using Lidgren.Network;
-using Lunar.Server.Content.Graphics;
 using Lunar.Server.Net;
 using Lunar.Server.World.Actors;
 using System.Linq;
 using Lunar.Core;
+using Lunar.Core.Content.Graphics;
 using Lunar.Core.Net;
 using Lunar.Server.Utilities;
 
@@ -26,7 +26,7 @@ namespace Lunar.Server.World.Structure
         public int PlayerDamage { get; set; }
         public int EffectCooldown { get; set; }
 
-        public TorchMapObject(Sprite sprite, Layer layer)
+        public TorchMapObject(SpriteInfo sprite, Layer layer)
             : base(layer)
         {
             this.PlayerDamage = 10;

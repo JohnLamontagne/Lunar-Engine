@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 using System;
-using System.Data.SqlClient;
 using System.IO;
 
 namespace Lunar.Server.Utilities
@@ -23,16 +22,16 @@ namespace Lunar.Server.Utilities
             switch (logType)
             {
                 case LogTypes.ERROR:
-                    Console.WriteLine($"Error: {eventDetails}.");
+                    Console.WriteLine($"Error: {eventDetails}");
                     TextLog($"Error: {eventDetails}.", stackTrace, Constants.FILEPATH_LOGS + "Error.txt");
                     break;
 
                 case LogTypes.GAME:
-                    TextLog($"Game event: {eventDetails}.", stackTrace, Constants.FILEPATH_LOGS + "Game_Event.txt");
+                    TextLog($"Game event: {eventDetails}", stackTrace, Constants.FILEPATH_LOGS + "Game_Event.txt");
                     break;
 
                 case LogTypes.GEN_SERVER:
-                    TextLog($"Event: {eventDetails}.", stackTrace, Constants.FILEPATH_LOGS + "General_Server.txt");
+                    TextLog($"Event: {eventDetails}", stackTrace, Constants.FILEPATH_LOGS + "General_Server.txt");
                     break;
             }
         }

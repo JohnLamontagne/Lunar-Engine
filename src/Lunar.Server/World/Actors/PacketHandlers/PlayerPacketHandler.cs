@@ -18,9 +18,9 @@ using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor;
-using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
+using Lunar.Server.World.Actors.Actions.Player;
 using Lunar.Server.World.Structure;
 
 namespace Lunar.Server.World.Actors.PacketHandlers
@@ -51,19 +51,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_PlayerInteract(PacketReceivedEventArgs args)
         {
-            foreach (var mapObject in _player.Layer.GetCollidingMapObjects(_player.Descriptor.Position, _player.CollisionBounds))
-            {
-                mapObject.OnInteract(_player);
-            }
-
-            // Try to attack the target
-            if (_player.Target != null)
-            {
-                if (_player.Target.Attackable)
-                {
-                    _player.Target.OnAttacked(_player, (int)(_player.Descriptor.Stats.Strength * new Random().NextDouble()));
-                }
-            }
+            _player.ActionProcessor.Process(new PlayerInteractAction());
         }
 
         private void Handle_ReqTarget(PacketReceivedEventArgs args)
@@ -99,39 +87,14 @@ namespace Lunar.Server.World.Actors.PacketHandlers
         {
             int slotNum = args.Message.ReadInt32();
 
-            if (_player.Inventory.GetSlot(slotNum) != null)
-            {
-                _player.Map.SpawnItem(_player.Inventory.GetSlot(slotNum).Item, _player.Descriptor.Position, _player.Layer);
-                _player.Inventory.RemoveItem(slotNum, 1);
-
-            }
+            _player.ActionProcessor.Process(new PlayerDropItemAction(slotNum));
         }
 
         private void Handle_UseItem(PacketReceivedEventArgs args)
         {
             int slotNum = args.Message.ReadInt32();
 
-            // Sanity check: is there actually an item in this slot?
-            if (_player.Inventory.GetSlot(slotNum) == null)
-            {
-                // Log it!
-                Logger.LogEvent($"Player attempted to equip bad item! User: {_player.Descriptor.Name} SlotNum: {slotNum}.", LogTypes.GAME, Environment.StackTrace);
-
-                return;
-            }
-
-            Item item = _player.Inventory.GetSlot(slotNum).Item;
-
-            if (item.ItemType == ItemTypes.Equipment)
-            {
-                _player.Equipment.Equip(item);
-                item.OnEquip(_player);
-                _player.Inventory.RemoveItem(slotNum, 1);
-            }
-            else if (item.ItemType == ItemTypes.Usable)
-            {
-                item.OnUse(_player);
-            }
+            _player.ActionProcessor.Process(new PlayerUseItemAction(slotNum));
         }
 
         private void Handle_PlayerMoving(PacketReceivedEventArgs args)
@@ -174,44 +137,15 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_PickupItem(PacketReceivedEventArgs obj)
         {
-            MapItem mapItem = _player.Map.GetMapItems().FirstOrDefault(mItem => mItem.WithinReachOf(_player));
-
-            if (mapItem != null)
-            {
-                _player.Inventory.Add(mapItem.Item, mapItem.Amount);
-                _player.Map.RemoveItem(mapItem.Item);
-            }
+            _player.ActionProcessor.Process(new PlayerPickupItemAction());
         }
 
         private void Handle_UnequipItem(PacketReceivedEventArgs args)
         {
             int slotNum = args.Message.ReadInt32();
 
-            // Sanity check: is there actually an item in this slot?
-            if (_player.Equipment.GetSlot(slotNum) == null)
-            {
-                // Log it!
-                Logger.LogEvent($"Player attempted to unequip bad item! User: {_player.Descriptor.Name} SlotNum: {slotNum}.", LogTypes.GAME, Environment.StackTrace);
-
-                return;
-            }
-
-            var item = _player.Equipment.GetSlot(slotNum);
-
-            if (item.ItemType != ItemTypes.Equipment || item.SlotType == EquipmentSlots.NE)
-            {
-                // Log it!
-                Logger.LogEvent($"Player attempted to unequip unequippable item! User: {_player.Descriptor.Name} SlotNum: {slotNum}.", LogTypes.GAME, Environment.StackTrace);
-
-                return;
-            }
-
-            _player.Equipment.SetSlot(slotNum, null);
-            _player.Inventory.Add(item, 1);
-            _player.NetworkComponent.SendEquipmentUpdate();
-            _player.CalculateBoostedStats();
+            _player.ActionProcessor.Process(new PlayerUnequipItemAction(slotNum));
         }
-
 
     }
 }

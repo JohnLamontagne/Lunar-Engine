@@ -23,7 +23,6 @@ using Lunar.Client.World;
 using Lunar.Client.World.Actors;
 using Lunar.Core;
 using Lunar.Core.Net;
-using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 
 namespace Lunar.Client.Scenes

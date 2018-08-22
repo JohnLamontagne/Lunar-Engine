@@ -15,6 +15,7 @@ using Lunar.Server.Net;
 using Lidgren.Network;
 using System.Collections.Generic;
 using System.Linq;
+using Lunar.Core.Content.Graphics;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
@@ -22,7 +23,6 @@ using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor;
 using Lunar.Core.World.Actor.Descriptors;
-using Lunar.Server.Content.Graphics;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Structure;
 using Lunar.Server.Utilities.Scripting;
@@ -44,7 +44,7 @@ namespace Lunar.Server.World.Actors
 
         public string Name { get; }
 
-        public Sprite Sprite { get; set; }
+        public SpriteInfo Sprite { get; set; }
 
         public NPCDescriptor Descriptor => _descriptor;
 
@@ -91,7 +91,7 @@ namespace Lunar.Server.World.Actors
 
             _map = map;
 
-            this.Sprite = new Sprite(definition.Descriptor.TexturePath);
+            this.Sprite = new SpriteInfo(definition.Descriptor.TexturePath);
             this.Speed = definition.Descriptor.Speed;
             this.Level = definition.Descriptor.Level;
             this.AggresiveRange = definition.Descriptor.AggresiveRange;

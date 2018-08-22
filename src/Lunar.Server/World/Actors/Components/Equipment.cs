@@ -17,7 +17,7 @@ using System.Linq;
 using Lunar.Core;
 using Lunar.Core.World;
 
-namespace Lunar.Server.World.Actors
+namespace Lunar.Server.World.Actors.Components
 {
     public class Equipment
     {

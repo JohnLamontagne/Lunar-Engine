@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 using System;
-using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,7 +20,6 @@ using Lunar.Client.World.Actors;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
-using Lunar.Core.World;
 using Lunar.Core.World.Actor;
 
 namespace Lunar.Client.World
