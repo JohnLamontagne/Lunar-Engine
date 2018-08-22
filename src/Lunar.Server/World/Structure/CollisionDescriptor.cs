@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.World.Structure
@@ -30,10 +31,10 @@ namespace Lunar.Server.World.Structure
             _collisionArea = collisionArea;
         }
 
-        public bool Collides(IActor actor)
+        public bool Collides(IActor<IActorDescriptor> actor)
         {
-            Rect collisionArea = new Rect((int)(actor.Position.X + actor.CollisionBounds.Left), (int)(actor.Position.Y + actor.CollisionBounds.Top),
-                (actor.Position.X + actor.CollisionBounds.Left) + actor.CollisionBounds.Width, (actor.Position.Y + actor.CollisionBounds.Top) + actor.CollisionBounds.Height);
+            Rect collisionArea = new Rect((int)(actor.Descriptor.Position.X + actor.CollisionBounds.Left), (int)(actor.Descriptor.Position.Y + actor.CollisionBounds.Top),
+                (actor.Descriptor.Position.X + actor.CollisionBounds.Left) + actor.CollisionBounds.Width, (actor.Descriptor.Position.Y + actor.CollisionBounds.Top) + actor.CollisionBounds.Height);
 
             return (_collisionArea.Intersects(collisionArea));
         }

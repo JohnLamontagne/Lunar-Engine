@@ -19,6 +19,7 @@ using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Logic;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Actors;
@@ -187,9 +188,9 @@ namespace Lunar.Server.World.Structure
             _tiles[x, y] = tile;
         }
 
-        public List<Tile> GetCollidingTiles(IActor actor)
+        public List<Tile> GetCollidingTiles(IActor<IActorDescriptor> actor)
         {
-            return this.GetCollidingTiles(actor.Position, actor.CollisionBounds);
+            return this.GetCollidingTiles(actor.Descriptor.Position, actor.CollisionBounds);
         }
 
         public List<Tile> GetCollidingTiles(Vector position, Rect collisionBounds)

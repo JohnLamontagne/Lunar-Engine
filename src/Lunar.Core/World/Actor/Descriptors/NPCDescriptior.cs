@@ -4,7 +4,7 @@ using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Core.World.Actor.Descriptors
 {
-    public class NPCDescriptor
+    public class NPCDescriptor : IActorDescriptor
     {
         private int _level;
         private float _speed;
@@ -23,19 +23,13 @@ namespace Lunar.Core.World.Actor.Descriptors
     
         public int Level { get; set; }
 
-        public int Strength { get; set; }
+        public Vector Position { get; set; }
 
-        public int Intelligence { get; set; }
+        public Stats Stats { get; private set; }
 
-        public int Defence { get; set; }
-
-        public int Dexterity { get; set; }
-
-        public int Health { get; set; }
+        public Stats StatBoosts { get; private set; }
 
         public float Speed { get; set; }
-
-        public int MaximumHealth { get; set; }
 
         public Rect CollisionBounds { get; set; }
 
@@ -65,7 +59,12 @@ namespace Lunar.Core.World.Actor.Descriptors
                     binaryWriter.Write(this.Name);
                     binaryWriter.Write(this.Level);
                     binaryWriter.Write(this.Speed);
-                    binaryWriter.Write(this.MaximumHealth);
+                    binaryWriter.Write(this.Stats.Strength);
+                    binaryWriter.Write(this.Stats.Defense);
+                    binaryWriter.Write(this.Stats.Dexterity);
+                    binaryWriter.Write(this.Stats.Health);
+                    binaryWriter.Write(this.Stats.Intelligence);
+                    binaryWriter.Write(this.Stats.MaximumHealth);
                     binaryWriter.Write(this.CollisionBounds.Left);
                     binaryWriter.Write(this.CollisionBounds.Top);
                     binaryWriter.Write(this.CollisionBounds.Width);
@@ -105,6 +104,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             Vector maxRoam = new Vector();
             Vector frameSize = new Vector();
             int attackRange = 0;
+            Actor.Stats stats;
 
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
             {
@@ -113,7 +113,17 @@ namespace Lunar.Core.World.Actor.Descriptors
                     name = binaryReader.ReadString();
                     level = binaryReader.ReadInt32();
                     speed = binaryReader.ReadSingle();
-                    maximumHealth = binaryReader.ReadInt32();
+
+                    stats = new Stats()
+                    {
+                        Strength = binaryReader.ReadInt32(),
+                        Defense = binaryReader.ReadInt32(),
+                        Dexterity = binaryReader.ReadInt32(),
+                        Health = binaryReader.ReadInt32(),
+                        Intelligence = binaryReader.ReadInt32(),
+                        MaximumHealth = binaryReader.ReadInt32()
+                    };
+
                     collisionBounds = new Rect(binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
                     aggresiveRange = binaryReader.ReadInt32();
                     texturePath = binaryReader.ReadString();
@@ -123,18 +133,19 @@ namespace Lunar.Core.World.Actor.Descriptors
                 }
             }
 
-            NPCDescriptor desc = new NPCDescriptor()
+            NPCDescriptor desc = new NPCDescriptor
             {
                 Name = name,
                 Level = level,
                 Speed = speed,
-                MaximumHealth = maximumHealth,
+                Stats = stats,
                 CollisionBounds = collisionBounds,
                 AggresiveRange = aggresiveRange,
                 TexturePath = texturePath,
                 MaxRoam = maxRoam,
                 FrameSize = frameSize,
-                AttackRange = attackRange
+                AttackRange = attackRange,
+                StatBoosts = new Stats()
             };
 
 

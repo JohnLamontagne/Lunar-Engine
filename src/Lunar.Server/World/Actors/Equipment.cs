@@ -66,7 +66,7 @@ namespace Lunar.Server.World.Actors
 
             _player.CalculateBoostedStats();
 
-            _player.SendEquipmentUpdate();
+            _player.NetworkComponent.SendEquipmentUpdate();
         }
     }
 }

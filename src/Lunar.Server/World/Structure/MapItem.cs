@@ -12,6 +12,7 @@
 */
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.World.Structure
@@ -49,7 +50,7 @@ namespace Lunar.Server.World.Structure
             this.Amount = amount;
         }
 
-        public bool WithinReachOf(IActor actor)
+        public bool WithinReachOf(IActor<IActorDescriptor> actor)
         {
             return (_collisionDescriptor.Collides(actor));
         }

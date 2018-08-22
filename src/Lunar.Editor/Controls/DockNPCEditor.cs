@@ -97,11 +97,11 @@ namespace Lunar.Editor.Controls
             this.radAggressive.Checked = _npc.Aggressive;
             this.radUnaggressive.Checked = !_npc.Aggressive;
 
-            this.txtStr.Text = _npc.Strength.ToString();
-            this.txtInt.Text = _npc.Intelligence.ToString();
-            this.txtDef.Text = _npc.Defence.ToString();
-            this.txtHealth.Text = _npc.Health.ToString();
-            this.txtDex.Text = _npc.Dexterity.ToString();
+            this.txtStr.Text = _npc.Stats.Strength.ToString();
+            this.txtInt.Text = _npc.Stats.Intelligence.ToString();
+            this.txtDef.Text = _npc.Stats.Defense.ToString();
+            this.txtHealth.Text = _npc.Stats.Health.ToString();
+            this.txtDex.Text = _npc.Stats.Dexterity.ToString();
             this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
             this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
             this.txtColLeft.Text = _npc.CollisionBounds.Left.ToString();
@@ -405,7 +405,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtStr.Text, out int newStr);
 
-            _npc.Strength = newStr;
+            _npc.Stats.Strength = newStr;
         }
 
         private void txtInt_TextChanged(object sender, EventArgs e)
@@ -414,7 +414,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtInt.Text, out int newInt);
 
-            _npc.Intelligence = newInt;
+            _npc.Stats.Intelligence = newInt;
         }
 
         private void txtDex_TextChanged(object sender, EventArgs e)
@@ -423,7 +423,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtDex.Text, out int newDex);
 
-            _npc.Dexterity = newDex;
+            _npc.Stats.Dexterity = newDex;
         }
 
         private void txtDef_TextChanged(object sender, EventArgs e)
@@ -432,7 +432,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtDef.Text, out int newDef);
 
-            _npc.Defence = newDef;
+            _npc.Stats.Defense = newDef;
         }
 
         private void txtHealth_TextChanged(object sender, EventArgs e)
@@ -441,7 +441,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtHealth.Text, out int newHealth);
 
-            _npc.Health = newHealth;
+            _npc.Stats.Health = newHealth;
         }
 
         private void picSpriteSheet_Paint(object sender, PaintEventArgs e)

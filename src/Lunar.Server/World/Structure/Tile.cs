@@ -120,7 +120,7 @@ namespace Lunar.Server.World.Structure
                         else
                         {
 
-                            Logger.LogEvent($"Player {player.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR, Environment.StackTrace);
+                            Logger.LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR, Environment.StackTrace);
                             return;
                         }
                        

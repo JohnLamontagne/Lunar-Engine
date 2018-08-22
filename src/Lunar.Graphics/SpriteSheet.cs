@@ -10,20 +10,20 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using Lunar.Core.Content.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Lunar.Graphics
 {
-    public class SpriteSheet
+    public class SpriteSheet : Lunar.Core.Content.Graphics.SpriteSheet
     {
         private readonly Sprite _sprite;
         private Rectangle _frameRectangle;
         private Rectangle _destionationRect;
         private int _horizontalFrameIndex;
         private int _verticalFrameIndex;
-        private readonly int _verticalFrames;
-        private readonly int _horizontalFrames;
         private readonly int _frameWidth;
         private readonly int _frameHeight;
 
@@ -42,7 +42,7 @@ namespace Lunar.Graphics
             get => _horizontalFrameIndex;
             set
             {
-                if ((value < 0) || value >= _horizontalFrames) value = 0;
+                if ((value < 0) || value >= this.HorizontalFrames) value = 0;
 
                 _horizontalFrameIndex = value;
 
@@ -55,7 +55,7 @@ namespace Lunar.Graphics
             get => _verticalFrameIndex;
             set
             {
-                if ((value < 0) || value >= _verticalFrames) value = 0;
+                if ((value < 0) || value >= this.VerticalFrames) value = 0;
 
                 _verticalFrameIndex = value;
 
@@ -64,14 +64,13 @@ namespace Lunar.Graphics
         }
 
         public SpriteSheet(Sprite sprite, int horizontalFrames, int verticalFrames, int frameWidth, int frameHeight)
+        :base(new SpriteInfo(sprite.Texture.Name), horizontalFrames, verticalFrames, frameWidth, frameHeight)
         {
             _sprite = sprite;
 
             _frameRectangle = new Rectangle(0, 0, frameWidth, frameHeight);
             _frameWidth = frameWidth;
             _frameHeight = frameHeight;
-            _horizontalFrames = horizontalFrames;
-            _verticalFrames = verticalFrames;
 
             this.Position = Vector2.Zero;
         }

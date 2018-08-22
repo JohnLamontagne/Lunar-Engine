@@ -1,4 +1,10 @@
-﻿namespace Lunar.Server.Utilities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Lunar.Core.Utilities
 {
     public class Role
     {
@@ -10,18 +16,6 @@
         {
             this.Name = name;
             this.Level = level;
-        }
-
-        public bool Supercedes(string roleName)
-        {
-            if (Settings.Roles.ContainsKey(roleName))
-            {
-                return (this.Level >= Settings.Roles[roleName].Level);
-            }
-            else
-            {
-                return false;
-            }
         }
 
         public bool Supercedes(Role role)

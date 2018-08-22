@@ -22,17 +22,18 @@ using Lunar.Core.Utilities.Data;
 using Lunar.Core.World;
 using Lunar.Server.Utilities;
 using Lunar.Core.Net;
+using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Server.World.Structure
 {
     public class MapObject
     {
-        private List<IActor> _interactingEntities;
-        private Dictionary<IActor, long> _cooldowns;
+        private List<IActor<IActorDescriptor>> _interactingEntities;
+        private Dictionary<IActor<IActorDescriptor>, long> _cooldowns;
         private bool _blocked;
 
-        protected Dictionary<IActor, long> Cooldowns { get { return _cooldowns; } }
-        protected List<IActor> InteractingEntities { get { return _interactingEntities; } }
+        protected Dictionary<IActor<IActorDescriptor>, long> Cooldowns { get { return _cooldowns; } }
+        protected List<IActor<IActorDescriptor>> InteractingEntities { get { return _interactingEntities; } }
 
         public Vector Position { get; set; }
         public Sprite Sprite { get; set; }
@@ -57,15 +58,15 @@ namespace Lunar.Server.World.Structure
 
         public MapObject(Layer layer)
         {
-            _interactingEntities = new List<IActor>();
-            _cooldowns = new Dictionary<IActor, long>();
+            _interactingEntities = new List<IActor<IActorDescriptor>>();
+            _cooldowns = new Dictionary<IActor<IActorDescriptor>, long>();
 
             this.MapObjectBehaviorDefinition = new MapObjectBehaviorDefinition();
 
             this.Layer = layer;
         }
 
-        public virtual void OnLeft(IActor actor)
+        public virtual void OnLeft(IActor<IActorDescriptor> actor)
         {
             if (_interactingEntities.Contains(actor))
             {
@@ -75,7 +76,7 @@ namespace Lunar.Server.World.Structure
             }  
         }
 
-        public virtual void OnEntered(IActor actor)
+        public virtual void OnEntered(IActor<IActorDescriptor> actor)
         {
             if (this.Blocked)
                 return;
@@ -93,7 +94,7 @@ namespace Lunar.Server.World.Structure
             
         }
 
-        public void OnInteract(IActor actor)
+        public void OnInteract(IActor<IActorDescriptor> actor)
         {
             this.MapObjectBehaviorDefinition.OnInteract?.Invoke(new ScriptActionArgs(this, actor));
         }

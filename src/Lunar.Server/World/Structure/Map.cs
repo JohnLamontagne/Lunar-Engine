@@ -24,6 +24,7 @@ using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 
 namespace Lunar.Server.World.Structure
@@ -32,8 +33,8 @@ namespace Lunar.Server.World.Structure
     {
         private readonly Dictionary<string, Layer> _layers;
         private readonly Dictionary<Layer, Pathfinder> _pathFinders;
-        private WorldDictionary<long, IActor> _actors;
-        private WorldDictionary<IActor, List<MapObject>> _actorCollidingObjects;
+        private WorldDictionary<long, IActor<IActorDescriptor>> _actors;
+        private WorldDictionary<IActor<IActorDescriptor>, List<MapObject>> _actorCollidingObjects;
 
         private List<Tuple<Vector, Layer>> _playerSpawnAreas;
         private List<MapItem> _mapItems;
@@ -63,8 +64,8 @@ namespace Lunar.Server.World.Structure
         private Map()
         {
             _layers = new Dictionary<string, Layer>();
-            _actors = new WorldDictionary<long, IActor>();
-            _actorCollidingObjects = new WorldDictionary<IActor, List<MapObject>>();
+            _actors = new WorldDictionary<long, IActor<IActorDescriptor>>();
+            _actorCollidingObjects = new WorldDictionary<IActor<IActorDescriptor>, List<MapObject>>();
             _playerSpawnAreas = new List<Tuple<Vector, Layer>>();
             _pathFinders = new Dictionary<Layer, Pathfinder>();
             _mapItems = new List<MapItem>();
@@ -185,18 +186,20 @@ namespace Lunar.Server.World.Structure
             return _layers[name];
         }
 
-        public bool ActorInMap(IActor actor)
+        public bool ActorInMap(IActor<IActorDescriptor> actor)
         {
             return _actors.ContainsKey(actor.UniqueID);
         }
 
-        public virtual void AddActor(IActor actor)
+        public virtual void AddActor<T>(IActor<T> actor) where T : class, IActorDescriptor
         {
+           ;
+
             _actors.Add(actor.UniqueID, actor);
             _actorCollidingObjects.Add(actor, new List<MapObject>());
         }
 
-        public IActor GetActor(long actorID)
+        public IActor<IActorDescriptor> GetActor(long actorID)
         {
             if (_actors.ContainsKey(actorID))
                 return _actors[actorID];
@@ -204,7 +207,7 @@ namespace Lunar.Server.World.Structure
                 return null;
         }
 
-        public virtual IEnumerable<T> GetActors<T>() where T : IActor
+        public virtual IEnumerable<T> GetActors<T>() where T : IActor<IActorDescriptor>
         {
             return from actor in _actors
                    where actor is T
@@ -357,6 +360,13 @@ namespace Lunar.Server.World.Structure
                         layer.NPCSpawnerEvent += (sender, args) =>
                         {
                             var npcDesc = Server.ServiceLocator.GetService<NPCManager>().GetNPC(args.Name);
+
+                            if (npcDesc == null)
+                            {
+                                Logger.LogEvent($"Error spawning NPC: {args.Name} does not exist!", LogTypes.ERROR, Environment.StackTrace);
+                                return;
+                            }
+
                             NPC npc = new NPC(npcDesc, map)
                             {
                                 Layer = (Layer) sender

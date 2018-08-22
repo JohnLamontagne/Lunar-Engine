@@ -16,6 +16,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using Lunar.Core.Utilities;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Actors;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -169,7 +171,7 @@ namespace Lunar.Server
                     if (player != null)
                     {
                         player.Role = role;
-                        player.Save();
+                        player.Save(Constants.FILEPATH_ACCOUNTS + player.Name + ".acc");
                     }
                 }
             }

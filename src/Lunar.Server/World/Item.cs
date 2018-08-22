@@ -14,6 +14,7 @@
 using System;
 using Lidgren.Network;
 using Lunar.Core.World;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Content.Graphics;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
@@ -91,12 +92,12 @@ namespace Lunar.Server.World
             this.BehaviorDefinition = ((ItemDefinition)sender).BehaviorDefinition;
         }
 
-        public void OnUse(IActor user)
+        public void OnUse(IActor<IActorDescriptor> user)
         {
             this.BehaviorDefinition?.OnUse?.Invoke(new ScriptActionArgs(this, user));
         }
 
-        public void OnEquip(IActor user)
+        public void OnEquip(IActor<IActorDescriptor> user)
         {
             this.BehaviorDefinition?.OnEquip?.Invoke(new ScriptActionArgs(this, user));
         }

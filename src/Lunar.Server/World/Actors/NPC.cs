@@ -21,6 +21,7 @@ using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Content.Graphics;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Structure;
@@ -29,7 +30,7 @@ using Lunar.Server.World.BehaviorDefinition;
 
 namespace Lunar.Server.World.Actors
 {
-    public sealed class NPC : IActor
+    public sealed class NPC : IActor<NPCDescriptor>
     {
         private Map _map;
         private Vector _frameSize;
@@ -37,6 +38,7 @@ namespace Lunar.Server.World.Actors
         private long _nextAttackTime;
         private Random _random;
         private long _nextMoveTime;
+        private NPCDescriptor _descriptor;
 
         private int _health;
 
@@ -44,25 +46,11 @@ namespace Lunar.Server.World.Actors
 
         public Sprite Sprite { get; set; }
 
+        public NPCDescriptor Descriptor => _descriptor;
+
         public float Speed { get; set; }
 
         public int Level { get; set; }
-
-        public int Health
-        {
-            get => _health;
-            set
-            {
-                _health = value;
-
-                if (!this.Alive)
-                {
-                    this.Died?.Invoke(this, new EventArgs());
-                }
-            }
-        }
-
-        public int MaximumHealth { get; set; }
 
         public int AggresiveRange { get; set; }
 
@@ -88,11 +76,11 @@ namespace Lunar.Server.World.Actors
 
         public Map Map => _map;
 
-        public IActor Target { get; set; }
+        public IActor<IActorDescriptor> Target { get; set; }
 
         public bool Attackable => true;
 
-        public bool Alive => this.Health > 0;
+        public bool Alive => this.Descriptor.Stats.Health > 0;
 
         public event EventHandler<SubjectEventArgs> EventOccured;
 
@@ -106,8 +94,6 @@ namespace Lunar.Server.World.Actors
             this.Sprite = new Sprite(definition.Descriptor.TexturePath);
             this.Speed = definition.Descriptor.Speed;
             this.Level = definition.Descriptor.Level;
-            this.Health = definition.Descriptor.MaximumHealth;
-            this.MaximumHealth = definition.Descriptor.MaximumHealth;
             this.AggresiveRange = definition.Descriptor.AggresiveRange;
             this.CollisionBounds = definition.Descriptor.CollisionBounds;
             
@@ -137,7 +123,7 @@ namespace Lunar.Server.World.Actors
 
         
 
-        public void OnAttacked(IActor attacker, int damageDelt)
+        public void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt)
         {
             this.BehaviorDefinition?.Attacked?.Invoke(new ScriptActionArgs(this, attacker, damageDelt));
         }
@@ -159,7 +145,7 @@ namespace Lunar.Server.World.Actors
         {
             if (_nextAttackTime > gameTime.TotalElapsedTime || this.Target == null || !this.Aggrevated || !this.Target.Attackable) return;
 
-            Vector posDiff = this.Position - this.Target.Position;
+            Vector posDiff = this.Position - this.Target.Descriptor.Position;
 
             posDiff = new Vector(Math.Abs(posDiff.X), Math.Abs(posDiff.Y));
 
@@ -199,10 +185,10 @@ namespace Lunar.Server.World.Actors
             }
         }
 
-        public void GoTo(IActor target)
+        public void GoTo(IActor<IActorDescriptor> target)
         {
-            float targetX = target.Position.X;
-            float targetY = target.Position.Y;
+            float targetX = target.Descriptor.Position.X;
+            float targetY = target.Descriptor.Position.Y;
 
             if (targetX < this.Position.X)
             {
@@ -227,7 +213,7 @@ namespace Lunar.Server.World.Actors
                 this.GoTo(new Vector(targetX, targetY));
         }
 
-        public bool WithinRangeOf(IActor actor)
+        public bool WithinRangeOf(IActor<IActorDescriptor> actor)
         {
             Rect collisionBoundsRight = new Rect(this.Position.X + this.CollisionBounds.Left + Settings.TileSize, this.Position.Y + this.CollisionBounds.Top,
                 this.CollisionBounds.Width, this.CollisionBounds.Height);
@@ -355,7 +341,7 @@ namespace Lunar.Server.World.Actors
             this.Position = new Vector(this.Position.X + dX, this.Position.Y + dY);
         }
 
-        public T FindTarget<T>() where T : IActor
+        public T FindTarget<T>() where T : IActor<IActorDescriptor>
         {
             foreach (var actor in _map.GetActors<T>())
             {
@@ -364,8 +350,8 @@ namespace Lunar.Server.World.Actors
                     continue;
                 }
 
-                if (actor.Position.X >= this.Position.X - this.AggresiveRange * Settings.TileSize && actor.Position.X <= this.Position.X + this.AggresiveRange * Settings.TileSize &&
-                    actor.Position.Y >= this.Position.Y - this.AggresiveRange* Settings.TileSize && actor.Position.Y <= this.Position.Y + this.AggresiveRange * Settings.TileSize)
+                if (actor.Descriptor.Position.X >= this.Position.X - this.AggresiveRange * Settings.TileSize && actor.Descriptor.Position.X <= this.Position.X + this.AggresiveRange * Settings.TileSize &&
+                    actor.Descriptor.Position.Y >= this.Position.Y - this.AggresiveRange* Settings.TileSize && actor.Descriptor.Position.Y <= this.Position.Y + this.AggresiveRange * Settings.TileSize)
                 {
                     return actor;
                 }
@@ -433,8 +419,8 @@ namespace Lunar.Server.World.Actors
             netBuffer.Write(this.Name);
             netBuffer.Write(this.Sprite.TextureName);
             netBuffer.Write(this.Speed);
-            netBuffer.Write(this.Health);
-            netBuffer.Write(this.MaximumHealth);
+            netBuffer.Write(this.Descriptor.Stats.Health);
+            netBuffer.Write(this.Descriptor.Stats.MaximumHealth);
             netBuffer.Write(this.Level);
             netBuffer.Write(this.Position.X);
             netBuffer.Write(this.Position.Y);

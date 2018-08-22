@@ -59,7 +59,7 @@ namespace Lunar.Server.World.Actors
                     }
                 }
 
-                _player.SendInventoryUpdate();
+                _player.NetworkComponent.SendInventoryUpdate();
             }
         }
 
@@ -87,7 +87,7 @@ namespace Lunar.Server.World.Actors
                     {
                         invSlot.Amount += amount;
 
-                        _player.SendInventoryUpdate();
+                        _player.NetworkComponent.SendInventoryUpdate();
 
                         return;
                     }
@@ -119,7 +119,7 @@ namespace Lunar.Server.World.Actors
                 }
             }
 
-            _player.SendInventoryUpdate();
+            _player.NetworkComponent.SendInventoryUpdate();
         }
     }
 }

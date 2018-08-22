@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
+using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Server.World.Actors
 {
@@ -46,7 +47,7 @@ namespace Lunar.Server.World.Actors
       
         public Player GetPlayer(string name)
         {
-            return _players.Values.FirstOrDefault(p => p.Name == name);
+            return _players.Values.FirstOrDefault(p => p.Descriptor.Name == name);
         }
 
         public void RemovePlayer(long uniqueID)
@@ -58,7 +59,7 @@ namespace Lunar.Server.World.Actors
         public bool LoginPlayer(string username, string password, PlayerConnection connection)
         {
             // Make sure this player isn't already in game.
-            if (_players.Values.Any(player => player.Name == username))
+            if (_players.Values.Any(player => player.Descriptor.Name == username))
             {
                 var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
                 packet.Message.Write("Account already logged in!");
@@ -72,10 +73,22 @@ namespace Lunar.Server.World.Actors
             {
                 // If we've made it this far, we've confirmed that the requested account is not already logged into.
                 // Let's make sure the password they provided us is valid.
-                var playerDescriptor = PlayerDescriptor.Load(username);
+                var playerDescriptor = PlayerDescriptor.Load(Constants.FILEPATH_ACCOUNTS + username + ".acc");
+
+
+                if (playerDescriptor == null)
+                {
+                    // The account doesn't exist!
+                    var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
+                    packet.Message.Write("Account does not exist!");
+                    connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
+                    connection.Disconnect("byeFelicia");
+
+                    return false;
+                }
 
                 // Check to see whether they were lying about that password...
-                if (playerDescriptor != null && password == playerDescriptor.Password)
+                if (password == playerDescriptor.Password)
                 {
                     // Whoa, they weren't lying!
                     // Let's go ahead and grant them access.
@@ -133,6 +146,8 @@ namespace Lunar.Server.World.Actors
 
             // Create their player.
             var descriptor = PlayerDescriptor.Create(username, password);
+            descriptor.MapID = Settings.StartingMap;
+            descriptor.Role = Settings.DefaultRole;
             var player = new Player(descriptor, connection);
             player.Save();
 

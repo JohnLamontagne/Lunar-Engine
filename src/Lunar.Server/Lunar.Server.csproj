@@ -100,7 +100,6 @@
     <Compile Include="Utilities\Pathfinding\Pathfinder.cs" />
     <Compile Include="Utilities\Pathfinding\SearchNode.cs" />
     <Compile Include="Utilities\Plugin\PluginManager.cs" />
-    <Compile Include="Utilities\Role.cs" />
     <Compile Include="Utilities\Scripting\Script.cs" />
     <Compile Include="Utilities\Scripting\ScriptAction.cs" />
     <Compile Include="Utilities\Scripting\ScriptActionArgs.cs" />
@@ -113,6 +112,7 @@
     <Compile Include="World\Actors\Inventory.cs" />
     <Compile Include="World\Actors\NPCDefinition.cs" />
     <Compile Include="World\Actors\PacketHandlers\PlayerPacketHandler.cs" />
+    <Compile Include="World\Actors\PlayerNetworkComponent.cs" />
     <Compile Include="World\BehaviorDefinition\ItemBehaviorDefinition.cs" />
     <Compile Include="World\Dialogue\Dialogue.cs" />
     <Compile Include="World\Actors\IActor.cs" />
@@ -120,7 +120,6 @@
     <Compile Include="World\Actors\NPC.cs" />
     <Compile Include="World\Actors\NPCManager.cs" />
     <Compile Include="World\Actors\Player.cs" />
-    <Compile Include="World\Actors\PlayerDescriptor.cs" />
     <Compile Include="World\Actors\PlayerManager.cs" />
     <Compile Include="World\ItemDefinition.cs" />
     <Compile Include="World\Structure\CollisionDescriptor.cs" />

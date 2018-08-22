@@ -49,7 +49,7 @@ namespace Lunar.Server.World.Actors
 
         public NPCDefinition GetNPC(string npcName)
         {
-            return _npcs[npcName] ?? null;
+            return !_npcs.ContainsKey(npcName) ? null : _npcs[npcName];
         }
 
         public void Initalize()

@@ -14,42 +14,33 @@
 using System;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.BehaviorDefinition;
 using Lunar.Server.World.Structure;
 
 namespace Lunar.Server.World.Actors
 {
-    public interface IActor : ISubject
+    public interface IActor<out T> : ISubject where T: class, IActorDescriptor
     {
+        T Descriptor { get; }
+
         long UniqueID { get; }
 
-        string Name { get; }
-
-        float Speed { get; set; }
-
-        int Level { get; set; }
-
-        int Health { get; set; }
-
-        int MaximumHealth { get; set; }
-
         bool Attackable { get; }
-
-        Vector Position { get; }
-
+       
         Layer Layer { get; set; }
 
         Rect CollisionBounds { get; }
 
         ActorBehaviorDefinition BehaviorDefinition { get; }
 
-        IActor Target { get; set; }
+        IActor<IActorDescriptor> Target { get; set; }
 
         void Update(GameTime gameTime);
 
         void WarpTo(Vector position);
 
-        void OnAttacked(IActor attacker, int damageDelt);
+        void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt);
     }
 }

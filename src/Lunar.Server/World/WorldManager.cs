@@ -59,7 +59,7 @@ namespace Lunar.Server.World
             // Make sure the sender is online.
             if (player == null) return;
 
-            var message = player.Name + ": " + args.Message.ReadString();
+            var message = player.Descriptor.Name + ": " + args.Message.ReadString();
 
             player.Map.SendChatMessage(message, ChatMessageType.Regular);
         }
