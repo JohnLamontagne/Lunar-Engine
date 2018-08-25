@@ -18,7 +18,11 @@ using System.IO;
 using System.Linq;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
+using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Server.Utilities.Data;
+using Lunar.Server.Utilities.Data.FileSystem;
+using Lunar.Server.Utilities.Data.SQL;
 
 namespace Lunar.Server.World.Actors
 {
@@ -26,9 +30,13 @@ namespace Lunar.Server.World.Actors
     {
         private readonly Dictionary<long, Player> _players;
 
+        private IDataLoader<PlayerDescriptor> _playerDataLoader;
+
         public PlayerManager()
         {
             _players = new Dictionary<long, Player>();
+
+            _playerDataLoader = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>();
         }
 
         public Player GetPlayer(long uniqueID)
@@ -73,7 +81,8 @@ namespace Lunar.Server.World.Actors
             {
                 // If we've made it this far, we've confirmed that the requested account is not already logged into.
                 // Let's make sure the password they provided us is valid.
-                var playerDescriptor = PlayerDescriptor.Load(Constants.FILEPATH_ACCOUNTS + username + ".acc");
+                var playerDescriptor = _playerDataLoader.Load(new PlayerDataLoaderArguments(username)); //PlayerDescriptor.Load(Constants.FILEPATH_ACCOUNTS + username + ".acc");
+
 
 
                 if (playerDescriptor == null)

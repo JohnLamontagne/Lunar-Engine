@@ -10,12 +10,13 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 namespace Lunar.Server
 {
     internal class Program
     {
         private static void Main(string[] args)
-        {
+        {           
             var server = new Server();
             server.Initalize();
             server.Start();

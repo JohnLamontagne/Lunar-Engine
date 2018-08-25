@@ -54,6 +54,10 @@
     <Compile Include="Content\Graphics\SpriteSheet.cs" />
     <Compile Include="Content\Graphics\Transform.cs" />
     <Compile Include="EngineConstants.cs" />
+    <Compile Include="Utilities\Data\Management\DataLoaderArguments.cs" />
+    <Compile Include="Utilities\Data\Management\DataLoaderFactory.cs" />
+    <Compile Include="Utilities\Data\Management\IDataDescriptor.cs" />
+    <Compile Include="Utilities\Data\Management\IDataLoader.cs" />
     <Compile Include="Utilities\IService.cs" />
     <Compile Include="Net\ChannelType.cs" />
     <Compile Include="Net\LidgrenExtensions.cs" />

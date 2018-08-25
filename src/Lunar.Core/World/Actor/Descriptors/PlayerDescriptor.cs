@@ -54,7 +54,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             set => _experience = value;
         }
 
-        public Stats Stats { get; private set; }
+        public Stats Stats { get;  set; }
 
         public Stats StatBoosts { get; private set; }
 
@@ -108,70 +108,6 @@ namespace Lunar.Core.World.Actor.Descriptors
             return descriptor;
         }
 
-        public static PlayerDescriptor Load(string filePath)
-        {
-            string name = "";
-            string password = "";
-            SpriteSheet sprite;
-            float speed;
-            int level;
-            int health;
-            int maximumHealth;
-            int strength;
-            int intelligence;
-            int dexterity;
-            int defense;
-            Vector position;
-            string mapID;
-            Role role;
-            try
-            {
-
-                using (var fileStream = new FileStream(filePath, FileMode.Open))
-                {
-                    using (var binaryReader = new BinaryReader(fileStream))
-                    {
-                        password = binaryReader.ReadString();
-                        sprite = new SpriteSheet(new SpriteInfo(binaryReader.ReadString()), binaryReader.ReadInt32(),
-                            binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
-                        speed = binaryReader.ReadSingle();
-                        maximumHealth = binaryReader.ReadInt32();
-                        health = binaryReader.ReadInt32();
-                        strength = binaryReader.ReadInt32();
-                        intelligence = binaryReader.ReadInt32();
-                        dexterity = binaryReader.ReadInt32();
-                        defense = binaryReader.ReadInt32();
-                        level = binaryReader.ReadInt32();
-                        position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                        mapID = binaryReader.ReadString();
-                    }
-                }
-
-                var playerDescriptor = new PlayerDescriptor(name, password)
-                {
-                    SpriteSheet = sprite,
-                    Speed = speed,
-                    Level = level,
-                    Position = position,
-                    MapID = mapID,
-                };
-                playerDescriptor.Stats = new Stats()
-                {
-                    Health = health,
-                    MaximumHealth = maximumHealth,
-                    Strength = strength,
-                    Intelligence = intelligence,
-                    Dexterity = dexterity,
-                    Defense = defense,
-                };
-
-                return playerDescriptor;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
 
         public void Save(string filePath)
         {

@@ -19,6 +19,9 @@ using System.Xml.Linq;
 using Lunar.Core.Utilities;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
+using Lunar.Server.Utilities.Data;
+using Lunar.Server.Utilities.Data.FileSystem;
+using Lunar.Server.Utilities.Data.SQL;
 
 namespace Lunar.Server
 {
@@ -164,7 +167,8 @@ namespace Lunar.Server
 
                     Role role = Settings.Roles[roleName] ?? Role.Default;
 
-                    var player = PlayerDescriptor.Load(userName);
+                    var player = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>()
+                        .Load(new PlayerDataLoaderArguments(userName));
 
                     if (player != null)
                     {
