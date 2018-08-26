@@ -426,7 +426,7 @@ namespace Lunar.Server.World.Actors
             netBuffer.Write(this.Position.Y);
             netBuffer.Write(_frameSize);
             netBuffer.Write(this.CollisionBounds);
-            netBuffer.Write(this.Layer.Name);
+            netBuffer.Write(this.Layer.Descriptor.Name);
 
             return netBuffer;
         }

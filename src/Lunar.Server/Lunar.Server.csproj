@@ -86,9 +86,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Utilities\Data\PlayerDataLoaderArguments.cs" />
-    <Compile Include="Utilities\Data\FileSystem\PlayerFSDataFactory.cs" />
-    <Compile Include="Utilities\Data\FileSystem\FSDataFactory.cs" />
     <Compile Include="Utilities\Commands\CommandHandler.cs" />
     <Compile Include="Utilities\Events\GameEventArgs.cs" />
     <Compile Include="Utilities\Events\GameEventListener.cs" />

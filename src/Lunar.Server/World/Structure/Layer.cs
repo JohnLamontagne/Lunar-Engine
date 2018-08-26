@@ -27,9 +27,11 @@ namespace Lunar.Server.World.Structure
 {
     public class Layer
     {
+        private LayerDescriptor _layerDescriptor;
+
+        public LayerDescriptor Descriptor => _layerDescriptor;
+
         private readonly Tile[,] _tiles;
-        
-        public string Name { get; private set; }
 
         private Dictionary<Vector, CollisionDescriptor> _collisionDescriptors;
         private Dictionary<Player, List<Tile>> _playerCollidingTiles;
@@ -37,15 +39,10 @@ namespace Lunar.Server.World.Structure
 
         public Dictionary<Vector, CollisionDescriptor> CollisionDescriptors { get { return _collisionDescriptors; } }
 
-        public int LayerIndex { get; set; }
-
-        public Layer(Vector dimensions, string layerName, int lIndex)
+        public Layer(LayerDescriptor descriptor)
         {
-            _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
-
-            this.Name = layerName;
-            this.LayerIndex = lIndex;
-
+            _layerDescriptor = descriptor;
+            _tiles = new Tile[descriptor.Tiles.GetLength(0), descriptor.Tiles.GetLength(0)];
             _playerCollidingTiles = new Dictionary<Player, List<Tile>>(); ;
             _collisionDescriptors = new Dictionary<Vector, CollisionDescriptor>();
             _mapObjects = new List<MapObject>();
@@ -248,7 +245,7 @@ namespace Lunar.Server.World.Structure
 
             foreach (var collidingTile in collidingTiles)
             {
-                if (collidingTile.Attribute == TileAttributes.Blocked)
+                if (collidingTile.Descriptor.Attribute == TileAttributes.Blocked)
                     return true;
 
             }
@@ -260,8 +257,8 @@ namespace Lunar.Server.World.Structure
         {
             var netBuffer = new NetBuffer();
 
-            netBuffer.Write(this.Name);
-            netBuffer.Write(this.LayerIndex);
+            netBuffer.Write(this.Descriptor.Name);
+            netBuffer.Write(this.Descriptor.LayerIndex);
 
             for (int x = 0; x < _tiles.GetLength(0); x++)
             {

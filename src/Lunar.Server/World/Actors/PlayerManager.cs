@@ -16,13 +16,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
+using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor.Descriptors;
-using Lunar.Server.Utilities.Data;
 using Lunar.Server.Utilities.Data.FileSystem;
-using Lunar.Server.Utilities.Data.SQL;
 
 namespace Lunar.Server.World.Actors
 {
@@ -30,13 +30,23 @@ namespace Lunar.Server.World.Actors
     {
         private readonly Dictionary<long, Player> _players;
 
-        private IDataLoader<PlayerDescriptor> _playerDataLoader;
+        private IDataManager<PlayerDescriptor> _playerDataManager;
 
         public PlayerManager()
         {
             _players = new Dictionary<long, Player>();
 
-            _playerDataLoader = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>();
+            _playerDataManager = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>();
+        }
+
+        private void AddPlayer(Player player)
+        {
+            _players.Add(player.UniqueID, player);
+
+            player.LeftGame += (sender, args) =>
+            {
+                _playerDataManager.Save(player.Descriptor);
+            };
         }
 
         public Player GetPlayer(long uniqueID)
@@ -50,7 +60,7 @@ namespace Lunar.Server.World.Actors
         public void Save()
         {
             foreach (var player in _players.Values)
-                player.Save();
+                _playerDataManager.Save(player.Descriptor);
         }
       
         public Player GetPlayer(string name)
@@ -77,59 +87,46 @@ namespace Lunar.Server.World.Actors
                 return false;
             }
 
-            if (File.Exists(Constants.FILEPATH_ACCOUNTS + username + ".acc"))
+            // If we've made it this far, we've confirmed that the requested account is not already logged into.
+            // Let's make sure the password they provided us is valid.
+            var playerDescriptor = _playerDataManager.Load(new PlayerDataLoaderArguments(username));
+
+            if (playerDescriptor == null)
             {
-                // If we've made it this far, we've confirmed that the requested account is not already logged into.
-                // Let's make sure the password they provided us is valid.
-                var playerDescriptor = _playerDataLoader.Load(new PlayerDataLoaderArguments(username)); //PlayerDescriptor.Load(Constants.FILEPATH_ACCOUNTS + username + ".acc");
+                // The account doesn't exist!
+                var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
+                packet.Message.Write("Account does not exist!");
+                connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
+                connection.Disconnect("byeFelicia");
 
+                return false;
+            }
 
+            // Check to see whether they were lying about that password...
+            if (SecurePasswordHasher.Verify(password, playerDescriptor.Password))
+            {
+                // Whoa, they weren't lying!
+                // Let's go ahead and grant them access.
+                    
 
-                if (playerDescriptor == null)
-                {
-                    // The account doesn't exist!
-                    var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
-                    packet.Message.Write("Account does not exist!");
-                    connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
-                    connection.Disconnect("byeFelicia");
+                // First, we'll add them to the list of online players.
+                var player = new Player(playerDescriptor, connection);
+                this.AddPlayer(player);
+               
 
-                    return false;
-                }
+                // Now we'll go ahead and tell their client to make whatever preperations that it needs to.
+                // We'll also tell them their super duper unique id.
+                var packet = new Packet(PacketType.LOGIN_SUCCESS, ChannelType.UNASSIGNED);
+                connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
 
-                // Check to see whether they were lying about that password...
-                if (password == playerDescriptor.Password)
-                {
-                    // Whoa, they weren't lying!
-                    // Let's go ahead and grant them access.
-                        
+                this.EventOccured?.Invoke(this, new SubjectEventArgs("playerLogin", new object[] { }));
 
-                    // First, we'll add them to the list of online players.
-                    var player = new Player(playerDescriptor, connection);
-                    _players.Add(player.UniqueID, player);
-
-                    // Now we'll go ahead and tell their client to make whatever preperations that it needs to.
-                    // We'll also tell them their super duper unique id.
-                    var packet = new Packet(PacketType.LOGIN_SUCCESS, ChannelType.UNASSIGNED);
-                    connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
-
-                    this.EventOccured?.Invoke(this, new SubjectEventArgs("playerLogin", new object[] { }));
-
-                    return true;
-                }
-                else
-                {
-                    var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
-                    packet.Message.Write("Incorrect password!");
-                    connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
-                    connection.Disconnect("byeFelicia");
-
-                    return false;
-                }
+                return true;
             }
             else
             {
                 var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
-                packet.Message.Write("Account does not exist!");
+                packet.Message.Write("Incorrect password!");
                 connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
                 connection.Disconnect("byeFelicia");
 
@@ -139,16 +136,14 @@ namespace Lunar.Server.World.Actors
 
         public bool RegisterPlayer(string username, string password, PlayerConnection connection)
         {
-            // Make sure this player isn't already registered.
-            if (File.Exists(Constants.FILEPATH_ACCOUNTS + username + ".acc"))
+            password = SecurePasswordHasher.Hash(password);
+
+            if (_playerDataManager.Exists(new PlayerDataLoaderArguments(username)))
             {
-                // Notify the requester that the specified username is already registered.
-                var packet = new Packet(PacketType.REGISTRATION_FAIL, ChannelType.UNASSIGNED);
-                packet.Message.Write("Account already registered!");
+                var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
+                packet.Message.Write("Account already exists!");
                 connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
                 connection.Disconnect("byeFelicia");
-
-                this.EventOccured?.Invoke(this, new SubjectEventArgs("playerRegister", new object[] { false }));
 
                 return false;
             }
@@ -158,9 +153,9 @@ namespace Lunar.Server.World.Actors
             descriptor.MapID = Settings.StartingMap;
             descriptor.Role = Settings.DefaultRole;
             var player = new Player(descriptor, connection);
-            player.Save();
+            _playerDataManager.Save(player.Descriptor);
 
-            _players.Add(player.UniqueID, player);
+            this.AddPlayer(player);
 
             // Notify them that they successfully registered.
             var successPacket = new Packet(PacketType.REGISTER_SUCCESS, ChannelType.UNASSIGNED);

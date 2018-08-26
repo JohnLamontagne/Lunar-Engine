@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Lunar.Core;
 using Lunar.Core.Utilities;
 
 namespace Lunar.Server.Utilities.Plugin
@@ -77,7 +78,7 @@ namespace Lunar.Server.Utilities.Plugin
 
         public void Initalize()
         {
-            this.LoadPlugins(Constants.FILEPATH_PLUGINS);
+            this.LoadPlugins(EngineConstants.FILEPATH_PLUGINS);
         }
     }
 }

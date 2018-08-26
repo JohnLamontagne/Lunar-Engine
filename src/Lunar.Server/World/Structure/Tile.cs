@@ -17,7 +17,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Lidgren.Network;
-using Lunar.Core.Content.Graphics;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Structure;
@@ -28,62 +27,43 @@ namespace Lunar.Server.World.Structure
 {
     public class Tile
     {
-        private SpriteInfo _sprite;
+        private TileDescriptor _descriptor;
+        private NPCHeartbeatListener _heartbeatListener;
+        private long _nextNPCSpawnTime;
         private Rect _collisionArea;
 
-        
-        private NPCHeartbeatListener _heartbeatListener;
+        public TileDescriptor Descriptor => _descriptor;
 
-        private long _nextNPCSpawnTime;
-
-        public Vector Position { get; }
-
-        public bool Animated { get; set; }
-
-        public int FrameCount { get; set; }
-
-        public bool LightSource { get; set; }
-
-        public int LightRadius { get; set; }
-
-        public Color LightColor { get; set; }
-
-        public bool Teleporter { get; set; }
-
-        public bool Blocked { get; set; }
-
-        public TileAttributes Attribute { get; private set; }
-
-        public AttributeData AttributeData { get; private set; }
-
-        public Tile(SpriteInfo sprite)
+        public Tile(TileDescriptor descriptor)
         {
-            _sprite = sprite;
+            _descriptor = descriptor;
 
-            _collisionArea = new Rect(sprite.Transform.Position.X, sprite.Transform.Position.Y, Settings.TileSize, Settings.TileSize);
+            if (descriptor.SpriteInfo != null)
+                _collisionArea = new Rect(descriptor.SpriteInfo.Transform.Position.X, descriptor.SpriteInfo.Transform.Position.Y, Settings.TileSize, Settings.TileSize);
+            else
+                _collisionArea = new Rect(descriptor.Position.X, descriptor.Position.Y, Settings.TileSize, Settings.TileSize);
 
-            this.Animated = false;
-            //this.LightColor = Color.White;
+            _heartbeatListener = new NPCHeartbeatListener();
         }
 
         public Tile(Vector position)
         {
-            this.Position = position;
+            _descriptor = new TileDescriptor(position);
             _collisionArea = new Rect(position.X, position.Y, Settings.TileSize, Settings.TileSize);
             _heartbeatListener = new NPCHeartbeatListener();
         }
 
         public void Update(GameTime gameTime)
         {
-            if (this.Attribute == TileAttributes.NPCSpawn)
+            if (this.Descriptor.Attribute == TileAttributes.NPCSpawn)
             {
-                var attributeData = ((NPCSpawnAttributeData)this.AttributeData);
+                var attributeData = ((NPCSpawnAttributeData)this.Descriptor.AttributeData);
 
                 if (_nextNPCSpawnTime <= gameTime.TotalElapsedTime && _heartbeatListener.NPCs.Count <= attributeData.MaxSpawns)
                 {
-                    this.NPCSpawnerEvent?.Invoke(this, new NPCSpawnerEventArgs(attributeData.NPCID, attributeData.MaxSpawns, this.Position, _heartbeatListener));
+                    this.NPCSpawnerEvent?.Invoke(this, new NPCSpawnerEventArgs(attributeData.NPCID, attributeData.MaxSpawns, this.Descriptor.Position, _heartbeatListener));
 
-                    _nextNPCSpawnTime = gameTime.TotalElapsedTime + ((NPCSpawnAttributeData)this.AttributeData).RespawnTime * 1000;
+                    _nextNPCSpawnTime = gameTime.TotalElapsedTime + ((NPCSpawnAttributeData)this.Descriptor.AttributeData).RespawnTime * 1000;
                 }
             }
         }
@@ -98,10 +78,10 @@ namespace Lunar.Server.World.Structure
 
         public void OnPlayerEntered(Player player)
         {
-            switch (this.Attribute)
+            switch (this.Descriptor.Attribute)
             {
                 case TileAttributes.Warp:
-                    WarpAttributeData attributeData = (WarpAttributeData) this.AttributeData;
+                    WarpAttributeData attributeData = (WarpAttributeData)this.Descriptor.AttributeData;
                     if (player.MapID != attributeData.WarpMap)
                     {
                         var map  = Server.ServiceLocator.GetService<WorldManager>().GetMap(attributeData.WarpMap);
@@ -110,7 +90,7 @@ namespace Lunar.Server.World.Structure
                         {
                             player.JoinMap(map);
 
-                            var newLayer = map.Layers.FirstOrDefault(l => l.Name == attributeData.LayerName);
+                            var newLayer = map.Layers.FirstOrDefault(l => l.Descriptor.Name == attributeData.LayerName);
 
                             if (newLayer != null)
                             {
@@ -140,21 +120,21 @@ namespace Lunar.Server.World.Structure
             var netBuffer = new NetBuffer();
 
             // Tell the client whether it's a blank tile
-            netBuffer.Write(_sprite == null);
+            netBuffer.Write(this.Descriptor.SpriteInfo == null);
 
             // Is this a blank tile (determined based on the existence of a Sprite)
-            if (_sprite != null)
+            if (this.Descriptor.SpriteInfo != null)
             {
-                netBuffer.Write(this.Animated);
-                netBuffer.Write(this.LightSource);
-                netBuffer.Write(this.LightRadius);
-                netBuffer.Write(this.LightColor);
-                netBuffer.Write(this.Teleporter);
-                netBuffer.Write(_sprite.TextureName);
-                netBuffer.Write(_sprite.Transform.Color);
-                netBuffer.Write(_sprite.Transform.Rect);
-                netBuffer.Write(_sprite.Transform.Position);
-                netBuffer.Write(this.FrameCount);
+                netBuffer.Write(this.Descriptor.LightSource);
+                netBuffer.Write(this.Descriptor.LightRadius);
+                netBuffer.Write(this.Descriptor.LightColor);
+                netBuffer.Write(this.Descriptor.Teleporter);
+                netBuffer.Write(this.Descriptor.SpriteInfo.TextureName);
+                netBuffer.Write(this.Descriptor.SpriteInfo.Transform.Color);
+                netBuffer.Write(this.Descriptor.SpriteInfo.Transform.Rect);
+                netBuffer.Write(this.Descriptor.SpriteInfo.Transform.Position);
+                netBuffer.Write(this.Descriptor.Animated);
+                netBuffer.Write(this.Descriptor.FrameCount);
             }
 
             return netBuffer;
@@ -162,32 +142,7 @@ namespace Lunar.Server.World.Structure
 
         public void Load(BinaryReader bR, Vector tilePosition)
         {
-            this.Attribute = (TileAttributes)bR.ReadByte();
-
-            int attributeDataLength = bR.ReadInt32();
-            byte[] attributeData = bR.ReadBytes(attributeDataLength);
-            this.AttributeData = AttributeData.Deserialize(attributeData);
-
-            if (bR.ReadBoolean())
-            {
-                this.Animated = bR.ReadBoolean();
-                this.LightSource = bR.ReadBoolean();
-
-                string spriteName = bR.ReadString();
-                float zIndex = bR.ReadSingle(); // We can throw this away
-
-                _sprite = new SpriteInfo(spriteName)
-                {
-                    Transform =
-                    {
-                        Position = tilePosition,
-                        Color = new Color(bR.ReadByte(), bR.ReadByte(), bR.ReadByte(), bR.ReadByte()),
-                        Rect = new Rect(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32())
-                    }
-                };
-
-                this.FrameCount = bR.ReadInt32();
-            }
+           
         }
 
         public event EventHandler<NPCSpawnerEventArgs> NPCSpawnerEvent;

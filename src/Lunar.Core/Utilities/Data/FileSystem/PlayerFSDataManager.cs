@@ -1,28 +1,30 @@
 ﻿using System;
 using System.IO;
+using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Content.Graphics;
+using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor;
 using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Server.Utilities.Data.FileSystem
 {
-    public class PlayerFSDataLoader : IDataLoader<PlayerDescriptor>
+    public class PlayerFSDataLoader : IDataManager<PlayerDescriptor>
     {
         public PlayerFSDataLoader()
         {
             
         }
 
-        public PlayerDescriptor Load(IDataLoaderArguments arguments)
+        public PlayerDescriptor Load(IDataManagerArguments arguments)
         {
             var playerDataLoaderArgs = arguments as PlayerDataLoaderArguments;
 
-            string filePath = Constants.FILEPATH_ACCOUNTS + playerDataLoaderArgs.Username +
-                              EngineConstants.ACC_FILE_EXT;
+            string filePath = EngineConstants.FILEPATH_ACCOUNTS + playerDataLoaderArgs.Username + EngineConstants.ACC_FILE_EXT;
 
             string name = "";
             string password = "";
@@ -45,6 +47,7 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                 {
                     using (var binaryReader = new BinaryReader(fileStream))
                     {
+                        name = binaryReader.ReadString();
                         password = binaryReader.ReadString();
                         sprite = new SpriteSheet(new SpriteInfo(binaryReader.ReadString()), binaryReader.ReadInt32(),
                             binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
@@ -58,6 +61,7 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                         level = binaryReader.ReadInt32();
                         position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                         mapID = binaryReader.ReadString();
+                        role = new Role(binaryReader.ReadString(), binaryReader.ReadInt32());
                     }
                 }
 
@@ -77,16 +81,54 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                         Dexterity = dexterity,
                         Defense = defense,
                     },
+                    Role = role
                 };
 
                 return playerDescriptor;
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error loading player data from filesystem!", LogTypes.ERROR, ex.StackTrace);
-
                 return null;
             }
+        }
+
+        public void Save(IDataDescriptor descriptor)
+        {
+            PlayerDescriptor playerDescriptor = ((PlayerDescriptor) descriptor);
+
+            string filePath = EngineConstants.FILEPATH_DATA + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT;
+
+            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
+            {
+                using (var binaryWriter = new BinaryWriter(fileStream))
+                {
+                    binaryWriter.Write(playerDescriptor.Name);
+                    binaryWriter.Write(playerDescriptor.Password);
+                    binaryWriter.Write(playerDescriptor.SpriteSheet.Sprite.TextureName);
+                    binaryWriter.Write(playerDescriptor.SpriteSheet.HorizontalFrames);
+                    binaryWriter.Write(playerDescriptor.SpriteSheet.VerticalFrames);
+                    binaryWriter.Write(playerDescriptor.SpriteSheet.FrameWidth);
+                    binaryWriter.Write(playerDescriptor.SpriteSheet.FrameHeight);
+                    binaryWriter.Write(playerDescriptor.Speed);
+                    binaryWriter.Write(playerDescriptor.Stats.MaximumHealth);
+                    binaryWriter.Write(playerDescriptor.Stats.Health);
+                    binaryWriter.Write(playerDescriptor.Stats.Strength);
+                    binaryWriter.Write(playerDescriptor.Stats.Intelligence);
+                    binaryWriter.Write(playerDescriptor.Stats.Dexterity);
+                    binaryWriter.Write(playerDescriptor.Stats.Defense);
+                    binaryWriter.Write(playerDescriptor.Level);
+                    binaryWriter.Write(playerDescriptor.Position.X);
+                    binaryWriter.Write(playerDescriptor.Position.Y);
+                    binaryWriter.Write(playerDescriptor.MapID);
+                    binaryWriter.Write(playerDescriptor.Role.Name);
+                    binaryWriter.Write(playerDescriptor.Role.Level);
+                }
+            }
+        }
+
+        public bool Exists(IDataManagerArguments arguments)
+        {
+            return File.Exists(EngineConstants.FILEPATH_DATA + (arguments as PlayerDataLoaderArguments)?.Username + EngineConstants.ACC_FILE_EXT);
         }
     }
 }

@@ -16,20 +16,20 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
+using Lunar.Core;
 using Lunar.Core.Utilities;
-using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Data;
 using Lunar.Server.Utilities.Data.FileSystem;
-using Lunar.Server.Utilities.Data.SQL;
 
 namespace Lunar.Server
 {
     public static class Settings
     {
-        private static readonly string _filePathConfig = Constants.FILEPATH_DATA + "config.xml";
-        private static readonly string _filePathExperience = Constants.FILEPATH_DATA + "experience.conf";
-        private static readonly string _filePathUserPermissions = Constants.FILEPATH_DATA + "user_permissions.xml";
+        private static readonly string _filePathConfig = EngineConstants.FILEPATH_DATA + "config.xml";
+        private static readonly string _filePathExperience = EngineConstants.FILEPATH_DATA + "experience.conf";
+        private static readonly string _filePathUserPermissions = EngineConstants. FILEPATH_DATA + "user_permissions.xml";
 
         public static string GameName { get; private set; }
 
@@ -167,13 +167,15 @@ namespace Lunar.Server
 
                     Role role = Settings.Roles[roleName] ?? Role.Default;
 
-                    var player = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>()
-                        .Load(new PlayerDataLoaderArguments(userName));
+
+                    var playerDataManager = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>();
+
+                    var player = playerDataManager.Load(new PlayerDataLoaderArguments(userName));
 
                     if (player != null)
                     {
                         player.Role = role;
-                        player.Save(Constants.FILEPATH_ACCOUNTS + player.Name + ".acc");
+                        playerDataManager.Save(player);
                     }
                 }
             }

@@ -94,6 +94,8 @@ namespace Lunar.Core.Net
 
         PLAYER_INTERACT,
 
+        DIAPLAY_ANIMATION,
+
         // Represents the total number of packets.
         PACKET_COUNT
     }

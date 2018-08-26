@@ -109,35 +109,7 @@ namespace Lunar.Core.World.Actor.Descriptors
         }
 
 
-        public void Save(string filePath)
-        {
-            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
-            {
-                using (var binaryWriter = new BinaryWriter(fileStream))
-                {
-                    binaryWriter.Write(_password);
-                    binaryWriter.Write(_spriteSheet.Sprite.TextureName);
-                    binaryWriter.Write(_spriteSheet.HorizontalFrames);
-                    binaryWriter.Write(_spriteSheet.VerticalFrames);
-                    binaryWriter.Write(_spriteSheet.FrameWidth);
-                    binaryWriter.Write(_spriteSheet.FrameHeight);
-                    binaryWriter.Write(_speed);
-                    binaryWriter.Write(this.Stats.MaximumHealth);
-                    binaryWriter.Write(this.Stats.Health);
-                    binaryWriter.Write(this.Stats.Strength);
-                    binaryWriter.Write(this.Stats.Intelligence);
-                    binaryWriter.Write(this.Stats.Dexterity);
-                    binaryWriter.Write(this.Stats.Defense);
-                    binaryWriter.Write(_level);
-                    binaryWriter.Write(_position.X);
-                    binaryWriter.Write(_position.Y);
-                    binaryWriter.Write(_mapID);
-                    binaryWriter.Write(_role.Name);
-                }
-            }
-        }
-
-
+      
         public event EventHandler StatChanged;
         public event EventHandler ExperienceChanged;
     }

@@ -1,6 +1,6 @@
 ﻿namespace Lunar.Core.Utilities.Data.Management
 {
-    public interface IDataLoaderArguments
+    public interface IDataManagerArguments
     {
     }
 }

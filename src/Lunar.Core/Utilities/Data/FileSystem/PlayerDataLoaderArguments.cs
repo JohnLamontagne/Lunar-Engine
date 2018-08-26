@@ -1,8 +1,8 @@
 ﻿using Lunar.Core.Utilities.Data.Management;
 
-namespace Lunar.Server.Utilities.Data
+namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class PlayerDataLoaderArguments : IDataLoaderArguments
+    public class PlayerDataLoaderArguments : IDataManagerArguments
     {
         public string Username { get; }
 

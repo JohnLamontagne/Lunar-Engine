@@ -10,6 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using System;
+
 namespace Lunar.Core
 {
     public static class EngineConstants
@@ -34,5 +37,33 @@ namespace Lunar.Core
         public const int TILE_WIDTH = 32;
 
         public const int TILE_HEIGHT = 32;
+
+        public static readonly string FILEPATH_DATA = AppDomain.CurrentDomain.BaseDirectory + "/Data/";
+
+        /// <summary>
+        /// Location of the accounts directory (if using file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_ACCOUNTS = EngineConstants.FILEPATH_DATA + "/Accounts/";
+
+        public static readonly string FILEPATH_SCRIPTS = EngineConstants.FILEPATH_DATA + "/Scripts/";
+
+        public static readonly string FILEPATH_PLUGINS = EngineConstants.FILEPATH_DATA + "/Plugins/";
+
+        /// <summary>
+        /// Location of the NPCs directory (if using the file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_NPCS = EngineConstants.FILEPATH_DATA + "/Npcs/";
+
+        public static readonly string FILEPATH_LOGS = EngineConstants.FILEPATH_DATA + "/Logs/";
+
+        /// <summary>
+        /// Location of the items directory (if using the file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_ITEMS = EngineConstants.FILEPATH_DATA + "/Items/";
+
+        /// <summary>
+        /// Location of the mapss directory (if using the file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_MAPS = EngineConstants.FILEPATH_DATA + "/Maps/";
     }
 }

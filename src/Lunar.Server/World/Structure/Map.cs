@@ -21,9 +21,8 @@ using System.IO;
 using System.Linq;
 using Lunar.Core;
 using Lunar.Core.Net;
-using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
-using Lunar.Core.World;
+using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 
@@ -31,6 +30,10 @@ namespace Lunar.Server.World.Structure
 {
     public class Map
     {
+        private MapDescriptor _mapDescriptor;
+
+        public MapDescriptor Descriptor => _mapDescriptor;
+
         private readonly Dictionary<string, Layer> _layers;
         private readonly Dictionary<Layer, Pathfinder> _pathFinders;
         private WorldDictionary<long, IActor<IActorDescriptor>> _actors;
@@ -40,35 +43,77 @@ namespace Lunar.Server.World.Structure
         private List<MapItem> _mapItems;
         private List<string> _tilesetPaths;
 
-        public string Name { get; set; }
-
-        public Vector Dimensions { get; private set; }
-
-        public Rect Bounds { get; set; }
-
-        public bool Dark { get; set; }
-
         public IEnumerable<Layer> Layers => _layers.Values;
 
         public List<Player> Players => this.GetActors<Player>().ToList();
 
-        public Map(Vector dimensions, string name) 
-            : this()
+        public Map(MapDescriptor descriptor)
         {
-            this.Dimensions = dimensions;
-            this.Name = name;
+            _mapDescriptor = descriptor;
 
-            this.Bounds = new Rect(0, 0, this.Dimensions.X, this.Dimensions.Y);
-        }
-
-        private Map()
-        {
             _layers = new Dictionary<string, Layer>();
             _actors = new WorldDictionary<long, IActor<IActorDescriptor>>();
             _actorCollidingObjects = new WorldDictionary<IActor<IActorDescriptor>, List<MapObject>>();
             _playerSpawnAreas = new List<Tuple<Vector, Layer>>();
             _pathFinders = new Dictionary<Layer, Pathfinder>();
             _mapItems = new List<MapItem>();
+
+            this.Initalize();
+        }
+
+        private void Initalize()
+        {
+            foreach (var layerDesc in this.Descriptor.Layers.Values)
+            {
+                Layer layer = new Layer(layerDesc);
+
+                for (int x = 0; x < this.Descriptor.Dimensions.X; x++)
+                {
+                    for (int y = 0; y < this.Descriptor.Dimensions.Y; y++)
+                    {
+                        Tile tile = layerDesc.Tiles[x, y] != null ? new Tile(layerDesc.Tiles[x, y]) : new Tile(new Vector(x * EngineConstants.TILE_WIDTH, y * EngineConstants.TILE_HEIGHT));
+
+                        layer.SetTile(x, y, tile);
+                    }
+                }
+
+                layer.NPCSpawnerEvent += (sender, args) =>
+                {
+                    var npcDesc = Server.ServiceLocator.GetService<NPCManager>().GetNPC(args.Name);
+
+                    if (npcDesc == null)
+                    {
+                        Logger.LogEvent($"Error spawning NPC: {args.Name} does not exist!", LogTypes.ERROR, Environment.StackTrace);
+                        return;
+                    }
+
+                    NPC npc = new NPC(npcDesc, this)
+                    {
+                        Layer = (Layer)sender
+                    };
+                    npc.WarpTo(args.Position);
+
+                    // This allows the tile spawner to keep track of npcs that exist, and respawn if neccessary (i.e., they die).
+                    args.HeartbeatListener.NPCs.Add(npc);
+                };
+
+                _layers.Add(layerDesc.Name, layer);
+            }
+
+            // Look for spawnpoints
+            foreach (var layer in this.Layers)
+            {
+                for (int x = 0; x < this.Descriptor.Dimensions.X; x++)
+                {
+                    for (int y = 0; y < this.Descriptor.Dimensions.Y; y++)
+                    {
+                        if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Descriptor.Attribute == TileAttributes.PlayerSpawn)
+                        {
+                            this.AddPlayerStartArea(new Vector(x * Settings.TileSize, y * Settings.TileSize), layer);
+                        }
+                    }
+                }
+            }
         }
 
         public void AddLayer(string name, Layer layer)
@@ -106,7 +151,7 @@ namespace Lunar.Server.World.Structure
         {
             var packet = new Packet(PacketType.MAP_ITEM_SPAWN, ChannelType.UNASSIGNED);
             packet.Message.Write(mapItem.Position);
-            packet.Message.Write(mapItem.Layer.Name);
+            packet.Message.Write(mapItem.Layer.Descriptor.Name);
             packet.Message.Write(mapItem.Item.PackData());
             this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
@@ -186,15 +231,13 @@ namespace Lunar.Server.World.Structure
             return _layers[name];
         }
 
-        public bool ActorInMap(IActor<IActorDescriptor> actor)
+        public bool ActorInMap<T>(T actor) where T : IActor<IActorDescriptor>
         {
             return _actors.ContainsKey(actor.UniqueID);
         }
 
         public virtual void AddActor<T>(IActor<T> actor) where T : class, IActorDescriptor
         {
-           ;
-
             _actors.Add(actor.UniqueID, actor);
             _actorCollidingObjects.Add(actor, new List<MapObject>());
         }
@@ -309,9 +352,9 @@ namespace Lunar.Server.World.Structure
         {
             var netBuffer = new NetBuffer();
 
-            netBuffer.Write(this.Name);
-            netBuffer.Write(this.Dimensions);
-            netBuffer.Write(this.Dark);
+            netBuffer.Write(this.Descriptor.Name);
+            netBuffer.Write(this.Descriptor.Dimensions);
+            netBuffer.Write(this.Descriptor.Dark);
 
             netBuffer.Write(_layers.Count);
             foreach (var layer in this.Layers)
@@ -325,79 +368,6 @@ namespace Lunar.Server.World.Structure
         public void Unload()
         {
             
-        }
-
-        public static Map Load(string path)
-        {
-            var map = new Map();
-
-            using (var fileStream = new FileStream(path, FileMode.Open))
-            {
-                using (var bR = new BinaryReader(fileStream))
-                {
-                    // Load the tileset information
-                    int tilesetCount = bR.ReadInt32();
-                    for (int i = 0; i < tilesetCount; i++)
-                    {
-                        // We can throw this information away as it is used only in the editor suite.
-                        string tilesetPath = bR.ReadString();
-                    }
-
-                    map.Name = bR.ReadString();
-                    map.Dimensions = new Vector(bR.ReadInt32(), bR.ReadInt32());
-                    map.Dark = bR.ReadBoolean();
-
-                    map.Bounds = new Rect(0, 0, (int)map.Dimensions.X, (int)map.Dimensions.Y);
-
-                    int layerCount = bR.ReadInt32();
-                    for (int i = 0; i < layerCount; i++)
-                    {
-                        string layerName = bR.ReadString();
-                        int lIndex = bR.ReadInt32();
-
-                        var layer = new Layer(map.Dimensions, layerName, lIndex);
-                        layer.Load(bR);
-                        layer.NPCSpawnerEvent += (sender, args) =>
-                        {
-                            var npcDesc = Server.ServiceLocator.GetService<NPCManager>().GetNPC(args.Name);
-
-                            if (npcDesc == null)
-                            {
-                                Logger.LogEvent($"Error spawning NPC: {args.Name} does not exist!", LogTypes.ERROR, Environment.StackTrace);
-                                return;
-                            }
-
-                            NPC npc = new NPC(npcDesc, map)
-                            {
-                                Layer = (Layer) sender
-                            };
-                            npc.WarpTo(args.Position);
-
-                            // This allows the tile spawner to keep track of npcs that exist, and respawn if neccessary (i.e., they die).
-                            args.HeartbeatListener.NPCs.Add(npc);
-                        };
-
-                        map.AddLayer(layerName, layer);
-                    }
-                }
-            }
-
-            // Look for spawnpoints
-            foreach (var layer in map.Layers)
-            {
-                for (int x = 0; x < map.Dimensions.X; x++)
-                {
-                    for (int y = 0; y < map.Dimensions.Y; y++)
-                    {
-                        if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Attribute == TileAttributes.PlayerSpawn)
-                        {
-                            map.AddPlayerStartArea(new Vector(x * Settings.TileSize, y * Settings.TileSize), layer);
-                        }
-                    }
-                }
-            }
-
-            return map;
         }
     }
 }

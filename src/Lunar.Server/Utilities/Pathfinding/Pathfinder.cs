@@ -33,7 +33,7 @@ namespace Lunar.Server.Utilities.Pathfinding
 
         public Pathfinder(Map map, Layer layer)
         {
-            _mapBounds = map.Bounds;
+            _mapBounds = map.Descriptor.Bounds;
             _layer = layer;
             _map = map;
 

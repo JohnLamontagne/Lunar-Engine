@@ -79,33 +79,32 @@ namespace Lunar.Client.World
                 return null;
             }
 
-
-                // Check for blank tile?
+            // Check for blank tile?
             if (netBuffer.ReadBoolean())
             {
                 return new Tile();
             }
             else
             {
-                var animated = netBuffer.ReadBoolean();
                 var lightSource = netBuffer.ReadBoolean();
                 var lightRadius = netBuffer.ReadInt32();
                 var lightColor = new Color(new Vector4(netBuffer.ReadByte(), netBuffer.ReadByte(), netBuffer.ReadByte(),
                     netBuffer.ReadByte()));
                 var teleporter = netBuffer.ReadBoolean();
-
                 var tilesetPath = Constants.FILEPATH_DATA + netBuffer.ReadString();
-
-                var sprite = Client.ServiceLocator.GetService<ContentManagerService>().ContentManager
-                    .LoadTexture2D(tilesetPath);
-
                 Color color = new Color(new Vector4(netBuffer.ReadByte(), netBuffer.ReadByte(), netBuffer.ReadByte(),
                     netBuffer.ReadByte()));
                 Rectangle sourceRectangle = new Rectangle(netBuffer.ReadInt32(), netBuffer.ReadInt32(),
                     netBuffer.ReadInt32(), netBuffer.ReadInt32());
                 Vector2 position = new Vector2(netBuffer.ReadFloat(), netBuffer.ReadFloat());
-
+                var animated = netBuffer.ReadBoolean();
                 var frameCount = netBuffer.ReadInt32();
+
+
+                var sprite = Client.ServiceLocator.GetService<ContentManagerService>().ContentManager
+                    .LoadTexture2D(tilesetPath);
+
+             
 
                 var tile = new Tile(sprite, sourceRectangle, position)
                 {

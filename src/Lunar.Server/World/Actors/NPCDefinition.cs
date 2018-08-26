@@ -1,4 +1,5 @@
-﻿using Lunar.Core.World.Actor.Descriptors;
+﻿using Lunar.Core;
+using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
 
@@ -15,7 +16,7 @@ namespace Lunar.Server.World.Actors
         {
             this.Descriptor = descriptor;
 
-            Script script = new Script(Constants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
+            Script script = new Script(EngineConstants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
 
             this.InitalizeDefaultBehavior();
 
@@ -26,7 +27,7 @@ namespace Lunar.Server.World.Actors
         {
             _behaviorDefinition = new ActorBehaviorDefinition();
 
-            Script script = new Script(Constants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
+            Script script = new Script(EngineConstants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
 
             this.BehaviorDefinition.Attack = new ScriptFunction(args => script.GetFunction("Attack").Call(args));
             this.BehaviorDefinition.OnCreated = new ScriptAction((args => script.GetFunction("OnCreated").Call(args)));

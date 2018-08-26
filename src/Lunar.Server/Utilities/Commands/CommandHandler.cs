@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using Lidgren.Network;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Server.Net;
@@ -43,7 +44,7 @@ namespace Lunar.Server.Utilities.Commands
 
         private void LoadScript()
         {
-            _script = new Script(Constants.FILEPATH_SCRIPTS + "command_handler.lua");
+            _script = new Script(EngineConstants.FILEPATH_SCRIPTS + "command_handler.lua");
 
             _script.ScriptChanged += Script_ScriptChanged;
         }

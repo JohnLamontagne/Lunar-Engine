@@ -19,9 +19,11 @@ using Lunar.Server.World.Structure;
 using System;
 using System.IO;
 using System.Threading;
+using Lunar.Core;
 using Lunar.Core.Utilities;
+using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Server.Utilities.Commands;
-using Lunar.Server.Utilities.Data.SQL;
+using Lunar.Server.Utilities.Data.FileSystem;
 using Lunar.Server.Utilities.Events;
 using Lunar.Server.Utilities.Plugin;
 
@@ -61,13 +63,13 @@ namespace Lunar.Server
             _netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
             Packet.Initalize(_netHandler);
 
+            // Register the data loader factories
+            Server.ServiceLocator.RegisterService(new FSDataFactory());
+
             // Create and initalize the game content managers.
             Server.ServiceLocator.RegisterService(new ItemManager());
             Server.ServiceLocator.RegisterService(new NPCManager());
             Server.ServiceLocator.RegisterService(new MapManager());
-
-            // Register the data loader factories
-            Server.ServiceLocator.RegisterService(new FSDataFactory());
 
             Server.ServiceLocator.RegisterService(new WorldManager(_netHandler));
             Server.ServiceLocator.RegisterService(new PlayerManager());
@@ -152,26 +154,26 @@ namespace Lunar.Server
 
         private void CheckFileIntegrity()
         {
-            if (!Directory.Exists(Constants.FILEPATH_DATA))
-                Directory.CreateDirectory(Constants.FILEPATH_DATA);
+            if (!Directory.Exists(EngineConstants.FILEPATH_DATA))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_DATA);
 
-            if (!Directory.Exists(Constants.FILEPATH_SCRIPTS))
-                Directory.CreateDirectory(Constants.FILEPATH_SCRIPTS);
+            if (!Directory.Exists(EngineConstants.FILEPATH_SCRIPTS))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_SCRIPTS);
 
-            if (!Directory.Exists(Constants.FILEPATH_ACCOUNTS))
-                Directory.CreateDirectory(Constants.FILEPATH_ACCOUNTS);
+            if (!Directory.Exists(EngineConstants.FILEPATH_ACCOUNTS))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_ACCOUNTS);
 
-            if (!Directory.Exists(Constants.FILEPATH_ITEMS))
-                Directory.CreateDirectory(Constants.FILEPATH_ITEMS);
+            if (!Directory.Exists(EngineConstants.FILEPATH_ITEMS))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_ITEMS);
 
-            if (!Directory.Exists(Constants.FILEPATH_LOGS))
-                Directory.CreateDirectory(Constants.FILEPATH_LOGS);
+            if (!Directory.Exists(EngineConstants.FILEPATH_LOGS))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_LOGS);
 
-            if (!Directory.Exists(Constants.FILEPATH_MAPS))
-                Directory.CreateDirectory(Constants.FILEPATH_MAPS);
+            if (!Directory.Exists(EngineConstants.FILEPATH_MAPS))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_MAPS);
 
-            if (!Directory.Exists(Constants.FILEPATH_NPCS))
-                Directory.CreateDirectory(Constants.FILEPATH_NPCS);
+            if (!Directory.Exists(EngineConstants.FILEPATH_NPCS))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_NPCS);
         }
     }
 }

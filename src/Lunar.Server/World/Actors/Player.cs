@@ -57,6 +57,8 @@ namespace Lunar.Server.World.Actors
 
         private Dictionary<string, List<ScriptAction>> _eventHandlers;
 
+        public event EventHandler<EventArgs> LeftGame;
+
         public event EventHandler<SubjectEventArgs> EventOccured;
 
         public PlayerDescriptor Descriptor => _descriptor;
@@ -67,7 +69,7 @@ namespace Lunar.Server.World.Actors
 
         public Map Map => _map;
 
-        public string MapID => _map != null ? _map.Name : _descriptor.MapID;
+        public string MapID => _map != null ? _map.Descriptor.Name : _descriptor.MapID;
 
         public long UniqueID => _connection.UniqueIdentifier;
 
@@ -222,7 +224,7 @@ namespace Lunar.Server.World.Actors
 
             var packet = new Packet(PacketType.POSITION_UPDATE, ChannelType.UNASSIGNED);
             packet.Message.Write(this.UniqueID);
-            packet.Message.Write(this.Layer.Name);
+            packet.Message.Write(this.Layer.Descriptor.Name);
             packet.Message.Write(this.Descriptor.Position);
             _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
 
@@ -267,10 +269,9 @@ namespace Lunar.Server.World.Actors
 
         public void LeaveGame()
         {
-            this.Save();
             _map.OnPlayerQuit(this);
 
-            this.OnEvent("quitGame");
+            this.LeftGame?.Invoke(this, new EventArgs());
         }
 
         public bool CanMove(float delta)
@@ -383,11 +384,6 @@ namespace Lunar.Server.World.Actors
             _connection.SendPacket(packet, method);
         }
 
-        public void Save()
-        {
-            _descriptor.Save(Constants.FILEPATH_ACCOUNTS + this.Descriptor.Name + ".acc");
-        }
-
         public NetBuffer Pack()
         {
             var buffer = new NetBuffer();
@@ -411,7 +407,7 @@ namespace Lunar.Server.World.Actors
             buffer.Write(this.Descriptor.Position);
             buffer.Write(this.Descriptor.SpriteSheet.Pack());
             buffer.Write(this.CollisionBounds);
-            buffer.Write(this.Layer.Name);
+            buffer.Write(this.Layer.Descriptor.Name);
 
             return buffer;
         }

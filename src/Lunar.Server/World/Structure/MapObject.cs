@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Lidgren.Network;
+using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
 using Lunar.Server.Utilities;
@@ -129,7 +130,7 @@ namespace Lunar.Server.World.Structure
             netBuffer.Write(this.Sprite.Transform.Color);
             netBuffer.Write(this.Position);
             netBuffer.Write(this.Animated);
-            netBuffer.Write(this.Layer.LayerIndex);
+            netBuffer.Write(this.Layer.Descriptor.LayerIndex);
             netBuffer.Write(this.FrameTime);
 
             // Is it a light?
@@ -189,7 +190,7 @@ namespace Lunar.Server.World.Structure
             string scriptPath = bR.ReadString();
             if (!string.IsNullOrEmpty(scriptPath))
             {
-                var script = new Script(Constants.FILEPATH_DATA + scriptPath);
+                var script = new Script(EngineConstants.FILEPATH_DATA + scriptPath);
                 mapObject.MapObjectBehaviorDefinition = (MapObjectBehaviorDefinition)script["BehaviorDefinition"];
             }
 
