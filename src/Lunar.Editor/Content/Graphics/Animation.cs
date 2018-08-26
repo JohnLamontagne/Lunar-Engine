@@ -17,7 +17,7 @@ namespace Lunar.Editor.Content.Graphics
     public class Animation : 
         Lunar.Graphics.Effects.Animation
     {
-        public Animation(AnimationDescription description) : 
+        public Animation(AnimationDescriptor description) : 
             base(description)
         {
         }

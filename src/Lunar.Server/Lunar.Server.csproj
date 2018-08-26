@@ -118,6 +118,7 @@
     <Compile Include="World\Actors\NPCDefinition.cs" />
     <Compile Include="World\Actors\PacketHandlers\PlayerPacketHandler.cs" />
     <Compile Include="World\Actors\Components\PlayerNetworkComponent.cs" />
+    <Compile Include="World\AnimationManager.cs" />
     <Compile Include="World\BehaviorDefinition\ItemBehaviorDefinition.cs" />
     <Compile Include="World\Dialogue\Dialogue.cs" />
     <Compile Include="World\Actors\IActor.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="World\Actors\NPCManager.cs" />
     <Compile Include="World\Actors\Player.cs" />
     <Compile Include="World\Actors\PlayerManager.cs" />
-    <Compile Include="World\ItemDefinition.cs" />
     <Compile Include="World\Structure\CollisionDescriptor.cs" />
     <Compile Include="World\Structure\LightInformation.cs" />
     <Compile Include="World\Structure\MapItem.cs" />

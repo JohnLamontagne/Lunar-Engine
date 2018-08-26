@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Content.Graphics;
-using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Data.FileSystem;

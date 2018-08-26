@@ -1,8 +1,10 @@
 ﻿using System;
 using Lidgren.Network;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Server.Net;
+using Lunar.Server.Utilities.Commands;
 
 namespace Lunar.Server.World.Actors.Components
 {
@@ -15,11 +17,42 @@ namespace Lunar.Server.World.Actors.Components
             _player = player;
         }
 
+        public void SendAvailableCommands()
+        {
+            var packet = new Packet(PacketType.AVAILABLE_COMMANDS, ChannelType.UNASSIGNED);
+            packet.Message.Write(Server.ServiceLocator.GetService<CommandHandler>().Pack());
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+        }
+
+        public void SendPositionUpdate()
+        {
+            var packet = new Packet(PacketType.POSITION_UPDATE, ChannelType.UNASSIGNED);
+            packet.Message.Write(_player.UniqueID);
+            packet.Message.Write(_player.Layer.Descriptor.Name);
+            packet.Message.Write(_player.Descriptor.Position);
+            _player.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+        }
+
         public void SendPlayerData()
         {
             var packet = new Packet(PacketType.PLAYER_DATA, ChannelType.UNASSIGNED);
             packet.Message.Write(_player.Pack());
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+        }
+
+        public void SendChatMessage(string message, ChatMessageType type)
+        {
+            var packet = new Packet(PacketType.PLAYER_MSG, ChannelType.UNASSIGNED);
+
+            packet.Message.Write((byte)type);
+            packet.Message.Write(message);
+
+            this.SendPacket(packet, NetDeliveryMethod.Unreliable);
+        }
+
+        public void SendPacket(Packet packet, NetDeliveryMethod method)
+        {
+            _player.Connection.SendPacket(packet, method);
         }
 
         public void SendPlayerStats()
@@ -37,7 +70,7 @@ namespace Lunar.Server.World.Actors.Components
             _player.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
-
+        
 
         public void SendInventoryUpdate()
         {
@@ -58,7 +91,7 @@ namespace Lunar.Server.World.Actors.Components
                 }
             }
 
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void SendMovementPacket()
@@ -76,7 +109,7 @@ namespace Lunar.Server.World.Actors.Components
         {
             var packet = new Packet(PacketType.LOADING_SCREEN, ChannelType.UNASSIGNED);
             packet.Message.Write(active);
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void SendEquipmentUpdate()
@@ -96,7 +129,7 @@ namespace Lunar.Server.World.Actors.Components
                 packet.Message.Write(_player.Equipment.GetSlot(i).PackData());
             }
 
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
     }
 }

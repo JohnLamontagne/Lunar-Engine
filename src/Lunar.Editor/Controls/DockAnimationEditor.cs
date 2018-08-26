@@ -37,7 +37,7 @@ namespace Lunar.Editor.Controls
 
         private Project _project;
 
-        private AnimationDescription _animationDescription;
+        private AnimationDescriptor _animationDescription;
         private Animation _subSurfaceAnimation;
         private Animation _surfaceAnimation;
 

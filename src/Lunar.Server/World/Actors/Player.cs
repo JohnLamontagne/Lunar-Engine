@@ -185,10 +185,10 @@ namespace Lunar.Server.World.Actors
                 if (item == null)
                     continue;
 
-                _strengthBoost += item.Strength;
-                _intelBoost += item.Intelligence;
-                _defBoost += item.Defence;
-                _dexBoost += item.Dexterity;
+                _strengthBoost += item.Descriptor.Strength;
+                _intelBoost += item.Descriptor.Intelligence;
+                _defBoost += item.Descriptor.Defence;
+                _dexBoost += item.Descriptor.Dexterity;
             }
 
             this.NetworkComponent.SendPlayerStats();
@@ -221,17 +221,11 @@ namespace Lunar.Server.World.Actors
             this.Descriptor.Position = position;
 
             this.Layer.OnPlayerWarped(this);
-
-            var packet = new Packet(PacketType.POSITION_UPDATE, ChannelType.UNASSIGNED);
-            packet.Message.Write(this.UniqueID);
-            packet.Message.Write(this.Layer.Descriptor.Name);
-            packet.Message.Write(this.Descriptor.Position);
-            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
-
+            
+            this.NetworkComponent.SendPositionUpdate();
+           
             this.OnEvent("moved");
         }
-
-      
 
       
         public void JoinMap(Map map)
@@ -256,16 +250,12 @@ namespace Lunar.Server.World.Actors
         {
             this.JoinMap(map);
 
-            var packet = new Packet(PacketType.AVAILABLE_COMMANDS, ChannelType.UNASSIGNED);
-            packet.Message.Write(Server.ServiceLocator.GetService<CommandHandler>().Pack());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            this.NetworkComponent.SendAvailableCommands();
 
-            this.SendChatMessage(Settings.WelcomeMessage, ChatMessageType.Announcement);
+            this.NetworkComponent.SendChatMessage(Settings.WelcomeMessage, ChatMessageType.Announcement);
 
             this.OnEvent("joinedGame");
         }
-
-    
 
         public void LeaveGame()
         {
@@ -367,22 +357,6 @@ namespace Lunar.Server.World.Actors
             }
         }
 
-      
-     
-        public void SendChatMessage(string message, ChatMessageType type)
-        {
-            var packet = new Packet(PacketType.PLAYER_MSG, ChannelType.UNASSIGNED);
-
-            packet.Message.Write((byte)type);
-            packet.Message.Write(message);
-
-            this.SendPacket(packet, NetDeliveryMethod.Unreliable);
-        }
-
-        public void SendPacket(Packet packet, NetDeliveryMethod method)
-        {
-            _connection.SendPacket(packet, method);
-        }
 
         public NetBuffer Pack()
         {

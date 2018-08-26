@@ -22,11 +22,11 @@ namespace Lunar.Server.World
 {
     public class ItemManager : IService
     {
-        private Dictionary<string, ItemDefinition> _items;
+        private Dictionary<string, ItemDescriptor> _items;
 
         public ItemManager()
         {
-            _items = new Dictionary<string, ItemDefinition>();
+            _items = new Dictionary<string, ItemDescriptor>();
 
             this.LoadItems();
         }
@@ -41,13 +41,13 @@ namespace Lunar.Server.World
             foreach (var file in files)
             {
                 ItemDescriptor itemDescriptor = ItemDescriptor.Load(EngineConstants.FILEPATH_ITEMS + file.Name);
-                _items.Add(itemDescriptor.Name, new ItemDefinition(itemDescriptor));
+                _items.Add(itemDescriptor.Name, itemDescriptor);
             }
 
             Console.WriteLine($"Loaded {files.Length} items.");
         }
 
-        public ItemDefinition GetItem(string itemName)
+        public ItemDescriptor GetItem(string itemName)
         {
             if (!_items.ContainsKey(itemName))
             {

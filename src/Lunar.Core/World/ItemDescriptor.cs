@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Core.World
 {
     public class ItemDescriptor
     {
         private string _name;
-        private string _texturePath;
+        private SpriteInfo _spriteInfo;
         private bool _stackable;
         private EquipmentSlots _slotType;
         private int _strength;
@@ -24,10 +25,10 @@ namespace Lunar.Core.World
             set => _name = value;
         }
 
-        public string TexturePath
+        public SpriteInfo SpriteInfo
         {
-            get => _texturePath;
-            set => _texturePath = value;
+            get => _spriteInfo;
+            set => _spriteInfo = value;
         }
 
         public bool Stackable
@@ -92,7 +93,7 @@ namespace Lunar.Core.World
                 using (var binaryWriter = new BinaryWriter(fileStream))
                 {
                     binaryWriter.Write(this.Name);
-                    binaryWriter.Write(this.TexturePath);
+                    binaryWriter.Write(this.SpriteInfo.TextureName);
                     binaryWriter.Write(this.Stackable);
                     binaryWriter.Write(this.ItemType.ToString());
                     binaryWriter.Write(this.SlotType.ToString());
@@ -117,7 +118,7 @@ namespace Lunar.Core.World
             var desc = new ItemDescriptor()
             {
                 _name = "Blank",
-                _texturePath = "",
+                _spriteInfo = new SpriteInfo(""),
                 _stackable = false,
                 _itemType = ItemTypes.NA,
                 _slotType = EquipmentSlots.NE,
@@ -171,7 +172,7 @@ namespace Lunar.Core.World
             var desc = new ItemDescriptor()
             {
                 _name = name,
-                _texturePath = texturePath,
+                _spriteInfo = new SpriteInfo(texturePath),
                 _scripts = scripts,
                 _stackable = stackable,
                 _itemType = itemType,

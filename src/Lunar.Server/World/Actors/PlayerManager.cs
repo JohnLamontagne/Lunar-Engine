@@ -14,9 +14,7 @@ using Lidgren.Network;
 using Lunar.Server.Net;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data.FileSystem;
@@ -159,7 +157,7 @@ namespace Lunar.Server.World.Actors
 
             // Notify them that they successfully registered.
             var successPacket = new Packet(PacketType.REGISTER_SUCCESS, ChannelType.UNASSIGNED);
-            player.SendPacket(successPacket, NetDeliveryMethod.Unreliable);
+            player.NetworkComponent.SendPacket(successPacket, NetDeliveryMethod.Unreliable);
 
             return true;
         }

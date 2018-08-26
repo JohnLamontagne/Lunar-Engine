@@ -171,7 +171,7 @@ namespace Lunar.Server.World.Structure
             }
             else
             {
-                Logger.LogEvent($"Specified item does not exist on map; cannot remove: {item.Name}", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}", LogTypes.ERROR, Environment.StackTrace);
             }
 
           
@@ -257,7 +257,10 @@ namespace Lunar.Server.World.Structure
                    select (T)actor;
         }
 
+        public void SendAnimation()
+        {
 
+        }
 
 
         public void OnPlayerQuit(Player player)
@@ -275,7 +278,7 @@ namespace Lunar.Server.World.Structure
             // Send map data packet to player.
             var mapDataPacket = new Packet(PacketType.MAP_DATA, ChannelType.UNASSIGNED);
             mapDataPacket.Message.Write(this.PackData());
-            player.SendPacket(mapDataPacket, NetDeliveryMethod.ReliableOrdered);
+            player.NetworkComponent.SendPacket(mapDataPacket, NetDeliveryMethod.ReliableOrdered);
 
             // Send the joining player to the current map players.
             var joiningPlayerDataPacket = new Packet(PacketType.PLAYER_JOINED, ChannelType.UNASSIGNED);
@@ -291,7 +294,7 @@ namespace Lunar.Server.World.Structure
                 var playerDataPacket = new Packet(PacketType.PLAYER_JOINED, ChannelType.UNASSIGNED);
                 playerDataPacket.Message.Write(p.Pack());
 
-                player.SendPacket(playerDataPacket, NetDeliveryMethod.ReliableOrdered);
+                player.NetworkComponent.SendPacket(playerDataPacket, NetDeliveryMethod.ReliableOrdered);
             }
 
             // Send all npcs to the player
@@ -300,7 +303,7 @@ namespace Lunar.Server.World.Structure
                 var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
                 npcDataPacket.Message.Write(npc.Pack());
                 
-                player.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
+                player.NetworkComponent.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
             }
 
             // Select random starting location
@@ -335,7 +338,7 @@ namespace Lunar.Server.World.Structure
         {
             foreach (Player player in this.GetActors<Player>())
             {
-                player.SendChatMessage(message, messageType);
+                player.NetworkComponent.SendChatMessage(message, messageType);
             }
         }
 
@@ -343,7 +346,7 @@ namespace Lunar.Server.World.Structure
         {
             foreach (var player in this.GetActors<Player>())
             {
-                player.SendPacket(packet, method);
+                player.NetworkComponent.SendPacket(packet, method);
                 packet.Reset();
             }
         }

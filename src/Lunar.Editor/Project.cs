@@ -43,12 +43,12 @@ namespace Lunar.Editor
         private readonly Dictionary<string, Map> _maps;
         private readonly Dictionary<string, ItemDescriptor> _items;
         private readonly Dictionary<string, NPCDescriptor> _npcs;
-        private readonly Dictionary<string, AnimationDescription> _animations;
+        private readonly Dictionary<string, AnimationDescriptor> _animations;
 
         public Dictionary<string, Map> Maps => _maps;
         public Dictionary<string, ItemDescriptor> Items => _items;
         public Dictionary<string, NPCDescriptor> NPCs => _npcs;
-        public Dictionary<string, AnimationDescription> Animations => _animations;
+        public Dictionary<string, AnimationDescriptor> Animations => _animations;
 
         public IEnumerable<FileInfo> MapFiles => _mapFiles.Values;
         public IEnumerable<FileInfo> ItemFiles => _itemFiles.Values;
@@ -73,7 +73,7 @@ namespace Lunar.Editor
             _maps = new Dictionary<string, Map>();
             _items = new Dictionary<string, ItemDescriptor>();
             _npcs= new Dictionary<string, NPCDescriptor>();
-            _animations = new Dictionary<string, AnimationDescription>();
+            _animations = new Dictionary<string, AnimationDescriptor>();
 
             _directories = new List<DirectoryInfo>();
 
@@ -230,7 +230,7 @@ namespace Lunar.Editor
 
         public FileInfo AddAnimation(string filePath)
         {
-            var animation = AnimationDescription.Create();
+            var animation = AnimationDescriptor.Create();
             animation.Name = Path.GetFileNameWithoutExtension(filePath);
             animation.Save(filePath);
             var animationFile = new FileInfo(filePath);
@@ -241,12 +241,12 @@ namespace Lunar.Editor
             return animationFile;
         }
 
-        public AnimationDescription LoadAnimation(string filePath)
+        public AnimationDescriptor LoadAnimation(string filePath)
         {
             if (_animations.ContainsKey(filePath))
                 return _animations[filePath];
 
-            var animation = AnimationDescription.Load(filePath);
+            var animation = AnimationDescriptor.Load(filePath);
             _animations.Add(filePath, animation);
 
             return animation;

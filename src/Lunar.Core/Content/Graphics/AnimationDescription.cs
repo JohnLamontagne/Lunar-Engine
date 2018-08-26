@@ -14,23 +14,23 @@ using System.IO;
 
 namespace Lunar.Core.Content.Graphics
 {
-    public class AnimationDescription
+    public class AnimationDescriptor
     {
-        public AnimationLayerDefinition SurfaceAnimation { get; }
+        public AnimationLayerDescriptor SurfaceAnimation { get; }
 
-        public AnimationLayerDefinition SubSurfaceAnimation { get; }
+        public AnimationLayerDescriptor SubSurfaceAnimation { get; }
 
         public string Name { get; set; }
 
-        private AnimationDescription()
+        private AnimationDescriptor()
         {
-            this.SubSurfaceAnimation = new AnimationLayerDefinition();
-            this.SurfaceAnimation = new AnimationLayerDefinition();
+            this.SubSurfaceAnimation = new AnimationLayerDescriptor();
+            this.SurfaceAnimation = new AnimationLayerDescriptor();
         }
 
-        public static AnimationDescription Load(string filePath)
+        public static AnimationDescriptor Load(string filePath)
         {
-            AnimationDescription animationDescription = new AnimationDescription();
+            AnimationDescriptor animationDescription = new AnimationDescriptor();
             using (FileStream fileStream = File.Open(filePath, FileMode.Open))
             {
                 using (BinaryReader binaryReader = new BinaryReader(fileStream))
@@ -53,9 +53,9 @@ namespace Lunar.Core.Content.Graphics
             return animationDescription;
         }
 
-        public static AnimationDescription Create()
+        public static AnimationDescriptor Create()
         {
-            AnimationDescription desc = new AnimationDescription();
+            AnimationDescriptor desc = new AnimationDescriptor();
             desc.SubSurfaceAnimation.TexturePath = "";
             desc.SurfaceAnimation.TexturePath = "";
 

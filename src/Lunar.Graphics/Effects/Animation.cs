@@ -30,7 +30,7 @@ namespace Lunar.Graphics.Effects
         private Rectangle _subSurfaceFrameRectangle;
         private Vector2 _position;
 
-        private AnimationDescription _definition;
+        private AnimationDescriptor _definition;
 
         public Vector2 Position
         {
@@ -38,7 +38,7 @@ namespace Lunar.Graphics.Effects
             set => _position = value;
         }
 
-        protected Animation(AnimationDescription description)
+        protected Animation(AnimationDescriptor description)
         {
             _definition = description;
             _nextSurfaceFrameTime = 0;

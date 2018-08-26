@@ -13,7 +13,7 @@
 
 namespace Lunar.Core.Content.Graphics
 {
-    public class AnimationLayerDefinition
+    public class AnimationLayerDescriptor
     {
         /// <summary>
         /// The width of each frame.
@@ -40,7 +40,7 @@ namespace Lunar.Core.Content.Graphics
         /// </summary>
         public string TexturePath { get; set; }
 
-        internal AnimationLayerDefinition()
+        internal AnimationLayerDescriptor()
         {
 
         }

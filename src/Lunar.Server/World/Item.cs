@@ -25,71 +25,72 @@ namespace Lunar.Server.World
 {
     public class Item
     {
-        private string _name;
-        private SpriteInfo _sprite;
-        private bool _stackable;
-        private EquipmentSlots _slotType;
-        private ItemTypes _itemType;
-        private int _strength;
-        private int _intelligence;
-        private int _dexterity;
-        private int _defence;
-        private int _health;
-        private ItemBehaviorDefinition _behaviorDefinition;
+        public ItemDescriptor Descriptor { get; }
 
-        public string Name { get { return _name; } set { _name = value; } }
+        public ItemBehaviorDefinition BehaviorDefinition { get; set; }
 
-        public SpriteInfo Sprite { get { return _sprite; } set { _sprite = value; } }
-
-        public bool Stackable {  get { return _stackable; } set { _stackable = value; } }
-
-        public ItemTypes ItemType { get { return _itemType; } set { _itemType = value; } }
-        
-        public EquipmentSlots SlotType { get { return _slotType; } set { _slotType = value; } }
-
-        public int Strength { get { return _strength; } set { _strength = value; } }
-
-        public int Intelligence { get { return _intelligence; } set { _intelligence = value; } }
-
-        public int Dexterity { get { return _dexterity; } set { _dexterity = value; } }
-
-        public int Defence { get { return _defence; } set { _defence = value; } }
-
-        public int Health { get { return _health; } set { _health = value; } }
-
-        public ItemBehaviorDefinition BehaviorDefinition { get { return _behaviorDefinition; } set { _behaviorDefinition = value; } }
-
-        public Item(ItemDefinition itemDef)
+        public Item(ItemDescriptor descriptor)
         {
-            if (itemDef == null)
+            if (descriptor == null)
             {
-                Logger.LogEvent("Null item definition!", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent("Null item!", LogTypes.ERROR, Environment.StackTrace);
 
-                this.Name = "Null";
-                this.Sprite = new SpriteInfo("nullItem");
+                Descriptor = new ItemDescriptor()
+                {
+                    Name = "Null",
+                    SpriteInfo = new SpriteInfo("nullItem")
+                };
                 return;
             }
 
-            this.Name = itemDef.Descriptor.Name;
-            this.Sprite = new SpriteInfo(itemDef.Descriptor.TexturePath);
-            this.Stackable = itemDef.Descriptor.Stackable;
-            this.ItemType = itemDef.Descriptor.ItemType;
-            this.SlotType = itemDef.Descriptor.SlotType;
-            this.Strength = itemDef.Descriptor.Strength;
-            this.Intelligence = itemDef.Descriptor.Intelligence;
-            this.Dexterity = itemDef.Descriptor.Dexterity;
-            this.Defence = itemDef.Descriptor.Defence;
-            this.Health = itemDef.Descriptor.Health;
-            this.BehaviorDefinition = itemDef.BehaviorDefinition;
-
-            itemDef.Descriptor.DefinitionChanged += ItemDescriptor_DefinitionChanged;
+            this.InitalizeHooks();
 
             this.BehaviorDefinition.OnCreated?.Invoke(new ScriptActionArgs(this));
         }
 
-        private void ItemDescriptor_DefinitionChanged(object sender, System.EventArgs e)
+        private void InitalizeHooks()
         {
-            this.BehaviorDefinition = ((ItemDefinition)sender).BehaviorDefinition;
+            this.BehaviorDefinition = new ItemBehaviorDefinition();
+
+            foreach (var pair in this.Descriptor.Scripts)
+            {
+                string scriptActionHook = pair.Key;
+                string scriptContent = pair.Value;
+
+                Script script = new Script(scriptContent, false);
+
+                switch (scriptActionHook)
+                {
+                    case "OnAcquired":
+                        BehaviorDefinition.OnAcquired = new ScriptAction(
+                            (args => { script.GetFunction("OnAcquired").Call(args); }
+                            ));
+                        break;
+
+                    case "OnCreated":
+                        BehaviorDefinition.OnCreated = new ScriptAction(
+                            (args => { script.GetFunction("OnCreated").Call(args); }
+                            ));
+                        break;
+
+                    case "OnDropped":
+                        BehaviorDefinition.OnDropped = new ScriptAction(
+                            (args => { script.GetFunction("OnDropped").Call(args); }
+                            ));
+                        break;
+
+                    case "OnEquip":
+                        BehaviorDefinition.OnEquip = new ScriptAction(
+                            (args => { script.GetFunction("OnEquip").Call(args); }
+                            ));
+                        break;
+
+                    case "OnUse":
+                        BehaviorDefinition.OnUse = new ScriptAction((args => { script.GetFunction("OnUse").Call(args); }
+                            ));
+                        break;
+                }
+            }
         }
 
         public void OnUse(IActor<IActorDescriptor> user)
@@ -106,9 +107,9 @@ namespace Lunar.Server.World
         {
             var netBuffer = new NetBuffer();
 
-            netBuffer.Write(this.Name);
-            netBuffer.Write(this.Sprite.TextureName);
-            netBuffer.Write((int)this.SlotType);
+            netBuffer.Write(this.Descriptor.Name);
+            netBuffer.Write(this.Descriptor.SpriteInfo.TextureName);
+            netBuffer.Write((int)this.Descriptor.SlotType);
 
             return netBuffer;
         }
