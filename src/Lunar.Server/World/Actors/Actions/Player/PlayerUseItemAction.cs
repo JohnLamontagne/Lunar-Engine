@@ -26,13 +26,13 @@ namespace Lunar.Server.World.Actors.Actions.Player
 
             Item item = player.Inventory.GetSlot(_slotNum).Item;
 
-            if (item.ItemType == ItemTypes.Equipment)
+            if (item.Descriptor.ItemType == ItemTypes.Equipment)
             {
                 player.Equipment.Equip(item);
                 item.OnEquip(player);
                 player.Inventory.RemoveItem(_slotNum, 1);
             }
-            else if (item.ItemType == ItemTypes.Usable)
+            else if (item.Descriptor.ItemType == ItemTypes.Usable)
             {
                 item.OnUse(player);
             }

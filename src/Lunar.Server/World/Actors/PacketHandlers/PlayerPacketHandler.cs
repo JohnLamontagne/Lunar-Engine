@@ -70,11 +70,11 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
                 var packet = new Packet(PacketType.TARGET_ACQ, ChannelType.UNASSIGNED);
                 packet.Message.Write(target.UniqueID);
-                _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+                _player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
             }
             else
             {
-                _player.SendChatMessage("Invalid target!", ChatMessageType.Alert);
+                _player.NetworkComponent.SendChatMessage("Invalid target!", ChatMessageType.Alert);
             }
         }
 

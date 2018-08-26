@@ -104,8 +104,8 @@ namespace Lunar.Editor.Controls
             this.DockText = _regularDockText;
             _unsavedDockText = _regularDockText + "*";
 
-            if (File.Exists(_project.ClientRootDirectory + "/" + _item.TexturePath))
-                this.picTexture.Load(_project.ClientRootDirectory + "/" + _item.TexturePath);
+            if (File.Exists(_project.ClientRootDirectory + "/" + _item.SpriteInfo.TextureName))
+                this.picTexture.Load(_project.ClientRootDirectory + "/" + _item.SpriteInfo.TextureName);
 
             onUseToolStripMenuItem.Checked = true;
             this.txtEditor.Text = _item.Scripts.ContainsKey("OnUse") ? _item.Scripts["OnUse"] : "";
@@ -182,7 +182,7 @@ namespace Lunar.Editor.Controls
 
                     string path = dialog.FileName; 
 
-                    _item.TexturePath = HelperFunctions.MakeRelative(path, _project.ClientRootDirectory.FullName + "/"); ;
+                    _item.SpriteInfo.TextureName = HelperFunctions.MakeRelative(path, _project.ClientRootDirectory.FullName + "/"); ;
 
                     this.picTexture.Load(path);
                 }

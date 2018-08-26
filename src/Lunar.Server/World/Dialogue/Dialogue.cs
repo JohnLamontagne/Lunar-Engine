@@ -124,13 +124,13 @@ namespace Lunar.Server.World.Dialogue
                 packet.Message.Write(response.Key);
             }
 
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            _player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void End()
         {
             var packet = new Packet(PacketType.DIALOGUE_END, ChannelType.UNASSIGNED);
-            _player.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            _player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
     }
 }

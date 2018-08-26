@@ -49,20 +49,20 @@ namespace Lunar.Server.World.Actors.Components
         public void Equip(Item item)
         {
 
-            if (item.SlotType == EquipmentSlots.NE)
+            if (item.Descriptor.SlotType == EquipmentSlots.NE)
             {
-                _player.SendChatMessage("You cannot equip this item!", ChatMessageType.Alert);
+                _player.NetworkComponent.SendChatMessage("You cannot equip this item!", ChatMessageType.Alert);
                 return;
             }
 
-            if (_equipment[(int)item.SlotType] != null)
+            if (_equipment[(int)item.Descriptor.SlotType] != null)
             {
-                var unequippedItem = _equipment[(int)item.SlotType];
+                var unequippedItem = _equipment[(int)item.Descriptor.SlotType];
 
                 _player.Inventory.Add(unequippedItem, 1);
             }
 
-            _equipment[(int)item.SlotType] = item;
+            _equipment[(int)item.Descriptor.SlotType] = item;
 
             _player.CalculateBoostedStats();
 

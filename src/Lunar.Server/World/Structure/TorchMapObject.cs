@@ -44,13 +44,13 @@ namespace Lunar.Server.World.Structure
                 {
                     // Process special tile functionality.
 
-                    player.SendChatMessage("Ouch -- that burns!", ChatMessageType.Alert);
+                    player.NetworkComponent.SendChatMessage("Ouch -- that burns!", ChatMessageType.Alert);
                     player.InflictDamage(this.PlayerDamage);
 
                     var playSoundPacket = new Packet(PacketType.PLAY_SOUND, ChannelType.UNASSIGNED);
                     playSoundPacket.Message.Write("torchburn");
                     playSoundPacket.Message.Write(100f);
-                    player.SendPacket(playSoundPacket, NetDeliveryMethod.ReliableOrdered);
+                    player.NetworkComponent.SendPacket(playSoundPacket, NetDeliveryMethod.ReliableOrdered);
 
                     this.Cooldowns[player] = gameTime.TotalElapsedTime + this.EffectCooldown;
                 }

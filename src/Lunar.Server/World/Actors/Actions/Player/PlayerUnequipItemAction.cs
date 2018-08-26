@@ -26,7 +26,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
 
             var item = player.Equipment.GetSlot(_slotNum);
 
-            if (item.ItemType != ItemTypes.Equipment || item.SlotType == EquipmentSlots.NE)
+            if (item.Descriptor.ItemType != ItemTypes.Equipment || item.Descriptor.SlotType == EquipmentSlots.NE)
             {
                 // Log it!
                 Logger.LogEvent($"Player attempted to unequip unequippable item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, Environment.StackTrace);

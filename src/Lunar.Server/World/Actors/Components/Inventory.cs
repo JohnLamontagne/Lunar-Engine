@@ -78,7 +78,7 @@ namespace Lunar.Server.World.Actors.Components
         public void Add(Item item, int amount)
         {
 
-            if (item.Stackable)
+            if (item.Descriptor.Stackable)
             {
                 // Does the item exist within inventory already?
                 foreach (var invSlot in _inventory)
@@ -106,7 +106,7 @@ namespace Lunar.Server.World.Actors.Components
 
                         _inventory[i] = new InventorySlot(item, 1);
 
-                        _player.SendChatMessage(item.Name + " has been added to your inventory!", ChatMessageType.Announcement);
+                        _player.NetworkComponent.SendChatMessage(item.Descriptor.Name + " has been added to your inventory!", ChatMessageType.Announcement);
 
                         break;
                     }
@@ -115,7 +115,7 @@ namespace Lunar.Server.World.Actors.Components
                 // Is inventory full?
                 if (!placedItem)
                 {
-                    _player.SendChatMessage("Your inventory is full!", ChatMessageType.Announcement);
+                    _player.NetworkComponent.SendChatMessage("Your inventory is full!", ChatMessageType.Announcement);
                 }
             }
 
