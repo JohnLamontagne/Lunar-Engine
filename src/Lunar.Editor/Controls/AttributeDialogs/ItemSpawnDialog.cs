@@ -1,0 +1,72 @@
+﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
+using System;
+using System.Windows.Forms;
+using DarkUI.Forms;
+using Lunar.Core.World;
+using Lunar.Core.World.Actor.Descriptors;
+
+namespace Lunar.Editor.Controls.AttributeDialogs
+{
+    public partial class ItemSpawnDialog : DarkDialog
+    {
+        private Form _parentForm;
+
+        public ItemDescriptor Item { get; private set; }
+
+        public int RespawnTime { get; private set; }
+       
+        public ItemSpawnDialog(Form parentForm, Project project)
+        {
+            _parentForm = parentForm;
+
+            this.btnOk.Click += BtnOk_Click;
+
+            InitializeComponent();
+
+            this.cmbItem.Items.Clear();
+            foreach (var item in project.Items.Values)
+            {
+                this.cmbItem.Items.Add(item);
+            }
+        }
+
+        private void BtnOk_Click(object sender, EventArgs e)
+        {
+            this.Submitted?.Invoke(this, new EventArgs());
+            this.Close();
+        }
+
+        public event EventHandler<EventArgs> Submitted;
+
+        private void cmbNPC_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.Item = (ItemDescriptor)this.cmbItem.SelectedItem;
+        }
+
+        private void txtRespawnTime_TextChanged(object sender, EventArgs e)
+        {
+            int.TryParse(txtRespawnTime.Text, out int respawnTime);
+
+            this.RespawnTime = respawnTime;
+        }
+
+        private void txtRespawnTime_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+    }
+}
