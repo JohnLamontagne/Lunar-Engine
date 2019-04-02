@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@ namespace Lunar.Editor
 {
     public static class Constants
     {
-        public const int TILE_SIZE = 32;
-
         public const int NEW_MAP_X = 35;
         public const int NEW_MAP_Y = 35;
     }

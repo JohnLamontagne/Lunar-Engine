@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -20,13 +20,19 @@ using Lunar.Editor.World;
 using System.Xml.Linq;
 using Lunar.Core;
 using Lunar.Core.Content.Graphics;
+using Lunar.Core.Utilities.Data;
+using Lunar.Core.Utilities.Data.FileSystem;
+using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Core.World.Structure;
 
 namespace Lunar.Editor
 {
     public class Project
     {
+        private IDataManager<MapDescriptor> _mapDataManager;
+
         private readonly DirectoryInfo _serverDirectory;
         private readonly DirectoryInfo _clientDirectory;
         private readonly List<DirectoryInfo> _directories;
@@ -77,6 +83,8 @@ namespace Lunar.Editor
 
             _directories = new List<DirectoryInfo>();
 
+            _mapDataManager = new MapFSDataManager();
+
             this.LoadContents(this.ServerRootDirectory);
         }
 
@@ -111,7 +119,7 @@ namespace Lunar.Editor
         public FileInfo AddMap(string filePath)
         {
             var map = new Map(new Vector2(Constants.NEW_MAP_X, Constants.NEW_MAP_Y), Path.GetFileNameWithoutExtension(filePath));
-            map.Save(filePath);
+            this.SaveMap(filePath, map);
             var mapFile = new FileInfo(filePath);
             _mapFiles.Add(filePath, mapFile);
 
@@ -122,7 +130,10 @@ namespace Lunar.Editor
 
         public Map LoadMap(string filePath, TextureLoader textureLoader)
         {
-            var map = Map.Load(filePath, this, textureLoader);
+            var mapDescriptor = _mapDataManager.Load(new MapDataLoaderArguments(filePath) { IsPath = true });
+            
+            var map = new Map(mapDescriptor, textureLoader);
+            map.Initalize(this, textureLoader);
 
             if (!_maps.ContainsKey(filePath))
                 _maps.Add(filePath, map);
@@ -130,6 +141,11 @@ namespace Lunar.Editor
                 _maps[filePath] = map;
 
             return map;
+        }
+
+        public void SaveMap(string filePath, Map map)
+        {
+            _mapDataManager.Save(map.Descriptor, new MapDataLoaderArguments(filePath){IsPath = true});
         }
 
         public FileInfo ChangeMap(string oldFilePath, string newFilePath)

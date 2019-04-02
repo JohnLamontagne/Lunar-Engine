@@ -38,12 +38,12 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolSelectObjectButton = new System.Windows.Forms.ToolStripButton();
             this.buttonMapObject = new System.Windows.Forms.ToolStripButton();
+            this.cmbQuickLayer = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.buttonSave = new System.Windows.Forms.ToolStripButton();
             this.scrollY = new DarkUI.Controls.DarkScrollBar();
             this.scrollX = new DarkUI.Controls.DarkScrollBar();
             this.mapView = new Lunar.Editor.Controls.View();
-            this.cmbQuickLayer = new System.Windows.Forms.ToolStripComboBox();
             this.mapToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -165,6 +165,16 @@
             this.buttonMapObject.ToolTipText = "New Map Object";
             this.buttonMapObject.Click += new System.EventHandler(this.buttonMapObject_Click);
             // 
+            // cmbQuickLayer
+            // 
+            this.cmbQuickLayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbQuickLayer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbQuickLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbQuickLayer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.cmbQuickLayer.Name = "cmbQuickLayer";
+            this.cmbQuickLayer.Size = new System.Drawing.Size(121, 28);
+            this.cmbQuickLayer.SelectedIndexChanged += new System.EventHandler(this.cmbQuickLayer_SelectedIndexChanged);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -224,16 +234,6 @@
             this.mapView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseDown);
             this.mapView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseMove);
             this.mapView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapView_MouseUp);
-            // 
-            // cmbQuickLayer
-            // 
-            this.cmbQuickLayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbQuickLayer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbQuickLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbQuickLayer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.cmbQuickLayer.Name = "cmbQuickLayer";
-            this.cmbQuickLayer.Size = new System.Drawing.Size(121, 28);
-            this.cmbQuickLayer.SelectedIndexChanged += new System.EventHandler(this.cmbQuickLayer_SelectedIndexChanged);
             // 
             // DockMapDocument
             // 

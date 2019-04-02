@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -523,9 +523,15 @@ namespace Lunar.Editor.Controls
 
         private void txtFrameWidth_TextChanged(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(this.txtFrameWidth.Text))
+                return;
+
             this.MarkUnsaved();
 
             int.TryParse(this.txtFrameWidth.Text, out int newWidth);
+
+            if (newWidth <= 0)
+                return;
 
             _npc.FrameSize = new Vector(newWidth, _npc.FrameSize.Y);
 
@@ -534,9 +540,15 @@ namespace Lunar.Editor.Controls
 
         private void txtFrameHeight_TextChanged(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(this.txtFrameHeight.Text))
+                return;
+
             this.MarkUnsaved();
 
             int.TryParse(this.txtFrameHeight.Text, out int newHeight);
+
+            if (newHeight <= 0)
+                return;
 
             _npc.FrameSize = new Vector(_npc.FrameSize.X, newHeight);
 

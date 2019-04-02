@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -36,5 +36,6 @@ namespace Lunar.Core.Utilities.Data
                 throw new Exception("Invalid string: only strings that have the {X:a Y:b} format can be translated into a vector!", ex);
             }
         }
+
     }
 }

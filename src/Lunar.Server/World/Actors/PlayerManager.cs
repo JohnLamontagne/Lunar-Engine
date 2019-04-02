@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ namespace Lunar.Server.World.Actors
 
             player.LeftGame += (sender, args) =>
             {
-                _playerDataManager.Save(player.Descriptor);
+                _playerDataManager.Save(player.Descriptor, null);
             };
         }
 
@@ -58,7 +58,7 @@ namespace Lunar.Server.World.Actors
         public void Save()
         {
             foreach (var player in _players.Values)
-                _playerDataManager.Save(player.Descriptor);
+                _playerDataManager.Save(player.Descriptor, null);
         }
       
         public Player GetPlayer(string name)
@@ -151,7 +151,7 @@ namespace Lunar.Server.World.Actors
             descriptor.MapID = Settings.StartingMap;
             descriptor.Role = Settings.DefaultRole;
             var player = new Player(descriptor, connection);
-            _playerDataManager.Save(player.Descriptor);
+            _playerDataManager.Save(player.Descriptor, null);
 
             this.AddPlayer(player);
 

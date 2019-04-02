@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ namespace Lunar.Editor.Controls
 
             foreach (var layer in _map.Layers.Values)
             {
-                this.lstLayers.Items.Add(layer.Name, true);
+                this.lstLayers.Items.Add(layer.Descriptor.Name, true);
             }
 
             this.lstLayers.SelectedItem = this.lstLayers.Items[0];
@@ -94,7 +94,7 @@ namespace Lunar.Editor.Controls
             this.lstLayers.SelectedItem = this.lstLayers.Items[this.lstLayers.Items.Count - 1];
             this.lstLayers.SetItemChecked(this.lstLayers.Items.Count - 1, true);
 
-            _map.Layers.Add(layerName, new Layer(_map.Dimensions, layerName, _map.Layers.Count + 1));
+            _map.Layers.Add(layerName, new Layer(_map.Descriptor.Dimensions, layerName, _map.Layers.Count + 1));
 
             this.LayersUpdated?.Invoke(this, new EventArgs());
         }
