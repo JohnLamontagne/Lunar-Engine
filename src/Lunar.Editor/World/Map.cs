@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -15,44 +15,32 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using DarkUI.Forms;
+using Lunar.Core.World.Structure;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Editor.Utilities;
+using Lunar.Graphics;
 
 namespace Lunar.Editor.World
 {
     public class Map
     {
+        private MapDescriptor _descriptor;
+
         private Dictionary<string, Layer> _layers;
-        private Vector2 _dimensions;
+
         private Dictionary<string, Texture2D> _tilesets;
 
-        public string Name { get; set; }
+        public string Name => _descriptor.Name;
 
-        [Browsable(false)]
-        public Dictionary<string, Texture2D> Tilesets => _tilesets;
+        public MapDescriptor Descriptor => _descriptor;
+
+        public IEnumerable<Texture2D> Tilesets => _tilesets.Values;
 
         [Browsable(false)]
         public Dictionary<string, Layer> Layers => _layers;
 
-        public Vector2 Dimensions
-        {
-            get => _dimensions;
-            set
-            {
-                _dimensions = value;
 
-                this.Bounds = new Rectangle(0, 0, (int)this.Dimensions.X, (int)this.Dimensions.Y);
-
-                if (_layers != null)
-                {
-                    foreach (var layer in _layers.Values)
-                        layer.Resize(this.Dimensions);
-                }
-
-                this.Map_Resized?.Invoke(this, new EventArgs());
-            }
-        }
 
         [Browsable(false)]
         public Rectangle Bounds { get; private set; }
@@ -61,17 +49,34 @@ namespace Lunar.Editor.World
 
         public Map(Vector2 dimensions, string name)
         {
-            this.Dimensions = dimensions;
-            this.Name = name;
+            _descriptor = new MapDescriptor(dimensions, name);
 
             _layers = new Dictionary<string, Layer>();
             _tilesets = new Dictionary<string, Texture2D>();
 
-            _layers.Add("Ground", new Layer(this.Dimensions, "Ground", 0));
-            _layers.Add("Mask1", new Layer(this.Dimensions, "Mask1", 1));
-            _layers.Add("Mask2", new Layer(this.Dimensions, "Mask2", 2));
-            _layers.Add("Fringe", new Layer(this.Dimensions, "Fringe", 3));
+           
+            this.AddLayer("Ground", new Layer(this.Descriptor.Dimensions, "Ground", 0));
+            this.AddLayer("Mask1", new Layer(this.Descriptor.Dimensions, "Mask1", 1));
+            this.AddLayer("Mask2", new Layer(this.Descriptor.Dimensions, "Mask2", 2));
+            this.AddLayer("Fringe", new Layer(this.Descriptor.Dimensions, "Fringe", 3));
         }
+
+        public Map(MapDescriptor descriptor, TextureLoader textureLoader)
+            : this()
+        {
+            _descriptor = descriptor;
+            _descriptor.DimensionsChanged += (sender, args) =>
+            {
+                if (_layers != null)
+                {
+                    foreach (var layer in _layers.Values)
+                        layer.Resize(this.Descriptor.Dimensions);
+                }
+
+                this.Map_Resized?.Invoke(this, new EventArgs());
+            };
+        }
+       
 
         private Map()
         {
@@ -79,6 +84,45 @@ namespace Lunar.Editor.World
             _tilesets = new Dictionary<string, Texture2D>();
         }
 
+        public void AddTileset(Texture2D texture)
+        {
+            _tilesets.Add(Path.GetFileName(texture.Tag.ToString()), texture);
+
+            if (!this.Descriptor.TilesetPaths.Contains(texture.Tag.ToString()))
+                this.Descriptor.TilesetPaths.Add(texture.Tag.ToString());
+        }
+
+        public bool TilesetExists(string tilesetPath)
+        {
+            return _tilesets.ContainsKey(tilesetPath);
+        }
+
+        public void RemoveTileset(string tilesetPath)
+        {
+            _tilesets.Remove(tilesetPath);
+            this.Descriptor.TilesetPaths.Remove(tilesetPath);
+        }
+
+        public Texture2D GetTileset(string tilesetPath)
+        {
+            return _tilesets[tilesetPath];
+        }
+
+        public void AddLayer(string layerName, Layer layer)
+        {
+            _layers.Add(layerName, layer);
+
+            _descriptor.Layers.Add(layerName, _layers[layerName].Descriptor);
+        }
+
+        public void RemoveLayer(string layerName)
+        {
+            _layers.Remove(layerName);
+            _descriptor.Layers.Remove(layerName);
+        }
+
+
+        
         public void Update(GameTime gameTime)
         {
             foreach (var layer in _layers.Values)
@@ -93,85 +137,59 @@ namespace Lunar.Editor.World
             }
         }
 
-        public void Save(string path)
+        public void Initalize(Project project, TextureLoader textureLoader)
         {
-            using (var fileStream = new FileStream(path, FileMode.OpenOrCreate))
+            foreach (var tilesetPath in this.Descriptor.TilesetPaths)
             {
-                using (var bW = new BinaryWriter(fileStream))
+                if (File.Exists(project.ClientRootDirectory + "/" + tilesetPath))
                 {
+                    var texture = textureLoader.LoadFromFile(project.ClientRootDirectory + "/" + tilesetPath);
+                    texture.Tag = tilesetPath;
 
-                    bW.Write(_tilesets.Count);
-                    foreach (var tileset in _tilesets.Values)
-                    {
-                        bW.Write(tileset.Tag.ToString());
-                    }
-
-                    bW.Write(this.Name);
-                    bW.Write((int)this.Dimensions.X);
-                    bW.Write((int)this.Dimensions.Y);
-                    bW.Write(this.Dark);
-
-                    bW.Write(_layers.Count);
-                    foreach (var layer in _layers.Values)
-                    {
-                        layer.Save(bW);
-                    }
+                    this.AddTileset(texture);
+                }
+                else
+                {
+                    DarkMessageBox.ShowError($"Could not load tileset {tilesetPath}!", "Error loading tileset!",
+                        DarkDialogButton.Ok);
                 }
             }
-        }
 
-        public static Map Load(string path, Project project, TextureLoader textureLoader)
-        {
-            var map = new Map();
-
-            using (var fileStream = new FileStream(path, FileMode.Open))
+            foreach (var layerDesc in this.Descriptor.Layers.Values)
             {
-                using (var bR = new BinaryReader(fileStream))
+                var layer = new Layer(layerDesc);
+
+                for (int x = 0; x < layerDesc.Tiles.GetLength(0); x++)
                 {
-
-                    // Load the tileset information
-                    int tilesetCount = bR.ReadInt32();
-
-                    for (int i = 0; i < tilesetCount; i++)
+                    for (int y = 0; y < layerDesc.Tiles.GetLength(1); y++)
                     {
-                        string tilesetPath = bR.ReadString();
+                        var tileDesc = layerDesc.Tiles[x, y];
 
-                        if (File.Exists(project.ClientRootDirectory + "/" + tilesetPath))
+                        if (tileDesc != null)
                         {
-                            Texture2D tileset = textureLoader.LoadFromFile(project.ClientRootDirectory + "/" + tilesetPath);
-                            tileset.Tag = tilesetPath;
-                            map.Tilesets.Add(Path.GetFileName(tilesetPath), tileset);
+                            Tile tile = new Tile(tileDesc);
+
+                            if (tileDesc.SpriteInfo != null)
+                            {
+                                tile.Sprite = new Sprite(_tilesets[Path.GetFileName(tileDesc.SpriteInfo.TextureName)])
+                                {
+                                    LayerDepth = tileDesc.SpriteInfo.Transform.LayerDepth,
+                                    SourceRectangle = new Rectangle(tileDesc.SpriteInfo.Transform.Rect.Left, tileDesc.SpriteInfo.Transform.Rect.Top, tileDesc.SpriteInfo.Transform.Rect.Width, tileDesc.SpriteInfo.Transform.Rect.Height),
+                                    Position = new Vector2(tileDesc.Position.X, tileDesc.Position.Y)
+                                };
+                            }
+                            layer.SetTile(x, y, tile);
                         }
                         else
                         {
-                            DarkMessageBox.ShowError($"Could not load tileset {tilesetPath}!", "Error loading tileset!",
-                                DarkDialogButton.Ok);
+                            layer.SetTile(x, y, new Tile());
                         }
-
                         
                     }
-
-                    map.Name = bR.ReadString();
-                    map.Dimensions = new Vector2(bR.ReadInt32(), bR.ReadInt32());
-                    map.Dark = bR.ReadBoolean();
-
-                    map.Bounds = new Rectangle(0, 0, (int)map.Dimensions.X, (int)map.Dimensions.Y);
-
-                    int layerCount = bR.ReadInt32();
-                    for (int i = 0; i < layerCount; i++)
-                    {
-                        string layerName = bR.ReadString();
-                        int layerIndex = bR.ReadInt32();
-
-                        var layer = new Layer(map.Dimensions, layerName, layerIndex);
-                        layer.Load(bR, textureLoader, project, map.Tilesets);
-
-                        map.Layers.Add(layerName, layer);
-                    }
                 }
+                
+                this.Layers.Add(layer.Descriptor.Name, layer);
             }
-
-            return map;
         }
 
         public event EventHandler Map_Resized;

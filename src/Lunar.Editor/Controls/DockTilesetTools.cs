@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ using System.IO;
 using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Docking;
+using Lunar.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Editor.Utilities;
@@ -73,7 +74,7 @@ namespace Lunar.Editor.Controls
             _tilesets.Clear();
             comboTileset.Items.Clear();
 
-            foreach (var tileset in map.Tilesets.Values)
+            foreach (var tileset in map.Tilesets)
             {
                 string tilesetPath = _project.ClientRootDirectory + "/" + tileset.Tag.ToString();
                 var tilesetTexture = _tilesetTextureLoader.LoadFromFile(tilesetPath);
@@ -119,27 +120,27 @@ namespace Lunar.Editor.Controls
             if (mouseX < _selectPosition.X)
             {
                 left = mouseX;
-                width = (int)Math.Abs((((mouseX / Constants.TILE_SIZE)) * Constants.TILE_SIZE) -
+                width = (int)Math.Abs((((mouseX / EngineConstants.TILE_WIDTH)) * EngineConstants.TILE_WIDTH) -
                                       _selectPosition.X);
             }
             else
             {
-                width = (int)Math.Abs((((mouseX / Constants.TILE_SIZE) + 1) * Constants.TILE_SIZE) -
+                width = (int)Math.Abs((((mouseX / EngineConstants.TILE_WIDTH) + 1) * EngineConstants.TILE_WIDTH) -
                                       _selectPosition.X);
             }
-            width = width < Constants.TILE_SIZE ? Constants.TILE_SIZE : width;
+            width = width < EngineConstants.TILE_WIDTH ? EngineConstants.TILE_WIDTH : width;
 
             int height = 0;
             if (mouseY < _selectPosition.Y)
             {
                 top = mouseY;
-                height = (int)Math.Abs((((mouseY / Constants.TILE_SIZE)) * Constants.TILE_SIZE) - _selectPosition.Y);
+                height = (int)Math.Abs((((mouseY / EngineConstants.TILE_HEIGHT)) * EngineConstants.TILE_HEIGHT) - _selectPosition.Y);
             }
             else
             {
-                height = (int)Math.Abs((((mouseY / Constants.TILE_SIZE) + 1) * Constants.TILE_SIZE) - _selectPosition.Y);
+                height = (int)Math.Abs((((mouseY / EngineConstants.TILE_HEIGHT) + 1) * EngineConstants.TILE_HEIGHT) - _selectPosition.Y);
             }
-            height = height < Constants.TILE_SIZE ? Constants.TILE_SIZE : height;
+            height = height < EngineConstants.TILE_HEIGHT ? EngineConstants.TILE_HEIGHT : height;
 
             _selectRectangle = new Rectangle(left, top, width, height);
             _tilesetDragging = false;
@@ -148,9 +149,9 @@ namespace Lunar.Editor.Controls
 
         private void tilesetView_MouseDown(object sender, MouseEventArgs e)
         {
-            _selectPosition = new Vector2((e.X / Constants.TILE_SIZE) * Constants.TILE_SIZE, (e.Y / Constants.TILE_SIZE) * Constants.TILE_SIZE);
-            _selectPosition = new Vector2(_selectPosition.X + ((int)_camera.Position.X / Constants.TILE_SIZE) * Constants.TILE_SIZE, _selectPosition.Y + ((int)_camera.Position.Y / Constants.TILE_SIZE) * Constants.TILE_SIZE);
-            _selectRectangle = new Rectangle((int)_selectPosition.X, (int)_selectPosition.Y, Constants.TILE_SIZE, Constants.TILE_SIZE);
+            _selectPosition = new Vector2((e.X / EngineConstants.TILE_WIDTH) * EngineConstants.TILE_WIDTH, (e.Y / EngineConstants.TILE_HEIGHT) * EngineConstants.TILE_HEIGHT);
+            _selectPosition = new Vector2(_selectPosition.X + ((int)_camera.Position.X / EngineConstants.TILE_WIDTH) * EngineConstants.TILE_WIDTH, _selectPosition.Y + ((int)_camera.Position.Y / EngineConstants.TILE_HEIGHT) * EngineConstants.TILE_HEIGHT);
+            _selectRectangle = new Rectangle((int)_selectPosition.X, (int)_selectPosition.Y, EngineConstants.TILE_WIDTH, EngineConstants.TILE_HEIGHT);
             _tilesetDragging = true;
         }
 
@@ -226,9 +227,9 @@ namespace Lunar.Editor.Controls
 
         private void buttonRemoveTileset_Click(object sender, EventArgs e)
         {
-            if (_currentMap.Tilesets.ContainsKey(this.comboTileset.SelectedItem.ToString()))
+            if (_currentMap.TilesetExists(this.comboTileset.SelectedItem.ToString()))
             {
-                string path = _currentMap.Tilesets[this.comboTileset.SelectedItem.ToString()].Tag.ToString();
+                string path = _currentMap.GetTileset(this.comboTileset.SelectedItem.ToString()).Tag.ToString();
                 this.comboTileset.Items.Remove(this.comboTileset.SelectedItem);
                 this.Tileset_Unloaded?.Invoke(this, new TilesetLoadedEventArgs(path));
             }
@@ -248,7 +249,7 @@ namespace Lunar.Editor.Controls
             _tilesets.Clear();
             comboTileset.Items.Clear();
 
-            foreach (var tileset in _currentMap.Tilesets.Values)
+            foreach (var tileset in _currentMap.Tilesets)
             {
                 string tilesetPath = ((SuiteForm)this.ParentForm).Project.ClientRootDirectory + "/" + tileset.Tag.ToString();
                 var tilesetTexture = _tilesetTextureLoader.LoadFromFile(tilesetPath);

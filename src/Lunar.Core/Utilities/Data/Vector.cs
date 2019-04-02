@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 using System;
+using Microsoft.Xna.Framework;
 
 namespace Lunar.Core.Utilities.Data
 {
@@ -142,6 +143,17 @@ namespace Lunar.Core.Utilities.Data
         public static bool operator !=(Vector vecOne, Vector vecTwo)
         {
             return !(vecOne == vecTwo);
+        }
+
+        public static implicit operator Vector(Vector2 vector)
+        {
+            return new Vector(vector.X, vector.Y);
+        }
+
+
+        public static implicit operator Vector2(Vector vector)
+        {
+            return new Vector2(vector.X, vector.Y);
         }
 
         public static Vector Normalize(Vector A)

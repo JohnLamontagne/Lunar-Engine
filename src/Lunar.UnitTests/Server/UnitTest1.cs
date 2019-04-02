@@ -47,8 +47,8 @@ namespace Lunar.UnitTests.Server
 
         private void BuildDirectories()
         {
-            if (!Directory.Exists(Lunar.Server.Constants.FILEPATH_DATA))
-                Directory.CreateDirectory(Lunar.Server.Constants.FILEPATH_DATA);
+            if (!Directory.Exists(EngineConstants.FILEPATH_DATA))
+                Directory.CreateDirectory(EngineConstants.FILEPATH_DATA);
 
             if (!Directory.Exists(EngineConstants.FILEPATH_SCRIPTS))
                 Directory.CreateDirectory(EngineConstants.FILEPATH_SCRIPTS);

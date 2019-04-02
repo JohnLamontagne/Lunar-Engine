@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -18,21 +18,23 @@ using Lunar.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Core.Utilities.Logic;
+using Lunar.Core.World.Structure;
 using Lunar.Editor.Utilities;
 
 namespace Lunar.Editor.World
 {
     public class Layer
     {
+        private LayerDescriptor _descriptor;
+
         private Tile[,] _tiles;
         private List<MapObject> _mapObjects;
         private string _name;
         private float _zIndex;
         private int _layerIndex;
 
-        public string Name { get; set; }
 
-        public bool Visible { get; set; }
+        public LayerDescriptor Descriptor => _descriptor;
 
         public float ZIndex
         {
@@ -61,6 +63,8 @@ namespace Lunar.Editor.World
             }
         }
 
+        public bool Visible { get; set; }
+
         public List<MapObject> MapObjects
         {
             get => _mapObjects;
@@ -71,10 +75,18 @@ namespace Lunar.Editor.World
             _mapObjects = new List<MapObject>();
             _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
 
-            this.Name = name;
+            _descriptor = new LayerDescriptor(dimensions, name, layerIndex);
+
             this.LayerIndex = layerIndex;
 
             this.Visible = true;
+        }
+
+        public Layer(LayerDescriptor layerDescriptor)
+        {
+            _descriptor = layerDescriptor;
+            _mapObjects = new List<MapObject>();
+            _tiles = new Tile[layerDescriptor.Tiles.GetLength(0), layerDescriptor.Tiles.GetLength(1)];
         }
 
         public void Resize(Vector2 dimensions)
@@ -144,54 +156,9 @@ namespace Lunar.Editor.World
                 throw new Exception("Fatal error: attempted to access an invalid tile!");
 
             _tiles[x, y] = tile;
+            _descriptor.Tiles[x, y] = tile.Descriptor;
         }
 
-        public void Save(BinaryWriter bW)
-        {
-            bW.Write(this.Name);
-            bW.Write(this.LayerIndex);
-
-            for (int x = 0; x < _tiles.GetLength(0); x++)
-            {
-                for (int y = 0; y < _tiles.GetLength(1); y++)
-                {
-                    if (_tiles[x, y] != null)
-                    {
-                        bW.Write(true);
-
-                        _tiles[x, y].Save(bW);
-                    }
-                    else
-                        bW.Write(false);
-                }
-            }
-
-            bW.Write(_mapObjects.Count);
-            foreach (var mapObject in _mapObjects)
-            {
-               mapObject.Save(bW);
-            }
-        }
-
-        public void Load(BinaryReader bR, TextureLoader textureLoader, Project project, Dictionary<string, Texture2D> tilesets)
-        {
-            for (int x = 0; x < _tiles.GetLength(0); x++)
-            {
-                for (int y = 0; y < _tiles.GetLength(1); y++)
-                {
-                    if (bR.ReadBoolean())
-                    {
-                        _tiles[x, y] = new Tile();
-                        _tiles[x,y].Load(bR, tilesets, new Vector2(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE));
-                    }
-                }
-            }
-
-            int mapObjectCount = bR.ReadInt32();
-            for (int i = 0; i < mapObjectCount; i++)
-            {
-                _mapObjects.Add(MapObject.Load(bR, this, project, textureLoader));
-            }
-        }
+     
     }
 }

@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ namespace Lunar.Core.Content.Graphics
         }
 
         public Color Color { get { return _color; } set { _color = value; } }
+
+        public float LayerDepth { get; set; }
 
         public Transform(Vector size)
         {

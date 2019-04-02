@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.mmorpgcreation.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -10,8 +10,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System.Collections.Generic;
-using System.IO;
+using Lunar.Core.Content.Graphics;
+using Lunar.Core.Utilities.Data;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Core.World.Structure;
@@ -21,49 +21,48 @@ namespace Lunar.Editor.World
 {
     public class Tile
     {
+        private TileDescriptor _descriptor;
+
+        public TileDescriptor Descriptor => _descriptor;
+
         private long _nextAnimationTime;
-        private Sprite _sprite;
-
-        public bool Animated { get; set; }
-
-        public bool LightSource { get; set; }
-
-        public bool Teleporter { get; set; }
-
-        public int PlayerDamage { get; set; }
-
-        public int FrameCount { get; set; }
-
-        public TileAttributes Attribute { get; set; }
-
-        public AttributeData AttributeData { get; set; }
-
-        public Color Color { get; set; }
 
         public float ZIndex
         {
-            get => _sprite.LayerDepth;
-            set => _sprite.LayerDepth = value;
+            get => this.Sprite.LayerDepth;
+            set => this.Sprite.LayerDepth = value;
         }
 
-        public Sprite Sprite => _sprite;
+        public Sprite Sprite { get; set; }
+
+        public Tile(TileDescriptor descriptor)
+        {
+            _descriptor = descriptor;
+        }
 
         public Tile(Texture2D texture, Rectangle sourceRectangle, Vector2 position)
             : this()
         {
-            _sprite = new Sprite(texture)
+            this.Sprite = new Sprite(texture)
             {
                 SourceRectangle = sourceRectangle,
                 Position = position
             };
 
+            _descriptor.SpriteInfo = new SpriteInfo(texture.Tag.ToString());
+            _descriptor.Position = new Vector(position.X, position.Y);
+            _descriptor.SpriteInfo.Transform = new Transform()
+            {
+                Rect = new Rect(this.Sprite.SourceRectangle.Left, this.Sprite.SourceRectangle.Top, this.Sprite.SourceRectangle.Width, this.Sprite.SourceRectangle.Height),
+                Color = new Core.Content.Graphics.Color(this.Sprite.Color.R, this.Sprite.Color.G, this.Sprite.Color.B, this.Sprite.Color.A),
+                LayerDepth = this.Sprite.LayerDepth,
+                Position = this.Sprite.Position
+            };
         }
 
         public Tile()
         {
-            this.Attribute = TileAttributes.None;
-            this.AttributeData = new AttributeData();
-            this.Animated = false;
+            _descriptor = new TileDescriptor(null);
         }
 
 
@@ -75,76 +74,13 @@ namespace Lunar.Editor.World
 
         public void Update(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime.TotalMilliseconds >= _nextAnimationTime && this.Animated)
+            if (gameTime.TotalGameTime.TotalMilliseconds >= _nextAnimationTime && this.Descriptor.Animated)
             {
 
                 _nextAnimationTime = (long)gameTime.TotalGameTime.TotalMilliseconds + 300;
             }
         }
 
-        public void Save(BinaryWriter bW)
-        {
-            bW.Write((byte)this.Attribute);
-           
-            byte[] attributeDataBytes = this.AttributeData.Serialize();
-            bW.Write(attributeDataBytes.Length);
-            bW.Write(attributeDataBytes);
-
-            // Tell the client whether it's a blank tile
-            bW.Write(_sprite != null);
-            // Is this a blank tile (determined based on the existence of a Sprite)
-            if (_sprite != null)
-            {
-                bW.Write(this.Animated);
-                bW.Write(this.LightSource);
-                bW.Write(_sprite.Texture.Tag.ToString());
-                bW.Write(this.ZIndex);
-                bW.Write(this.Color.R);
-                bW.Write(this.Color.G);
-                bW.Write(this.Color.B);
-                bW.Write(this.Color.A);
-                bW.Write(this.Sprite.SourceRectangle.X);
-                bW.Write(this.Sprite.SourceRectangle.Y);
-                bW.Write(this.Sprite.SourceRectangle.Width);
-                bW.Write(this.Sprite.SourceRectangle.Height);
-                bW.Write(this.FrameCount);
-            }
-        }
-
-        public void Load(BinaryReader bR, Dictionary<string, Texture2D> tilesets, Vector2 tilePosition)
-        {
-            this.Attribute = (TileAttributes)bR.ReadByte();
-
-            int attributeDataLength = bR.ReadInt32();
-            byte[] attributeData = bR.ReadBytes(attributeDataLength);
-            this.AttributeData = AttributeData.Deserialize(attributeData);
-
-            if (bR.ReadBoolean())
-            {
-                this.Animated = bR.ReadBoolean();
-                this.LightSource = bR.ReadBoolean();
-
-                string spriteName = bR.ReadString();
-                float zIndex = bR.ReadSingle();
-
-                if (tilesets.ContainsKey(Path.GetFileName(spriteName)))
-                {
-                    _sprite = new Sprite(tilesets[Path.GetFileName(spriteName)])
-                    {
-                        LayerDepth = zIndex,
-                        Position = tilePosition
-                    };
-                }
-
-                this.Color = new Color(bR.ReadByte(), bR.ReadByte(), bR.ReadByte(), bR.ReadByte());
-
-                var rectangle = new Rectangle(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32());
-
-                if (_sprite != null)
-                    _sprite.SourceRectangle = rectangle;
-
-                this.FrameCount = bR.ReadInt32();
-            }
-        }
+       
     }
 }
