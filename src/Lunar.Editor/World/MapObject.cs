@@ -33,7 +33,7 @@ namespace Lunar.Editor.World
             {
                 _sprite = value;
                 _sprite.Position = this.Position;
-                _sprite.LayerDepth = this.Layer.ZIndex;
+                _sprite.LayerDepth = this.Layer.Descriptor.ZIndex;
                 _collisionRect = new Rectangle((int)_position.X, (int)_position.Y,
                     this.Sprite.SourceRectangle.Width, this.Sprite.SourceRectangle.Height);
             } 
@@ -163,7 +163,7 @@ namespace Lunar.Editor.World
                 mapObject.Sprite = new AnimatedSprite(texture)
                 {
                     Position = position,
-                    LayerDepth = layer.ZIndex,
+                    LayerDepth = layer.Descriptor.ZIndex,
                     SourceRectangle = textureRect
                 };
 
@@ -173,7 +173,7 @@ namespace Lunar.Editor.World
                 mapObject.Sprite = new Sprite(texture)
                 {
                     Position = position,
-                    LayerDepth = layer.ZIndex,
+                    LayerDepth = layer.Descriptor.ZIndex,
                     SourceRectangle = textureRect
                 };
             }

@@ -31,7 +31,12 @@ namespace Lunar.Editor.World
 
         private Dictionary<string, Texture2D> _tilesets;
 
-        public string Name => _descriptor.Name;
+        public string Name
+        {
+            get { return this.Descriptor.Name; }
+
+            set { this.Descriptor.Name = value; }
+        }
 
         public MapDescriptor Descriptor => _descriptor;
 
@@ -169,7 +174,7 @@ namespace Lunar.Editor.World
                         {
                             Tile tile = new Tile(tileDesc);
 
-                            if (tileDesc.SpriteInfo != null)
+                            if (tileDesc.SpriteInfo != null && _tilesets.ContainsKey(Path.GetFileName(tileDesc.SpriteInfo.TextureName)))
                             {
                                 tile.Sprite = new Sprite(_tilesets[Path.GetFileName(tileDesc.SpriteInfo.TextureName)])
                                 {

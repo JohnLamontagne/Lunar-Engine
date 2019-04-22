@@ -26,42 +26,11 @@ namespace Lunar.Editor.World
     public class Layer
     {
         private LayerDescriptor _descriptor;
-
         private Tile[,] _tiles;
         private List<MapObject> _mapObjects;
-        private string _name;
-        private float _zIndex;
-        private int _layerIndex;
 
 
         public LayerDescriptor Descriptor => _descriptor;
-
-        public float ZIndex
-        {
-            get => _zIndex;
-            private set
-            {
-                _zIndex = value;
-
-                foreach (var tile in _tiles)
-                {
-                    if (tile != null && tile.Sprite != null)
-                        tile.Sprite.LayerDepth = _zIndex;
-                }
-            }
-        }
-
-        public int LayerIndex
-        {
-            get => _layerIndex;
-            set
-            {
-                _layerIndex = value;
-                
-                this.ZIndex = value * EngineConstants.PARTS_PER_LAYER;
-                
-            }
-        }
 
         public bool Visible { get; set; }
 
@@ -76,15 +45,24 @@ namespace Lunar.Editor.World
             _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
 
             _descriptor = new LayerDescriptor(dimensions, name, layerIndex);
-
-            this.LayerIndex = layerIndex;
+            _descriptor.DescriptorChanged += _descriptor_DescriptorChanged;
 
             this.Visible = true;
+        }
+
+        private void _descriptor_DescriptorChanged(object sender, EventArgs e)
+        {
+            foreach (var tile in _tiles)
+            {
+                if (tile != null && tile.Sprite != null)
+                    tile.Sprite.LayerDepth = _descriptor.ZIndex;
+            }
         }
 
         public Layer(LayerDescriptor layerDescriptor)
         {
             _descriptor = layerDescriptor;
+            _descriptor.DescriptorChanged += _descriptor_DescriptorChanged;
             _mapObjects = new List<MapObject>();
             _tiles = new Tile[layerDescriptor.Tiles.GetLength(0), layerDescriptor.Tiles.GetLength(1)];
         }

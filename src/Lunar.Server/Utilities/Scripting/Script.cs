@@ -126,10 +126,7 @@ namespace Lunar.Server.Utilities.Scripting
         {
             try
             {
-                using (FileStream fs = File.Open(_scriptFilePath, FileMode.Open))
-                {
-
-                }
+                using (FileStream fs = File.Open(_scriptFilePath, FileMode.Open)) { }
             }
             catch (Exception)
             {

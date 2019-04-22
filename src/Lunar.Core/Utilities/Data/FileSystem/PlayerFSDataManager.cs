@@ -106,7 +106,7 @@ namespace Lunar.Server.Utilities.Data.FileSystem
         {
             PlayerDescriptor playerDescriptor = ((PlayerDescriptor) descriptor);
 
-            string filePath = EngineConstants.FILEPATH_DATA + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT;
+            string filePath = EngineConstants.FILEPATH_ACCOUNTS + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT;
 
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
             {

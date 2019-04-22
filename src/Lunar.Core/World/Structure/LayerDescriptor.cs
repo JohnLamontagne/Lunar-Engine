@@ -12,15 +12,38 @@
 */
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Logic;
+using System;
 using System.IO;
 
 namespace Lunar.Core.World.Structure
 {
     public class LayerDescriptor
     {
-        public string Name { get; set; }
+        private string _name;
+        private int _layerIndex;
 
-        public int LayerIndex { get; set; }
+
+        public string Name
+        {
+            get => _name;
+            set 
+            {
+                _name = value;
+                this.DescriptorChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public int LayerIndex
+        {
+            get => _layerIndex;
+            set
+            {
+                _layerIndex = value;
+                this.DescriptorChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public float ZIndex { get => this.LayerIndex * EngineConstants.PARTS_PER_LAYER; }
 
         public TileDescriptor[,] Tiles { get; private set; }
 
@@ -36,5 +59,7 @@ namespace Lunar.Core.World.Structure
         {
             this.Tiles = HelperFunctions.ResizeArray<TileDescriptor>(this.Tiles, (int)dimensions.X, (int)dimensions.Y);
         }
+
+        public event EventHandler<EventArgs> DescriptorChanged;
     }
 }

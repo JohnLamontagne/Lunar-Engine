@@ -32,6 +32,8 @@ namespace Lunar.Editor.Controls
         public DockMapAttributes()
         {
             InitializeComponent();
+
+            this.AttributeData = new AttributeData();
         }
 
         public void SetProject(Project project)

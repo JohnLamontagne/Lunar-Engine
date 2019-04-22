@@ -26,14 +26,36 @@ namespace Lunar.Editor.World
         public TileDescriptor Descriptor => _descriptor;
 
         private long _nextAnimationTime;
+        private Sprite _sprite;
 
         public float ZIndex
         {
             get => this.Sprite.LayerDepth;
-            set => this.Sprite.LayerDepth = value;
+            set
+            {
+                this.Sprite.LayerDepth = value;
+                _descriptor.SpriteInfo.Transform.LayerDepth = value;
+            }
         }
 
-        public Sprite Sprite { get; set; }
+        public Sprite Sprite
+        {
+            get { return _sprite; }
+            set
+            {
+                _sprite = value;
+
+                _descriptor.SpriteInfo = new SpriteInfo(this.Sprite.Texture.Tag.ToString());
+                _descriptor.Position = new Vector(this.Sprite.Position.X, this.Sprite.Position.Y);
+                _descriptor.SpriteInfo.Transform = new Transform()
+                {
+                    Rect = new Rect(this.Sprite.SourceRectangle.Left, this.Sprite.SourceRectangle.Top, this.Sprite.SourceRectangle.Width, this.Sprite.SourceRectangle.Height),
+                    Color = new Core.Content.Graphics.Color(this.Sprite.Color.R, this.Sprite.Color.G, this.Sprite.Color.B, this.Sprite.Color.A),
+                    LayerDepth = this.Sprite.LayerDepth,
+                    Position = this.Sprite.Position
+                };
+            }
+        }
 
         public Tile(TileDescriptor descriptor)
         {
@@ -46,18 +68,9 @@ namespace Lunar.Editor.World
             this.Sprite = new Sprite(texture)
             {
                 SourceRectangle = sourceRectangle,
-                Position = position
+                Position = position,
             };
 
-            _descriptor.SpriteInfo = new SpriteInfo(texture.Tag.ToString());
-            _descriptor.Position = new Vector(position.X, position.Y);
-            _descriptor.SpriteInfo.Transform = new Transform()
-            {
-                Rect = new Rect(this.Sprite.SourceRectangle.Left, this.Sprite.SourceRectangle.Top, this.Sprite.SourceRectangle.Width, this.Sprite.SourceRectangle.Height),
-                Color = new Core.Content.Graphics.Color(this.Sprite.Color.R, this.Sprite.Color.G, this.Sprite.Color.B, this.Sprite.Color.A),
-                LayerDepth = this.Sprite.LayerDepth,
-                Position = this.Sprite.Position
-            };
         }
 
         public Tile()

@@ -227,6 +227,9 @@ namespace Lunar.Editor.Controls
 
         private void buttonRemoveTileset_Click(object sender, EventArgs e)
         {
+            if (this.comboTileset.SelectedItem == null)
+                return;
+
             if (_currentMap.TilesetExists(this.comboTileset.SelectedItem.ToString()))
             {
                 string path = _currentMap.GetTileset(this.comboTileset.SelectedItem.ToString()).Tag.ToString();

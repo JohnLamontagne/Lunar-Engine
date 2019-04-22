@@ -103,7 +103,6 @@ namespace Lunar.Client.World
                 var sprite = Client.ServiceLocator.GetService<ContentManagerService>().ContentManager
                     .LoadTexture2D(tilesetPath);
 
-             
 
                 var tile = new Tile(sprite, sourceRectangle, position)
                 {

@@ -159,7 +159,7 @@ namespace Lunar.Editor.Controls
             int lIndex = 0;
             foreach (var layerName in this.Layers)
             {
-                _map.Layers[layerName].LayerIndex = lIndex++;
+                _map.Layers[layerName].Descriptor.LayerIndex = lIndex++;
             }
         }
 

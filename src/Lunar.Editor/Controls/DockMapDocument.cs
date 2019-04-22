@@ -238,7 +238,7 @@ namespace Lunar.Editor.Controls
 
             this.UpdateQuickLayerSelection();
 
-            foreach (var layer in _map.Layers.Values.OrderBy(l => l.ZIndex))
+            foreach (var layer in _map.Layers.Values.OrderBy(l => l.Descriptor.ZIndex))
             {
                 _dockLayers.AddLayer(layer.Descriptor.Name);
             }
@@ -260,7 +260,7 @@ namespace Lunar.Editor.Controls
                             var attributeSprite = new Sprite(texture)
                             {
                                 Position = new Vector2(x * EngineConstants.TILE_WIDTH, y * EngineConstants.TILE_HEIGHT),
-                                LayerDepth = layer.ZIndex + .02f // place it slightly above the layer's tile
+                                LayerDepth = layer.Descriptor.ZIndex + .02f // place it slightly above the layer's tile
                             };
 
                             switch (layer.GetTile(x, y).Descriptor.Attribute)
@@ -279,7 +279,7 @@ namespace Lunar.Editor.Controls
                                     break;
                             }
 
-                            _tileAttributeSprites.Add(new Vector3(x, y, layer.ZIndex), attributeSprite);
+                            _tileAttributeSprites.Add(new Vector3(x, y, layer.Descriptor.ZIndex), attributeSprite);
                         }
                     }
                 }
@@ -315,7 +315,7 @@ namespace Lunar.Editor.Controls
 
                 if (_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
                     view.SpriteBatch.Draw(currentTileset, placeTilePos, _dockTilesetTools.SelectRectangle, 
-                        new Color(Color.White, 150), 0f, Vector2.Zero, 1f, SpriteEffects.None, _map.Layers[_dockLayers.SelectedLayer].ZIndex + .01f);
+                        new Color(Color.White, 150), 0f, Vector2.Zero, 1f, SpriteEffects.None, _map.Layers[_dockLayers.SelectedLayer].Descriptor.ZIndex + .01f);
             }
             else if (_placementMode == PlacementMode.Select || _placementMode == PlacementMode.MapObject_Select)
             {
@@ -602,7 +602,7 @@ namespace Lunar.Editor.Controls
 
                 layer.GetTile(mapX, mapY).Descriptor.Attribute = TileAttributes.None;
 
-                _tileAttributeSprites.Remove(new Vector3(mapX, mapY, layer.ZIndex));
+                _tileAttributeSprites.Remove(new Vector3(mapX, mapY, layer.Descriptor.ZIndex));
 
                 this.MarkUnsaved();
             }
@@ -635,7 +635,7 @@ namespace Lunar.Editor.Controls
                 var attributeSprite = new Sprite(texture)
                 {
                     Position = new Vector2(mapX * EngineConstants.TILE_WIDTH, mapY * EngineConstants.TILE_HEIGHT),
-                    LayerDepth = layer.ZIndex + .02f // place it slightly above the layer's tile
+                    LayerDepth = layer.Descriptor.ZIndex + .02f // place it slightly above the layer's tile
                 };
                 
                 switch (attribute)
@@ -657,7 +657,7 @@ namespace Lunar.Editor.Controls
                         break;
                 }
 
-                var locationKey = new Vector3(mapX, mapY, layer.ZIndex);
+                var locationKey = new Vector3(mapX, mapY, layer.Descriptor.ZIndex);
 
                 if (!_tileAttributeSprites.ContainsKey(locationKey))
                     _tileAttributeSprites.Add(locationKey, attributeSprite);
@@ -682,7 +682,7 @@ namespace Lunar.Editor.Controls
             {
                 Sprite = new Sprite(texture)
                 {
-                    LayerDepth = _map.Layers[_dockLayers.SelectedLayer].ZIndex + .01f, // Display the map objects slightly above the layer
+                    LayerDepth = _map.Layers[_dockLayers.SelectedLayer].Descriptor.ZIndex + .01f, // Display the map objects slightly above the layer
                 }
             };
 
@@ -739,7 +739,7 @@ namespace Lunar.Editor.Controls
                         Tile tile = new Tile(tilesetTexture2D, new Rectangle(tSetX, tSetY, EngineConstants.TILE_WIDTH, EngineConstants.TILE_HEIGHT),
                             new Vector2(x * EngineConstants.TILE_WIDTH, y * EngineConstants.TILE_HEIGHT))
                         {
-                            ZIndex = layer.ZIndex
+                            ZIndex = layer.Descriptor.ZIndex
                         };
 
                         layer.SetTile(x, y, tile);
