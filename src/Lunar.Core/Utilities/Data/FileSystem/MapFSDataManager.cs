@@ -19,32 +19,20 @@ using Lunar.Core.World.Structure;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class MapFSDataManager : IDataManager<MapDescriptor>
+    public class MapFSDataManager : FSDataManager<MapDescriptor>
     {
         public MapFSDataManager()
         {
             
         }
 
-        public MapDescriptor Load(IDataManagerArguments arguments)
+        public override MapDescriptor Load(IDataManagerArguments arguments)
         {
             MapDescriptor map = null;
 
-            var mapArguments = (arguments as MapDataLoaderArguments);
+            var mapArguments = (arguments as MapFSDataManagerArguments);
 
-            string path = "";
-
-            if (mapArguments.IsPath)
-            {
-                path = mapArguments.Name;
-            }
-            else
-            {
-                path = Core.EngineConstants.FILEPATH_MAPS + mapArguments.Name + EngineConstants.MAP_FILE_EXT;
-            }
-           
-
-            using (var fileStream = new FileStream(path, FileMode.Open))
+            using (var fileStream = new FileStream(this.RootPath + mapArguments.Name + EngineConstants.MAP_FILE_EXT, FileMode.Open))
             {
                 using (var bR = new BinaryReader(fileStream))
                 {
@@ -169,11 +157,11 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             return map;
         }
 
-        public void Save(IDataDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IDataDescriptor descriptor, IDataManagerArguments arguments)
         {
             MapDescriptor mapDesc = (MapDescriptor)descriptor;
 
-            string filePath = (arguments as MapDataLoaderArguments).Name;
+            string filePath = this.RootPath + (arguments as MapFSDataManagerArguments).Name + EngineConstants.MAP_FILE_EXT;
 
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
             {
@@ -259,9 +247,9 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             }
         }
 
-        public bool Exists(IDataManagerArguments arguments)
+        public override bool Exists(IDataManagerArguments arguments)
         {
-            throw new System.NotImplementedException();
+            return File.Exists(this.RootPath + (arguments as MapFSDataManagerArguments).Name + EngineConstants.MAP_FILE_EXT);
         }
     }
 }

@@ -71,7 +71,7 @@ namespace Lunar.Server.World.Structure
             {
                 _interactingEntities.Remove(actor);
                 _cooldowns.Remove(actor);
-                this.MapObjectBehaviorDefinition?.OnLeft?.Invoke(new ScriptActionArgs(this, actor));
+                this.MapObjectBehaviorDefinition?.OnLeft?.Invoke(new GameEventArgs(this, actor));
             }  
         }
 
@@ -87,7 +87,7 @@ namespace Lunar.Server.World.Structure
                 {
                     _interactingEntities.Add(actor);
                     _cooldowns.Add(actor, 0);
-                    this.MapObjectBehaviorDefinition?.OnEntered?.Invoke(new ScriptActionArgs(this, actor));
+                    this.MapObjectBehaviorDefinition?.OnEntered?.Invoke(new GameEventArgs(this, actor));
                 }
             }
             
@@ -95,21 +95,13 @@ namespace Lunar.Server.World.Structure
 
         public void OnInteract(IActor<IActorDescriptor> actor)
         {
-            this.MapObjectBehaviorDefinition.OnInteract?.Invoke(new ScriptActionArgs(this, actor));
+            this.MapObjectBehaviorDefinition.OnInteract?.Invoke(new GameEventArgs(this, actor));
         }
 
-        public void OnScriptChanged(object sender, EventArgs args)
-        {
-            (sender as Script).ReExecute();
-
-            var mapObjectDef = ((Script)sender).GetTable("MapObject");
-
-            this.MapObjectBehaviorDefinition = (MapObjectBehaviorDefinition)mapObjectDef["BehaviorDefinition"];
-        }
 
         public virtual void Update(GameTime gameTime)
         {
-            this.MapObjectBehaviorDefinition?.Update?.Invoke(new ScriptActionArgs(this, gameTime));
+            this.MapObjectBehaviorDefinition?.Update?.Invoke(new GameEventArgs(this, gameTime));
         }
 
         public NetBuffer Pack()
@@ -189,11 +181,9 @@ namespace Lunar.Server.World.Structure
             string scriptPath = bR.ReadString();
             if (!string.IsNullOrEmpty(scriptPath))
             {
-                var script = new Script(EngineConstants.FILEPATH_DATA + scriptPath);
-                mapObject.MapObjectBehaviorDefinition = (MapObjectBehaviorDefinition)script["BehaviorDefinition"];
+                var script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
+                mapObject.MapObjectBehaviorDefinition = script.Invoke<MapObjectBehaviorDefinition>("get_behavior_def", new GameEventArgs(null));
             }
-
-
 
             var lightSource = bR.ReadBoolean();
             var lightRadius = bR.ReadSingle();

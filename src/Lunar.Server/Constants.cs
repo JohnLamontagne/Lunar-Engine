@@ -24,5 +24,39 @@ namespace Lunar.Server
         public const int MAX_QUEUED_ACTIONS = 10;
 
         public const int ACTIONS_PER_SECOND = 5;
+
+
+#if DEBUG
+        public static readonly string FILEPATH_DATA = AppDomain.CurrentDomain.BaseDirectory + "../../Server Data/";
+#else
+        public static readonly string FILEPATH_DATA = AppDomain.CurrentDomain.BaseDirectory + "/Data/";
+#endif
+
+        /// <summary>
+        /// Location of the accounts directory (if using file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_ACCOUNTS = Constants.FILEPATH_DATA + "/Accounts/";
+
+        public static readonly string FILEPATH_SCRIPTS = Constants.FILEPATH_DATA + "/Scripts/";
+
+        public static readonly string FILEPATH_PLUGINS = Constants.FILEPATH_DATA + "/Plugins/";
+
+        /// <summary>
+        /// Location of the NPCs directory (if using the file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_NPCS = Constants.FILEPATH_DATA + "/Npcs/";
+
+        public static readonly string FILEPATH_LOGS = Constants.FILEPATH_DATA + "/Logs/";
+
+        /// <summary>
+        /// Location of the items directory (if using the file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_ITEMS = Constants.FILEPATH_DATA + "/Items/";
+
+        /// <summary>
+        /// Location of the mapss directory (if using the file-system storage). SERVER ONLY
+        /// </summary>
+        public static readonly string FILEPATH_MAPS = Constants.FILEPATH_DATA + "/Maps/";
+
     }
 }

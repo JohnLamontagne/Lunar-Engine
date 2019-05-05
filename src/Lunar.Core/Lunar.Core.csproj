@@ -55,8 +55,11 @@
     <Compile Include="Content\Graphics\Transform.cs" />
     <Compile Include="EngineConstants.cs" />
     <Compile Include="Utilities\Data\FileSystem\FSDataFactory.cs" />
+    <Compile Include="Utilities\Data\FileSystem\FSDataFactoryArguments.cs" />
+    <Compile Include="Utilities\Data\FileSystem\FSDataManager.cs" />
     <Compile Include="Utilities\Data\FileSystem\MapFSDataManager.cs" />
     <Compile Include="Utilities\Data\FileSystem\PlayerFSDataManager.cs" />
+    <Compile Include="Utilities\Data\Management\IDataFactoryArguments.cs" />
     <Compile Include="Utilities\Data\Management\IDataManagerArguments.cs" />
     <Compile Include="Utilities\Data\Management\IDataManagerFactory.cs" />
     <Compile Include="Utilities\Data\Management\IDataDescriptor.cs" />

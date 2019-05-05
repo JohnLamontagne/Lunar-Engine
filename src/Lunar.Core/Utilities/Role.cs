@@ -26,7 +26,7 @@ namespace Lunar.Core.Utilities
 
         public bool Supercedes(Role role)
         {
-            return (this.Level > role.Level);
+            return (this.Level >= role.Level);
         }
 
         // A default, permissionless role

@@ -130,7 +130,7 @@ namespace Lunar.Editor
 
         public Map LoadMap(string filePath, TextureLoader textureLoader)
         {
-            var mapDescriptor = _mapDataManager.Load(new MapDataLoaderArguments(filePath) { IsPath = true });
+            var mapDescriptor = _mapDataManager.Load(new MapFSDataManagerArguments(filePath));
             
             var map = new Map(mapDescriptor, textureLoader);
             map.Initalize(this, textureLoader);
@@ -145,7 +145,7 @@ namespace Lunar.Editor
 
         public void SaveMap(string filePath, Map map)
         {
-            _mapDataManager.Save(map.Descriptor, new MapDataLoaderArguments(filePath){IsPath = true});
+            _mapDataManager.Save(map.Descriptor, new MapFSDataManagerArguments(filePath));
         }
 
         public FileInfo ChangeMap(string oldFilePath, string newFilePath)

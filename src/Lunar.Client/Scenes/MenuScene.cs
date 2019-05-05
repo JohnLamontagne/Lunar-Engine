@@ -34,10 +34,10 @@ namespace Lunar.Client.Scenes
         {
             _gameWindow = gameWindow;
 
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_AuthenticationSuccess);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.LOGIN_SUCCESS, this.Handle_AuthenticationSuccess);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.LOGIN_FAIL, this.Handle_AuthenticationFailure);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.REGISTRATION_FAIL, this.Handle_AuthenticationFailure);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_AuthenticationSuccess);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_SUCCESS, this.Handle_AuthenticationSuccess);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_FAIL, this.Handle_AuthenticationFailure);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.REGISTRATION_FAIL, this.Handle_AuthenticationFailure);
         }
 
         protected override void OnEnter()
@@ -61,8 +61,8 @@ namespace Lunar.Client.Scenes
 
         private void Handle_AuthenticationSuccess(PacketReceivedEventArgs args)
         {
-            Client.ServiceLocator.GetService<SceneManager>().GetScene<GameScene>("gameScene").InitalizeInterface();
-            Client.ServiceLocator.GetService<SceneManager>().SetActiveScene("loadingScene");
+            Client.ServiceLocator.Get<SceneManager>().GetScene<GameScene>("gameScene").InitalizeInterface();
+            Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
         }
 
         private void Handle_AuthenticationFailure(PacketReceivedEventArgs args)
@@ -117,7 +117,7 @@ namespace Lunar.Client.Scenes
 
         private void registerButton_ButtonClicked(object sender, EventArgs e)
         {
-            NetHandler netHandler = Client.ServiceLocator.GetService<NetHandler>();
+            NetHandler netHandler = Client.ServiceLocator.Get<NetHandler>();
 
             var registerMenuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
 
@@ -139,7 +139,7 @@ namespace Lunar.Client.Scenes
 
         private void loginButton_ButtonClicked(object sender, EventArgs e)
         {
-            NetHandler netHandler = Client.ServiceLocator.GetService<NetHandler>();
+            NetHandler netHandler = Client.ServiceLocator.Get<NetHandler>();
 
             var loginMenuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
 

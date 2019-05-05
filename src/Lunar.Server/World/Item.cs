@@ -44,7 +44,7 @@ namespace Lunar.Server.World
 
             this.InitalizeHooks();
 
-            this.BehaviorDefinition.OnCreated?.Invoke(new ScriptActionArgs(this));
+            this.BehaviorDefinition.OnCreated?.Invoke(new GameEventArgs(this));
         }
 
         private void InitalizeHooks()
@@ -56,37 +56,48 @@ namespace Lunar.Server.World
                 string scriptActionHook = pair.Key;
                 string scriptContent = pair.Value;
 
-                Script script = new Script(scriptContent, false);
+                Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScriptFromSource(scriptContent);
 
                 switch (scriptActionHook)
                 {
                     case "OnAcquired":
-                        BehaviorDefinition.OnAcquired = new ScriptAction(
-                            (args => { script.GetFunction("OnAcquired").Call(args); }
-                            ));
+                        BehaviorDefinition.OnAcquired = new Action<GameEventArgs>((args) => 
+                            {
+                                script.Invoke("on_acquired", args);
+                            }
+                        );
                         break;
 
                     case "OnCreated":
-                        BehaviorDefinition.OnCreated = new ScriptAction(
-                            (args => { script.GetFunction("OnCreated").Call(args); }
-                            ));
+                        BehaviorDefinition.OnCreated = new Action<GameEventArgs>((args) =>
+                            {
+                            script.Invoke("on_created", args);
+                            }
+                        );
                         break;
 
                     case "OnDropped":
-                        BehaviorDefinition.OnDropped = new ScriptAction(
-                            (args => { script.GetFunction("OnDropped").Call(args); }
-                            ));
+                        BehaviorDefinition.OnDropped = new Action<GameEventArgs>((args) =>
+                            {
+                            script.Invoke("on_dropped", args);
+                            }
+                        );
                         break;
 
                     case "OnEquip":
-                        BehaviorDefinition.OnEquip = new ScriptAction(
-                            (args => { script.GetFunction("OnEquip").Call(args); }
-                            ));
+                        BehaviorDefinition.OnEquip = new Action<GameEventArgs>((args) =>
+                            {
+                            script.Invoke("on_equip", args);
+                            }
+                        );
                         break;
 
                     case "OnUse":
-                        BehaviorDefinition.OnUse = new ScriptAction((args => { script.GetFunction("OnUse").Call(args); }
-                            ));
+                        BehaviorDefinition.OnUse = new Action<GameEventArgs>((args) =>
+                            {
+                                script.Invoke("on_use", args);
+                            }
+                        );
                         break;
                 }
             }
@@ -94,12 +105,12 @@ namespace Lunar.Server.World
 
         public void OnUse(IActor<IActorDescriptor> user)
         {
-            this.BehaviorDefinition?.OnUse?.Invoke(new ScriptActionArgs(this, user));
+            this.BehaviorDefinition?.OnUse?.Invoke(new GameEventArgs(this, user));
         }
 
         public void OnEquip(IActor<IActorDescriptor> user)
         {
-            this.BehaviorDefinition?.OnEquip?.Invoke(new ScriptActionArgs(this, user));
+            this.BehaviorDefinition?.OnEquip?.Invoke(new GameEventArgs(this, user));
         }
         
         public NetBuffer PackData()

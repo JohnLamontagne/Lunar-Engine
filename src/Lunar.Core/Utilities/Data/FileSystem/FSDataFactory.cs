@@ -16,9 +16,11 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 {
     public class FSDataFactory : IDataManagerFactory
     {
-        public T Create<T>() where T : IDataManager<IDataDescriptor>, new()
+        public T Create<T>(IDataFactoryArguments args) where T: IDataManager<IDataDescriptor>, new()
         {
-            return new T();
+            dynamic dataManager = new T();
+            dataManager.RootPath = (args as FSDataFactoryArguments).RootPath;
+            return dataManager;
         }
 
         public void Initalize()

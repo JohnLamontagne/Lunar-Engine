@@ -66,7 +66,7 @@ namespace Lunar.Editor.Controls
         private MapObject _selectedMapObject;
         private Vector2 _selectedMapObjectOffset;
 
-        private Dictionary<Vector3, Sprite> _tileAttributeSprites;
+        private Dictionary<Tuple<string, Vector2>, Sprite> _tileAttributeSprites;
 
         public Map Map => _map;
 
@@ -106,9 +106,7 @@ namespace Lunar.Editor.Controls
 
             this.mapView.Resize += MapView_Resize;
 
-            _tileAttributeSprites = new Dictionary<Vector3, Sprite>();
-
-            
+            _tileAttributeSprites = new Dictionary<Tuple<string, Vector2>, Sprite>();        
         }
 
         private void UpdateQuickLayerSelection()
@@ -279,7 +277,8 @@ namespace Lunar.Editor.Controls
                                     break;
                             }
 
-                            _tileAttributeSprites.Add(new Vector3(x, y, layer.Descriptor.ZIndex), attributeSprite);
+                            _tileAttributeSprites.Add(new Tuple<string, Vector2>(layer.Descriptor.Name, new Vector2(x, y)), attributeSprite);
+                            
                         }
                     }
                 }
@@ -328,8 +327,9 @@ namespace Lunar.Editor.Controls
 
             if (_placementMode == PlacementMode.Place_Attribute)
             {
-                foreach (var attributeSprite in _tileAttributeSprites.Values)
-                    view.SpriteBatch.Draw(attributeSprite);
+                foreach (var attributeKeyPair in _tileAttributeSprites)
+                    if (this.Map.Layers[attributeKeyPair.Key.Item1].Visible)
+                        view.SpriteBatch.Draw(attributeKeyPair.Value);
             }
         }
 
@@ -602,7 +602,7 @@ namespace Lunar.Editor.Controls
 
                 layer.GetTile(mapX, mapY).Descriptor.Attribute = TileAttributes.None;
 
-                _tileAttributeSprites.Remove(new Vector3(mapX, mapY, layer.Descriptor.ZIndex));
+                _tileAttributeSprites.Remove(new Tuple<string, Vector2>(layer.Descriptor.Name, new Vector2(mapX, mapY)));
 
                 this.MarkUnsaved();
             }
@@ -657,7 +657,7 @@ namespace Lunar.Editor.Controls
                         break;
                 }
 
-                var locationKey = new Vector3(mapX, mapY, layer.Descriptor.ZIndex);
+                var locationKey = new Tuple<string, Vector2>(layer.Descriptor.Name, new Vector2(mapX, mapY));
 
                 if (!_tileAttributeSprites.ContainsKey(locationKey))
                     _tileAttributeSprites.Add(locationKey, attributeSprite);

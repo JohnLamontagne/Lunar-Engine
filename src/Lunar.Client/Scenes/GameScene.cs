@@ -43,26 +43,26 @@ namespace Lunar.Client.Scenes
             _camera = camera;
             _worldManager = new WorldManager(contentManager, _camera);
 
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAYER_MSG, this.Handle_PlayerMessage);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.INVENTORY_UPDATE, this.Handle_InventoryUpdate);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.EQUIPMENT_UPDATE, this.Handle_EquipmentUpdate);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.TARGET_ACQ, this.Handle_TargetAcquired);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.QUIT_GAME, this.Handle_QuitGame);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.DIALOGUE, this.Handle_Dialogue);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.DIALOGUE_END, this.Handle_DialogueEnd);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.LOADING_SCREEN, this.Handle_LoadingScreen);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_MSG, this.Handle_PlayerMessage);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.INVENTORY_UPDATE, this.Handle_InventoryUpdate);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.EQUIPMENT_UPDATE, this.Handle_EquipmentUpdate);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.TARGET_ACQ, this.Handle_TargetAcquired);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.QUIT_GAME, this.Handle_QuitGame);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.DIALOGUE, this.Handle_Dialogue);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.DIALOGUE_END, this.Handle_DialogueEnd);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.LOADING_SCREEN, this.Handle_LoadingScreen);
 
-            Client.ServiceLocator.GetService<NetHandler>().Disconnected += Handle_Disconnected;
+            Client.ServiceLocator.Get<NetHandler>().Disconnected += Handle_Disconnected;
 
             _worldManager.EventOccured += _worldManager_EventOccured;
 
-            Client.ServiceLocator.RegisterService(_worldManager);
+            Client.ServiceLocator.Register(_worldManager);
         }
 
         private void Handle_LoadingScreen(PacketReceivedEventArgs obj)
         {
             _loadingScreen = true;
-            Client.ServiceLocator.GetService<SceneManager>().SetActiveScene("loadingScene");
+            Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
         }
 
 
@@ -137,7 +137,7 @@ namespace Lunar.Client.Scenes
             var packet = new Packet(PacketType.DIALOGUE_RESP);
             packet.Message.Write(_dialogueUniqueID);
             packet.Message.Write(((Label)sender).Text);
-            Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
         }
 
         private void Handle_TargetAcquired(PacketReceivedEventArgs args)
@@ -164,7 +164,7 @@ namespace Lunar.Client.Scenes
             // Unload the world.
             _worldManager.Unload();
 
-            Client.ServiceLocator.GetService<SceneManager>().SetActiveScene("menuScene");
+            Client.ServiceLocator.Get<SceneManager>().SetActiveScene("menuScene");
         }
 
         private void Handle_Disconnected(object sender, EventArgs e)
@@ -177,7 +177,7 @@ namespace Lunar.Client.Scenes
             // Unload the world.
             _worldManager.Unload();
 
-            Client.ServiceLocator.GetService<SceneManager>().SetActiveScene("menuScene");
+            Client.ServiceLocator.Get<SceneManager>().SetActiveScene("menuScene");
         }
 
         private void _worldManager_EventOccured(object sender, Core.Utilities.SubjectEventArgs e)
@@ -230,11 +230,11 @@ namespace Lunar.Client.Scenes
             else if (e.EventName == "loadingMap")
             {
                 _loadingScreen = true;
-                Client.ServiceLocator.GetService<SceneManager>().SetActiveScene("loadingScene");
+                Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
             }
             else if (e.EventName == "finishedLoadingMap")
             {
-                Client.ServiceLocator.GetService<SceneManager>().GetScene<LoadingScene>("loadingScene").OnFinishedLoading();
+                Client.ServiceLocator.Get<SceneManager>().GetScene<LoadingScene>("loadingScene").OnFinishedLoading();
             }
         }
 
@@ -324,7 +324,7 @@ namespace Lunar.Client.Scenes
                 // Unequip the item
                 var packet = new Packet(PacketType.REQ_UNEQUIP_ITEM);
                 packet.Message.Write(slotNum);
-                Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
             }
         }
 
@@ -347,14 +347,14 @@ namespace Lunar.Client.Scenes
                     // Drop the item
                     var packet = new Packet(PacketType.DROP_ITEM);
                     packet.Message.Write(slotNum);
-                    Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
                 }
                 else
                 {
                     // Equip the item
                     var packet = new Packet(PacketType.REQ_USE_ITEM);
                     packet.Message.Write(slotNum);
-                    Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
                 }
             }
         }
@@ -429,7 +429,7 @@ namespace Lunar.Client.Scenes
                     {
                         var selectPacket = new Packet(PacketType.REQ_TARGET);
                         selectPacket.Message.Write(entity.UniqueID);
-                        Client.ServiceLocator.GetService<NetHandler>().SendMessage(selectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                        Client.ServiceLocator.Get<NetHandler>().SendMessage(selectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
 
                         foundTarget = true;
                     }
@@ -441,7 +441,7 @@ namespace Lunar.Client.Scenes
                     this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer").Visible = false;
 
                     var deselectPacket = new Packet(PacketType.DESELECT_TARGET);
-                    Client.ServiceLocator.GetService<NetHandler>().SendMessage(deselectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    Client.ServiceLocator.Get<NetHandler>().SendMessage(deselectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
                 }
             }
         }
@@ -523,7 +523,7 @@ namespace Lunar.Client.Scenes
         private void logoutButton_ButtonClicked(object sender, EventArgs e)
         {
             var packet = new Packet(PacketType.QUIT_GAME);
-            Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
         }
 
         private void messageEntry_ReturnPressed(object sender, EventArgs e)
@@ -534,7 +534,7 @@ namespace Lunar.Client.Scenes
             {
                 var packet = new Packet(PacketType.PLAYER_MSG);
                 packet.Message.Write(text);
-                Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.Unreliable, ChannelType.UNASSIGNED);
+                Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.Unreliable, ChannelType.UNASSIGNED);
                 ((Textbox)sender).Text = string.Empty;
                 ((Textbox) sender).Active = false;
             }

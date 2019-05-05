@@ -48,9 +48,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IronPython, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.SQLite, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Wpf, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="KopiLua">
       <HintPath>..\libs\KopiLua.dll</HintPath>
     </Reference>
@@ -62,6 +74,15 @@
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.CSharp">
       <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.2.3.2\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamic, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Metadata, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="NLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -99,9 +120,7 @@
     <Compile Include="Utilities\Pathfinding\SearchNode.cs" />
     <Compile Include="Utilities\Plugin\PluginManager.cs" />
     <Compile Include="Utilities\Scripting\Script.cs" />
-    <Compile Include="Utilities\Scripting\ScriptAction.cs" />
-    <Compile Include="Utilities\Scripting\ScriptActionArgs.cs" />
-    <Compile Include="Utilities\Scripting\ScriptFunction.cs" />
+    <Compile Include="Utilities\Scripting\GameEventArgs.cs" />
     <Compile Include="Utilities\Scripting\ScriptManager.cs" />
     <Compile Include="Utilities\Scripting\ScriptUtilities.cs" />
     <Compile Include="Net\WebCommunicator.cs" />
@@ -144,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
     <None Include="Server.licenseheader" />
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +187,33 @@
   <ItemGroup>
     <Folder Include="Utilities\Language\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Server Data\Animations\test.adat" />
+    <Content Include="Server Data\Animations\test.lanim" />
+    <Content Include="Server Data\config.xml" />
+    <Content Include="Server Data\experience.conf" />
+    <Content Include="Server Data\Items\asdfasdf.idat" />
+    <Content Include="Server Data\Items\Emerald Ring.idat" />
+    <Content Include="Server Data\Items\health_potion.lua" />
+    <Content Include="Server Data\Items\ruby_ring.lua" />
+    <Content Include="Server Data\Logs\Error.txt" />
+    <Content Include="Server Data\Maps\default.mdat" />
+    <Content Include="Server Data\Npcs\asdfasdfasdf.ndat" />
+    <Content Include="Server Data\Npcs\test.ndat" />
+    <Content Include="Server Data\Scripts\aggressive_npc.py" />
+    <Content Include="Server Data\Scripts\commands_handler.py" />
+    <Content Include="Server Data\Scripts\npc_common.py" />
+    <Content Include="Server Data\Scripts\player.py" />
+    <Content Include="Server Data\user_permissions.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)..\Server Data\*.*" "$(ProjectDir)$(OutDir)\Data\" /Y /E</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -44,7 +44,7 @@ namespace Lunar.Client.World
             _name = netBuffer.ReadString();
 
             var textureName = netBuffer.ReadString();
-            _sprite = new Sprite(Client.ServiceLocator.GetService<ContentManagerService>()
+            _sprite = new Sprite(Client.ServiceLocator.Get<ContentManagerService>()
                 .ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName))
             {
                 Position = position,

@@ -29,7 +29,6 @@ namespace Lunar.Editor.World
         private Tile[,] _tiles;
         private List<MapObject> _mapObjects;
 
-
         public LayerDescriptor Descriptor => _descriptor;
 
         public bool Visible { get; set; }

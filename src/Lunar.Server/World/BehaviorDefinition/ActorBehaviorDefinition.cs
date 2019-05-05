@@ -21,27 +21,27 @@ namespace Lunar.Server.World.BehaviorDefinition
         /// <summary>
         /// Invoked upon actor death
         /// </summary>
-        public ScriptAction OnDeath { get; set; }
+        public Action<GameEventArgs> OnDeath { get; set; }
 
         /// <summary>
         ///  Attacks the specified actor, returning the amount of damage delt.
         /// </summary>
-        public ScriptFunction Attack { get; set; }
+        public Func<GameEventArgs, int> Attack { get; set; }
 
         /// <summary>
         /// Invoked upon being attacked by the specified actor
         /// </summary>
-        public ScriptAction Attacked { get; set; }
+        public Action<GameEventArgs> Attacked { get; set; }
 
         /// <summary>
         /// Invoked every actor Update() pass
         /// </summary>
-        public ScriptAction Update { get; set; }
+        public Action<GameEventArgs> Update { get; set; }
 
         /// <summary>
         /// Invoked when the actor is created
         /// </summary>
-        public ScriptAction OnCreated { get; set; }
+        public Action<GameEventArgs> OnCreated { get; set; }
 
         public virtual event EventHandler<SubjectEventArgs> EventOccured;
     }

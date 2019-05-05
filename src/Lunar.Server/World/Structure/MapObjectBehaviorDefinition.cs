@@ -11,18 +11,18 @@
 	limitations under the License.
 */
 using Lunar.Server.Utilities.Scripting;
-
+using System;
 
 namespace Lunar.Server.World.Structure
 {
     public class MapObjectBehaviorDefinition
     {
-        public ScriptAction OnEntered { get; set; }
+        public Action<EventArgs> OnEntered { get; set; }
 
-        public ScriptAction OnLeft { get; set; }
+        public Action<EventArgs> OnLeft { get; set; }
 
-        public ScriptAction OnInteract { get; set; }
+        public Action<EventArgs> OnInteract { get; set; }
 
-        public ScriptAction Update { get; set; }
+        public Action<EventArgs> Update { get; set; }
     }
 }

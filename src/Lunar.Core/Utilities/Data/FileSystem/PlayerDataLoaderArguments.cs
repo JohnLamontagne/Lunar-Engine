@@ -14,11 +14,11 @@ using Lunar.Core.Utilities.Data.Management;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class PlayerDataLoaderArguments : IDataManagerArguments
+    public class PlayerDataArguments : IDataManagerArguments
     {
         public string Username { get; }
 
-        public PlayerDataLoaderArguments(string username)
+        public PlayerDataArguments(string username)
         {
             this.Username = username;
         }

@@ -55,7 +55,7 @@ namespace Lunar.Server.World.Actors
         private int _dexBoost;
         private int _defBoost;
 
-        private Dictionary<string, List<ScriptAction>> _eventHandlers;
+        private Dictionary<string, List<Action<EventArgs>>> _eventHandlers;
 
         public event EventHandler<EventArgs> LeftGame;
 
@@ -124,8 +124,7 @@ namespace Lunar.Server.World.Actors
             _networkComponent = new PlayerNetworkComponent(this);
             _actionProcessor = new ActionProcessor<Player>(this);
 
-            _eventHandlers = new Dictionary<string, List<ScriptAction>>();
-            _eventHandlers = new Dictionary<string, List<ScriptAction>>();
+            _eventHandlers = new Dictionary<string, List<Action<EventArgs>>>();
 
             if (this.BehaviorDefinition == null)
             {
@@ -133,7 +132,7 @@ namespace Lunar.Server.World.Actors
             }
             else
             {
-                this.BehaviorDefinition.OnCreated?.Invoke(new ScriptActionArgs(this));
+                this.BehaviorDefinition.OnCreated?.Invoke(new GameEventArgs(this));
                 this.BehaviorDefinition.EventOccured += this.BehaviorDescriptor_EventOccured;
             }
         }
@@ -145,7 +144,7 @@ namespace Lunar.Server.World.Actors
                 _lastAttacker.Target = null;
             }
 
-            this.BehaviorDefinition.OnDeath?.Invoke(new ScriptActionArgs(this));
+            this.BehaviorDefinition.OnDeath?.Invoke(new GameEventArgs(this));
         }
 
         public void InflictDamage(int amount)
@@ -162,7 +161,7 @@ namespace Lunar.Server.World.Actors
         {
             _lastAttacker = attacker;
 
-            this.BehaviorDefinition?.Attacked?.Invoke(new ScriptActionArgs(this, attacker, damageDelt));
+            this.BehaviorDefinition?.Attacked?.Invoke(new GameEventArgs(this, attacker, damageDelt));
         }
 
 
@@ -201,15 +200,15 @@ namespace Lunar.Server.World.Actors
         private void OnEvent(string eventName, params object[] args)
         {
             if (_eventHandlers.ContainsKey(eventName))
-                _eventHandlers[eventName].ForEach(a => a.Invoke(new ScriptActionArgs(this, args)));
+                _eventHandlers[eventName].ForEach(a => a.Invoke(new GameEventArgs(this, args)));
 
             this.EventOccured?.Invoke(this, new SubjectEventArgs(eventName, args));
         }
 
-        public void AddEventHandler(string eventName, ScriptAction handler)
+        public void AddEventHandler(string eventName, Action<EventArgs> handler)
         {
             if (!_eventHandlers.ContainsKey(eventName))
-                _eventHandlers.Add(eventName, new List<ScriptAction>());
+                _eventHandlers.Add(eventName, new List<Action<EventArgs>>());
 
             _eventHandlers[eventName].Add(handler);
         }

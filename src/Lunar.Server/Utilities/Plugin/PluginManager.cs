@@ -78,7 +78,7 @@ namespace Lunar.Server.Utilities.Plugin
 
         public void Initalize()
         {
-            this.LoadPlugins(EngineConstants.FILEPATH_PLUGINS);
+            this.LoadPlugins(Constants.FILEPATH_PLUGINS);
         }
     }
 }

@@ -18,9 +18,12 @@ namespace Lunar.Client
 {
     public static class Constants
     {
-        public static readonly string FILEPATH_ROOT = "Data/";
+#if DEBUG
+        public static readonly string FILEPATH_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory + "../../../../";
+#else
         public static readonly string FILEPATH_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;
-        public static readonly string FILEPATH_DATA = FILEPATH_DIRECTORY + "/" + FILEPATH_ROOT;
+#endif
+        public static readonly string FILEPATH_DATA = FILEPATH_DIRECTORY + "/" + "/Client Data/";
         public static readonly string FILEPATH_PLUGINS = FILEPATH_DATA + "/plugins/";
         public static readonly string FILEPATH_SHADERS = FILEPATH_DATA + "/shaders/";
         public static readonly string FILEPATH_GFX = FILEPATH_DATA + "gfx/";

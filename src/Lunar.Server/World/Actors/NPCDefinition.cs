@@ -14,6 +14,7 @@ using Lunar.Core;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
+using System;
 
 namespace Lunar.Server.World.Actors
 {
@@ -28,7 +29,7 @@ namespace Lunar.Server.World.Actors
         {
             this.Descriptor = descriptor;
 
-            Script script = new Script(EngineConstants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
+            Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "aggressive_npc.py"); 
 
             this.InitalizeDefaultBehavior();
 
@@ -39,78 +40,33 @@ namespace Lunar.Server.World.Actors
         {
             _behaviorDefinition = new ActorBehaviorDefinition();
 
-            Script script = new Script(EngineConstants.FILEPATH_SCRIPTS + "aggressive_npc.lua");
+            Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "aggressive_npc.py");
 
-            this.BehaviorDefinition.Attack = new ScriptFunction(args => script.GetFunction("Attack").Call(args));
-            this.BehaviorDefinition.OnCreated = new ScriptAction((args => script.GetFunction("OnCreated").Call(args)));
-            this.BehaviorDefinition.Attacked = new ScriptAction((args =>
-                    {
-                        script.GetFunction("Attacked").Call(args);
-                    }
-                ));
-            this.BehaviorDefinition.OnDeath = new ScriptAction((args =>
-                    {
-                        script.GetFunction("OnDeath").Call(args);
-                    }
-                ));
-
-            this.BehaviorDefinition.Update = new ScriptAction((args =>
-                    {
-                        script.GetFunction("Update").Call(args);
-                    }
-                ));
-        }
-
-        private void InitalizeScripts(NPCDescriptor descriptor)
-        {
-            _behaviorDefinition = new ActorBehaviorDefinition();
-            foreach (var scriptDef in descriptor.Scripts)
+            this.BehaviorDefinition.Attack = new Func<GameEventArgs, int>((args)=> 
             {
-                string scriptActionHook = scriptDef.Key;
-                string scriptContent = scriptDef.Value;
+                return script.Invoke<int>("attack", args);
+            });
 
-                Script script = new Script(scriptContent, false);
+            this.BehaviorDefinition.Attacked = new Action<GameEventArgs>((args) =>
+            {
+                script.Invoke("attack", args);
+            });
 
-                switch (scriptActionHook)
-                {
-                    case "OnAttack":
-                        this.BehaviorDefinition.Attack = new ScriptFunction(args => script.GetFunction("Attack").Call(args));
-                        break;
+            this.BehaviorDefinition.OnCreated = new Action<GameEventArgs>((args) =>
+            {
+                script.Invoke("on_created", args);
+            });
 
-                    case "OnCreated":
-                        this.BehaviorDefinition.OnCreated = new ScriptAction((args =>
-                            {
-                                script.GetFunction("OnCreated").Call(args);
-                            }
-                        ));
-                        break;
+            
+            this.BehaviorDefinition.OnDeath = new Action<GameEventArgs>((args) =>
+            {
+                script.Invoke("on_death", args);
+            });
 
-                    case "OnAttacked":
-                        this.BehaviorDefinition.Attacked = new ScriptAction((args =>
-                            {
-                                script.GetFunction("Attacked").Call(args);
-                            }
-                        ));
-                        break;
-
-                    case "OnDeath":
-                        this.BehaviorDefinition.OnDeath = new ScriptAction((args =>
-                            {
-                                script.GetFunction("OnDeath").Call(args);
-                            }
-                        ));
-                        break;
-
-                    case "OnUpdate":
-                        this.BehaviorDefinition.Update = new ScriptAction((args =>
-                            {
-                                script.GetFunction("Update").Call(args);
-                            }
-                        ));
-                        break;
-                }
-            }
-
+            this.BehaviorDefinition.OnDeath = new Action<GameEventArgs>((args) =>
+            {
+                script.Invoke("update", args);
+            });
         }
     }
 }

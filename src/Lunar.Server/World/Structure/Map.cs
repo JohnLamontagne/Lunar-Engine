@@ -77,7 +77,7 @@ namespace Lunar.Server.World.Structure
 
                 layer.NPCSpawnerEvent += (sender, args) =>
                 {
-                    var npcDesc = Server.ServiceLocator.GetService<NPCManager>().GetNPC(args.Name);
+                    var npcDesc = Server.ServiceLocator.Get<NPCManager>().GetNPC(args.Name);
 
                     if (npcDesc == null)
                     {

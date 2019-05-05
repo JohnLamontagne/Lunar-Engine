@@ -11,7 +11,7 @@
 	limitations under the License.
 */
 using Lunar.Server.Utilities.Scripting;
-
+using System;
 
 namespace Lunar.Server.World.BehaviorDefinition
 {
@@ -20,26 +20,26 @@ namespace Lunar.Server.World.BehaviorDefinition
         /// <summary>
         /// Invoked when the item is used
         /// </summary>
-        public ScriptAction OnUse { get; set; }
+        public Action<GameEventArgs> OnUse { get; set; }
 
         /// <summary>
         /// Invoked when the item is equipped
         /// </summary>
-        public ScriptAction OnEquip { get; set; }
+        public Action<GameEventArgs> OnEquip { get; set; }
 
         /// <summary>
         /// Invoked when the item is acquired by an actor
         /// </summary>
-        public ScriptAction OnAcquired { get; set; }
+        public Action<GameEventArgs> OnAcquired { get; set; }
 
         /// <summary>
         /// Invoked when the item is dropped by an actor
         /// </summary>
-        public ScriptAction OnDropped { get; set; }
+        public Action<GameEventArgs> OnDropped { get; set; }
 
         /// <summary>
         /// Invoked when the item is created within the gameworld
         /// </summary>
-        public ScriptAction OnCreated { get; set; }
+        public Action<GameEventArgs> OnCreated { get; set; }
     }
 }

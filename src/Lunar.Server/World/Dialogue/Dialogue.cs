@@ -22,7 +22,7 @@ namespace Lunar.Server.World.Dialogue
 {
     public class Dialogue
     {
-        private readonly Dictionary<string, ScriptAction> _scriptedResponses;
+        private readonly Dictionary<string, Action<GameEventArgs>> _scriptedResponses;
         private readonly Dictionary<string, Dialogue> _dialogueResponses;
         private  string _text;
         private string _uniqueID;
@@ -34,13 +34,13 @@ namespace Lunar.Server.World.Dialogue
             _player = player;
             _uniqueID = Guid.NewGuid().ToString();
 
-            _scriptedResponses = new Dictionary<string, ScriptAction>();
+            _scriptedResponses = new Dictionary<string, Action<GameEventArgs>>();
             _dialogueResponses = new Dictionary<string, Dialogue>();
 
             player.Connection.AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
         }
 
-        public void AddResponse(string response, ScriptAction action)
+        public void AddResponse(string response, Action<GameEventArgs> action)
         {
             _scriptedResponses.Add(response, action);
         }
@@ -84,7 +84,7 @@ namespace Lunar.Server.World.Dialogue
             {
                 var next = _scriptedResponses[response];
                 this.ClearResponses();
-                next.Invoke(new ScriptActionArgs(this, _player));
+                next.Invoke(new GameEventArgs(this, _player));
             }
             else
             {

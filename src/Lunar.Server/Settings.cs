@@ -27,9 +27,9 @@ namespace Lunar.Server
 {
     public static class Settings
     {
-        private static readonly string _filePathConfig = EngineConstants.FILEPATH_DATA + "config.xml";
-        private static readonly string _filePathExperience = EngineConstants.FILEPATH_DATA + "experience.conf";
-        private static readonly string _filePathUserPermissions = EngineConstants. FILEPATH_DATA + "user_permissions.xml";
+        private static readonly string _filePathConfig = Constants.FILEPATH_DATA + "config.xml";
+        private static readonly string _filePathExperience = Constants.FILEPATH_DATA + "experience.conf";
+        private static readonly string _filePathUserPermissions = Constants. FILEPATH_DATA + "user_permissions.xml";
 
         public static string GameName { get; private set; }
 
@@ -58,6 +58,8 @@ namespace Lunar.Server
         public static int MaxLevel { get; private set; }
 
         public static int[] ExperienceThreshhold { get; private set; }
+
+        public static Dictionary<string, Role> UserPermissions { get; private set; }
 
         public static void Initalize()
         {
@@ -153,8 +155,14 @@ namespace Lunar.Server
 
         private static void LoadUserPermissions()
         {
+            UserPermissions = new Dictionary<string, Role>();
+
             if (!File.Exists(_filePathUserPermissions))
+            {
+                Logger.LogEvent($"Could not load user permissions: file does not exist at {_filePathUserPermissions}!", LogTypes.ERROR, "");
                 return;
+            }
+                
 
             try
             {
@@ -167,21 +175,15 @@ namespace Lunar.Server
 
                     Role role = Settings.Roles[roleName] ?? Role.Default;
 
-
-                    var playerDataManager = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>();
-
-                    var player = playerDataManager.Load(new PlayerDataLoaderArguments(userName));
-
-                    if (player != null)
-                    {
-                        player.Role = role;
-                        playerDataManager.Save(player, new PlayerDataLoaderArguments(player.Name));
-                    }
+                    if (UserPermissions.ContainsKey(userName))
+                        UserPermissions[userName] = role;
+                    else
+                        UserPermissions.Add(userName, role);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error loading user permissions!");
+                Logger.LogEvent($"Could not load user permissions: {ex.Message}", LogTypes.ERROR, ex.StackTrace);
             }
         }
 

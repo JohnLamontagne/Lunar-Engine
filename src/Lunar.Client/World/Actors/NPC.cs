@@ -116,7 +116,7 @@ namespace Lunar.Client.World.Actors
 
             this.Light = new PointLight();
 
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.NPC_MOVING, this.Handle_NPCMoving);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.NPC_MOVING, this.Handle_NPCMoving);
         }
 
         private void Handle_NPCMoving(PacketReceivedEventArgs args)
@@ -299,7 +299,7 @@ namespace Lunar.Client.World.Actors
             this.Position = position;
 
             var layerName = buffer.ReadString();
-            _layer = Client.ServiceLocator.GetService<WorldManager>().Map.GetLayer(layerName);
+            _layer = Client.ServiceLocator.Get<WorldManager>().Map.GetLayer(layerName);
 
             this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);
             this.SpriteSheet.HorizontalFrameIndex = 1;

@@ -83,7 +83,7 @@ namespace Lunar.Server.World.Structure
                     WarpAttributeData attributeData = (WarpAttributeData)this.Descriptor.AttributeData;
                     if (player.MapID != attributeData.WarpMap)
                     {
-                        var map  = Server.ServiceLocator.GetService<WorldManager>().GetMap(attributeData.WarpMap);
+                        var map  = Server.ServiceLocator.Get<WorldManager>().GetMap(attributeData.WarpMap);
 
                         if (map != null)
                         {

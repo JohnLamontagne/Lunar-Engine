@@ -100,7 +100,7 @@ namespace Lunar.Client.World
                 var frameCount = netBuffer.ReadInt32();
 
 
-                var sprite = Client.ServiceLocator.GetService<ContentManagerService>().ContentManager
+                var sprite = Client.ServiceLocator.Get<ContentManagerService>().ContentManager
                     .LoadTexture2D(tilesetPath);
 
 
@@ -121,7 +121,7 @@ namespace Lunar.Client.World
                     pointLight.Radius = lightRadius;
                     pointLight.Position = new Vector2(position.X - (lightRadius / 2f) + (EngineConstants.TILE_WIDTH / 2f),
                         position.Y - (lightRadius / 2f) + (EngineConstants.TILE_HEIGHT / 2f));
-                    Client.ServiceLocator.GetService<LightManagerService>().Component.Lights.Add(pointLight);
+                    Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Add(pointLight);
                 }
 
                 return tile;

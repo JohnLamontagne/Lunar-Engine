@@ -28,7 +28,7 @@ namespace Lunar.Core.Utilities
             _services = new Dictionary<Type, IService>();
         }
 
-        public IService GetService(Type serviceType)
+        public IService Get(Type serviceType)
         {
             return _services[serviceType];
         }
@@ -38,17 +38,17 @@ namespace Lunar.Core.Utilities
         /// </summary>
         /// <param name="serviceKTypeName"></param>
         /// <returns></returns>
-        public IService GetService(string serviceKTypeName)
+        public IService Get(string serviceKTypeName)
         {
             return _services.FirstOrDefault(s => s.Key.Name == serviceKTypeName).Value;
         }
 
-        public T GetService<T>() where T : IService
+        public T Get<T>() where T : IService
         {
             return (T)(_services[typeof(T)]);
         }
 
-        public void RegisterService(IService service)
+        public void Register(IService service)
         {
             _services.Add(service.GetType(), service);
         }

@@ -23,7 +23,7 @@ namespace Lunar.Client.Net
 
         public Packet(PacketType packetType)
         {
-            _message = Client.ServiceLocator.GetService<NetHandler>().ConstructMessage();
+            _message = Client.ServiceLocator.Get<NetHandler>().ConstructMessage();
             _message.Write((short)packetType);
         }
     }

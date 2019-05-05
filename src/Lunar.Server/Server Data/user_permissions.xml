@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Permissions>
 	<user name="admin" role="Admin"/>
+	<user name="1" role="Admin"/>
 </Permissions>

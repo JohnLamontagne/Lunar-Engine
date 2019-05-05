@@ -41,9 +41,9 @@ namespace Lunar.Client.Scenes
 
             if (_finishedLoading && gameTime.TotalGameTime.TotalMilliseconds > _minEndTime)
             {
-                Client.ServiceLocator.GetService<SceneManager>().SetActiveScene("gameScene");
+                Client.ServiceLocator.Get<SceneManager>().SetActiveScene("gameScene");
                 var mapLoaded = new Packet(PacketType.MAP_LOADED);
-                Client.ServiceLocator.GetService<NetHandler>().SendMessage(mapLoaded.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                Client.ServiceLocator.Get<NetHandler>().SendMessage(mapLoaded.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
             }
 
             base.Update(gameTime);

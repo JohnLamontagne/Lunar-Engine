@@ -52,8 +52,8 @@ namespace Lunar.Client.World
             _mapItems = new Dictionary<Vector2, List<MapItem>>();
             _mapObjects = new List<MapObject>();
 
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_SPAWN, this.Handle_MapItemSpawn);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_DESPAWN, this.Handle_MapItemDeSpawn);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_SPAWN, this.Handle_MapItemSpawn);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_DESPAWN, this.Handle_MapItemDeSpawn);
         }
 
         private void Handle_MapItemDeSpawn(PacketReceivedEventArgs args)
@@ -138,17 +138,17 @@ namespace Lunar.Client.World
         public void Unpack(NetBuffer netBuffer)
         {
 
-            Client.ServiceLocator.GetService<LightManagerService>().Component.Lights.Clear();
+            Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Clear();
 
             this.Dark = netBuffer.ReadBoolean();
 
             if (this.Dark)
             {
-                Client.ServiceLocator.GetService<LightManagerService>().Component.AmbientColor = new Color(100, 100, 100, 20);
+                Client.ServiceLocator.Get<LightManagerService>().Component.AmbientColor = new Color(100, 100, 100, 20);
             }
             else
             {
-                Client.ServiceLocator.GetService<LightManagerService>().Component.AmbientColor = Color.White;
+                Client.ServiceLocator.Get<LightManagerService>().Component.AmbientColor = Color.White;
             }
 
             int layerCount = netBuffer.ReadInt32();
@@ -199,12 +199,12 @@ namespace Lunar.Client.World
         {
             _entities.Add(uniqueID, actor);
 
-            Client.ServiceLocator.GetService<LightManagerService>().Component.Lights.Add(actor.Light);
+            Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Add(actor.Light);
         }
 
         public void RemoveEntity(long uniqueID)
         {
-            Client.ServiceLocator.GetService<LightManagerService>().Component.Lights.Remove(_entities[uniqueID].Light);
+            Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Remove(_entities[uniqueID].Light);
 
             _entities.Remove(uniqueID);
         }

@@ -34,7 +34,7 @@ namespace Lunar.Server.World.Actors
         {
             Console.WriteLine("Loading NPCs...");
 
-            var directoryInfo = new DirectoryInfo(EngineConstants.FILEPATH_NPCS);
+            var directoryInfo = new DirectoryInfo(Constants.FILEPATH_NPCS);
             FileInfo[] files = directoryInfo.GetFiles("*" + EngineConstants.NPC_FILE_EXT);
 
             foreach (var file in files)

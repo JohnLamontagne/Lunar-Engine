@@ -31,7 +31,7 @@ namespace Lunar.Server.World.Structure
         {
             _maps = new Dictionary<string, Map>();
 
-            _mapDataLoader = Server.ServiceLocator.GetService<FSDataFactory>().Create<MapFSDataManager>();
+            _mapDataLoader = Server.ServiceLocator.Get<FSDataFactory>().Create<MapFSDataManager>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
 
             this.LoadMaps();
         }
@@ -40,12 +40,12 @@ namespace Lunar.Server.World.Structure
         {
             Console.WriteLine("Loading Maps...");
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(EngineConstants.FILEPATH_MAPS);
+            DirectoryInfo directoryInfo = new DirectoryInfo(Constants.FILEPATH_MAPS);
             FileInfo[] files = directoryInfo.GetFiles($"*{EngineConstants.MAP_FILE_EXT}");
 
             foreach (var file in files)
             {
-                Map map = new Map(_mapDataLoader.Load(new MapDataLoaderArguments(Path.GetFileNameWithoutExtension(file.FullName))));
+                Map map = new Map(_mapDataLoader.Load(new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(file.FullName))));
 
                 map.ConstructPathfinder();
                 _maps.Add(map.Descriptor.Name, map);

@@ -24,36 +24,28 @@ namespace Lunar.Server.Utilities.Commands
 {
     public class CommandHandler : IService
     {
-        private readonly Dictionary<string, List<ScriptAction>> _scriptedCommandHandlers;
+        private readonly Dictionary<string, List<dynamic>> _scriptedCommandHandlers;
         private Script _script;
 
         public CommandHandler(NetHandler netHandler)
         {
             netHandler.AddPacketHandler(PacketType.CLIENT_COMMAND, this.Handle_ClientCommand);
 
-            _scriptedCommandHandlers = new Dictionary<string, List<ScriptAction>>();
+            _scriptedCommandHandlers = new Dictionary<string, List<dynamic>>();
         }
 
-        public void AddHandler(string command, ScriptAction action)
+        public void AddHandler(string command, dynamic action)
         {
             if (!_scriptedCommandHandlers.ContainsKey(command))
-                _scriptedCommandHandlers.Add(command, new List<ScriptAction>());
+                _scriptedCommandHandlers.Add(command, new List<dynamic>());
 
             _scriptedCommandHandlers[command].Add(action);
         }
 
         private void LoadScript()
         {
-            _script = new Script(EngineConstants.FILEPATH_SCRIPTS + "command_handler.lua");
-
-            _script.ScriptChanged += Script_ScriptChanged;
-        }
-
-        private void Script_ScriptChanged(object sender, EventArgs e)
-        {
-            _scriptedCommandHandlers.Clear();
-
-            _script.ReExecute();
+            _script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "command_handler.py");
+            _script.SetVariable<CommandHandler>("command_handler", this);
         }
 
         private void Handle_ClientCommand(PacketReceivedEventArgs args)
@@ -72,9 +64,20 @@ namespace Lunar.Server.Utilities.Commands
             if (_scriptedCommandHandlers.ContainsKey(command))
             {
                 // Get the player
-                var player = Server.ServiceLocator.GetService<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
+                var player = Server.ServiceLocator.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
 
-                _scriptedCommandHandlers[command].ForEach(a => a.Invoke(new ScriptActionArgs(this, player, cArgs)));
+                _scriptedCommandHandlers[command].ForEach(a => 
+                    {
+                        try
+                        {
+                            a(new GameEventArgs(this, player, cArgs));
+                        }
+                        catch (Exception ex)
+                        {
+                            Server.ServiceLocator.Get<ScriptManager>().HandleException(ex);
+                        }
+                    }
+                );
             }
         }
 

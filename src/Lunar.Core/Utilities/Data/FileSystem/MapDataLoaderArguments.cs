@@ -14,16 +14,14 @@ using Lunar.Core.Utilities.Data.Management;
 
 namespace Lunar.Core.Utilities.Data
 {
-    public class MapDataLoaderArguments : IDataManagerArguments
+    public class MapFSDataManagerArguments : IDataManagerArguments
     {
         public string Name { get; }
 
-        public bool IsPath { get; set; }
 
-        public MapDataLoaderArguments(string name)
+        public MapFSDataManagerArguments(string name)
         {
             this.Name = name;
-          
         }
     }
 }

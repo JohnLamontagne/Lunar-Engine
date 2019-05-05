@@ -57,30 +57,30 @@ namespace Lunar.Server
             Console.WriteLine("Checking file integrity...");
             this.CheckFileIntegrity();
 
-            Server.ServiceLocator.RegisterService(new ScriptManager());
+            Server.ServiceLocator.Register(new ScriptManager());
 
             _netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
             Packet.Initalize(_netHandler);
 
             // Register the data loader factories
-            Server.ServiceLocator.RegisterService(new FSDataFactory());
+            Server.ServiceLocator.Register(new FSDataFactory());
 
             // Create and initalize the game content managers.
-            Server.ServiceLocator.RegisterService(new ItemManager());
-            Server.ServiceLocator.RegisterService(new NPCManager());
-            Server.ServiceLocator.RegisterService(new MapManager());
+            Server.ServiceLocator.Register(new ItemManager());
+            Server.ServiceLocator.Register(new NPCManager());
+            Server.ServiceLocator.Register(new MapManager());
 
-            Server.ServiceLocator.RegisterService(new WorldManager(_netHandler));
-            Server.ServiceLocator.RegisterService(new PlayerManager());
+            Server.ServiceLocator.Register(new WorldManager(_netHandler));
+            Server.ServiceLocator.Register(new PlayerManager());
 
-            Server.ServiceLocator.RegisterService(new GameEventListener());
+            Server.ServiceLocator.Register(new GameEventListener());
 
             var pluginManager = new PluginManager();
             pluginManager.Initalize();
-            Server.ServiceLocator.RegisterService(pluginManager);
+            Server.ServiceLocator.Register(pluginManager);
 
             CommandHandler commandHandler = new CommandHandler(_netHandler);
-            Server.ServiceLocator.RegisterService(commandHandler);
+            Server.ServiceLocator.Register(commandHandler);
             commandHandler.Initalize();
 
             _webCommunicator = new WebCommunicator();
@@ -132,7 +132,7 @@ namespace Lunar.Server
                 {
                     if (gameTime.TotalElapsedTime >= nextUpdateTime)
                     {
-                        Server.ServiceLocator.GetService<WorldManager>().Update(gameTime);
+                        Server.ServiceLocator.Get<WorldManager>().Update(gameTime);
 
                         GameTimerManager.Instance.Update(gameTime);
 
@@ -143,7 +143,7 @@ namespace Lunar.Server
                 }
 
                 // Save the game world
-                Server.ServiceLocator.GetService<WorldManager>().Save();
+                Server.ServiceLocator.Get<WorldManager>().Save();
             });
 
             _netThread.Start();
@@ -153,26 +153,26 @@ namespace Lunar.Server
 
         private void CheckFileIntegrity()
         {
-            if (!Directory.Exists(EngineConstants.FILEPATH_DATA))
-                Directory.CreateDirectory(EngineConstants.FILEPATH_DATA);
+            if (!Directory.Exists(Constants.FILEPATH_DATA))
+                Directory.CreateDirectory(Constants.FILEPATH_DATA);
 
-            if (!Directory.Exists(EngineConstants.FILEPATH_SCRIPTS))
-                Directory.CreateDirectory(EngineConstants.FILEPATH_SCRIPTS);
+            if (!Directory.Exists(Constants.FILEPATH_SCRIPTS))
+                Directory.CreateDirectory(Constants.FILEPATH_SCRIPTS);
 
-            if (!Directory.Exists(EngineConstants.FILEPATH_ACCOUNTS))
-                Directory.CreateDirectory(EngineConstants.FILEPATH_ACCOUNTS);
+            if (!Directory.Exists(Constants.FILEPATH_ACCOUNTS))
+                Directory.CreateDirectory(Constants.FILEPATH_ACCOUNTS);
 
-            if (!Directory.Exists(EngineConstants.FILEPATH_ITEMS))
-                Directory.CreateDirectory(EngineConstants.FILEPATH_ITEMS);
+            if (!Directory.Exists(Constants.FILEPATH_ITEMS))
+                Directory.CreateDirectory(Constants.FILEPATH_ITEMS);
 
-            if (!Directory.Exists(EngineConstants.FILEPATH_LOGS))
-                Directory.CreateDirectory(EngineConstants.FILEPATH_LOGS);
+            if (!Directory.Exists(Constants.FILEPATH_LOGS))
+                Directory.CreateDirectory(Constants.FILEPATH_LOGS);
 
-            if (!Directory.Exists(EngineConstants.FILEPATH_MAPS))
-                Directory.CreateDirectory(EngineConstants.FILEPATH_MAPS);
+            if (!Directory.Exists(Constants.FILEPATH_MAPS))
+                Directory.CreateDirectory(Constants.FILEPATH_MAPS);
 
-            if (!Directory.Exists(EngineConstants.FILEPATH_NPCS))
-                Directory.CreateDirectory(EngineConstants.FILEPATH_NPCS);
+            if (!Directory.Exists(Constants.FILEPATH_NPCS))
+                Directory.CreateDirectory(Constants.FILEPATH_NPCS);
         }
     }
 }

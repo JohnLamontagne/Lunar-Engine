@@ -10,35 +10,61 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+using System;
 using System.Collections.Generic;
+using IronPython.Hosting;
+using Lunar.Core;
 using Lunar.Core.Utilities;
+using Microsoft.Scripting.Hosting;
 
 namespace Lunar.Server.Utilities.Scripting
 {
     public class ScriptManager : IService
     {
         private Dictionary<string, Script> _scripts;
+        private ScriptEngine _scriptEngine;
 
         public ScriptManager()
         {
             _scripts = new Dictionary<string, Script>();
+
+            _scriptEngine = Python.CreateEngine();
+            var oldSearchPaths = _scriptEngine.GetSearchPaths();
+            oldSearchPaths.Add(Constants.FILEPATH_SCRIPTS);
+            _scriptEngine.SetSearchPaths(oldSearchPaths);
         }
 
-        /// <summary>
-        /// Retrieves the script at the specified filepath and caches it if it has not yet been loaded.
-        /// </summary>
-        /// <param name="scriptPath"></param>
-        /// <returns></returns>
-        public Script GetScript(string scriptPath)
+        public Script CreateScript(string scriptPath)
         {
-            // Don't load the same script twice
-            if (!_scripts.ContainsKey(scriptPath))
-            {
-                var script = new Script(scriptPath);
-                _scripts.Add(scriptPath, script);
-            }
+            if (_scripts.ContainsKey(scriptPath))
+                return _scripts[scriptPath];
 
-            return _scripts[scriptPath];
+            ScriptSource compiledScript = _scriptEngine.CreateScriptSourceFromFile(scriptPath);
+            Script script = new Script(_scriptEngine, compiledScript);
+            _scripts.Add(scriptPath, script);
+
+            return script;
+        }
+
+        public Script CreateScriptFromSource(string source)
+        {
+            string key = source.GetHashCode().ToString();
+
+            if (_scripts.ContainsKey(key))
+                return _scripts[key];
+
+            ScriptSource compiledScript = _scriptEngine.CreateScriptSourceFromString(source);
+            Script script = new Script(_scriptEngine, compiledScript);
+            _scripts.Add(key, script);
+
+            return script;
+        }
+
+        public void HandleException(Exception ex)
+        {
+            ExceptionOperations eo = _scriptEngine.GetService<ExceptionOperations>();
+            string error = eo.FormatException(ex);
+            Logger.LogEvent($"Script error: {error}", LogTypes.ERROR, ex.StackTrace);
         }
 
         public void Initalize()

@@ -37,7 +37,7 @@ namespace Lunar.Client.GUI
         {
             _widgets = new Dictionary<string, IWidget>();
 
-            var graphicsDevice = Client.ServiceLocator.GetService<GraphicsDeviceService>().GraphicsDevice;
+            var graphicsDevice = Client.ServiceLocator.Get<GraphicsDeviceService>().GraphicsDevice;
 
             var pp = graphicsDevice.PresentationParameters;
             _renderTarget = new RenderTarget2D(graphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
@@ -219,7 +219,7 @@ namespace Lunar.Client.GUI
         {
             spriteBatch.End();
 
-            Client.ServiceLocator.GetService<GraphicsDeviceService>().GraphicsDevice.SetRenderTarget(null);
+            Client.ServiceLocator.Get<GraphicsDeviceService>().GraphicsDevice.SetRenderTarget(null);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 

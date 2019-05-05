@@ -42,18 +42,18 @@ namespace Lunar.Server.World
 
         private void Player_Connection_Lost(object sender, ConnectionEventArgs e)
         {
-            Player player = Server.ServiceLocator.GetService<PlayerManager>().GetPlayer(e.Connection.RemoteUniqueIdentifier);
+            Player player = Server.ServiceLocator.Get<PlayerManager>().GetPlayer(e.Connection.RemoteUniqueIdentifier);
 
             if (player == null)
                 return;
       
             player.LeaveGame();
-            Server.ServiceLocator.GetService<PlayerManager>().RemovePlayer(player.UniqueID);
+            Server.ServiceLocator.Get<PlayerManager>().RemovePlayer(player.UniqueID);
         }
 
         private void Handle_PlayerMessage(PacketReceivedEventArgs args)
         {
-            Player player = Server.ServiceLocator.GetService<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
+            Player player = Server.ServiceLocator.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
 
             // Make sure the sender is online.
             if (player == null) return;
@@ -67,7 +67,7 @@ namespace Lunar.Server.World
         {
             if (!_maps.ContainsKey(player.MapID))
             {
-                this.AddMap(player.MapID, Server.ServiceLocator.GetService<MapManager>().GetMap(player.MapID));
+                this.AddMap(player.MapID, Server.ServiceLocator.Get<MapManager>().GetMap(player.MapID));
             }
 
             player.JoinGame(_maps[player.MapID]);
@@ -83,11 +83,11 @@ namespace Lunar.Server.World
 
             PlayerConnection senderConn = args.Connection;
 
-            bool registerSuccess = Server.ServiceLocator.GetService<PlayerManager>().RegisterPlayer(username, password, senderConn);
+            bool registerSuccess = Server.ServiceLocator.Get<PlayerManager>().RegisterPlayer(username, password, senderConn);
 
             if (registerSuccess)
             {
-                var player = Server.ServiceLocator.GetService<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier);
+                var player = Server.ServiceLocator.Get<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier);
 
                 this.JoinGame(player);
             }
@@ -103,11 +103,11 @@ namespace Lunar.Server.World
 
             PlayerConnection senderConn = args.Connection;
 
-            var loginSuccess = Server.ServiceLocator.GetService<PlayerManager>().LoginPlayer(username, password, senderConn);
+            var loginSuccess = Server.ServiceLocator.Get<PlayerManager>().LoginPlayer(username, password, senderConn);
 
             if (loginSuccess)
             {
-                var player = Server.ServiceLocator.GetService<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier);
+                var player = Server.ServiceLocator.Get<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier);
 
                 this.JoinGame(player);
             }
@@ -117,7 +117,7 @@ namespace Lunar.Server.World
         {
             if (!_maps.ContainsKey(id))
             {
-                _maps.Add(id, Server.ServiceLocator.GetService<MapManager>().GetMap(id));
+                _maps.Add(id, Server.ServiceLocator.Get<MapManager>().GetMap(id));
             }
 
             return _maps[id];
@@ -138,7 +138,7 @@ namespace Lunar.Server.World
 
         public void Save()
         {
-            Server.ServiceLocator.GetService<PlayerManager>().Save();
+            Server.ServiceLocator.Get<PlayerManager>().Save();
         }
 
         public void Initalize()

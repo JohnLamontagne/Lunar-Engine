@@ -118,14 +118,14 @@ namespace Lunar.Server.World.Actors
             _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
 
 
-            this.BehaviorDefinition?.OnCreated?.Invoke(new ScriptActionArgs(this));
+            this.BehaviorDefinition?.OnCreated?.Invoke(new GameEventArgs(this));
         }
 
         
 
         public void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt)
         {
-            this.BehaviorDefinition?.Attacked?.Invoke(new ScriptActionArgs(this, attacker, damageDelt));
+            this.BehaviorDefinition?.Attacked?.Invoke(new GameEventArgs(this, attacker, damageDelt));
         }
 
         public void Update(GameTime gameTime)
@@ -138,7 +138,7 @@ namespace Lunar.Server.World.Actors
             this.ProcessMovement(gameTime);
             this.ProcessCombat(gameTime);
 
-            this.BehaviorDefinition?.Update?.Invoke(new ScriptActionArgs(this, new object[] { gameTime }));
+            this.BehaviorDefinition?.Update?.Invoke(new GameEventArgs(this, new object[] { gameTime }));
         }
 
         private void ProcessCombat(GameTime gameTime)
@@ -159,7 +159,7 @@ namespace Lunar.Server.World.Actors
                         return;
                 }
 
-                var damageDelt = this.BehaviorDefinition?.Attack?.Invoke(new ScriptActionArgs(this, this.Target));
+                var damageDelt = this.BehaviorDefinition?.Attack?.Invoke(new GameEventArgs(this, this.Target));
                 this.Target.OnAttacked(this, Convert.ToInt32(damageDelt));
                 
 

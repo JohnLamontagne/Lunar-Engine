@@ -74,8 +74,8 @@ namespace Lunar.Client.World
             var frameTime = netBuffer.ReadInt32();
 
             var sprite =
-                new AnimatedSprite(Client.ServiceLocator.GetService<ContentManagerService>().ContentManager.LoadTexture2D(
-                    Constants.FILEPATH_ROOT + textureName))
+                new AnimatedSprite(Client.ServiceLocator.Get<ContentManagerService>().ContentManager.LoadTexture2D(
+                    Constants.FILEPATH_DATA + textureName))
                 {
                     SourceRectangle = sourceRectangle,
                     Color = color,
@@ -100,7 +100,7 @@ namespace Lunar.Client.World
                     Intensity = .7f,
                 };
 
-                Client.ServiceLocator.GetService<LightManagerService>().Component.Lights.Add(pointLight);
+                Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Add(pointLight);
 
                 mapObject.Light = pointLight;
             }

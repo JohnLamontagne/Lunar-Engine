@@ -21,6 +21,7 @@ using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities.Data.FileSystem;
+using Lunar.Core;
 
 namespace Lunar.Server.World.Actors
 {
@@ -34,7 +35,7 @@ namespace Lunar.Server.World.Actors
         {
             _players = new Dictionary<long, Player>();
 
-            _playerDataManager = Server.ServiceLocator.GetService<FSDataFactory>().Create<PlayerFSDataLoader>();
+            _playerDataManager = Server.ServiceLocator.Get<FSDataFactory>().Create<PlayerFSDataLoader>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
         }
 
         private void AddPlayer(Player player)
@@ -87,7 +88,7 @@ namespace Lunar.Server.World.Actors
 
             // If we've made it this far, we've confirmed that the requested account is not already logged into.
             // Let's make sure the password they provided us is valid.
-            var playerDescriptor = _playerDataManager.Load(new PlayerDataLoaderArguments(username));
+            var playerDescriptor = _playerDataManager.Load(new PlayerDataArguments(username));
 
             if (playerDescriptor == null)
             {
@@ -110,6 +111,9 @@ namespace Lunar.Server.World.Actors
                 // First, we'll add them to the list of online players.
                 var player = new Player(playerDescriptor, connection);
                 this.AddPlayer(player);
+
+                if (Settings.UserPermissions.ContainsKey(player.Descriptor.Name))
+                    player.Descriptor.Role = Settings.UserPermissions[player.Descriptor.Name];
                
 
                 // Now we'll go ahead and tell their client to make whatever preperations that it needs to.
@@ -136,7 +140,7 @@ namespace Lunar.Server.World.Actors
         {
             password = SecurePasswordHasher.Hash(password);
 
-            if (_playerDataManager.Exists(new PlayerDataLoaderArguments(username)))
+            if (_playerDataManager.Exists(new PlayerDataArguments(username)))
             {
                 var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
                 packet.Message.Write("Account already exists!");

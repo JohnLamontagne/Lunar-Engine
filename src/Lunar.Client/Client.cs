@@ -80,12 +80,12 @@ namespace Lunar.Client
         {
             Window.Title = Settings.GameName;
 
-            Client.ServiceLocator.RegisterService(new GraphicsDeviceService(this.GraphicsDevice));
-            Client.ServiceLocator.RegisterService(new ContentManagerService(this.Content));
-            Client.ServiceLocator.RegisterService(new LightManagerService(new PenumbraComponent(this)));
-            Client.ServiceLocator.RegisterService(new NetHandler());
-            Client.ServiceLocator.RegisterService(new SceneManager());
-            Client.ServiceLocator.GetService<LightManagerService>().Component.Initialize();
+            Client.ServiceLocator.Register(new GraphicsDeviceService(this.GraphicsDevice));
+            Client.ServiceLocator.Register(new ContentManagerService(this.Content));
+            Client.ServiceLocator.Register(new LightManagerService(new PenumbraComponent(this)));
+            Client.ServiceLocator.Register(new NetHandler());
+            Client.ServiceLocator.Register(new SceneManager());
+            Client.ServiceLocator.Get<LightManagerService>().Component.Initialize();
 
             _camera = new Camera(new Rectangle(0, 0, Settings.ResolutionX, Settings.ResolutionY));
 
@@ -152,13 +152,13 @@ namespace Lunar.Client
 
             _previousKeyboardState = currentKeyboardState;
 
-            Client.ServiceLocator.GetService<LightManagerService>().Component.Transform = _camera.GetTransformation();
+            Client.ServiceLocator.Get<LightManagerService>().Component.Transform = _camera.GetTransformation();
 
-            Client.ServiceLocator.GetService<NetHandler>().Update();
+            Client.ServiceLocator.Get<NetHandler>().Update();
 
             _cursorPos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
 
-            Client.ServiceLocator.GetService<SceneManager>().Update(gameTime);
+            Client.ServiceLocator.Get<SceneManager>().Update(gameTime);
 
             base.Update(gameTime);
 
@@ -171,14 +171,14 @@ namespace Lunar.Client
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            Client.ServiceLocator.GetService<LightManagerService>().Component.BeginDraw();
+            Client.ServiceLocator.Get<LightManagerService>().Component.BeginDraw();
 
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, _camera.GetTransformation());
 
 
-            Client.ServiceLocator.GetService<SceneManager>().Draw(gameTime, _spriteBatch);
+            Client.ServiceLocator.Get<SceneManager>().Draw(gameTime, _spriteBatch);
 
             // The cursor should always be the foremost visible
             _spriteBatch.Draw(_cursorSprite, _cursorPos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1);
@@ -191,10 +191,10 @@ namespace Lunar.Client
         private void InitalizeScenes()
         {
 
-            Client.ServiceLocator.GetService<SceneManager>().AddScene(new MenuScene(this.Content, this.Window), "menuScene");
-            Client.ServiceLocator.GetService<SceneManager>().AddScene(new GameScene(this.Content, this.Window, _camera), "gameScene");
-            Client.ServiceLocator.GetService<SceneManager>().AddScene(new LoadingScene(this.Content, this.Window), "loadingScene");
-            Client.ServiceLocator.GetService<SceneManager>().SetActiveScene("menuScene");
+            Client.ServiceLocator.Get<SceneManager>().AddScene(new MenuScene(this.Content, this.Window), "menuScene");
+            Client.ServiceLocator.Get<SceneManager>().AddScene(new GameScene(this.Content, this.Window, _camera), "gameScene");
+            Client.ServiceLocator.Get<SceneManager>().AddScene(new LoadingScene(this.Content, this.Window), "loadingScene");
+            Client.ServiceLocator.Get<SceneManager>().SetActiveScene("menuScene");
         }
 
         public event EventHandler<SubjectEventArgs> EventOccured;

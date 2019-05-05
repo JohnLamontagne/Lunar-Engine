@@ -48,12 +48,12 @@ namespace Lunar.Client.World
             _contentManager = contentManager;
             _camera = camera;
 
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.MAP_DATA, this.Handle_MapData);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAYER_JOINED, this.Handle_PlayerJoined);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAYER_LEFT, this.Handle_PlayerLeft);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAYER_DATA, this.Handle_PlayerData);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.NPC_DATA, this.Handle_NPCData);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.POSITION_UPDATE, this.Handle_PositionUpdate);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.MAP_DATA, this.Handle_MapData);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_JOINED, this.Handle_PlayerJoined);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_LEFT, this.Handle_PlayerLeft);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_DATA, this.Handle_PlayerData);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.NPC_DATA, this.Handle_NPCData);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.POSITION_UPDATE, this.Handle_PositionUpdate);
         }
 
         private void Handle_PositionUpdate(PacketReceivedEventArgs args)
@@ -96,7 +96,7 @@ namespace Lunar.Client.World
         {
             long uniqueID = args.Message.ReadInt64();
 
-            if (uniqueID == Client.ServiceLocator.GetService<NetHandler>().UniqueID)
+            if (uniqueID == Client.ServiceLocator.Get<NetHandler>().UniqueID)
             {
                 _player.Unpack(args.Message, _contentManager);
 
@@ -121,7 +121,7 @@ namespace Lunar.Client.World
 
             Player player;
 
-            if (uniqueID == Client.ServiceLocator.GetService<NetHandler>().UniqueID)
+            if (uniqueID == Client.ServiceLocator.Get<NetHandler>().UniqueID)
             {
                 if (_player == null)
                 {

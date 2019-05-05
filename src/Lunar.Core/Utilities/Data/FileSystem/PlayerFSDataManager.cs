@@ -23,18 +23,13 @@ using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Server.Utilities.Data.FileSystem
 {
-    public class PlayerFSDataLoader : IDataManager<PlayerDescriptor>
+    public class PlayerFSDataLoader : FSDataManager<PlayerDescriptor>
     {
-        public PlayerFSDataLoader()
-        {
-            
-        }
 
-        public PlayerDescriptor Load(IDataManagerArguments arguments)
+        public override PlayerDescriptor Load(IDataManagerArguments arguments)
         {
-            var playerDataLoaderArgs = arguments as PlayerDataLoaderArguments;
 
-            string filePath = EngineConstants.FILEPATH_ACCOUNTS + playerDataLoaderArgs.Username + EngineConstants.ACC_FILE_EXT;
+            string filePath = this.RootPath + (arguments as PlayerDataArguments).Username + EngineConstants.ACC_FILE_EXT;
 
             string name = "";
             string password = "";
@@ -102,13 +97,11 @@ namespace Lunar.Server.Utilities.Data.FileSystem
             }
         }
 
-        public void Save(IDataDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IDataDescriptor descriptor, IDataManagerArguments arguments)
         {
             PlayerDescriptor playerDescriptor = ((PlayerDescriptor) descriptor);
 
-            string filePath = EngineConstants.FILEPATH_ACCOUNTS + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT;
-
-            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
+            using (var fileStream = new FileStream(this.RootPath + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT, FileMode.OpenOrCreate))
             {
                 using (var binaryWriter = new BinaryWriter(fileStream))
                 {
@@ -136,9 +129,9 @@ namespace Lunar.Server.Utilities.Data.FileSystem
             }
         }
 
-        public bool Exists(IDataManagerArguments arguments)
+        public override bool Exists(IDataManagerArguments arguments)
         {
-            return File.Exists(EngineConstants.FILEPATH_DATA + (arguments as PlayerDataLoaderArguments)?.Username + EngineConstants.ACC_FILE_EXT);
+            return File.Exists(this.RootPath + (arguments as PlayerDataArguments).Username + EngineConstants.ACC_FILE_EXT);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Lunar.Server.World.Actors.Components
         public void SendAvailableCommands()
         {
             var packet = new Packet(PacketType.AVAILABLE_COMMANDS, ChannelType.UNASSIGNED);
-            packet.Message.Write(Server.ServiceLocator.GetService<CommandHandler>().Pack());
+            packet.Message.Write(Server.ServiceLocator.Get<CommandHandler>().Pack());
             this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 

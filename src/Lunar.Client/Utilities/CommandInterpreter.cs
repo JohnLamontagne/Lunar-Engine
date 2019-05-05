@@ -31,7 +31,7 @@ namespace Lunar.Client.Utilities
         {
             _manualInterpreter = new ManualInterpreter();
 
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.AVAILABLE_COMMANDS, this.Handle_AvailableCommands);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.AVAILABLE_COMMANDS, this.Handle_AvailableCommands);
         }
 
         private void Handle_AvailableCommands(PacketReceivedEventArgs args)
@@ -56,7 +56,7 @@ namespace Lunar.Client.Utilities
         {
             _manualInterpreter.Execute(output, input);
 
-            if (Client.ServiceLocator.GetService<NetHandler>().Connected)
+            if (Client.ServiceLocator.Get<NetHandler>().Connected)
             { 
                 string[] instructions = input.Split(InstructionSeparator, StringSplitOptions.RemoveEmptyEntries);
 
@@ -75,7 +75,7 @@ namespace Lunar.Client.Utilities
                     foreach (var arg in commandArgs)
                         packet.Message.Write(arg);
 
-                    Client.ServiceLocator.GetService<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
                 }
             }
         }

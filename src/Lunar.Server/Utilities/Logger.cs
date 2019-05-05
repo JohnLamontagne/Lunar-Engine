@@ -24,15 +24,15 @@ namespace Lunar.Server.Utilities
             {
                 case LogTypes.ERROR:
                     Console.WriteLine($"Error: {eventDetails}");
-                    TextLog($"Error: {eventDetails}.", stackTrace, EngineConstants.FILEPATH_LOGS + "Error.txt");
+                    TextLog($"Error: {eventDetails}.", stackTrace, Constants.FILEPATH_LOGS + "Error.txt");
                     break;
 
                 case LogTypes.GAME:
-                    TextLog($"Game event: {eventDetails}", stackTrace, EngineConstants.FILEPATH_LOGS + "Game_Event.txt");
+                    TextLog($"Game event: {eventDetails}", stackTrace, Constants.FILEPATH_LOGS + "Game_Event.txt");
                     break;
 
                 case LogTypes.GEN_SERVER:
-                    TextLog($"Event: {eventDetails}", stackTrace, EngineConstants.FILEPATH_LOGS + "General_Server.txt");
+                    TextLog($"Event: {eventDetails}", stackTrace, Constants.FILEPATH_LOGS + "General_Server.txt");
                     break;
             }
         }

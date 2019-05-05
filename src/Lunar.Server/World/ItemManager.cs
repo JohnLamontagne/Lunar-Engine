@@ -35,12 +35,12 @@ namespace Lunar.Server.World
         {
             Console.WriteLine("Loading Items...");
 
-            var directoryInfo = new DirectoryInfo(EngineConstants.FILEPATH_ITEMS);
+            var directoryInfo = new DirectoryInfo(Constants.FILEPATH_ITEMS);
             FileInfo[] files = directoryInfo.GetFiles("*.litm");
 
             foreach (var file in files)
             {
-                ItemDescriptor itemDescriptor = ItemDescriptor.Load(EngineConstants.FILEPATH_ITEMS + file.Name);
+                ItemDescriptor itemDescriptor = ItemDescriptor.Load(Constants.FILEPATH_ITEMS + file.Name);
                 _items.Add(itemDescriptor.Name, itemDescriptor);
             }
 

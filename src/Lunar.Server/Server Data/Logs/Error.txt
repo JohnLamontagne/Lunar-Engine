@@ -1,0 +1,2090 @@
+
+Log Entry: 00:37:49 Thursday, 02 November 2017:
+Error: Item ss does not exist.
+------------------------------
+
+Log Entry: 00:37:49 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:38:15 Thursday, 02 November 2017:
+Error: Item s does not exist.
+-----------------------------
+
+Log Entry: 00:38:15 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:38:43 Thursday, 02 November 2017:
+Error: Item ss does not exist.
+------------------------------
+
+Log Entry: 00:38:43 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:38:56 Thursday, 02 November 2017:
+Error: Item ss does not exist.
+------------------------------
+
+Log Entry: 00:38:56 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 00:58:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:40:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:48:46 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 02:02:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:44:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:44:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:44:57 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:45:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:45:41 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:46:03 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:46:29 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:46:55 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:47:15 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:47:46 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:48:09 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:48:35 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:52:26 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:53:02 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 12:53:17 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:00:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:01:59 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:03:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:07:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:18:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:24:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:46:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 13:50:00 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:02:56 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:06:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:11:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:13:18 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:13:51 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:14:59 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:16:51 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:17:09 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:17:25 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:18:37 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:19:24 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:19:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:20:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:20:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:21:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:23:26 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:23:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:24:46 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:25:11 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:03 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:22 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:40 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:26:58 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:28:58 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:29:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:29:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:30:07 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:30:27 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:30:52 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:31:14 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:32:01 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:32:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:32:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:35:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:36:13 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:37:16 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:44:26 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:45:20 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:47:33 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:48:09 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:48:44 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:49:15 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:57:48 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 14:59:06 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 15:00:37 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 16:59:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 16:59:52 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:04:04 Thursday, 02 November 2017:
+Error: Item asdfasdf does not exist.
+------------------------------------
+
+Log Entry: 17:04:04 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 17:04:39 Thursday, 02 November 2017:
+Error: Item ruby_ring does not exist.
+-------------------------------------
+
+Log Entry: 17:04:39 Thursday, 02 November 2017:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 17:17:23 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:24:12 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:24:25 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:27:18 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:27:50 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:29:06 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:29:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:50:42 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:54:53 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:38:05 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:38:23 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:38:38 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:39:42 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:40:47 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:41:21 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:51:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:53:49 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:54:50 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:55:36 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:57:08 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:58:34 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:59:28 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:00:23 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:01:57 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:03:19 Thursday, 02 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:12:37 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:14:57 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:15:37 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:16:22 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:17:22 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:18:14 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:18:35 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:28:47 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:29:47 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:30:08 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:30:25 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:30:56 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:31:27 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 01:31:53 Friday, 03 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 11:48:47 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:51:15 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:52:11 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:53:07 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:54:24 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 17:59:59 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:20:19 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:37:08 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:40:45 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:41:46 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:45:05 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 18:59:58 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:04:16 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:43:08 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:43:58 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:45:02 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:47:59 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 19:48:45 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:03:21 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:07:00 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:07:03 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:09:10 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:12:23 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:12:58 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:14:16 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:17:11 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:17:29 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:21:10 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 20:21:39 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 22:06:14 Sunday, 05 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 21:43:21 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 23:36:13 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 23:38:25 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 23:42:50 Monday, 06 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:37:05 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:38:00 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:38:37 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:48:23 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:58:22 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:59:27 Tuesday, 07 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:12:50 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:13:35 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:19:18 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:21:33 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:23:44 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:32:37 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:33:17 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:35:45 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:38:14 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:43:30 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:45:54 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 00:52:56 Sunday, 19 November 2017:
+Error: No spawn area available!.
+--------------------------------
+
+Log Entry: 02:36:22 Saturday, 25 November 2017:
+Error: Player 1 stepped on warp tile where destination does not exist!.
+-----------------------------------------------------------------------
+
+Log Entry: 02:36:27 Saturday, 25 November 2017:
+Error: Player 1 stepped on warp tile where destination does not exist!.
+-----------------------------------------------------------------------
+
+Log Entry: 16:25:12 Saturday, 02 December 2017:
+Error: Actor 6927021018005606939 does not exist in map!.
+--------------------------------------------------------
+
+Log Entry: 16:25:32 Saturday, 02 December 2017:
+Error: Actor 6927021018005606939 does not exist in map!.
+--------------------------------------------------------
+
+Log Entry: 22:33:18 Wednesday, 06 December 2017:
+Error: Actor 7971306566047587905 does not exist in map!.
+--------------------------------------------------------
+
+Log Entry: 00:10:17 Thursday, 15 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:11:13 Thursday, 15 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:11:26 Thursday, 15 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 18:23:08 Sunday, 18 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 18:38:02 Sunday, 18 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 18:38:28 Sunday, 18 February 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 20:01:05 Wednesday, 06 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 20:02:21 Wednesday, 06 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 16:51:39 Saturday, 23 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 16:53:37 Saturday, 23 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:51:35 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 00:58:41 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:04:02 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:06:42 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:11:56 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:14:18 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:15:31 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:17:17 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 01:18:23 Friday, 29 June 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:16:35 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:23:49 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:26:04 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:43:10 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:44:15 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:44:45 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:45:09 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:50:25 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 17:50:30 Saturday, 07 July 2018:
+Error: Error hooking player behavior definition!.
+-------------------------------------------------
+
+Log Entry: 16:27:46 Monday, 09 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 16:27:46 Monday, 09 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 16:29:30 Monday, 09 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 16:29:30 Monday, 09 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 16:29:51 Monday, 09 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 16:29:51 Monday, 09 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 23:19:24 Tuesday, 10 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 23:19:24 Tuesday, 10 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 14:36:28 Wednesday, 11 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 14:36:28 Wednesday, 11 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 14:58:34 Wednesday, 11 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 14:58:34 Wednesday, 11 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:03:27 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:03:27 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:07:30 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:07:30 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:09:03 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:09:03 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:09:15 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:09:15 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:09:55 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:09:55 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:11:16 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:11:16 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:17:04 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:17:04 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:19:53 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:19:53 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:20:34 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:20:34 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:21:16 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:21:16 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:21:30 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:21:30 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:21:59 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:21:59 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:22:13 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:22:13 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:22:46 Thursday, 12 July 2018:
+Error: Item Tome does not exist.
+--------------------------------
+
+Log Entry: 22:22:46 Thursday, 12 July 2018:
+Error: Null item descriptor!.
+-----------------------------
+
+Log Entry: 22:12:40 Wednesday, 25 July 2018:
+Error: Failed to register player: Unable to read beyond the end of the stream..
+-------------------------------------------------------------------------------
+
+Log Entry: 22:12:44 Wednesday, 25 July 2018:
+Error: Failed to register player: Unable to read beyond the end of the stream..
+-------------------------------------------------------------------------------
+
+Log Entry: 22:12:45 Wednesday, 25 July 2018:
+Error: Failed to register player: Unable to read beyond the end of the stream..
+-------------------------------------------------------------------------------
+
+Log Entry: 5:35:45 PM Sunday, May 5, 2019:
+Error: Script Error on line 58 Microsoft.Scripting.Hosting.ScriptSource: .
+   at Microsoft.Scripting.ErrorSink.Add(SourceUnit source, String message, SourceSpan span, Int32 errorCode, Severity severity)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Int32 start, Int32 end, String message, Int32 errorCode)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Token t, IndexSpan span, Int32 errorCode, Boolean allowIncomplete)
+   at IronPython.Compiler.Parser.ReportSyntaxError(TokenWithSpan t, Int32 errorCode)
+   at IronPython.Compiler.Parser.EatNewLine()
+   at IronPython.Compiler.Parser.ParseSimpleStmt()
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseIfStmtTest()
+   at IronPython.Compiler.Parser.ParseIfStmt()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseClassOrFuncBody()
+   at IronPython.Compiler.Parser.ParseFuncDef()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseFileWorker(Boolean makeModule, Boolean returnValue)
+   at IronPython.Compiler.Parser.ParseFile(Boolean makeModule, Boolean returnValue)
+   at IronPython.Runtime.PythonContext.ParseAndBindAst(CompilerContext context)
+   at IronPython.Runtime.PythonContext.CompilePythonCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at IronPython.Runtime.PythonContext.CompileSourceCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Compile(CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+--------------------------------------------------------------------------
+
+Log Entry: 5:36:10 PM Sunday, May 5, 2019:
+Error: Script Error on line 58 Microsoft.Scripting.Hosting.ScriptSource: .
+   at Microsoft.Scripting.ErrorSink.Add(SourceUnit source, String message, SourceSpan span, Int32 errorCode, Severity severity)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Int32 start, Int32 end, String message, Int32 errorCode)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Token t, IndexSpan span, Int32 errorCode, Boolean allowIncomplete)
+   at IronPython.Compiler.Parser.ReportSyntaxError(TokenWithSpan t, Int32 errorCode)
+   at IronPython.Compiler.Parser.EatNewLine()
+   at IronPython.Compiler.Parser.ParseSimpleStmt()
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseIfStmtTest()
+   at IronPython.Compiler.Parser.ParseIfStmt()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseClassOrFuncBody()
+   at IronPython.Compiler.Parser.ParseFuncDef()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseFileWorker(Boolean makeModule, Boolean returnValue)
+   at IronPython.Compiler.Parser.ParseFile(Boolean makeModule, Boolean returnValue)
+   at IronPython.Runtime.PythonContext.ParseAndBindAst(CompilerContext context)
+   at IronPython.Runtime.PythonContext.CompilePythonCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at IronPython.Runtime.PythonContext.CompileSourceCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Compile(CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+--------------------------------------------------------------------------
+
+Log Entry: 5:36:43 PM Sunday, May 5, 2019:
+Error: Script Error on line 58 C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at Microsoft.Scripting.ErrorSink.Add(SourceUnit source, String message, SourceSpan span, Int32 errorCode, Severity severity)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Int32 start, Int32 end, String message, Int32 errorCode)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Token t, IndexSpan span, Int32 errorCode, Boolean allowIncomplete)
+   at IronPython.Compiler.Parser.ReportSyntaxError(TokenWithSpan t, Int32 errorCode)
+   at IronPython.Compiler.Parser.EatNewLine()
+   at IronPython.Compiler.Parser.ParseSimpleStmt()
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseIfStmtTest()
+   at IronPython.Compiler.Parser.ParseIfStmt()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseClassOrFuncBody()
+   at IronPython.Compiler.Parser.ParseFuncDef()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseFileWorker(Boolean makeModule, Boolean returnValue)
+   at IronPython.Compiler.Parser.ParseFile(Boolean makeModule, Boolean returnValue)
+   at IronPython.Runtime.PythonContext.ParseAndBindAst(CompilerContext context)
+   at IronPython.Runtime.PythonContext.CompilePythonCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at IronPython.Runtime.PythonContext.CompileSourceCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Compile(CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:37:28 PM Sunday, May 5, 2019:
+Error: Script Error on line 78: unexpected token '<newline>' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at Microsoft.Scripting.ErrorSink.Add(SourceUnit source, String message, SourceSpan span, Int32 errorCode, Severity severity)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Int32 start, Int32 end, String message, Int32 errorCode)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Token t, IndexSpan span, Int32 errorCode, Boolean allowIncomplete)
+   at IronPython.Compiler.Parser.EatNoEof(TokenKind kind)
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseClassOrFuncBody()
+   at IronPython.Compiler.Parser.ParseFuncDef()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseFileWorker(Boolean makeModule, Boolean returnValue)
+   at IronPython.Compiler.Parser.ParseFile(Boolean makeModule, Boolean returnValue)
+   at IronPython.Runtime.PythonContext.ParseAndBindAst(CompilerContext context)
+   at IronPython.Runtime.PythonContext.CompilePythonCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at IronPython.Runtime.PythonContext.CompileSourceCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Compile(CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:37:46 PM Sunday, May 5, 2019:
+Error: Script Error on line 89: syntax error in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at Microsoft.Scripting.ErrorSink.Add(SourceUnit source, String message, SourceSpan span, Int32 errorCode, Severity severity)
+   at IronPython.Compiler.Parser.ReportSyntaxError(Int32 start, Int32 end, String message, Int32 errorCode)
+   at IronPython.Compiler.Parser.ReportSyntaxError(String message)
+   at IronPython.Compiler.Parser.ReadNameMaybeNone()
+   at IronPython.Compiler.Parser.AddTrailers(Expression ret, Boolean allowGeneratorExpression)
+   at IronPython.Compiler.Parser.ParsePower()
+   at IronPython.Compiler.Parser.ParseFactor()
+   at IronPython.Compiler.Parser.ParseExpr(Int32 precedence)
+   at IronPython.Compiler.Parser.ParseComparison()
+   at IronPython.Compiler.Parser.ParseNotTest()
+   at IronPython.Compiler.Parser.ParseAndTest()
+   at IronPython.Compiler.Parser.ParseOrTest()
+   at IronPython.Compiler.Parser.ParseExpression()
+   at IronPython.Compiler.Parser.FinishArgListOrGenExpr()
+   at IronPython.Compiler.Parser.AddTrailers(Expression ret, Boolean allowGeneratorExpression)
+   at IronPython.Compiler.Parser.ParsePower()
+   at IronPython.Compiler.Parser.ParseFactor()
+   at IronPython.Compiler.Parser.ParseExpr(Int32 precedence)
+   at IronPython.Compiler.Parser.ParseComparison()
+   at IronPython.Compiler.Parser.ParseNotTest()
+   at IronPython.Compiler.Parser.ParseAndTest()
+   at IronPython.Compiler.Parser.ParseOrTest()
+   at IronPython.Compiler.Parser.ParseExpression()
+   at IronPython.Compiler.Parser.ParseTestListAsExpr()
+   at IronPython.Compiler.Parser.ParseExprStmt()
+   at IronPython.Compiler.Parser.ParseSmallStmt()
+   at IronPython.Compiler.Parser.ParseSimpleStmt()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseSuite()
+   at IronPython.Compiler.Parser.ParseClassOrFuncBody()
+   at IronPython.Compiler.Parser.ParseFuncDef()
+   at IronPython.Compiler.Parser.ParseStmt()
+   at IronPython.Compiler.Parser.ParseFileWorker(Boolean makeModule, Boolean returnValue)
+   at IronPython.Compiler.Parser.ParseFile(Boolean makeModule, Boolean returnValue)
+   at IronPython.Runtime.PythonContext.ParseAndBindAst(CompilerContext context)
+   at IronPython.Runtime.PythonContext.CompilePythonCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at IronPython.Runtime.PythonContext.CompileSourceCode(SourceUnit sourceUnit, CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Compile(CompilerOptions options, ErrorSink errorSink)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:41:49 PM Sunday, May 5, 2019:
+Error: Script Error: name 'end' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:42:36 PM Sunday, May 5, 2019:
+Error: Script Error: global name 'Server' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:43:08 PM Sunday, May 5, 2019:
+Error: Script Error: Could not add reference to assembly Server in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, String name)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object reference)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object[] references)
+   at Microsoft.Scripting.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:43:37 PM Sunday, May 5, 2019:
+Error: Script Error: Could not add reference to assembly Server in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, String name)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object reference)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object[] references)
+   at Microsoft.Scripting.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:44:25 PM Sunday, May 5, 2019:
+Error: Script Error: No module named npc_common in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:44:26 PM Sunday, May 5, 2019:
+Error: Script Error: Could not add reference to assembly Server in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, String name)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object reference)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object[] references)
+   at Microsoft.Scripting.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:47:24 PM Sunday, May 5, 2019:
+Error: Script Error: Could not add reference to assembly Server in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, String name)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object reference)
+   at IronPython.Runtime.ClrModule.AddReference(CodeContext context, Object[] references)
+   at Microsoft.Scripting.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:47:50 PM Sunday, May 5, 2019:
+Error: Script Error: global name 'Server' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:48:04 PM Sunday, May 5, 2019:
+Error: Script Error: global name 'Server' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:48:28 PM Sunday, May 5, 2019:
+Error: Script Error: name 'Lunar' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:48:45 PM Sunday, May 5, 2019:
+Error: Script Error: 'Lunar.Server' object has no attribute 'ServiceLocator' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Binding.PythonGetMemberBinder.NamespaceTrackerDelegate.Target(CallSite site, Object self, CodeContext context)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`3.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:49:34 PM Sunday, May 5, 2019:
+Error: Script Error: name 'CommandHandler' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:51:36 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.RegisterPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 154
+   at Lunar.Server.World.WorldManager.Handle_PlayerRegister(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 86
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:19:35 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.RegisterPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 154
+   at Lunar.Server.World.WorldManager.Handle_PlayerRegister(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 86
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:22:39 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:24:56 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:25:23 PM Sunday, May 5, 2019:
+Error: Script error: 'Player' object has no attribute 'Role'.
+   at IronPython.Runtime.Binding.PythonGetMemberBinder.FastErrorGet`1.GetError(CallSite site, TSelfType target, CodeContext context)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`3.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+-------------------------------------------------------------
+
+Log Entry: 6:26:26 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:26:29 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:27:56 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:04 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:04 PM Sunday, May 5, 2019:
+Error: Script error: index out of range: 1.
+   at IronPython.Runtime.Operations.PythonOps.FixIndex(Int32 v, Int32 len)
+   at IronPython.Runtime.Operations.ArrayOps.GetItem(Array data, Int32 index)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`3.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+-------------------------------------------
+
+Log Entry: 6:28:04 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:04 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:04 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:04 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:04 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:08 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:28:11 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:28:43 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:28:47 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:29:21 PM Sunday, May 5, 2019:
+Error: Script error: expected Role, got str.
+   at Microsoft.Scripting.Interpreter.ThrowInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run4[T0,T1,T2,T3,TRet](T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute3[T0,T1,T2,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`4.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+--------------------------------------------
+
+Log Entry: 6:29:43 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:32:25 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:32:28 PM Sunday, May 5, 2019:
+Error: Script error: 'Player' object has no attribute 'SendChatMessage'.
+   at IronPython.Runtime.Binding.PythonGetMemberBinder.FastErrorGet`1.GetError(CallSite site, TSelfType target, CodeContext context)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`3.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+------------------------------------------------------------------------
+
+Log Entry: 6:33:21 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:33:26 PM Sunday, May 5, 2019:
+Error: Script error: global name 'ChatMessageType' is not defined.
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+------------------------------------------------------------------
+
+Log Entry: 6:34:01 PM Sunday, May 5, 2019:
+Error: Script Error: name 'CommandHandler' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:34:02 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:35:26 PM Sunday, May 5, 2019:
+Error: Script Error: name 'ckr' is not defined in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py: .
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 19
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:35:41 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:36:45 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:37:04 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.RegisterPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 154
+   at Lunar.Server.World.WorldManager.Handle_PlayerRegister(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 86
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:45:02 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:45:27 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:45:51 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:46:28 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:47:33 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:47:38 PM Sunday, May 5, 2019:
+Error: Script error: unsupported operand type(s) for +: 'str' and 'int'.
+   at CallSite.Target(Closure , CallSite , Object , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`3.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+------------------------------------------------------------------------
+
+Log Entry: 6:48:15 PM Sunday, May 5, 2019:
+Error: Script error: unsupported operand type(s) for +: 'str' and 'int'.
+   at CallSite.Target(Closure , CallSite , Object , Object )
+   at Microsoft.Scripting.Interpreter.DynamicInstruction`3.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+------------------------------------------------------------------------
+
+Log Entry: 6:49:12 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:49:16 PM Sunday, May 5, 2019:
+Error: Script error: global name 'Vector' is not defined.
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+---------------------------------------------------------
+
+Log Entry: 6:49:21 PM Sunday, May 5, 2019:
+Error: Script error: global name 'Vector' is not defined.
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+---------------------------------------------------------
+
+Log Entry: 6:50:18 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:52:12 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:53:29 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:57:04 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:57:08 PM Sunday, May 5, 2019:
+Error: Script error: Traceback (most recent call last):
+  File "C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py", line 20, in warpToCommand
+NameError: global name 'Vector' is not defined.
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:58:41 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 6:58:45 PM Sunday, May 5, 2019:
+Error: Script error: Traceback (most recent call last):
+  File "C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//Scripts/command_handler.py", line 19, in warpToCommand
+NameError: global name 'Vector' is not defined.
+   at IronPython.Runtime.Operations.PythonOps.GetVariable(CodeContext context, String name, Boolean isGlobal, Boolean lightThrow)
+   at IronPython.Compiler.LookupGlobalInstruction.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonCallTargets.OriginalCallTarget1(PythonFunction function, Object arg0)
+   at CallSite.Target(Closure , CallSite , Object , GameEventArgs )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid2[T0,T1](CallSite site, T0 arg0, T1 arg1)
+   at Lunar.Server.Utilities.Commands.CommandHandler.<>c__DisplayClass5_1.<Handle_ClientCommand>b__0(Object a) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Commands\CommandHandler.cs:line 73
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:59:06 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------
+
+Log Entry: 7:08:26 PM Sunday, May 5, 2019:
+Error: Error hooking player behavior definition!.
+   at System.Environment.GetStackTrace(Exception e, Boolean needFileInfo)
+   at System.Environment.get_StackTrace()
+   at Lunar.Server.World.Actors.Player..ctor(PlayerDescriptor descriptor, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\Player.cs:line 131
+   at Lunar.Server.World.Actors.PlayerManager.LoginPlayer(String username, String password, PlayerConnection connection) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\Actors\PlayerManager.cs:line 112
+   at Lunar.Server.World.WorldManager.Handle_PlayerLogin(PacketReceivedEventArgs args) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\World\WorldManager.cs:line 106
+   at Lunar.Server.Net.NetHandler.Update() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Net\NetHandler.cs:line 65
+   at Lunar.Server.Server.<BeginServerLoop>b__14_0() in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Server.cs:line 114
+   at System.Threading.ThreadHelper.ThreadStart_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+-------------------------------------------------

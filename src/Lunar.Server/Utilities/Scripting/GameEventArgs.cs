@@ -14,7 +14,7 @@ using System;
 
 namespace Lunar.Server.Utilities.Scripting
 {
-    public class ScriptActionArgs : EventArgs
+    public class GameEventArgs : EventArgs
     {
         private object _invoker;
         private object[] _args;
@@ -34,7 +34,7 @@ namespace Lunar.Server.Utilities.Scripting
             }
         }
 
-        public ScriptActionArgs(object invoker, params object[] args)
+        public GameEventArgs(object invoker, params object[] args)
         {
             _invoker = invoker;
             _args = args;

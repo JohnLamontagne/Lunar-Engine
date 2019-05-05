@@ -109,6 +109,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\Lidgren.Network.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Dynamic, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Metadata, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -178,6 +187,7 @@
     <None Include="app.manifest" />
     <None Include="Content\Content.mgcb" />
     <None Include="Lunar.Client.licenseheader" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -207,9 +217,7 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)..\libs\MonoGame.Penumbra.DesktopGL.dll" "$(ProjectDir)$(OutDir)" /Y /E
 
-xcopy "$(ProjectDir)..\libs\MonoGame.Penumbra.dll" "$(ProjectDir)$(OutDir)" /Y /E
-
-xcopy "$(ProjectDir)..\Client Data\*.*" "$(ProjectDir)$(OutDir)\Data\" /Y /E</PostBuildEvent>
+xcopy "$(ProjectDir)..\libs\MonoGame.Penumbra.dll" "$(ProjectDir)$(OutDir)" /Y /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

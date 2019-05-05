@@ -44,9 +44,9 @@ namespace Lunar.Client.Scenes
 
             // Allow the server to demand that the client play music.
             // We handle this here so that we may easily play music in any scene.
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAY_MUSIC, this.Handle_PlayMusic);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.STOP_MUSIC, this.Handle_StopMusic);
-            Client.ServiceLocator.GetService<NetHandler>().AddPacketHandler(PacketType.PLAY_SOUND, this.Handle_PlaySound);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAY_MUSIC, this.Handle_PlayMusic);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.STOP_MUSIC, this.Handle_StopMusic);
+            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAY_SOUND, this.Handle_PlaySound);
         }
 
         private void Handle_PlaySound(PacketReceivedEventArgs args)
@@ -110,7 +110,7 @@ namespace Lunar.Client.Scenes
             // This also ensures that GuiManager can call Begin and render outside of worldspace
             spriteBatch.End();
 
-            Client.ServiceLocator.GetService<LightManagerService>().Component.Draw(gameTime);
+            Client.ServiceLocator.Get<LightManagerService>().Component.Draw(gameTime);
 
             this.GuiManager.Begin(spriteBatch);
             this.GuiManager.Draw(spriteBatch);
