@@ -1,38 +1,35 @@
-import Lunar.Core
-import System
-import Lunar.Server
-import Lunar.Server.World
-import Lunar.Server.World.Actors
-import Lunar.Server.World.BehaviorDefinition
-import Lunar.Server.Utilities.Scripting
+import sys
+import clr
+clr.AddReference('Lunar.Core')
+clr.AddReference('Lunar.Server')
+clr.AddReference('System')
+import npc_common
+from Lunar.Server.Utilities import *
+from Lunar.Server.World.BehaviorDefinition import *
 
-def on_joined(args):
-  player = args.Invoker
 
-  player.SendChatMessage(Settings.WelcomeMessage, ChatMessageType.Announcement)
+class PlayerBehaviorDefinition(ActorBehaviorDefinition):
+    
+    def __init__(self):
+        return
+    
+    def Update(self, player, gameTime):
+        return
 
-   # The below code works if you have an actual item implemented that is named Tome
-   # item = Item(Server.ServiceLocator:GetService(typeof("Lunar.Server.World.ItemManager")):GetItem("Tome"))
-   # player.Inventory:Add(item, 1)
+    def OnCreated(self, player):
+        print("Player behavior definition created...")
 
-def on_attacked(args):
-  player = args.Invoker
-  player.Health = player.Health - args[1]
-  player.SendPlayerStats()
+    def Attack(self, player, target):
+        return 10
 
-def on_created(args):
-  player = args.Invoker
-  player.AddEventHandler("joinedGame", on_joined)
+    def Attacked(self, player, attacker, damage_delt):
+        player.Descriptor.Stats.Health -= damage_delt
+        player.NetworkComponent.SendPlayerStats()
 
-def on_death(args):
-  player = args.Invoker
+    def OnDeath(self, player):
+        player.SendChatMessage("You are dead!", ChatMessageType.Alert)
+        player.Description.Stats.Health = player.Description.Stats.MaximumHealth
+        player.JointMap(player.Map)
 
-  player.SendChatMessage("You are dead!", ChatMessageType.Alert)
-  player.Health = player.MaximumHealth
-  player.JoinMap(player.Map)
-end
 
-BehaviorDefinition = ActorBehaviorDefinition()
-BehaviorDefinition.OnCreated =  on_crea
-BehaviorDefinition.Attacked = ScriptAction(Attacked)
-BehaviorDefinition.OnDeath = ScriptAction(OnDeath)
+BehaviorDefinition = PlayerBehaviorDefinition()

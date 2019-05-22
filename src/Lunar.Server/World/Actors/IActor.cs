@@ -29,8 +29,6 @@ namespace Lunar.Server.World.Actors
        
         Layer Layer { get; set; }
 
-        Rect CollisionBounds { get; }
-
         ActorBehaviorDefinition BehaviorDefinition { get; }
 
         IActor<IActorDescriptor> Target { get; set; }

@@ -18,7 +18,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
     {
         public void Execute(Actors.Player player)
         {
-            foreach (var mapObject in player.Layer.GetCollidingMapObjects(player.Descriptor.Position, player.CollisionBounds))
+            foreach (var mapObject in player.Layer.GetCollidingMapObjects(player.Descriptor.Position, player.Descriptor.CollisionBounds))
             {
                 mapObject.OnInteract(player);
             }

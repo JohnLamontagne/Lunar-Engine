@@ -13,35 +13,39 @@
 using Lunar.Server.Utilities.Scripting;
 using System;
 using Lunar.Core.Utilities;
+using Lunar.Server.World.Actors;
+using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World.BehaviorDefinition
 {
-    public class ActorBehaviorDefinition
+    public abstract class ActorBehaviorDefinition
     {
+
         /// <summary>
         /// Invoked upon actor death
         /// </summary>
-        public Action<GameEventArgs> OnDeath { get; set; }
+        public abstract void OnDeath(IActor<IActorDescriptor> actor);
 
         /// <summary>
         ///  Attacks the specified actor, returning the amount of damage delt.
         /// </summary>
-        public Func<GameEventArgs, int> Attack { get; set; }
+        public abstract int Attack(IActor<IActorDescriptor> attacker, IActor<IActorDescriptor> target);
 
         /// <summary>
         /// Invoked upon being attacked by the specified actor
         /// </summary>
-        public Action<GameEventArgs> Attacked { get; set; }
+        public abstract void Attacked(IActor<IActorDescriptor> attacked, IActor<IActorDescriptor> attacker, int damageDelt);
 
         /// <summary>
         /// Invoked every actor Update() pass
         /// </summary>
-        public Action<GameEventArgs> Update { get; set; }
+        public abstract void Update(IActor<IActorDescriptor> actor, GameTime gameTime);
 
         /// <summary>
         /// Invoked when the actor is created
         /// </summary>
-        public Action<GameEventArgs> OnCreated { get; set; }
+        public abstract void OnCreated(IActor<IActorDescriptor> actor);
 
         public virtual event EventHandler<SubjectEventArgs> EventOccured;
     }

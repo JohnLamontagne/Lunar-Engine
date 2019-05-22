@@ -65,16 +65,6 @@ namespace Lunar.Server.World.Structure
             {
                 Layer layer = new Layer(layerDesc);
 
-                for (int x = 0; x < this.Descriptor.Dimensions.X; x++)
-                {
-                    for (int y = 0; y < this.Descriptor.Dimensions.Y; y++)
-                    {
-                        Tile tile = layerDesc.Tiles[x, y] != null ? new Tile(layerDesc.Tiles[x, y]) : new Tile(new Vector(x * EngineConstants.TILE_WIDTH, y * EngineConstants.TILE_HEIGHT));
-
-                        layer.SetTile(x, y, tile);
-                    }
-                }
-
                 layer.NPCSpawnerEvent += (sender, args) =>
                 {
                     var npcDesc = Server.ServiceLocator.Get<NPCManager>().GetNPC(args.Name);

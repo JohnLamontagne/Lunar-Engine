@@ -83,7 +83,7 @@ namespace Lunar.Editor
 
             _directories = new List<DirectoryInfo>();
 
-            _mapDataManager = new MapFSDataManager();
+            _mapDataManager = new FSDataFactory().Create<MapFSDataManager>(new FSDataFactoryArguments(_serverDirectory + "/Maps/"));
 
             this.LoadContents(this.ServerRootDirectory);
         }
@@ -130,7 +130,7 @@ namespace Lunar.Editor
 
         public Map LoadMap(string filePath, TextureLoader textureLoader)
         {
-            var mapDescriptor = _mapDataManager.Load(new MapFSDataManagerArguments(filePath));
+            var mapDescriptor = _mapDataManager.Load(new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
             
             var map = new Map(mapDescriptor, textureLoader);
             map.Initalize(this, textureLoader);
@@ -145,7 +145,7 @@ namespace Lunar.Editor
 
         public void SaveMap(string filePath, Map map)
         {
-            _mapDataManager.Save(map.Descriptor, new MapFSDataManagerArguments(filePath));
+            _mapDataManager.Save(map.Descriptor, new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
         }
 
         public FileInfo ChangeMap(string oldFilePath, string newFilePath)

@@ -101,9 +101,9 @@ namespace Lunar.Client.World.Actors
 
                     _requestMoving = false;
 
-                    if (_mainPlayer)
-                        _camera.Position = new Vector2(this.Position.X + (_spriteSheet.Sprite.SourceRectangle.Width / 2f) - (Settings.ResolutionX / 2f), 
-                            this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - (Settings.ResolutionY / 2f));
+                    ///if (_mainPlayer)
+                     ///   _camera.Position = new Vector2(this.Position.X + (_spriteSheet.Sprite.SourceRectangle.Width / 2f) - (Settings.ResolutionX / 2f), 
+                       ///     this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - (Settings.ResolutionY / 2f));
                 }
             }
         }
@@ -142,6 +142,7 @@ namespace Lunar.Client.World.Actors
         public Player(Camera camera, long uniqueID)
         {
             _camera = camera;
+            _camera.Subject = this;
             _uniqueID = uniqueID;
             _mainPlayer = true;
 
@@ -357,19 +358,19 @@ namespace Lunar.Client.World.Actors
                 switch (this.Direction)
                 {
                     case Direction.Right:
-                        dX = this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                        dX = this.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                         break;
 
                     case Direction.Left:
-                        dX = -this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                        dX = -this.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                         break;
 
                     case Direction.Up:
-                        dY = -this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                        dY = -this.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                         break;
 
                     case Direction.Down:
-                        dY = this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                        dY = this.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                         break;
                 }
 
@@ -383,6 +384,8 @@ namespace Lunar.Client.World.Actors
 
                 this.Position = new Vector2(this.Position.X + dX, this.Position.Y + dY);
             }
+
+            _camera.Update(gameTime);
 
             
             _light.Position = new Vector2(this.Position.X + (this.SpriteSheet.Sprite.SourceRectangle.Width/2f) - _light.Radius / 2f, this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - _light.Radius / 2f);
@@ -436,9 +439,7 @@ namespace Lunar.Client.World.Actors
             this.Layer = Client.ServiceLocator.Get<WorldManager>().Map.GetLayer(layerName);
 
             _requestMoving = false;
-
-            if (_mainPlayer)
-                _camera.Position = new Vector2(this.Position.X + (this.SpriteSheet.Sprite.SourceRectangle.Width / 2f) - (Settings.ResolutionX / 2f), this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - (Settings.ResolutionY / 2f));
+            
         }
     }
 }

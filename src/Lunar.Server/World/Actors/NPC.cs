@@ -30,45 +30,27 @@ using Lunar.Server.World.BehaviorDefinition;
 
 namespace Lunar.Server.World.Actors
 {
-    public sealed class NPC : IActor<NPCDescriptor>
+    public sealed class NPC : IActor<NPCDefinition>
     {
         private Map _map;
-        private Vector _frameSize;
         private List<Vector> _targetPath;
         private long _nextAttackTime;
         private Random _random;
         private long _nextMoveTime;
-        private NPCDescriptor _descriptor;
+        private NPCDefinition _definition;
 
         private int _health;
-
-        public string Name { get; }
-
         public SpriteInfo Sprite { get; set; }
 
-        public NPCDescriptor Descriptor => _descriptor;
+        public NPCDefinition Descriptor => _definition;
 
-        public float Speed { get; set; }
-
-        public int Level { get; set; }
-
-        public int AggresiveRange { get; set; }
-
-        public Vector MaxRoam { get; }
-
-        public int AttackRange { get; }
 
         public Layer Layer { get; set; }
 
         public long UniqueID { get; }
 
-        public Vector Position { get; private set; }
-
-        public Rect CollisionBounds { get; set; }
 
         public Direction Direction { get; set; }
-
-        public ActorBehaviorDefinition BehaviorDefinition { get; set; }
 
         public bool Aggrevated { get; set; }
 
@@ -82,27 +64,28 @@ namespace Lunar.Server.World.Actors
 
         public bool Alive => this.Descriptor.Stats.Health > 0;
 
+        public ActorBehaviorDefinition BehaviorDefinition => this.Descriptor.BehaviorDefinition;
+
         public event EventHandler<SubjectEventArgs> EventOccured;
+
+        public GameTimerManager GameTimerManager { get; }
 
 
         public NPC(NPCDefinition definition, Map map)
         {
-            this.Name = definition.Descriptor.Name;
+            if (definition == null)
+            {
+                Logger.LogEvent($"Null npc spawned on map {map.Descriptor.Name}!", LogTypes.ERROR, Environment.StackTrace);
+                definition = new NPCDefinition(NPCDescriptor.Create());
+            }
+
+            this.GameTimerManager = new GameTimerManager();
 
             _map = map;
+            _definition = definition;
 
-            this.Sprite = new SpriteInfo(definition.Descriptor.TexturePath);
-            this.Speed = definition.Descriptor.Speed;
-            this.Level = definition.Descriptor.Level;
-            this.AggresiveRange = definition.Descriptor.AggresiveRange;
-            this.CollisionBounds = definition.Descriptor.CollisionBounds;
-            
+            this.Sprite = new SpriteInfo(this.Descriptor.TexturePath);
             this.Layer = map.Layers.ElementAt(0);
-
-            _frameSize = definition.Descriptor.FrameSize;
-            AttackRange = definition.Descriptor.AttackRange;
-
-            MaxRoam = definition.Descriptor.MaxRoam;
             
             _random = new Random();
 
@@ -111,21 +94,34 @@ namespace Lunar.Server.World.Actors
 
             _map.AddActor(this);
 
-            this.BehaviorDefinition = definition.BehaviorDefinition;
 
             var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
             npcDataPacket.Message.Write(this.Pack());
             _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
 
-
-            this.BehaviorDefinition?.OnCreated?.Invoke(new GameEventArgs(this));
+            try
+            {
+                this.Descriptor.BehaviorDefinition?.OnCreated(this);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+            }
+            
         }
 
         
 
         public void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt)
         {
-            this.BehaviorDefinition?.Attacked?.Invoke(new GameEventArgs(this, attacker, damageDelt));
+            try
+            {
+                this.Descriptor.BehaviorDefinition?.Attacked(this, attacker, damageDelt);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -138,19 +134,26 @@ namespace Lunar.Server.World.Actors
             this.ProcessMovement(gameTime);
             this.ProcessCombat(gameTime);
 
-            this.BehaviorDefinition?.Update?.Invoke(new GameEventArgs(this, new object[] { gameTime }));
+            try
+            {
+                this.Descriptor.BehaviorDefinition?.Update(this, gameTime);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+            }
         }
 
         private void ProcessCombat(GameTime gameTime)
         {
             if (_nextAttackTime > gameTime.TotalElapsedTime || this.Target == null || !this.Aggrevated || !this.Target.Attackable) return;
 
-            Vector posDiff = this.Position - this.Target.Descriptor.Position;
+            Vector posDiff = this.Descriptor.Position - this.Target.Descriptor.Position;
 
             posDiff = new Vector(Math.Abs(posDiff.X), Math.Abs(posDiff.Y));
 
-            if (posDiff.X.IsWithin(0, this.AttackRange)
-                && posDiff.Y.IsWithin(0, this.AttackRange))
+            if (posDiff.X.IsWithin(0, this.Descriptor.AttackRange)
+                && posDiff.Y.IsWithin(0, this.Descriptor.AttackRange))
             {
 
                 if (this.Target is Player player)
@@ -159,9 +162,24 @@ namespace Lunar.Server.World.Actors
                         return;
                 }
 
-                var damageDelt = this.BehaviorDefinition?.Attack?.Invoke(new GameEventArgs(this, this.Target));
-                this.Target.OnAttacked(this, Convert.ToInt32(damageDelt));
-                
+                int damageDelt = 0;
+                try
+                {
+                    damageDelt = (int)this.Descriptor.BehaviorDefinition?.Attack(this, this.Target);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogEvent("Error handling Attack: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+                }
+
+                try
+                {
+                    this.Target.OnAttacked(this, Convert.ToInt32(damageDelt));
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+                }
 
                 _nextAttackTime = gameTime.TotalElapsedTime + 1000;
             }
@@ -174,7 +192,7 @@ namespace Lunar.Server.World.Actors
 
         public void GoTo(Vector targetDest)
         {
-            _targetPath = this.Map.GetPathfinder(this.Layer).FindPath(this.Position, targetDest);
+            _targetPath = this.Map.GetPathfinder(this.Layer).FindPath(this.Descriptor.Position, targetDest);
             _targetPath.Reverse();
 
             this.State = ActorStates.Moving;
@@ -190,38 +208,44 @@ namespace Lunar.Server.World.Actors
             float targetX = target.Descriptor.Position.X;
             float targetY = target.Descriptor.Position.Y;
 
-            if (targetX < this.Position.X)
+            if (targetX < this.Descriptor.Position.X)
             {
-                targetX -= this.CollisionBounds.Width;
+                targetX -= this.Descriptor.CollisionBounds.Width;
             }
             else
             {
-                targetX += this.CollisionBounds.Width;
+                targetX += this.Descriptor.CollisionBounds.Width;
             }
 
-            if (targetY < this.Position.Y)
+            if (targetY < this.Descriptor.Position.Y)
             {
-                targetY -= this.CollisionBounds.Height;
+                targetY -= this.Descriptor.CollisionBounds.Height;
             }
             else
             {
-                targetY += this.CollisionBounds.Height;
+                targetY += this.Descriptor.CollisionBounds.Height;
             }
 
-            // Don't mother moving if we're within range of the target
+            // Don't mother moving if we're not within range of the target
             if (!this.WithinRangeOf(target))
                 this.GoTo(new Vector(targetX, targetY));
         }
 
+        /// <summary>
+        /// Returns True if the player is within range of the specified actor.
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <returns></returns>
         public bool WithinRangeOf(IActor<IActorDescriptor> actor)
         {
-            Rect collisionBoundsRight = new Rect(this.Position.X + this.CollisionBounds.Left + Settings.TileSize, this.Position.Y + this.CollisionBounds.Top,
-                this.CollisionBounds.Width, this.CollisionBounds.Height);
+            // We consider within range to be either 1 tile to the right or left of the player. This of course will correspond to whatever tile size is set within the engine.
+            Rect collisionBoundsRight = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left + Settings.TileSize, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
+                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
 
-            Rect collisionBoundsLeft = new Rect(this.Position.X + this.CollisionBounds.Left - Settings.TileSize, this.Position.Y + this.CollisionBounds.Top,
-                this.CollisionBounds.Width, this.CollisionBounds.Height);
+            Rect collisionBoundsLeft = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left - Settings.TileSize, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
+                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
 
-            return (collisionBoundsRight.Intersects(actor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.CollisionBounds));
+            return (collisionBoundsRight.Intersects(actor.Descriptor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.Descriptor.CollisionBounds));
         }
 
         private void ProcessMovement(GameTime gameTime)
@@ -230,14 +254,14 @@ namespace Lunar.Server.World.Actors
             {
                 var targetDest = _targetPath[_targetPath.Count - 1];
 
-                if (targetDest.X < this.Position.X)
+                if (targetDest.X < this.Descriptor.Position.X)
                 {
                     this.UpdateMovement(Direction.Left, gameTime);
 
-                    if (targetDest.X >= this.Position.X)
+                    if (targetDest.X >= this.Descriptor.Position.X)
                     {
 
-                        this.Position = new Vector(targetDest.X, this.Position.Y);
+                        this.Descriptor.Position = new Vector(targetDest.X, this.Descriptor.Position.Y);
 
                         // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
                         // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
@@ -247,13 +271,13 @@ namespace Lunar.Server.World.Actors
 
                     }
                 }
-                else if (targetDest.X > this.Position.X)
+                else if (targetDest.X > this.Descriptor.Position.X)
                 {
                     this.UpdateMovement(Direction.Right, gameTime);
 
-                    if (targetDest.X <= this.Position.X)
+                    if (targetDest.X <= this.Descriptor.Position.X)
                     {
-                        this.Position = new Vector(targetDest.X, this.Position.Y);
+                        this.Descriptor.Position = new Vector(targetDest.X, this.Descriptor.Position.Y);
 
                         // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
                         // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
@@ -263,13 +287,13 @@ namespace Lunar.Server.World.Actors
 
                     }
                 }
-                else if (targetDest.Y < this.Position.Y)
+                else if (targetDest.Y < this.Descriptor.Position.Y)
                 {
                     this.UpdateMovement(Direction.Up, gameTime);
 
-                    if (targetDest.Y >= this.Position.Y)
+                    if (targetDest.Y >= this.Descriptor.Position.Y)
                     {
-                        this.Position = new Vector(this.Position.X, targetDest.Y);
+                        this.Descriptor.Position = new Vector(this.Descriptor.Position.X, targetDest.Y);
 
                         // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
                         // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
@@ -279,13 +303,13 @@ namespace Lunar.Server.World.Actors
 
                     }
                 }
-                else if (targetDest.Y > this.Position.Y)
+                else if (targetDest.Y > this.Descriptor.Position.Y)
                 {
                     this.UpdateMovement(Direction.Down, gameTime);
 
-                    if (targetDest.Y <= this.Position.X)
+                    if (targetDest.Y <= this.Descriptor.Position.X)
                     {
-                        this.Position = new Vector(this.Position.X, targetDest.Y);
+                        this.Descriptor.Position = new Vector(this.Descriptor.Position.X, targetDest.Y);
 
                         // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
                         // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
@@ -322,23 +346,23 @@ namespace Lunar.Server.World.Actors
             switch (this.Direction)
             {
                 case Direction.Right:
-                    dX = this.Speed * gameTime.UpdateTimeInMilliseconds;
+                    dX = this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
                     break;
 
                 case Direction.Left:
-                    dX = -this.Speed * gameTime.UpdateTimeInMilliseconds;
+                    dX = -this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
                     break;
 
                 case Direction.Up:
-                    dY = -this.Speed * gameTime.UpdateTimeInMilliseconds;
+                    dY = -this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
                     break;
 
                 case Direction.Down:
-                    dY = this.Speed * gameTime.UpdateTimeInMilliseconds;
+                    dY = this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
                     break;
             }
 
-            this.Position = new Vector(this.Position.X + dX, this.Position.Y + dY);
+            this.Descriptor.Position = new Vector(this.Descriptor.Position.X + dX, this.Descriptor.Position.Y + dY);
         }
 
         public T FindTarget<T>() where T : IActor<IActorDescriptor>
@@ -350,8 +374,8 @@ namespace Lunar.Server.World.Actors
                     continue;
                 }
 
-                if (actor.Descriptor.Position.X >= this.Position.X - this.AggresiveRange * Settings.TileSize && actor.Descriptor.Position.X <= this.Position.X + this.AggresiveRange * Settings.TileSize &&
-                    actor.Descriptor.Position.Y >= this.Position.Y - this.AggresiveRange* Settings.TileSize && actor.Descriptor.Position.Y <= this.Position.Y + this.AggresiveRange * Settings.TileSize)
+                if (actor.Descriptor.Position.X >= this.Descriptor.Position.X - this.Descriptor.AggresiveRange * Settings.TileSize && actor.Descriptor.Position.X <= this.Descriptor.Position.X + this.Descriptor.AggresiveRange * Settings.TileSize &&
+                    actor.Descriptor.Position.Y >= this.Descriptor.Position.Y - this.Descriptor.AggresiveRange * Settings.TileSize && actor.Descriptor.Position.Y <= this.Descriptor.Position.Y + this.Descriptor.AggresiveRange * Settings.TileSize)
                 {
                     return actor;
                 }
@@ -396,14 +420,14 @@ namespace Lunar.Server.World.Actors
             packet.Message.Write(this.UniqueID);
             packet.Message.Write(false);
             packet.Message.Write((int)this.Direction);
-            packet.Message.Write(this.Position);
+            packet.Message.Write(this.Descriptor.Position);
 
             _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
         public void WarpTo(Vector position)
         {
-            this.Position = position;
+            this.Descriptor.Position = position;
             var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
             npcDataPacket.Message.Write(this.Pack());
             _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
@@ -416,16 +440,16 @@ namespace Lunar.Server.World.Actors
             var netBuffer = new NetBuffer();
 
             netBuffer.Write(this.UniqueID);
-            netBuffer.Write(this.Name);
+            netBuffer.Write(this.Descriptor.Name);
             netBuffer.Write(this.Sprite.TextureName);
-            netBuffer.Write(this.Speed);
+            netBuffer.Write(this.Descriptor.Speed);
             netBuffer.Write(this.Descriptor.Stats.Health);
             netBuffer.Write(this.Descriptor.Stats.MaximumHealth);
-            netBuffer.Write(this.Level);
-            netBuffer.Write(this.Position.X);
-            netBuffer.Write(this.Position.Y);
-            netBuffer.Write(_frameSize);
-            netBuffer.Write(this.CollisionBounds);
+            netBuffer.Write(this.Descriptor.Level);
+            netBuffer.Write(this.Descriptor.Position.X);
+            netBuffer.Write(this.Descriptor.Position.Y);
+            netBuffer.Write(this.Descriptor.FrameSize);
+            netBuffer.Write(this.Descriptor.CollisionBounds);
             netBuffer.Write(this.Layer.Descriptor.Name);
 
             return netBuffer;

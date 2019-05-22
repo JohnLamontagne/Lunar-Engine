@@ -32,9 +32,13 @@
             this.darkToolStrip1 = new DarkUI.Controls.DarkToolStrip();
             this.buttonSave = new System.Windows.Forms.ToolStripButton();
             this.darkSectionPanel1 = new DarkUI.Controls.DarkSectionPanel();
+            this.txtAttackRange = new DarkUI.Controls.DarkTextBox();
+            this.darkLabel17 = new DarkUI.Controls.DarkLabel();
             this.txtMaxRoam = new DarkUI.Controls.DarkTextBox();
             this.darkLabel15 = new DarkUI.Controls.DarkLabel();
             this.darkSectionPanel2 = new DarkUI.Controls.DarkSectionPanel();
+            this.darkLabel16 = new DarkUI.Controls.DarkLabel();
+            this.txtSpeed = new DarkUI.Controls.DarkTextBox();
             this.txtHealth = new DarkUI.Controls.DarkTextBox();
             this.txtDef = new DarkUI.Controls.DarkTextBox();
             this.txtDex = new DarkUI.Controls.DarkTextBox();
@@ -45,25 +49,20 @@
             this.darkLabel6 = new DarkUI.Controls.DarkLabel();
             this.darkLabel5 = new DarkUI.Controls.DarkLabel();
             this.darkLabel4 = new DarkUI.Controls.DarkLabel();
-            this.darkLabel2 = new DarkUI.Controls.DarkLabel();
-            this.radUnaggressive = new DarkUI.Controls.DarkRadioButton();
-            this.radAggressive = new DarkUI.Controls.DarkRadioButton();
             this.darkLabel1 = new DarkUI.Controls.DarkLabel();
             this.txtName = new DarkUI.Controls.DarkTextBox();
-            this.darkSectionPanel3 = new DarkUI.Controls.DarkSectionPanel();
+            this.scriptSectorPanel = new DarkUI.Controls.DarkSectionPanel();
             this.txtEditor = new ScintillaNET.Scintilla();
             this.darkMenuStrip1 = new DarkUI.Controls.DarkMenuStrip();
             this.scriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onEquipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onAcquiredToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onDroppedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onCreatedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.darkSectionPanel4 = new DarkUI.Controls.DarkSectionPanel();
             this.darkLabel3 = new DarkUI.Controls.DarkLabel();
             this.cmbEquipSlot = new System.Windows.Forms.ComboBox();
             this.lstItems = new DarkUI.Controls.DarkListView();
             this.darkSectionPanel5 = new DarkUI.Controls.DarkSectionPanel();
+            this.btnClearSpritesheet = new DarkUI.Controls.DarkButton();
             this.txtFrameHeight = new DarkUI.Controls.DarkTextBox();
             this.darkLabel14 = new DarkUI.Controls.DarkLabel();
             this.txtFrameWidth = new DarkUI.Controls.DarkTextBox();
@@ -79,16 +78,31 @@
             this.darkLabel11 = new DarkUI.Controls.DarkLabel();
             this.darkLabel10 = new DarkUI.Controls.DarkLabel();
             this.darkLabel9 = new DarkUI.Controls.DarkLabel();
+            this.darkSectionPanel3 = new DarkUI.Controls.DarkSectionPanel();
+            this.darkSectionPanel7 = new DarkUI.Controls.DarkSectionPanel();
+            this.txtVarName = new DarkUI.Controls.DarkTextBox();
+            this.darkLabel19 = new DarkUI.Controls.DarkLabel();
+            this.txtVarVal = new DarkUI.Controls.DarkTextBox();
+            this.darkLabel18 = new DarkUI.Controls.DarkLabel();
+            this.cmbVarType = new System.Windows.Forms.ComboBox();
+            this.darkLabel2 = new DarkUI.Controls.DarkLabel();
+            this.darkToolStrip2 = new DarkUI.Controls.DarkToolStrip();
+            this.buttonAddVariable = new System.Windows.Forms.ToolStripButton();
+            this.buttonRemoveVariable = new System.Windows.Forms.ToolStripButton();
+            this.lstVariables = new DarkUI.Controls.DarkListView();
             this.darkToolStrip1.SuspendLayout();
             this.darkSectionPanel1.SuspendLayout();
             this.darkSectionPanel2.SuspendLayout();
-            this.darkSectionPanel3.SuspendLayout();
+            this.scriptSectorPanel.SuspendLayout();
             this.darkMenuStrip1.SuspendLayout();
             this.darkSectionPanel4.SuspendLayout();
             this.darkSectionPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpriteSheet)).BeginInit();
             this.darkSectionPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCollisionPreview)).BeginInit();
+            this.darkSectionPanel3.SuspendLayout();
+            this.darkSectionPanel7.SuspendLayout();
+            this.darkToolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // darkToolStrip1
@@ -101,7 +115,7 @@
             this.darkToolStrip1.Location = new System.Drawing.Point(0, 0);
             this.darkToolStrip1.Name = "darkToolStrip1";
             this.darkToolStrip1.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.darkToolStrip1.Size = new System.Drawing.Size(1550, 28);
+            this.darkToolStrip1.Size = new System.Drawing.Size(1774, 28);
             this.darkToolStrip1.TabIndex = 1;
             this.darkToolStrip1.Text = "darkToolStrip1";
             // 
@@ -119,12 +133,11 @@
             // 
             // darkSectionPanel1
             // 
+            this.darkSectionPanel1.Controls.Add(this.txtAttackRange);
+            this.darkSectionPanel1.Controls.Add(this.darkLabel17);
             this.darkSectionPanel1.Controls.Add(this.txtMaxRoam);
             this.darkSectionPanel1.Controls.Add(this.darkLabel15);
             this.darkSectionPanel1.Controls.Add(this.darkSectionPanel2);
-            this.darkSectionPanel1.Controls.Add(this.darkLabel2);
-            this.darkSectionPanel1.Controls.Add(this.radUnaggressive);
-            this.darkSectionPanel1.Controls.Add(this.radAggressive);
             this.darkSectionPanel1.Controls.Add(this.darkLabel1);
             this.darkSectionPanel1.Controls.Add(this.txtName);
             this.darkSectionPanel1.Location = new System.Drawing.Point(13, 31);
@@ -133,12 +146,33 @@
             this.darkSectionPanel1.Size = new System.Drawing.Size(409, 377);
             this.darkSectionPanel1.TabIndex = 2;
             // 
+            // txtAttackRange
+            // 
+            this.txtAttackRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtAttackRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtAttackRange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtAttackRange.Location = new System.Drawing.Point(94, 96);
+            this.txtAttackRange.Name = "txtAttackRange";
+            this.txtAttackRange.Size = new System.Drawing.Size(51, 23);
+            this.txtAttackRange.TabIndex = 20;
+            this.txtAttackRange.TextChanged += new System.EventHandler(this.TxtAttackRange_TextChanged);
+            // 
+            // darkLabel17
+            // 
+            this.darkLabel17.AutoSize = true;
+            this.darkLabel17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel17.Location = new System.Drawing.Point(4, 98);
+            this.darkLabel17.Name = "darkLabel17";
+            this.darkLabel17.Size = new System.Drawing.Size(80, 15);
+            this.darkLabel17.TabIndex = 19;
+            this.darkLabel17.Text = "Attack Range:";
+            // 
             // txtMaxRoam
             // 
             this.txtMaxRoam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtMaxRoam.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtMaxRoam.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtMaxRoam.Location = new System.Drawing.Point(94, 123);
+            this.txtMaxRoam.Location = new System.Drawing.Point(94, 67);
             this.txtMaxRoam.Name = "txtMaxRoam";
             this.txtMaxRoam.Size = new System.Drawing.Size(51, 23);
             this.txtMaxRoam.TabIndex = 18;
@@ -148,7 +182,7 @@
             // 
             this.darkLabel15.AutoSize = true;
             this.darkLabel15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel15.Location = new System.Drawing.Point(13, 125);
+            this.darkLabel15.Location = new System.Drawing.Point(18, 69);
             this.darkLabel15.Name = "darkLabel15";
             this.darkLabel15.Size = new System.Drawing.Size(66, 15);
             this.darkLabel15.TabIndex = 17;
@@ -156,6 +190,8 @@
             // 
             // darkSectionPanel2
             // 
+            this.darkSectionPanel2.Controls.Add(this.darkLabel16);
+            this.darkSectionPanel2.Controls.Add(this.txtSpeed);
             this.darkSectionPanel2.Controls.Add(this.txtHealth);
             this.darkSectionPanel2.Controls.Add(this.txtDef);
             this.darkSectionPanel2.Controls.Add(this.txtDex);
@@ -171,6 +207,27 @@
             this.darkSectionPanel2.SectionHeader = "Stat Information";
             this.darkSectionPanel2.Size = new System.Drawing.Size(383, 136);
             this.darkSectionPanel2.TabIndex = 15;
+            // 
+            // darkLabel16
+            // 
+            this.darkLabel16.AutoSize = true;
+            this.darkLabel16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel16.Location = new System.Drawing.Point(166, 98);
+            this.darkLabel16.Name = "darkLabel16";
+            this.darkLabel16.Size = new System.Drawing.Size(42, 15);
+            this.darkLabel16.TabIndex = 21;
+            this.darkLabel16.Text = "Speed:";
+            // 
+            // txtSpeed
+            // 
+            this.txtSpeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtSpeed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSpeed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtSpeed.Location = new System.Drawing.Point(220, 96);
+            this.txtSpeed.Name = "txtSpeed";
+            this.txtSpeed.Size = new System.Drawing.Size(51, 23);
+            this.txtSpeed.TabIndex = 20;
+            this.txtSpeed.TextChanged += new System.EventHandler(this.TxtSpeed_TextChanged);
             // 
             // txtHealth
             // 
@@ -277,43 +334,11 @@
             this.darkLabel4.TabIndex = 10;
             this.darkLabel4.Text = "Strength:";
             // 
-            // darkLabel2
-            // 
-            this.darkLabel2.AutoSize = true;
-            this.darkLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel2.Location = new System.Drawing.Point(10, 86);
-            this.darkLabel2.Name = "darkLabel2";
-            this.darkLabel2.Size = new System.Drawing.Size(67, 15);
-            this.darkLabel2.TabIndex = 8;
-            this.darkLabel2.Text = "Aggressive:";
-            // 
-            // radUnaggressive
-            // 
-            this.radUnaggressive.AutoSize = true;
-            this.radUnaggressive.Checked = true;
-            this.radUnaggressive.Location = new System.Drawing.Point(148, 84);
-            this.radUnaggressive.Name = "radUnaggressive";
-            this.radUnaggressive.Size = new System.Drawing.Size(51, 19);
-            this.radUnaggressive.TabIndex = 7;
-            this.radUnaggressive.TabStop = true;
-            this.radUnaggressive.Text = "False";
-            this.radUnaggressive.CheckedChanged += new System.EventHandler(this.radUnaggressive_CheckedChanged);
-            // 
-            // radAggressive
-            // 
-            this.radAggressive.AutoSize = true;
-            this.radAggressive.Location = new System.Drawing.Point(94, 84);
-            this.radAggressive.Name = "radAggressive";
-            this.radAggressive.Size = new System.Drawing.Size(48, 19);
-            this.radAggressive.TabIndex = 6;
-            this.radAggressive.Text = "True";
-            this.radAggressive.CheckedChanged += new System.EventHandler(this.radAggressive_CheckedChanged);
-            // 
             // darkLabel1
             // 
             this.darkLabel1.AutoSize = true;
             this.darkLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel1.Location = new System.Drawing.Point(10, 41);
+            this.darkLabel1.Location = new System.Drawing.Point(15, 41);
             this.darkLabel1.Name = "darkLabel1";
             this.darkLabel1.Size = new System.Drawing.Size(69, 15);
             this.darkLabel1.TabIndex = 5;
@@ -330,22 +355,22 @@
             this.txtName.TabIndex = 4;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
-            // darkSectionPanel3
+            // scriptSectorPanel
             // 
-            this.darkSectionPanel3.Controls.Add(this.txtEditor);
-            this.darkSectionPanel3.Controls.Add(this.darkMenuStrip1);
-            this.darkSectionPanel3.Enabled = false;
-            this.darkSectionPanel3.Location = new System.Drawing.Point(855, 31);
-            this.darkSectionPanel3.Name = "darkSectionPanel3";
-            this.darkSectionPanel3.SectionHeader = "Scripting Information";
-            this.darkSectionPanel3.Size = new System.Drawing.Size(683, 485);
-            this.darkSectionPanel3.TabIndex = 4;
+            this.scriptSectorPanel.Controls.Add(this.txtEditor);
+            this.scriptSectorPanel.Controls.Add(this.darkMenuStrip1);
+            this.scriptSectorPanel.Location = new System.Drawing.Point(855, 31);
+            this.scriptSectorPanel.Name = "scriptSectorPanel";
+            this.scriptSectorPanel.SectionHeader = "Scripting Information";
+            this.scriptSectorPanel.Size = new System.Drawing.Size(884, 699);
+            this.scriptSectorPanel.TabIndex = 4;
             // 
             // txtEditor
             // 
+            this.txtEditor.Enabled = false;
             this.txtEditor.Location = new System.Drawing.Point(4, 52);
             this.txtEditor.Name = "txtEditor";
-            this.txtEditor.Size = new System.Drawing.Size(675, 429);
+            this.txtEditor.Size = new System.Drawing.Size(876, 643);
             this.txtEditor.TabIndex = 1;
             this.txtEditor.TextChanged += new System.EventHandler(this.txtEditor_TextChanged);
             this.txtEditor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtEditor_KeyDown);
@@ -359,62 +384,35 @@
             this.darkMenuStrip1.Location = new System.Drawing.Point(1, 25);
             this.darkMenuStrip1.Name = "darkMenuStrip1";
             this.darkMenuStrip1.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
-            this.darkMenuStrip1.Size = new System.Drawing.Size(681, 24);
+            this.darkMenuStrip1.Size = new System.Drawing.Size(882, 24);
             this.darkMenuStrip1.TabIndex = 2;
             this.darkMenuStrip1.Text = "darkMenuStrip1";
             // 
             // scriptsToolStripMenuItem
             // 
             this.scriptsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.onUseToolStripMenuItem,
-            this.onEquipToolStripMenuItem,
-            this.onAcquiredToolStripMenuItem,
-            this.onDroppedToolStripMenuItem,
-            this.onCreatedToolStripMenuItem});
+            this.newToolStripMenuItem,
+            this.loadToolStripMenuItem});
             this.scriptsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.scriptsToolStripMenuItem.Name = "scriptsToolStripMenuItem";
-            this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.scriptsToolStripMenuItem.Text = "Scripts";
+            this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.scriptsToolStripMenuItem.Text = "File";
             // 
-            // onUseToolStripMenuItem
+            // newToolStripMenuItem
             // 
-            this.onUseToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.onUseToolStripMenuItem.Name = "onUseToolStripMenuItem";
-            this.onUseToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.onUseToolStripMenuItem.Text = "OnUse";
-            this.onUseToolStripMenuItem.Click += new System.EventHandler(this.onUseToolStripMenuItem_Click);
+            this.newToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
             // 
-            // onEquipToolStripMenuItem
+            // loadToolStripMenuItem
             // 
-            this.onEquipToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.onEquipToolStripMenuItem.Name = "onEquipToolStripMenuItem";
-            this.onEquipToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.onEquipToolStripMenuItem.Text = "OnEquip";
-            this.onEquipToolStripMenuItem.Click += new System.EventHandler(this.onEquipToolStripMenuItem_Click);
-            // 
-            // onAcquiredToolStripMenuItem
-            // 
-            this.onAcquiredToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.onAcquiredToolStripMenuItem.Name = "onAcquiredToolStripMenuItem";
-            this.onAcquiredToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.onAcquiredToolStripMenuItem.Text = "OnAcquired";
-            this.onAcquiredToolStripMenuItem.Click += new System.EventHandler(this.onAcquiredToolStripMenuItem_Click);
-            // 
-            // onDroppedToolStripMenuItem
-            // 
-            this.onDroppedToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.onDroppedToolStripMenuItem.Name = "onDroppedToolStripMenuItem";
-            this.onDroppedToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.onDroppedToolStripMenuItem.Text = "OnDropped";
-            this.onDroppedToolStripMenuItem.Click += new System.EventHandler(this.onDroppedToolStripMenuItem_Click);
-            // 
-            // onCreatedToolStripMenuItem
-            // 
-            this.onCreatedToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.onCreatedToolStripMenuItem.Name = "onCreatedToolStripMenuItem";
-            this.onCreatedToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-            this.onCreatedToolStripMenuItem.Text = "OnCreated";
-            this.onCreatedToolStripMenuItem.Click += new System.EventHandler(this.onCreatedToolStripMenuItem_Click);
+            this.loadToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadToolStripMenuItem_Click);
             // 
             // darkSectionPanel4
             // 
@@ -425,7 +423,7 @@
             this.darkSectionPanel4.Location = new System.Drawing.Point(428, 33);
             this.darkSectionPanel4.Name = "darkSectionPanel4";
             this.darkSectionPanel4.SectionHeader = "Equipment Information";
-            this.darkSectionPanel4.Size = new System.Drawing.Size(421, 228);
+            this.darkSectionPanel4.Size = new System.Drawing.Size(421, 181);
             this.darkSectionPanel4.TabIndex = 5;
             // 
             // darkLabel3
@@ -455,13 +453,14 @@
             // 
             this.lstItems.Location = new System.Drawing.Point(244, 36);
             this.lstItems.Name = "lstItems";
-            this.lstItems.Size = new System.Drawing.Size(173, 187);
+            this.lstItems.Size = new System.Drawing.Size(173, 130);
             this.lstItems.TabIndex = 0;
             this.lstItems.Text = "darkListView1";
             this.lstItems.SelectedIndicesChanged += new System.EventHandler(this.lstItems_SelectedIndicesChanged);
             // 
             // darkSectionPanel5
             // 
+            this.darkSectionPanel5.Controls.Add(this.btnClearSpritesheet);
             this.darkSectionPanel5.Controls.Add(this.txtFrameHeight);
             this.darkSectionPanel5.Controls.Add(this.darkLabel14);
             this.darkSectionPanel5.Controls.Add(this.txtFrameWidth);
@@ -470,8 +469,18 @@
             this.darkSectionPanel5.Location = new System.Drawing.Point(13, 414);
             this.darkSectionPanel5.Name = "darkSectionPanel5";
             this.darkSectionPanel5.SectionHeader = "Display Information";
-            this.darkSectionPanel5.Size = new System.Drawing.Size(409, 299);
+            this.darkSectionPanel5.Size = new System.Drawing.Size(409, 316);
             this.darkSectionPanel5.TabIndex = 16;
+            // 
+            // btnClearSpritesheet
+            // 
+            this.btnClearSpritesheet.Location = new System.Drawing.Point(321, 289);
+            this.btnClearSpritesheet.Name = "btnClearSpritesheet";
+            this.btnClearSpritesheet.Padding = new System.Windows.Forms.Padding(5);
+            this.btnClearSpritesheet.Size = new System.Drawing.Size(75, 23);
+            this.btnClearSpritesheet.TabIndex = 22;
+            this.btnClearSpritesheet.Text = "Clear";
+            this.btnClearSpritesheet.Click += new System.EventHandler(this.BtnClearSpritesheet_Click);
             // 
             // txtFrameHeight
             // 
@@ -538,7 +547,7 @@
             this.darkSectionPanel6.Controls.Add(this.darkLabel11);
             this.darkSectionPanel6.Controls.Add(this.darkLabel10);
             this.darkSectionPanel6.Controls.Add(this.darkLabel9);
-            this.darkSectionPanel6.Location = new System.Drawing.Point(428, 267);
+            this.darkSectionPanel6.Location = new System.Drawing.Point(428, 220);
             this.darkSectionPanel6.Name = "darkSectionPanel6";
             this.darkSectionPanel6.SectionHeader = "Collision Information";
             this.darkSectionPanel6.Size = new System.Drawing.Size(417, 281);
@@ -639,19 +648,159 @@
             this.darkLabel9.TabIndex = 4;
             this.darkLabel9.Text = "Top:";
             // 
+            // darkSectionPanel3
+            // 
+            this.darkSectionPanel3.Controls.Add(this.darkSectionPanel7);
+            this.darkSectionPanel3.Controls.Add(this.darkToolStrip2);
+            this.darkSectionPanel3.Controls.Add(this.lstVariables);
+            this.darkSectionPanel3.Location = new System.Drawing.Point(428, 507);
+            this.darkSectionPanel3.Name = "darkSectionPanel3";
+            this.darkSectionPanel3.SectionHeader = "Custom Variables";
+            this.darkSectionPanel3.Size = new System.Drawing.Size(417, 260);
+            this.darkSectionPanel3.TabIndex = 18;
+            // 
+            // darkSectionPanel7
+            // 
+            this.darkSectionPanel7.Controls.Add(this.txtVarName);
+            this.darkSectionPanel7.Controls.Add(this.darkLabel19);
+            this.darkSectionPanel7.Controls.Add(this.txtVarVal);
+            this.darkSectionPanel7.Controls.Add(this.darkLabel18);
+            this.darkSectionPanel7.Controls.Add(this.cmbVarType);
+            this.darkSectionPanel7.Controls.Add(this.darkLabel2);
+            this.darkSectionPanel7.Location = new System.Drawing.Point(153, 38);
+            this.darkSectionPanel7.Name = "darkSectionPanel7";
+            this.darkSectionPanel7.SectionHeader = null;
+            this.darkSectionPanel7.Size = new System.Drawing.Size(260, 190);
+            this.darkSectionPanel7.TabIndex = 24;
+            // 
+            // txtVarName
+            // 
+            this.txtVarName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtVarName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtVarName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtVarName.Location = new System.Drawing.Point(99, 39);
+            this.txtVarName.Name = "txtVarName";
+            this.txtVarName.Size = new System.Drawing.Size(132, 23);
+            this.txtVarName.TabIndex = 22;
+            this.txtVarName.TextChanged += new System.EventHandler(this.TxtVarName_TextChanged);
+            // 
+            // darkLabel19
+            // 
+            this.darkLabel19.AutoSize = true;
+            this.darkLabel19.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel19.Location = new System.Drawing.Point(7, 41);
+            this.darkLabel19.Name = "darkLabel19";
+            this.darkLabel19.Size = new System.Drawing.Size(86, 15);
+            this.darkLabel19.TabIndex = 21;
+            this.darkLabel19.Text = "Variable Name:";
+            // 
+            // txtVarVal
+            // 
+            this.txtVarVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtVarVal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtVarVal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtVarVal.Location = new System.Drawing.Point(99, 131);
+            this.txtVarVal.Name = "txtVarVal";
+            this.txtVarVal.Size = new System.Drawing.Size(132, 23);
+            this.txtVarVal.TabIndex = 20;
+            // 
+            // darkLabel18
+            // 
+            this.darkLabel18.AutoSize = true;
+            this.darkLabel18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel18.Location = new System.Drawing.Point(55, 133);
+            this.darkLabel18.Name = "darkLabel18";
+            this.darkLabel18.Size = new System.Drawing.Size(38, 15);
+            this.darkLabel18.TabIndex = 13;
+            this.darkLabel18.Text = "Value:";
+            // 
+            // cmbVarType
+            // 
+            this.cmbVarType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbVarType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVarType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbVarType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbVarType.FormattingEnabled = true;
+            this.cmbVarType.Location = new System.Drawing.Point(99, 75);
+            this.cmbVarType.Name = "cmbVarType";
+            this.cmbVarType.Size = new System.Drawing.Size(132, 23);
+            this.cmbVarType.TabIndex = 12;
+            // 
+            // darkLabel2
+            // 
+            this.darkLabel2.AutoSize = true;
+            this.darkLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel2.Location = new System.Drawing.Point(14, 78);
+            this.darkLabel2.Name = "darkLabel2";
+            this.darkLabel2.Size = new System.Drawing.Size(79, 15);
+            this.darkLabel2.TabIndex = 11;
+            this.darkLabel2.Text = "Variable Type:";
+            // 
+            // darkToolStrip2
+            // 
+            this.darkToolStrip2.AutoSize = false;
+            this.darkToolStrip2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.darkToolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.darkToolStrip2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkToolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buttonAddVariable,
+            this.buttonRemoveVariable});
+            this.darkToolStrip2.Location = new System.Drawing.Point(1, 231);
+            this.darkToolStrip2.Name = "darkToolStrip2";
+            this.darkToolStrip2.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
+            this.darkToolStrip2.Size = new System.Drawing.Size(415, 28);
+            this.darkToolStrip2.TabIndex = 23;
+            this.darkToolStrip2.Text = "darkToolStrip2";
+            // 
+            // buttonAddVariable
+            // 
+            this.buttonAddVariable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonAddVariable.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.buttonAddVariable.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddVariable.Image")));
+            this.buttonAddVariable.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.buttonAddVariable.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonAddVariable.Name = "buttonAddVariable";
+            this.buttonAddVariable.Size = new System.Drawing.Size(23, 25);
+            this.buttonAddVariable.Text = "toolStripButton1";
+            this.buttonAddVariable.ToolTipText = "Add Layer";
+            this.buttonAddVariable.Click += new System.EventHandler(this.ButtonAddVariable_Click);
+            // 
+            // buttonRemoveVariable
+            // 
+            this.buttonRemoveVariable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonRemoveVariable.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.buttonRemoveVariable.Image = ((System.Drawing.Image)(resources.GetObject("buttonRemoveVariable.Image")));
+            this.buttonRemoveVariable.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.buttonRemoveVariable.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonRemoveVariable.Name = "buttonRemoveVariable";
+            this.buttonRemoveVariable.Size = new System.Drawing.Size(23, 25);
+            this.buttonRemoveVariable.Text = "toolStripButton2";
+            this.buttonRemoveVariable.ToolTipText = "Remove Layer";
+            this.buttonRemoveVariable.Click += new System.EventHandler(this.ButtonRemoveVariable_Click);
+            // 
+            // lstVariables
+            // 
+            this.lstVariables.Location = new System.Drawing.Point(12, 38);
+            this.lstVariables.Name = "lstVariables";
+            this.lstVariables.Size = new System.Drawing.Size(135, 190);
+            this.lstVariables.TabIndex = 0;
+            this.lstVariables.Text = "darkListView1";
+            this.lstVariables.SelectedIndicesChanged += new System.EventHandler(this.LstVariables_SelectedIndicesChanged);
+            // 
             // DockNPCEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.darkSectionPanel3);
             this.Controls.Add(this.darkSectionPanel6);
             this.Controls.Add(this.darkSectionPanel5);
             this.Controls.Add(this.darkSectionPanel4);
-            this.Controls.Add(this.darkSectionPanel3);
+            this.Controls.Add(this.scriptSectorPanel);
             this.Controls.Add(this.darkSectionPanel1);
             this.Controls.Add(this.darkToolStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "DockNPCEditor";
-            this.Size = new System.Drawing.Size(1550, 722);
+            this.Size = new System.Drawing.Size(1774, 783);
             this.Load += new System.EventHandler(this.DockItemEditor_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DockItemEditor_KeyDown);
             this.darkToolStrip1.ResumeLayout(false);
@@ -660,8 +809,8 @@
             this.darkSectionPanel1.PerformLayout();
             this.darkSectionPanel2.ResumeLayout(false);
             this.darkSectionPanel2.PerformLayout();
-            this.darkSectionPanel3.ResumeLayout(false);
-            this.darkSectionPanel3.PerformLayout();
+            this.scriptSectorPanel.ResumeLayout(false);
+            this.scriptSectorPanel.PerformLayout();
             this.darkMenuStrip1.ResumeLayout(false);
             this.darkMenuStrip1.PerformLayout();
             this.darkSectionPanel4.ResumeLayout(false);
@@ -672,6 +821,11 @@
             this.darkSectionPanel6.ResumeLayout(false);
             this.darkSectionPanel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCollisionPreview)).EndInit();
+            this.darkSectionPanel3.ResumeLayout(false);
+            this.darkSectionPanel7.ResumeLayout(false);
+            this.darkSectionPanel7.PerformLayout();
+            this.darkToolStrip2.ResumeLayout(false);
+            this.darkToolStrip2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -682,18 +836,8 @@
         private DarkUI.Controls.DarkSectionPanel darkSectionPanel1;
         private DarkUI.Controls.DarkLabel darkLabel1;
         private DarkUI.Controls.DarkTextBox txtName;
-        private DarkUI.Controls.DarkLabel darkLabel2;
-        private DarkUI.Controls.DarkRadioButton radUnaggressive;
-        private DarkUI.Controls.DarkRadioButton radAggressive;
-        private DarkUI.Controls.DarkSectionPanel darkSectionPanel3;
+        private DarkUI.Controls.DarkSectionPanel scriptSectorPanel;
         private ScintillaNET.Scintilla txtEditor;
-        private DarkUI.Controls.DarkMenuStrip darkMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem scriptsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem onUseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem onEquipToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem onAcquiredToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem onDroppedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem onCreatedToolStripMenuItem;
         private DarkUI.Controls.DarkSectionPanel darkSectionPanel4;
         private DarkUI.Controls.DarkListView lstItems;
         private System.Windows.Forms.ComboBox cmbEquipSlot;
@@ -726,6 +870,27 @@
         private DarkUI.Controls.DarkLabel darkLabel5;
         private DarkUI.Controls.DarkLabel darkLabel4;
         private DarkUI.Controls.DarkTextBox txtMaxRoam;
+        private DarkUI.Controls.DarkLabel darkLabel16;
+        private DarkUI.Controls.DarkTextBox txtSpeed;
+        private DarkUI.Controls.DarkTextBox txtAttackRange;
+        private DarkUI.Controls.DarkLabel darkLabel17;
         private DarkUI.Controls.DarkLabel darkLabel15;
+        private DarkUI.Controls.DarkMenuStrip darkMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem scriptsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private DarkUI.Controls.DarkButton btnClearSpritesheet;
+        private DarkUI.Controls.DarkSectionPanel darkSectionPanel3;
+        private DarkUI.Controls.DarkListView lstVariables;
+        private DarkUI.Controls.DarkToolStrip darkToolStrip2;
+        private System.Windows.Forms.ToolStripButton buttonAddVariable;
+        private System.Windows.Forms.ToolStripButton buttonRemoveVariable;
+        private DarkUI.Controls.DarkSectionPanel darkSectionPanel7;
+        private DarkUI.Controls.DarkLabel darkLabel2;
+        private DarkUI.Controls.DarkTextBox txtVarVal;
+        private DarkUI.Controls.DarkLabel darkLabel18;
+        private System.Windows.Forms.ComboBox cmbVarType;
+        private DarkUI.Controls.DarkTextBox txtVarName;
+        private DarkUI.Controls.DarkLabel darkLabel19;
     }
 }

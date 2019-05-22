@@ -17,17 +17,6 @@ namespace Lunar.Server.Utilities
     public class GameTimerManager
     {
         private static GameTimerManager _instance;
-        public static GameTimerManager Instance {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new GameTimerManager();
-                }
-
-                return _instance;
-            }
-        }
 
         private Dictionary<string, GameTimer> _gameTimers;
 
@@ -49,6 +38,9 @@ namespace Lunar.Server.Utilities
 
         public GameTimer GetTimer(string name)
         {
+            if (!_gameTimers.ContainsKey(name))
+                return null;
+
             return _gameTimers[name];
         }
 

@@ -16,6 +16,7 @@ namespace Lunar.Server.Utilities.Scripting
                 _scriptEngine = scriptEngine;
                 _compiledScript = compiledScript;
                 _scope = _scriptEngine.CreateScope();
+                _scope.SetVariable("gameTimeManager", new GameTimerManager());
                 _compiledScript.Execute(_scope);
                 Console.WriteLine($"Successfully loaded script {compiledScript.Path}");
             }
@@ -41,9 +42,19 @@ namespace Lunar.Server.Utilities.Scripting
 
         public void Invoke(string functionName, GameEventArgs args)
         {
-            
-            dynamic funct = _scope.GetVariable(functionName);
-            funct(args);
+            try
+            {
+                dynamic funct = _scope.GetVariable(functionName);
+                funct(args);
+            }
+            catch (Microsoft.Scripting.SyntaxErrorException ex)
+            {
+                Logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent($"Script Error: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+            }
         }
 
         public T Invoke<T>(string functionName, GameEventArgs args)

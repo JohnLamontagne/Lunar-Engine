@@ -12,6 +12,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using IronPython.Hosting;
 using Lunar.Core;
 using Lunar.Core.Utilities;
@@ -36,6 +37,9 @@ namespace Lunar.Server.Utilities.Scripting
 
         public Script CreateScript(string scriptPath)
         {
+            if (string.IsNullOrEmpty(scriptPath) || !File.Exists(scriptPath))
+                return null;
+
             if (_scripts.ContainsKey(scriptPath))
                 return _scripts[scriptPath];
 

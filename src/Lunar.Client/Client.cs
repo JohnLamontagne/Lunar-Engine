@@ -59,8 +59,6 @@ namespace Lunar.Client
 
             _graphics.PreparingDeviceSettings += _graphics_PreparingDeviceSettings;
 
-
-
             Content.RootDirectory = "Content";
 
         }
@@ -175,7 +173,7 @@ namespace Lunar.Client
 
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, _camera.GetTransformation());
+            _spriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, _camera.GetTransformation());
 
 
             Client.ServiceLocator.Get<SceneManager>().Draw(gameTime, _spriteBatch);

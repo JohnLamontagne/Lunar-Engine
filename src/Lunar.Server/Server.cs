@@ -134,7 +134,6 @@ namespace Lunar.Server
                     {
                         Server.ServiceLocator.Get<WorldManager>().Update(gameTime);
 
-                        GameTimerManager.Instance.Update(gameTime);
 
                         nextUpdateTime = gameTime.TotalElapsedTime + millisecondsPerUpdate;
 

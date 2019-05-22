@@ -6,6 +6,7 @@ from Lunar.Core import *
 from Lunar.Core.Utilities.Data import *
 from Lunar.Server import *
 from Lunar.Server.Utilities.Commands import *
+from Lunar.Server.World.Actors import *
 
 def warpToCommand(args):
   player = args[0]
@@ -32,7 +33,7 @@ def warpToPlayerCommand(args):
   if not targetPlayer.Map.ActorInMap(player):
     player.JoinMap(targetPlayer.Map)
 
-  player.WarpTo(targetPlayer.Position)
+  player.WarpTo(targetPlayer.Descriptor.Position)
   player.NetworkComponent.SendChatMessage("Warped to " + playerName, ChatMessageType.Announcement)
 
 def setSpeedCommand(args):
@@ -63,14 +64,16 @@ def spawnItemCommand(args):
 def spawnNPCCommand(args):
   player = args[0]
   npcName = args[1][0]
+  print(args[1][0])
 
   if not player.Descriptor.Role.Supercedes(Settings.Roles["Admin"]):
     player.NetworkComponent.SendChatMessage("You do not have the correct permissions to use this command!", ChatMessageType.Alert)
     return
 
-  npcDesc = Server.ServiceLocator.GetService("NPCManager").GetNPC(npcName)
-  npc = NPC(npcDesc, player.Map)
-  npc.WarpTo(player.Position)
+  npcDesc = Server.ServiceLocator.Get[NPCManager]().GetNPC(npcName)
+  if npcDesc:
+    npc = NPC(npcDesc, player.Map)
+    npc.WarpTo(player.Descriptor.Position)
   
 def setCollisionBoundsCommand(args):
   player = args[0]
@@ -82,8 +85,8 @@ def setCollisionBoundsCommand(args):
   if not player.Role.Supercedes(Settings.Roles["Admin"]):
     player.NetworkComponent.SendChatMessage("You do not have the correct permissions to use this command!", ChatMessageType.Alert)
 
-  player.CollisionBounds = Rect(left, top, width, height)
-  player.NetworkComponent.SendChatMessage("Set collision bounds to " + player.CollisionBounds.ToString(), ChatMessageType.Announcement)
+  player.Descriptor.CollisionBounds = Rect(left, top, width, height)
+  player.NetworkComponent.SendChatMessage("Set collision bounds to " + player.Descriptor.CollisionBounds.ToString(), ChatMessageType.Announcement)
 
 Server.ServiceLocator.Get[CommandHandler]().AddHandler("warpTo", warpToCommand)
 Server.ServiceLocator.Get[CommandHandler]().AddHandler("warpToPlayer", warpToPlayerCommand)

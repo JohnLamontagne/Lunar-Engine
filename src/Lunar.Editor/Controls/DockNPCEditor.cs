@@ -31,7 +31,6 @@ namespace Lunar.Editor.Controls
         private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
-        private string _activeScript;
 
         private Project _project;
 
@@ -41,9 +40,7 @@ namespace Lunar.Editor.Controls
         {
             InitializeComponent();
 
-            _activeScript = "";
-
-            this.txtEditor.Lexer = Lexer.Lua;
+            this.txtEditor.Lexer = Lexer.Python;
 
             this.txtEditor.StyleResetDefault();
 
@@ -55,23 +52,25 @@ namespace Lunar.Editor.Controls
 
             this.txtEditor.StyleClearAll();
 
-            this.txtEditor.Styles[Style.Lua.Comment].ForeColor = Color.FromArgb(181, 189, 104);
-            this.txtEditor.Styles[Style.Lua.CommentLine].ForeColor = Color.FromArgb(181, 189, 104);
-            this.txtEditor.Styles[Style.Lua.CommentLine].Italic = true;
+            this.txtEditor.Styles[Style.Python.CommentBlock].ForeColor = Color.FromArgb(181, 189, 104);
+            this.txtEditor.Styles[Style.Python.CommentLine].ForeColor = Color.FromArgb(181, 189, 104);
+            this.txtEditor.Styles[Style.Python.CommentLine].Italic = true;
 
-            this.txtEditor.Styles[Style.Lua.String].ForeColor = Color.FromArgb(222, 147, 95);
+            this.txtEditor.Styles[Style.Python.String].ForeColor = Color.FromArgb(222, 147, 95);
 
-            this.txtEditor.Styles[Style.Lua.Operator].ForeColor = Color.FromArgb(240, 198, 116);
+            this.txtEditor.Styles[Style.Python.Operator].ForeColor = Color.FromArgb(240, 198, 116);
 
-            this.txtEditor.Styles[Style.Lua.Number].ForeColor = Color.FromArgb(138, 190, 183);
+            this.txtEditor.Styles[Style.Python.Number].ForeColor = Color.FromArgb(138, 190, 183);
 
-            this.txtEditor.Styles[Style.Lua.Preprocessor].ForeColor = Color.FromArgb(129, 162, 190);
+            this.txtEditor.Styles[Style.Python.Identifier].ForeColor = Color.FromArgb(178, 148, 187);
 
-            this.txtEditor.Styles[Style.Lua.Identifier].ForeColor = Color.FromArgb(178, 148, 187);
+            this.txtEditor.Styles[Style.Python.Word].ForeColor = Color.FromArgb(130, 239, 104);
 
-            this.txtEditor.Styles[Style.Lua.Word].ForeColor = Color.FromArgb(130, 239, 104);
+            this.txtEditor.CaretForeColor = Color.White;
 
-            this.txtEditor.SetKeywords(0, "if then end not function");
+            this.txtEditor.SetKeywords(0, "if not def");
+
+            this.cmbVarType.Items.AddRange(new object[] { typeof(int), typeof(float), typeof(string) });
         }
 
         public DockNPCEditor(Project project, string text, Image icon, FileInfo file)
@@ -92,9 +91,6 @@ namespace Lunar.Editor.Controls
 
             this.txtName.Text = _npc.Name;
 
-            this.radAggressive.Checked = _npc.Aggressive;
-            this.radUnaggressive.Checked = !_npc.Aggressive;
-
             this.txtStr.Text = _npc.Stats.Strength.ToString();
             this.txtInt.Text = _npc.Stats.Intelligence.ToString();
             this.txtDef.Text = _npc.Stats.Defense.ToString();
@@ -107,9 +103,17 @@ namespace Lunar.Editor.Controls
             this.txtColWidth.Text = _npc.CollisionBounds.Width.ToString();
             this.txtColHeight.Text = _npc.CollisionBounds.Height.ToString();
             this.txtMaxRoam.Text = _npc.MaxRoam.X.ToString();
+            this.txtSpeed.Text = _npc.Speed.ToString();
+            this.txtAttackRange.Text = _npc.AttackRange.ToString();
+
+            this.UpdateScriptEditor();
+                
 
             this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
             this.cmbEquipSlot.SelectedItem = EquipmentSlots.MainArm;
+
+            this.UpdateCustomVariablesView();
+            
 
             if (File.Exists(_project.ClientRootDirectory + "/" + _npc.TexturePath))
             {
@@ -123,6 +127,41 @@ namespace Lunar.Editor.Controls
                 this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
             }
                 
+        }
+
+        private void UpdateCustomVariablesView()
+        {
+            int prevIndex = 0;
+            if (this.lstVariables.SelectedIndices.Count > 0)
+                prevIndex = this.lstVariables.SelectedIndices[0];
+
+
+            this.lstVariables.Items.Clear();
+            foreach (var val in _npc.CustomVariables.Keys)
+            {
+                this.lstVariables.Items.Add(new DarkListItem(val.ToString()));
+            }
+            if (prevIndex < 0)
+                prevIndex = 0;
+
+            if (this.lstVariables.Items.Count > 0)
+                this.lstVariables.SelectItem(prevIndex);
+        }
+
+        private void UpdateScriptEditor()
+        {
+            if (File.Exists(_project.ServerRootDirectory.FullName + "/Scripts/" + _npc.BehaviorScriptPath))
+            {
+                this.txtEditor.Text = File.ReadAllText(_project.ServerRootDirectory.FullName + "/Scripts/" + _npc.BehaviorScriptPath);
+                this.scriptSectorPanel.SectionHeader = "Script Editor: " + Path.GetFileName(_npc.BehaviorScriptPath);
+                this.txtEditor.Enabled = true;
+            }
+            else
+            {
+                this.scriptSectorPanel.SectionHeader = "Script Editor";
+            }
+
+            
         }
 
         public override void Close()
@@ -162,11 +201,6 @@ namespace Lunar.Editor.Controls
         private void txtEditor_TextChanged(object sender, System.EventArgs e)
         {
             this.MarkUnsaved();
-
-            if (_npc.Scripts.ContainsKey(_activeScript))
-            {
-                _npc.Scripts[_activeScript] = txtEditor.Text;
-            }
         }
 
 
@@ -250,107 +284,6 @@ namespace Lunar.Editor.Controls
             }
 
             this.MarkUnsaved();
-        }
-
-        private void onUseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            onUseToolStripMenuItem.Checked = true;
-            onEquipToolStripMenuItem.Checked = false;
-            onAcquiredToolStripMenuItem.Checked = false;
-            onDroppedToolStripMenuItem.Checked = false;
-            onCreatedToolStripMenuItem.Checked = false;
-
-            if (_npc.Scripts.ContainsKey("OnUse"))
-            {
-                this.txtEditor.Text = _npc.Scripts["OnUse"];
-            }
-            else
-            {
-                _npc.Scripts.Add("OnUse", this.txtEditor.Text);
-            }
-
-            _activeScript = "OnUse";
-        }
-
-        private void onEquipToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            onEquipToolStripMenuItem.Checked = true;
-            onUseToolStripMenuItem.Checked = false;
-            onAcquiredToolStripMenuItem.Checked = false;
-            onDroppedToolStripMenuItem.Checked = false;
-            onCreatedToolStripMenuItem.Checked = false;
-
-            if (_npc.Scripts.ContainsKey("OnEquip"))
-            {
-                this.txtEditor.Text = _npc.Scripts["OnEqip"];
-            }
-            else
-            {
-                _npc.Scripts.Add("OnEqip", this.txtEditor.Text);
-            }
-
-            _activeScript = "OnEquip";
-        }
-
-        private void onAcquiredToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            onAcquiredToolStripMenuItem.Checked = true;
-            onEquipToolStripMenuItem.Checked = false;
-            onUseToolStripMenuItem.Checked = false;
-            onDroppedToolStripMenuItem.Checked = false;
-            onCreatedToolStripMenuItem.Checked = false;
-
-            if (_npc.Scripts.ContainsKey("OnAcquired"))
-            {
-                this.txtEditor.Text = _npc.Scripts["OnAcquired"];
-            }
-            else
-            {
-                _npc.Scripts.Add("OnAcquired", this.txtEditor.Text);
-            }
-
-            _activeScript = "OnAcquired";
-        }
-
-        private void onDroppedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            onDroppedToolStripMenuItem.Checked = true;
-            onAcquiredToolStripMenuItem.Checked = false;
-            onEquipToolStripMenuItem.Checked = false;
-            onUseToolStripMenuItem.Checked = false;
-            onCreatedToolStripMenuItem.Checked = false;
-
-            if (_npc.Scripts.ContainsKey("OnDropped"))
-            {
-                this.txtEditor.Text = _npc.Scripts["OnDropped"];
-            }
-            else
-            {
-                _npc.Scripts.Add("OnDropped", this.txtEditor.Text);
-            }
-
-            _activeScript = "OnDropped";
-        }
-
-        private void onCreatedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            onCreatedToolStripMenuItem.Checked = true;
-            onDroppedToolStripMenuItem.Checked = false;
-            onAcquiredToolStripMenuItem.Checked = false;
-            onEquipToolStripMenuItem.Checked = false;
-            onUseToolStripMenuItem.Checked = false;
-
-            if (_npc.Scripts.ContainsKey("OnCreated"))
-            {
-                this.txtEditor.Text = _npc.Scripts["OnCreated"];
-            }
-            else
-            {
-                _npc.Scripts.Add("OnCreated", this.txtEditor.Text);
-            }
-
-            _activeScript = "OnCreated";
         }
 
         private void txtColTop_TextChanged(object sender, EventArgs e)
@@ -576,16 +509,151 @@ namespace Lunar.Editor.Controls
         {
         }
 
-        private void radAggressive_CheckedChanged(object sender, EventArgs e)
+        private void TxtSpeed_TextChanged(object sender, EventArgs e)
         {
-            _npc.Aggressive = this.radAggressive.Checked;
-           this.MarkUnsaved();
+            this.MarkUnsaved();
+
+            float.TryParse(this.txtSpeed.Text, out float newSpeed);
+
+            _npc.Speed = newSpeed;
         }
 
-        private void radUnaggressive_CheckedChanged(object sender, EventArgs e)
+        private void TxtAttackRange_TextChanged(object sender, EventArgs e)
         {
-            _npc.Aggressive = !this.radUnaggressive.Checked;
             this.MarkUnsaved();
+
+            int.TryParse(this.txtAttackRange.Text, out int newAttackRange);
+
+            _npc.AttackRange = newAttackRange;
+        }
+
+        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.RestoreDirectory = true;
+                dialog.InitialDirectory = _project.ServerRootDirectory.FullName + "/Scripts/";
+                dialog.Filter = @"Python script Files (*.py)|*.py";
+                dialog.DefaultExt = ".py";
+                dialog.AddExtension = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = dialog.FileName;
+                    _npc.BehaviorScriptPath = HelperFunctions.MakeRelative(path, _project.ServerRootDirectory.FullName + "/Scripts/");
+
+                    File.CreateText(path).Write(Constants.DEFAULT_PY_ACTOR_BEHAVIOR);
+
+                    this.txtEditor.Text = Constants.DEFAULT_PY_ACTOR_BEHAVIOR;
+                    this.scriptSectorPanel.SectionHeader = "Script Editor: " + Path.GetFileName(_npc.BehaviorScriptPath);
+                    this.txtEditor.Enabled = true;
+
+                    this.MarkUnsaved();
+                }
+            }
+        }
+
+        private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.RestoreDirectory = true;
+                dialog.InitialDirectory = _project.ServerRootDirectory.FullName + "/Scripts/";
+                dialog.Filter = @"Python script Files (*.py)|*.py";
+                dialog.DefaultExt = ".py";
+                dialog.AddExtension = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = dialog.FileName;
+
+                    _npc.BehaviorScriptPath = HelperFunctions.MakeRelative(path, _project.ServerRootDirectory.FullName + "/Scripts/");
+
+                    this.UpdateScriptEditor();
+
+                    this.MarkUnsaved();
+                }
+            }
+        }
+
+        private void FillCustomVariableFields(string varName)
+        {
+            if (_npc.CustomVariables.ContainsKey(varName))
+            {
+                this.txtVarName.Text = varName;
+                this.cmbVarType.SelectedItem = _npc.CustomVariables[varName].GetType();
+                this.txtVarVal.Text = _npc.CustomVariables[varName].ToString();
+            }
+        }
+
+        private void BtnClearSpritesheet_Click(object sender, EventArgs e)
+        {
+            _npc.TexturePath = string.Empty;
+            this.picCollisionPreview.Image = null;
+        }
+
+        private void ButtonAddVariable_Click(object sender, EventArgs e)
+        {
+            int i = 1;
+            string newName = "var";
+
+            foreach (var name in _npc.CustomVariables.Keys)
+            {
+                if (newName + i == name)
+                {
+                    i += 1;
+                }
+            }
+
+            newName += i;
+
+            _npc.CustomVariables.Add(newName, 0);
+
+            this.UpdateCustomVariablesView();
+        }
+
+        private void ButtonRemoveVariable_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void LstVariables_SelectedIndicesChanged(object sender, EventArgs e)
+        {
+            if (this.lstVariables.SelectedIndices.Count > 0 && this.lstVariables.SelectedIndices[0] >= 0)
+            {
+                string varName = this.lstVariables.Items[this.lstVariables.SelectedIndices[0]].Text;
+
+                this.FillCustomVariableFields(varName);
+            }
+        }
+
+        private void TxtVarName_TextChanged(object sender, EventArgs e)
+        {
+            if (this.lstVariables.SelectedIndices.Count > 0 && this.lstVariables.SelectedIndices[0] >= 0)
+            {
+                string varName = this.lstVariables.Items[this.lstVariables.SelectedIndices[0]].Text;
+
+                if (varName == this.txtVarName.Text)
+                    return;
+
+                if (_npc.CustomVariables.ContainsKey(varName))
+                {
+                    var oldVariableVal = _npc.CustomVariables[varName];
+                    _npc.CustomVariables.Remove(varName);
+
+                    if (!_npc.CustomVariables.ContainsKey(this.txtVarName.Text))
+                    {
+                        _npc.CustomVariables.Add(this.txtVarName.Text, oldVariableVal);
+
+                        this.lstVariables.Items[this.lstVariables.SelectedIndices[0]].Text = this.txtVarName.Text;
+                    }
+                    else
+                    {
+                        this.txtVarName.Text = varName;
+                    }
+                }
+                
+            }
         }
     }
 }

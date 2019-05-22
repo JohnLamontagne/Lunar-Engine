@@ -28,5 +28,7 @@ namespace Lunar.Core.World.Actor.Descriptors
         Stats StatBoosts { get; }
 
         Vector Position { get; set; }
+
+        Rect CollisionBounds { get; set; }
     }
 }

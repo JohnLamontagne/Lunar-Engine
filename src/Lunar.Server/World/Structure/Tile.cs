@@ -159,18 +159,13 @@ namespace Lunar.Server.World.Structure
 
                 this.NPCs.CollectionChanged += (sender, args) =>
                 {
-                    List<NPC> npcsToRemove = new List<NPC>(this.NPCs.Count);
-
                     foreach (NPC npc in args.NewItems)
                     {
                         npc.Died += (o, eventArgs) =>
                         {
-                            npcsToRemove.Add(npc);
+                            this.NPCs.Remove(npc);
                         };
                     }
-
-                    foreach (var npc in npcsToRemove)
-                        this.NPCs.Remove(npc);
                 };
             }
         }

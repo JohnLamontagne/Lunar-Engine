@@ -87,11 +87,14 @@ namespace Lunar.Core.World.Actor.Descriptors
             get => _role;
             set => _role = value;
         }
+        public Rect CollisionBounds { get; set; }
 
         public PlayerDescriptor(string username, string password)
         {
             _name = username;
             _password = password;
+
+            this.StatBoosts = new Stats();
         }
 
         public static PlayerDescriptor Create(string name, string password)

@@ -46,6 +46,27 @@ namespace Lunar.Server.World.Structure
             _playerCollidingTiles = new Dictionary<Player, List<Tile>>(); ;
             _collisionDescriptors = new Dictionary<Vector, CollisionDescriptor>();
             _mapObjects = new List<MapObject>();
+
+            this.LoadData();
+        }
+
+        private void LoadData()
+        {
+            for (int x = 0; x < _tiles.GetLength(0); x++)
+            {
+                for (int y = 0; y < _tiles.GetLength(1); y++)
+                {
+                    if (this.Descriptor.Tiles[x, y] != null)
+                    {
+                        _tiles[x, y] = new Tile(this.Descriptor.Tiles[x, y]);
+                        _tiles[x, y].NPCSpawnerEvent += OnNpcSpawnerEvent;
+                    }
+                    else
+                    {
+                        _tiles[x, y] = new Tile(new Vector(x * EngineConstants.TILE_WIDTH, y * EngineConstants.TILE_HEIGHT));
+                    }
+                }
+            }
         }
 
         public CollisionDescriptor GetCollisionDescriptor(Vector position)
@@ -186,7 +207,7 @@ namespace Lunar.Server.World.Structure
 
         public List<Tile> GetCollidingTiles(IActor<IActorDescriptor> actor)
         {
-            return this.GetCollidingTiles(actor.Descriptor.Position, actor.CollisionBounds);
+            return this.GetCollidingTiles(actor.Descriptor.Position, actor.Descriptor.CollisionBounds);
         }
 
         public List<Tile> GetCollidingTiles(Vector position, Rect collisionBounds)
@@ -293,28 +314,7 @@ namespace Lunar.Server.World.Structure
         }
 
 
-        public void Load(BinaryReader bR)
-        {
-            for (int x = 0; x < _tiles.GetLength(0); x++)
-            {
-                for (int y = 0; y < _tiles.GetLength(1); y++)
-                {
-                    if (bR.ReadBoolean())
-                    {
-                        _tiles[x, y] = new Tile(new Vector(x * Settings.TileSize, y * Settings.TileSize));
-                        _tiles[x, y].Load(bR, new Vector(x * Settings.TileSize, y * Settings.TileSize));
-                        _tiles[x, y].NPCSpawnerEvent += OnNpcSpawnerEvent;
-                    }
-                }
-            }
-
-            int mapObjectCount = bR.ReadInt32();
-            for (int i = 0; i < mapObjectCount; i++)
-            {
-                var mapObject = MapObject.Load(bR, this);
-                _mapObjects.Add(mapObject);
-            }
-        }
+ 
 
 
         private void OnNpcSpawnerEvent(object sender, Tile.NPCSpawnerEventArgs e)

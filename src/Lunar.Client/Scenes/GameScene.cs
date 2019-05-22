@@ -188,7 +188,7 @@ namespace Lunar.Client.Scenes
 
                 if ((Player)e.Args[0] == ((WorldManager)sender).Player)
                 {
-                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Value = (player.Health / player.MaximumHealth) * 100;
+                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Value = ((float)player.Health / player.MaximumHealth) * 100;
                     this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text = $"HP {player.Health}/{player.MaximumHealth}";
                     this.GuiManager.GetWidget<StatusBar>("healthStatusBar").TextOffset =
                         new Vector2(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Width - this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Font.MeasureString(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text).X,

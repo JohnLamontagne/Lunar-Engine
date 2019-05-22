@@ -10,7 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+using Lunar.Client.World.Actors;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Lunar.Client.Utilities
 {
@@ -22,6 +24,8 @@ namespace Lunar.Client.Utilities
         private Vector2 _minView;
         private Vector2 _maxView;
         private Rectangle _bounds;
+
+        public float Speed { get; set; }
 
         public float Zoom
         {
@@ -51,10 +55,12 @@ namespace Lunar.Client.Utilities
 
         public float Rotation { get { return _rotation; } set { _rotation = value; } }
 
+        public IActor Subject { get; set; }
+
         public Vector2 Position
         {
             get => _position;
-            set => _position = new Vector2(MathHelper.Clamp(value.X, _minView.X, _maxView.X - Settings.ResolutionX), MathHelper.Clamp(value.Y, _minView.Y, _maxView.Y - Settings.ResolutionY));
+            set => _position = new Vector2((int)Math.Floor(MathHelper.Clamp(value.X, _minView.X, _maxView.X - (float)Settings.ResolutionX)), (int)Math.Floor(MathHelper.Clamp(value.Y, _minView.Y, _maxView.Y - (float)Settings.ResolutionY)));
         }
 
         public Camera(Rectangle bounds)
@@ -63,30 +69,38 @@ namespace Lunar.Client.Utilities
             _rotation = 0f;
             _position = Vector2.Zero;
             this.Bounds = bounds;
+            this.Speed = 0.2f;
+            //this.Rotate(30);
         }
 
-        public void Move(Vector2 distance)
-        {
-            _position += distance;
-            Vector2.Clamp(this.Position, _minView, _maxView);
-        }
+
 
         public void Rotate(float amount)
         {
             _rotation += amount;
 
-            if (_rotation > 360) _rotation -= 360;
+            if (_rotation > 360f) _rotation -= 360f;
         }
 
         public Matrix GetTransformation()
         {
-            return Matrix.CreateTranslation(new Vector3(-this.Position.X * this.Zoom, -this.Position.Y * this.Zoom, 0)) *
+            return Matrix.CreateTranslation(new Vector3(-this.Position.X * this.Zoom, -this.Position.Y * this.Zoom, 0f)) *
                 Matrix.CreateRotationZ(this.Rotation) *
-                Matrix.CreateScale(new Vector3(this.Zoom, this.Zoom, 1));
+                Matrix.CreateScale(new Vector3(this.Zoom, this.Zoom, 1f));
         }
 
         public void Unload()
         {
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (this.Subject != null)
+            {
+                float x = MathHelper.Lerp(this.Position.X, (float)Math.Floor(this.Subject.Position.X) + (this.Subject.SpriteSheet.Sprite.SourceRectangle.Width / 2) - (Settings.ResolutionX / 2), this.Speed);
+                float y = MathHelper.Lerp(this.Position.Y, (float)Math.Floor(this.Subject.Position.Y) + (this.Subject.SpriteSheet.Sprite.SourceRectangle.Height / 2) - (Settings.ResolutionY / 2), this.Speed);
+                this.Position = new Vector2(x, y);
+            }
         }
 
         public Vector2 ScreenToWorldCoords(Vector2 screenPos)

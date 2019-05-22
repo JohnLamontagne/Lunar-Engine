@@ -44,16 +44,9 @@ namespace Lunar.Server.World.Actors
 
         private IActor<IActorDescriptor> _lastAttacker;
 
-        private Rect _collisionBounds;
-
         private Map _map;
 
-        // Boosted stats
-        private int _speedBoost;
-        private int _strengthBoost;
-        private int _intelBoost;
-        private int _dexBoost;
-        private int _defBoost;
+        private Script _script;
 
         private Dictionary<string, List<Action<EventArgs>>> _eventHandlers;
 
@@ -99,13 +92,6 @@ namespace Lunar.Server.World.Actors
 
         public ActorStates State { get; set; }
 
-
-        public Rect CollisionBounds
-        {
-            get => _collisionBounds;
-            set => _collisionBounds = value;
-        }
-
         public Direction Direction { get; set; }
 
         public ActorBehaviorDefinition BehaviorDefinition { get; }
@@ -116,7 +102,7 @@ namespace Lunar.Server.World.Actors
             _connection = connection;
             this.State = ActorStates.Idle;
 
-            this.CollisionBounds = new Rect(16, 52, 16, 20);
+            this.Descriptor.CollisionBounds = new Rect(16, 52, 16, 20);
 
             _inventory = new Inventory(this);
             _equipment = new Equipment(this);
@@ -126,13 +112,23 @@ namespace Lunar.Server.World.Actors
 
             _eventHandlers = new Dictionary<string, List<Action<EventArgs>>>();
 
+            Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "player.py");
+            _script = script;
+
+            try
+            {
+                this.BehaviorDefinition = script.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
+            }
+            catch { }
+            
+
             if (this.BehaviorDefinition == null)
             {
                 Logger.LogEvent("Error hooking player behavior definition!", LogTypes.ERROR, Environment.StackTrace);
             }
             else
             {
-                this.BehaviorDefinition.OnCreated?.Invoke(new GameEventArgs(this));
+                this.BehaviorDefinition.OnCreated(this);
                 this.BehaviorDefinition.EventOccured += this.BehaviorDescriptor_EventOccured;
             }
         }
@@ -144,7 +140,14 @@ namespace Lunar.Server.World.Actors
                 _lastAttacker.Target = null;
             }
 
-            this.BehaviorDefinition.OnDeath?.Invoke(new GameEventArgs(this));
+            try
+            {
+                this.BehaviorDefinition.OnDeath(this);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent("Unhandled OnDeath event for " + this.GetType().ToString() + " named " + this.Descriptor.Name, LogTypes.ERROR, ex.StackTrace);
+            }
         }
 
         public void InflictDamage(int amount)
@@ -161,7 +164,7 @@ namespace Lunar.Server.World.Actors
         {
             _lastAttacker = attacker;
 
-            this.BehaviorDefinition?.Attacked?.Invoke(new GameEventArgs(this, attacker, damageDelt));
+            this.BehaviorDefinition?.Attacked(this, attacker, damageDelt);
         }
 
 
@@ -173,10 +176,10 @@ namespace Lunar.Server.World.Actors
 
         public void CalculateBoostedStats()
         {
-            _strengthBoost = 0;
-            _intelBoost = 0;
-            _defBoost = 0;
-            _dexBoost = 0;
+            this.Descriptor.StatBoosts.Strength = 0;
+            this.Descriptor.StatBoosts.Intelligence = 0;
+            this.Descriptor.StatBoosts.Defense = 0;
+            this.Descriptor.StatBoosts.Dexterity = 0;
 
             foreach (Item item in this.Equipment.Items)
             {
@@ -184,10 +187,10 @@ namespace Lunar.Server.World.Actors
                 if (item == null)
                     continue;
 
-                _strengthBoost += item.Descriptor.Strength;
-                _intelBoost += item.Descriptor.Intelligence;
-                _defBoost += item.Descriptor.Defence;
-                _dexBoost += item.Descriptor.Dexterity;
+                this.Descriptor.StatBoosts.Strength += item.Descriptor.Strength;
+                this.Descriptor.StatBoosts.Intelligence += item.Descriptor.Intelligence;
+                this.Descriptor.StatBoosts.Defense += item.Descriptor.Defence;
+                this.Descriptor.StatBoosts.Dexterity += item.Descriptor.Dexterity;
             }
 
             this.NetworkComponent.SendPlayerStats();
@@ -270,7 +273,7 @@ namespace Lunar.Server.World.Actors
             switch (this.Direction)
             {
                 case Direction.Right:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X + delta, this.Descriptor.Position.Y), _collisionBounds))
+                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X + delta, this.Descriptor.Position.Y), this.Descriptor.CollisionBounds))
                     {
                         // The player can't move anymore.
                         canMove = false;
@@ -278,7 +281,7 @@ namespace Lunar.Server.World.Actors
                     break;
 
                 case Direction.Left:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X - delta, this.Descriptor.Position.Y), _collisionBounds))
+                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X - delta, this.Descriptor.Position.Y), this.Descriptor.CollisionBounds))
                     {
                         // The player can't move anymore.
                         canMove = false;
@@ -286,7 +289,7 @@ namespace Lunar.Server.World.Actors
                     break;
 
                 case Direction.Up:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X, this.Descriptor.Position.Y - delta), _collisionBounds))
+                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X, this.Descriptor.Position.Y - delta), this.Descriptor.CollisionBounds))
                     {
                         // The player can't move anymore.
                         canMove = false;
@@ -294,7 +297,7 @@ namespace Lunar.Server.World.Actors
                     break;
 
                 case Direction.Down:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X, this.Descriptor.Position.Y + delta), _collisionBounds))
+                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X, this.Descriptor.Position.Y + delta), this.Descriptor.CollisionBounds))
                     {
                         // The player can't move anymore.
                         canMove = false;
@@ -379,7 +382,7 @@ namespace Lunar.Server.World.Actors
             buffer.Write(this.Descriptor.Stats.Defense);
             buffer.Write(this.Descriptor.Position);
             buffer.Write(this.Descriptor.SpriteSheet.Pack());
-            buffer.Write(this.CollisionBounds);
+            buffer.Write(this.Descriptor.CollisionBounds);
             buffer.Write(this.Layer.Descriptor.Name);
 
             return buffer;

@@ -132,4 +132,21 @@
   <metadata name="darkMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>148, 17</value>
   </metadata>
+  <metadata name="darkToolStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>287, 17</value>
+  </metadata>
+  <data name="buttonAddVariable.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABDSURBVChTY0AG3759+4+OoVKYACRp0WUCx5QpBgkgY3TF
+        yBjDNFyYDoqRMboCZAz1JgRgUwyVwgQkK0bHUCkgYGAAAAZK8zqiLDYoAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="buttonRemoveVariable.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAiSURBVChTYxgk4Nu3b/+JxWDFUH14AR0UE4uh+gYWMDAA
+        AAdubJ0BY5DpAAAAAElFTkSuQmCC
+</value>
+  </data>
 </root>

@@ -15,58 +15,59 @@ using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
 using System;
+using System.Collections.Generic;
 
 namespace Lunar.Server.World.Actors
 {
-    public class NPCDefinition
+    /// <summary>
+    /// Defines world a unique world NPC based off of underlying descriptor
+    /// </summary>
+    public class NPCDefinition : NPCDescriptor
     {
-        private ActorBehaviorDefinition _behaviorDefinition;
+        public ActorBehaviorDefinition BehaviorDefinition { get; set; }
 
-        public ActorBehaviorDefinition BehaviorDefinition => _behaviorDefinition;
-        public NPCDescriptor Descriptor { get; }
+        private Script _script;
 
         public NPCDefinition(NPCDescriptor descriptor)
         {
-            this.Descriptor = descriptor;
+            this.Name = descriptor.Name;
+            this.Level = descriptor.Level;
+            this.MaxRoam = descriptor.MaxRoam;
+            this.Position = descriptor.Position;
+            this.FrameSize = descriptor.FrameSize;
 
-            Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "aggressive_npc.py"); 
 
+            this.AggresiveRange = descriptor.AggresiveRange;
+            this.AttackRange = descriptor.AttackRange;
+            this.Speed = descriptor.Speed;
+            this.TexturePath = descriptor.TexturePath;
+            this.Stats.Defense = descriptor.Stats.Defense;
+            this.Stats.Dexterity = descriptor.Stats.Dexterity;
+            this.Stats.Health = descriptor.Stats.Health;
+            this.Stats.MaximumHealth = descriptor.Stats.MaximumHealth;
+            this.Stats.Strength = descriptor.Stats.Strength;
+            this.Stats.Intelligence = descriptor.Stats.Intelligence;
+            this.BehaviorScriptPath = descriptor.BehaviorScriptPath;
+
+
+            this.InitalizeScripts();
             this.InitalizeDefaultBehavior();
+        }
 
-            //this.InitalizeScripts(descriptor);
+        private void InitalizeScripts()
+        {
+            _script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + this.BehaviorScriptPath);
+
+            if (_script != null)
+            {
+                this.BehaviorDefinition = _script.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
+            }
         }
 
         private void InitalizeDefaultBehavior()
         {
-            _behaviorDefinition = new ActorBehaviorDefinition();
 
-            Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "aggressive_npc.py");
-
-            this.BehaviorDefinition.Attack = new Func<GameEventArgs, int>((args)=> 
-            {
-                return script.Invoke<int>("attack", args);
-            });
-
-            this.BehaviorDefinition.Attacked = new Action<GameEventArgs>((args) =>
-            {
-                script.Invoke("attack", args);
-            });
-
-            this.BehaviorDefinition.OnCreated = new Action<GameEventArgs>((args) =>
-            {
-                script.Invoke("on_created", args);
-            });
-
-            
-            this.BehaviorDefinition.OnDeath = new Action<GameEventArgs>((args) =>
-            {
-                script.Invoke("on_death", args);
-            });
-
-            this.BehaviorDefinition.OnDeath = new Action<GameEventArgs>((args) =>
-            {
-                script.Invoke("update", args);
-            });
+  
         }
     }
 }

@@ -33,8 +33,8 @@ namespace Lunar.Server.World.Structure
 
         public bool Collides(IActor<IActorDescriptor> actor)
         {
-            Rect collisionArea = new Rect((int)(actor.Descriptor.Position.X + actor.CollisionBounds.Left), (int)(actor.Descriptor.Position.Y + actor.CollisionBounds.Top),
-                (actor.Descriptor.Position.X + actor.CollisionBounds.Left) + actor.CollisionBounds.Width, (actor.Descriptor.Position.Y + actor.CollisionBounds.Top) + actor.CollisionBounds.Height);
+            Rect collisionArea = new Rect((int)(actor.Descriptor.Position.X + actor.Descriptor.CollisionBounds.Left), (int)(actor.Descriptor.Position.Y + actor.Descriptor.CollisionBounds.Top),
+                (actor.Descriptor.Position.X + actor.Descriptor.CollisionBounds.Left) + actor.Descriptor.CollisionBounds.Width, (actor.Descriptor.Position.Y + actor.Descriptor.CollisionBounds.Top) + actor.Descriptor.CollisionBounds.Height);
 
             return (_collisionArea.Intersects(collisionArea));
         }

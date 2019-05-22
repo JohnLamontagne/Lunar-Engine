@@ -45,8 +45,6 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Rect CollisionBounds { get; set; }
 
-        public bool Aggressive { get; set; }
-
         public int AggresiveRange { get; set; }
 
         public Vector MaxRoam { get; set; }
@@ -55,14 +53,16 @@ namespace Lunar.Core.World.Actor.Descriptors
     
         public int AttackRange { get; set; }
 
-        public Dictionary<string, string> Scripts => _scripts;
+        public string BehaviorScriptPath { get; set; }
+
+        public Dictionary<string, object> CustomVariables { get; }
 
         protected NPCDescriptor()
         {
             _scripts = new Dictionary<string, string>();
+            this.CustomVariables = new Dictionary<string, object>();
 
             this.Stats = new Stats();
-            this.StatBoosts = new Stats();
         }
 
         public void Save(string filePath)
@@ -91,6 +91,7 @@ namespace Lunar.Core.World.Actor.Descriptors
                     binaryWriter.Write(this.FrameSize.X);
                     binaryWriter.Write(this.FrameSize.Y);
                     binaryWriter.Write(this.AttackRange);
+                    binaryWriter.Write(this.BehaviorScriptPath);
                 }
             }
         }
@@ -102,7 +103,6 @@ namespace Lunar.Core.World.Actor.Descriptors
                 Name = "",
                 AggresiveRange = 0,
                 AttackRange = 0,
-                Aggressive = false,
                 TexturePath = ""
             };
         }
@@ -120,6 +120,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             Vector frameSize = new Vector();
             int attackRange = 0;
             Actor.Stats stats;
+            string behaviorScriptPath = "";
 
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
             {
@@ -144,7 +145,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                     texturePath = binaryReader.ReadString();
                     maxRoam = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                     frameSize = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                    attackRange = binaryReader.ReadInt32();                    
+                    attackRange = binaryReader.ReadInt32();
+                    behaviorScriptPath = binaryReader.ReadString();
                 }
             }
 
@@ -160,7 +162,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                 MaxRoam = maxRoam,
                 FrameSize = frameSize,
                 AttackRange = attackRange,
-                StatBoosts = new Stats()
+                StatBoosts = new Stats(),
+                BehaviorScriptPath = behaviorScriptPath
             };
 
 
