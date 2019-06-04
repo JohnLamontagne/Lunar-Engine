@@ -1,16 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-using DarkUI.Docking;
+﻿using DarkUI.Docking;
 using DarkUI.Forms;
 using DarkUI.Win32;
 using System;
@@ -133,9 +121,9 @@ namespace Lunar.Editor
             this.CloseDocument(e.File);
         }
 
-        private void OpenLuaDocument(FileInfo file)
+        public void OpenLuaDocument(FileInfo file)
         {
-            var luaDoc = new DockLUADocument(file.Name, Icons.document_16xLG, file)
+            var luaDoc = new DockScriptDocument(file.Name, Icons.document_16xLG, file)
             {
                 Tag = file
             };
@@ -157,7 +145,7 @@ namespace Lunar.Editor
             DockPanel.AddContent(luaDoc);
         }
 
-        private void OpenItemDocument(FileInfo file)
+        public void OpenItemDocument(FileInfo file)
         {
             var itemDoc = new DockItemDocument(_project, file.Name, Icons.document_16xLG, file)
             {
@@ -180,7 +168,7 @@ namespace Lunar.Editor
             DockPanel.AddContent(itemDoc);
         }
 
-        private void OpenAnimationDocument(FileInfo file)
+        public void OpenAnimationDocument(FileInfo file)
         {
             var animDoc = new DockAnimationEditor(_project, file.Name, Icons.document_16xLG, file)
             {
@@ -234,7 +222,7 @@ namespace Lunar.Editor
             _dockTilesetTools.DockGroup.Hide();
         }
 
-        private void OpenMapDocument(FileInfo file)
+        public void OpenMapDocument(FileInfo file)
         {
             var mapDoc = new DockMapDocument(file.Name, Icons.document_16xLG, file, _project, _dockTilesetTools, _dockLayers, _dockMapObject, _dockMapAttributes)
             {
@@ -257,7 +245,7 @@ namespace Lunar.Editor
             DockPanel.AddContent(mapDoc);
         }
 
-        private void OpenNPCDocument(FileInfo file)
+        public void OpenNPCDocument(FileInfo file)
         {
             var npcDoc = new DockNPCEditor(_project, file.Name, Icons.document_16xLG, file)
             {
@@ -298,7 +286,7 @@ namespace Lunar.Editor
 
         private void _dockProject_File_Created(object sender, FileEventArgs e)
         {
-            if (e.File.Extension == EngineConstants.LUA_FILE_EXT)
+            if (e.File.Extension == EngineConstants.SCRIPT_FILE_EXT)
             {
                 this.OpenLuaDocument(e.File);
             }
@@ -322,7 +310,7 @@ namespace Lunar.Editor
 
         private void _dockProject_File_Selected(object sender, FileEventArgs e)
         {
-            if (e.File.Extension == EngineConstants.LUA_FILE_EXT)
+            if (e.File.Extension == EngineConstants.SCRIPT_FILE_EXT)
             {
                 this.OpenLuaDocument(e.File);
             }
@@ -472,9 +460,18 @@ namespace Lunar.Editor
 
             if (createProjectDialog.ShowDialog() == DialogResult.OK)
             {
+                // Make sure they've actually entered something.
+                if (string.IsNullOrEmpty(createProjectDialog.ClientDataPath) || string.IsNullOrEmpty(createProjectDialog.ServerDataPath))
+                {
+                    DarkMessageBox.ShowError("At least one project directory path is missing!", "Error Creating Project!", DarkDialogButton.Ok);
+                    return;
+                }
+                    
+
                 string clientDataPath = Path.GetFullPath(createProjectDialog.ClientDataPath);
                 string serverDataPath = Path.GetFullPath(createProjectDialog.ServerDataPath);
 
+                // Make sure these directories actually exist.
                 if (Directory.Exists(clientDataPath) && Directory.Exists(serverDataPath))
                 {
                     var fileBrowserDialog = new SaveFileDialog();
@@ -490,6 +487,11 @@ namespace Lunar.Editor
 
                         this.PopulateProjectTree();
                     }
+                }
+                else
+                {
+                    DarkMessageBox.ShowError("Invalid project directories specified!", "Error Creating Project!", DarkDialogButton.Ok);
+                    return;
                 }
             }
         }

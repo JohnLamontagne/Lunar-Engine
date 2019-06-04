@@ -51,12 +51,6 @@
             this.darkLabel4 = new DarkUI.Controls.DarkLabel();
             this.darkLabel1 = new DarkUI.Controls.DarkLabel();
             this.txtName = new DarkUI.Controls.DarkTextBox();
-            this.scriptSectorPanel = new DarkUI.Controls.DarkSectionPanel();
-            this.txtEditor = new ScintillaNET.Scintilla();
-            this.darkMenuStrip1 = new DarkUI.Controls.DarkMenuStrip();
-            this.scriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.darkSectionPanel4 = new DarkUI.Controls.DarkSectionPanel();
             this.darkLabel3 = new DarkUI.Controls.DarkLabel();
             this.cmbEquipSlot = new System.Windows.Forms.ComboBox();
@@ -90,11 +84,11 @@
             this.buttonAddVariable = new System.Windows.Forms.ToolStripButton();
             this.buttonRemoveVariable = new System.Windows.Forms.ToolStripButton();
             this.lstVariables = new DarkUI.Controls.DarkListView();
+            this.darkLabel20 = new DarkUI.Controls.DarkLabel();
+            this.cmbScript = new System.Windows.Forms.ComboBox();
             this.darkToolStrip1.SuspendLayout();
             this.darkSectionPanel1.SuspendLayout();
             this.darkSectionPanel2.SuspendLayout();
-            this.scriptSectorPanel.SuspendLayout();
-            this.darkMenuStrip1.SuspendLayout();
             this.darkSectionPanel4.SuspendLayout();
             this.darkSectionPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpriteSheet)).BeginInit();
@@ -115,7 +109,7 @@
             this.darkToolStrip1.Location = new System.Drawing.Point(0, 0);
             this.darkToolStrip1.Name = "darkToolStrip1";
             this.darkToolStrip1.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.darkToolStrip1.Size = new System.Drawing.Size(1774, 28);
+            this.darkToolStrip1.Size = new System.Drawing.Size(872, 28);
             this.darkToolStrip1.TabIndex = 1;
             this.darkToolStrip1.Text = "darkToolStrip1";
             // 
@@ -133,6 +127,8 @@
             // 
             // darkSectionPanel1
             // 
+            this.darkSectionPanel1.Controls.Add(this.cmbScript);
+            this.darkSectionPanel1.Controls.Add(this.darkLabel20);
             this.darkSectionPanel1.Controls.Add(this.txtAttackRange);
             this.darkSectionPanel1.Controls.Add(this.darkLabel17);
             this.darkSectionPanel1.Controls.Add(this.txtMaxRoam);
@@ -354,65 +350,6 @@
             this.txtName.Size = new System.Drawing.Size(133, 23);
             this.txtName.TabIndex = 4;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
-            // 
-            // scriptSectorPanel
-            // 
-            this.scriptSectorPanel.Controls.Add(this.txtEditor);
-            this.scriptSectorPanel.Controls.Add(this.darkMenuStrip1);
-            this.scriptSectorPanel.Location = new System.Drawing.Point(855, 31);
-            this.scriptSectorPanel.Name = "scriptSectorPanel";
-            this.scriptSectorPanel.SectionHeader = "Scripting Information";
-            this.scriptSectorPanel.Size = new System.Drawing.Size(884, 699);
-            this.scriptSectorPanel.TabIndex = 4;
-            // 
-            // txtEditor
-            // 
-            this.txtEditor.Enabled = false;
-            this.txtEditor.Location = new System.Drawing.Point(4, 52);
-            this.txtEditor.Name = "txtEditor";
-            this.txtEditor.Size = new System.Drawing.Size(876, 643);
-            this.txtEditor.TabIndex = 1;
-            this.txtEditor.TextChanged += new System.EventHandler(this.txtEditor_TextChanged);
-            this.txtEditor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtEditor_KeyDown);
-            // 
-            // darkMenuStrip1
-            // 
-            this.darkMenuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.darkMenuStrip1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.scriptsToolStripMenuItem});
-            this.darkMenuStrip1.Location = new System.Drawing.Point(1, 25);
-            this.darkMenuStrip1.Name = "darkMenuStrip1";
-            this.darkMenuStrip1.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
-            this.darkMenuStrip1.Size = new System.Drawing.Size(882, 24);
-            this.darkMenuStrip1.TabIndex = 2;
-            this.darkMenuStrip1.Text = "darkMenuStrip1";
-            // 
-            // scriptsToolStripMenuItem
-            // 
-            this.scriptsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
-            this.loadToolStripMenuItem});
-            this.scriptsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.scriptsToolStripMenuItem.Name = "scriptsToolStripMenuItem";
-            this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.scriptsToolStripMenuItem.Text = "File";
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.newToolStripMenuItem.Text = "New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
-            // 
-            // loadToolStripMenuItem
-            // 
-            this.loadToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.loadToolStripMenuItem.Text = "Load";
-            this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadToolStripMenuItem_Click);
             // 
             // darkSectionPanel4
             // 
@@ -787,6 +724,29 @@
             this.lstVariables.Text = "darkListView1";
             this.lstVariables.SelectedIndicesChanged += new System.EventHandler(this.LstVariables_SelectedIndicesChanged);
             // 
+            // darkLabel20
+            // 
+            this.darkLabel20.AutoSize = true;
+            this.darkLabel20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel20.Location = new System.Drawing.Point(44, 139);
+            this.darkLabel20.Name = "darkLabel20";
+            this.darkLabel20.Size = new System.Drawing.Size(40, 15);
+            this.darkLabel20.TabIndex = 21;
+            this.darkLabel20.Text = "Script:";
+            // 
+            // cmbScript
+            // 
+            this.cmbScript.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbScript.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbScript.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbScript.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbScript.FormattingEnabled = true;
+            this.cmbScript.Location = new System.Drawing.Point(90, 139);
+            this.cmbScript.Name = "cmbScript";
+            this.cmbScript.Size = new System.Drawing.Size(268, 23);
+            this.cmbScript.TabIndex = 22;
+            this.cmbScript.SelectedIndexChanged += new System.EventHandler(this.CmbScript_SelectedIndexChanged);
+            // 
             // DockNPCEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -795,12 +755,11 @@
             this.Controls.Add(this.darkSectionPanel6);
             this.Controls.Add(this.darkSectionPanel5);
             this.Controls.Add(this.darkSectionPanel4);
-            this.Controls.Add(this.scriptSectorPanel);
             this.Controls.Add(this.darkSectionPanel1);
             this.Controls.Add(this.darkToolStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "DockNPCEditor";
-            this.Size = new System.Drawing.Size(1774, 783);
+            this.Size = new System.Drawing.Size(872, 783);
             this.Load += new System.EventHandler(this.DockItemEditor_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DockItemEditor_KeyDown);
             this.darkToolStrip1.ResumeLayout(false);
@@ -809,10 +768,6 @@
             this.darkSectionPanel1.PerformLayout();
             this.darkSectionPanel2.ResumeLayout(false);
             this.darkSectionPanel2.PerformLayout();
-            this.scriptSectorPanel.ResumeLayout(false);
-            this.scriptSectorPanel.PerformLayout();
-            this.darkMenuStrip1.ResumeLayout(false);
-            this.darkMenuStrip1.PerformLayout();
             this.darkSectionPanel4.ResumeLayout(false);
             this.darkSectionPanel4.PerformLayout();
             this.darkSectionPanel5.ResumeLayout(false);
@@ -836,8 +791,6 @@
         private DarkUI.Controls.DarkSectionPanel darkSectionPanel1;
         private DarkUI.Controls.DarkLabel darkLabel1;
         private DarkUI.Controls.DarkTextBox txtName;
-        private DarkUI.Controls.DarkSectionPanel scriptSectorPanel;
-        private ScintillaNET.Scintilla txtEditor;
         private DarkUI.Controls.DarkSectionPanel darkSectionPanel4;
         private DarkUI.Controls.DarkListView lstItems;
         private System.Windows.Forms.ComboBox cmbEquipSlot;
@@ -875,10 +828,6 @@
         private DarkUI.Controls.DarkTextBox txtAttackRange;
         private DarkUI.Controls.DarkLabel darkLabel17;
         private DarkUI.Controls.DarkLabel darkLabel15;
-        private DarkUI.Controls.DarkMenuStrip darkMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem scriptsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private DarkUI.Controls.DarkButton btnClearSpritesheet;
         private DarkUI.Controls.DarkSectionPanel darkSectionPanel3;
         private DarkUI.Controls.DarkListView lstVariables;
@@ -892,5 +841,7 @@
         private System.Windows.Forms.ComboBox cmbVarType;
         private DarkUI.Controls.DarkTextBox txtVarName;
         private DarkUI.Controls.DarkLabel darkLabel19;
+        private DarkUI.Controls.DarkLabel darkLabel20;
+        private System.Windows.Forms.ComboBox cmbScript;
     }
 }

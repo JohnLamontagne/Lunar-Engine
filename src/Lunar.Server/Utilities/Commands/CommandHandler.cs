@@ -45,7 +45,7 @@ namespace Lunar.Server.Utilities.Commands
         private void LoadScript()
         {
             _script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "command_handler.py");
-            _script.SetVariable<CommandHandler>("command_handler", this);
+            _script?.SetVariable<CommandHandler>("command_handler", this);
         }
 
         private void Handle_ClientCommand(PacketReceivedEventArgs args)

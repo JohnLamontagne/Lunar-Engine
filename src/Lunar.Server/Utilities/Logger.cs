@@ -18,12 +18,38 @@ namespace Lunar.Server.Utilities
 {
     public static class Logger
     {
+        private static string _previousConsoleLog;
+        private static int _previousConsoleLogY;
+        private static int _sameErrorCount;
+
         public static void LogEvent(string eventDetails, LogTypes logType, string stackTrace)
         {
             switch (logType)
             {
                 case LogTypes.ERROR:
-                    Console.WriteLine($"Error: {eventDetails}");
+                    var newConsoleLog = $"Error: {eventDetails}";
+
+                    // If our new console log is the same as the previous log entry, we'll just consolidate the entries and append a [n] at the end where n: the number of duplicate log entries.
+                    if (newConsoleLog == _previousConsoleLog)
+                    {
+                        // We set this variable to -1 so that we can have the correct Y index of the console log to update. Otherwise any additional console activity would break the error logging consolidation feature.
+                        if (_previousConsoleLogY == -1)
+                        {
+                            _previousConsoleLogY = Console.CursorTop - 1;
+                        }
+
+                        Console.SetCursorPosition(_previousConsoleLog.Length + 1, _previousConsoleLogY);
+                        Console.WriteLine($"[{_sameErrorCount}]");
+                        _sameErrorCount++;
+                    }
+                    else
+                    {
+                        _previousConsoleLogY = -1;
+                        _sameErrorCount = 0;
+                        Console.WriteLine(newConsoleLog);
+                        _previousConsoleLog = newConsoleLog;
+                    }
+
                     TextLog($"Error: {eventDetails}.", stackTrace, Constants.FILEPATH_LOGS + "Error.txt");
                     break;
 

@@ -86,6 +86,12 @@
     <Compile Include="Controls\CreateDirectoryDialog.Designer.cs">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CreateScriptDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateScriptDialog.Designer.cs">
+      <DependentUpon>CreateScriptDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CreateLayerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,11 +128,11 @@
     <Compile Include="Controls\DockMapAttributes.Designer.cs">
       <DependentUpon>DockMapAttributes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DockLUADocument.cs">
+    <Compile Include="Controls\DockScriptDocument.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\DockLUADocument.Designer.cs">
-      <DependentUpon>DockLUADocument.cs</DependentUpon>
+    <Compile Include="Controls\DockScriptDocument.Designer.cs">
+      <DependentUpon>DockScriptDocument.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DockConsole.cs">
       <SubType>UserControl</SubType>
@@ -229,6 +235,9 @@
     <EmbeddedResource Include="Controls\CreateDirectoryDialog.resx">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CreateScriptDialog.resx">
+      <DependentUpon>CreateScriptDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\CreateLayerDialog.resx">
       <DependentUpon>CreateLayerDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -244,8 +253,8 @@
     <EmbeddedResource Include="Controls\DockItemDocument.resx">
       <DependentUpon>DockItemDocument.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DockLUADocument.resx">
-      <DependentUpon>DockLUADocument.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\DockScriptDocument.resx">
+      <DependentUpon>DockScriptDocument.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockConsole.resx">
       <DependentUpon>DockConsole.cs</DependentUpon>

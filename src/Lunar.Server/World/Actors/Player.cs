@@ -94,7 +94,7 @@ namespace Lunar.Server.World.Actors
 
         public Direction Direction { get; set; }
 
-        public ActorBehaviorDefinition BehaviorDefinition { get; }
+        public ActorBehaviorDefinition Behavior { get; }
 
         public Player(PlayerDescriptor descriptor, PlayerConnection connection)
         {
@@ -117,19 +117,19 @@ namespace Lunar.Server.World.Actors
 
             try
             {
-                this.BehaviorDefinition = script.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
+                this.Behavior = script.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
             }
             catch { }
             
 
-            if (this.BehaviorDefinition == null)
+            if (this.Behavior == null)
             {
                 Logger.LogEvent("Error hooking player behavior definition!", LogTypes.ERROR, Environment.StackTrace);
             }
             else
             {
-                this.BehaviorDefinition.OnCreated(this);
-                this.BehaviorDefinition.EventOccured += this.BehaviorDescriptor_EventOccured;
+                this.Behavior.OnCreated(this);
+                this.Behavior.EventOccured += this.BehaviorDescriptor_EventOccured;
             }
         }
 
@@ -142,7 +142,7 @@ namespace Lunar.Server.World.Actors
 
             try
             {
-                this.BehaviorDefinition.OnDeath(this);
+                this.Behavior.OnDeath(this);
             }
             catch (Exception ex)
             {
@@ -164,7 +164,7 @@ namespace Lunar.Server.World.Actors
         {
             _lastAttacker = attacker;
 
-            this.BehaviorDefinition?.Attacked(this, attacker, damageDelt);
+            this.Behavior?.Attacked(this, attacker, damageDelt);
         }
 
 

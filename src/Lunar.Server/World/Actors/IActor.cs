@@ -29,7 +29,7 @@ namespace Lunar.Server.World.Actors
        
         Layer Layer { get; set; }
 
-        ActorBehaviorDefinition BehaviorDefinition { get; }
+        ActorBehaviorDefinition Behavior { get; }
 
         IActor<IActorDescriptor> Target { get; set; }
 

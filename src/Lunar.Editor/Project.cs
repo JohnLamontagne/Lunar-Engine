@@ -1,16 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,18 +21,23 @@ namespace Lunar.Editor
     {
         private IDataManager<MapDescriptor> _mapDataManager;
 
-        private readonly DirectoryInfo _serverDirectory;
+        private readonly DirectoryInfo _serverRootDirectory;
+        private readonly DirectoryInfo _serverWorldDirectory;
         private readonly DirectoryInfo _clientDirectory;
         private readonly List<DirectoryInfo> _directories;
         private readonly string _projectPath;
 
-        public DirectoryInfo ServerRootDirectory => _serverDirectory;
+        public DirectoryInfo ServerWorldDirectory => _serverWorldDirectory;
+
+        public DirectoryInfo ServerRootDirectory => _serverRootDirectory;
+
         public DirectoryInfo ClientRootDirectory => _clientDirectory;
 
         private readonly Dictionary<string, FileInfo> _mapFiles;
         private readonly Dictionary<string, FileInfo> _itemFiles;
         private readonly Dictionary<string, FileInfo> _npcFiles;
         private readonly Dictionary<string, FileInfo> _animationFiles;
+        private readonly Dictionary<string, FileInfo> _scriptFiles;
 
         private readonly Dictionary<string, Map> _maps;
         private readonly Dictionary<string, ItemDescriptor> _items;
@@ -59,6 +52,8 @@ namespace Lunar.Editor
         public IEnumerable<FileInfo> MapFiles => _mapFiles.Values;
         public IEnumerable<FileInfo> ItemFiles => _itemFiles.Values;
         public IEnumerable<FileInfo> AnimationFiles => _animationFiles.Values;
+
+        public IEnumerable<FileInfo> ScriptFiles => _scriptFiles.Values;
         public IEnumerable<FileInfo> NPCFiles => _npcFiles.Values;
 
         public IEnumerable<DirectoryInfo> Directories => _directories;
@@ -68,13 +63,15 @@ namespace Lunar.Editor
         private Project(string projectPath, string serverDir, string clientDir)
         {
             _projectPath = projectPath;
-            _serverDirectory = new DirectoryInfo(serverDir);
+            _serverRootDirectory = new DirectoryInfo(serverDir);
+            _serverWorldDirectory = new DirectoryInfo(serverDir + "/World/");
             _clientDirectory = new DirectoryInfo(clientDir);
 
             _mapFiles = new Dictionary<string, FileInfo>();
             _npcFiles = new Dictionary<string, FileInfo>();
             _itemFiles = new Dictionary<string, FileInfo>();
             _animationFiles = new Dictionary<string, FileInfo>();
+            _scriptFiles = new Dictionary<string, FileInfo>();
 
             _maps = new Dictionary<string, Map>();
             _items = new Dictionary<string, ItemDescriptor>();
@@ -83,9 +80,9 @@ namespace Lunar.Editor
 
             _directories = new List<DirectoryInfo>();
 
-            _mapDataManager = new FSDataFactory().Create<MapFSDataManager>(new FSDataFactoryArguments(_serverDirectory + "/Maps/"));
+            _mapDataManager = new FSDataFactory().Create<MapFSDataManager>(new FSDataFactoryArguments(_serverWorldDirectory + "/Maps/"));
 
-            this.LoadContents(this.ServerRootDirectory);
+            this.LoadContents(this.ServerWorldDirectory);
         }
 
         public static Project Load(string projectPath)
@@ -113,8 +110,32 @@ namespace Lunar.Editor
 
         public FileInfo AddScript(string filePath)
         {
-            return null;
+            File.CreateText(filePath).Close();
+            var scriptFile = new FileInfo(filePath);
+            _scriptFiles.Add(filePath, scriptFile);
+
+            this.ScriptAdded?.Invoke(this, new FileEventArgs(scriptFile));
+
+            return scriptFile;
         }
+
+        public void RemoveScript(string filePath)
+        {
+            File.Delete(filePath);
+            this.ScriptDeleted?.Invoke(this, new FileEventArgs(_scriptFiles[filePath]));
+            _scriptFiles.Remove(filePath);
+        }
+
+        public void SaveScript(string filePath, string contents)
+        {
+            File.WriteAllText(filePath, contents);
+        }
+
+        public FileInfo LoadScript(string filePath)
+        {
+            return new FileInfo(filePath);
+            
+        } 
 
         public FileInfo AddMap(string filePath)
         {
@@ -169,8 +190,7 @@ namespace Lunar.Editor
             if (!_mapFiles.ContainsKey(filePath))
                 return;
 
-            if (_maps.ContainsKey(filePath))
-                _maps.Remove(filePath);
+            _maps.Remove(filePath);
 
             this.MapDeleted?.Invoke(this, new FileEventArgs(_mapFiles[filePath]));
 
@@ -426,13 +446,27 @@ namespace Lunar.Editor
                 this.LoadNPC(file.FullName);
             }
 
+
+            var scriptDirectory = new DirectoryInfo(projectDirectory.FullName + "/Scripts/");
+
+            if (!scriptDirectory.Exists)
+            {
+                Directory.CreateDirectory(scriptDirectory.FullName);
+            }
+
+            // Load all of the item files
+            foreach (var file in scriptDirectory.GetFiles("*" + EngineConstants.SCRIPT_FILE_EXT, SearchOption.AllDirectories))
+            {
+                _scriptFiles.Add(file.FullName, file);
+                this.LoadScript(file.FullName);
+            }
         }
 
         public void Save()
         {
             var xml = new XElement("Config",
                 new XElement("General",
-                    new XElement("Server_Data_Path", _serverDirectory.FullName),
+                    new XElement("Server_Data_Path", _serverRootDirectory.FullName),
                     new XElement("Client_Data_Path", _clientDirectory.FullName)
                 )
             );
@@ -443,15 +477,18 @@ namespace Lunar.Editor
         public event EventHandler<FileEventArgs> NPCDeleted;
         public event EventHandler<FileEventArgs> AnimationDeleted;
         public event EventHandler<FileEventArgs> MapDeleted;
+        public event EventHandler<FileEventArgs> ScriptDeleted;
 
         public event EventHandler<GameFileChangedEventArgs> NPCChanged;
         public event EventHandler<GameFileChangedEventArgs> AnimationChanged;
         public event EventHandler<GameFileChangedEventArgs> ItemChanged;
         public event EventHandler<GameFileChangedEventArgs> MapChanged;
+        public event EventHandler<GameFileChangedEventArgs> ScriptChanged;
 
         public event EventHandler<FileEventArgs> ItemAdded;
         public event EventHandler<FileEventArgs> NPCAdded;
         public event EventHandler<FileEventArgs> AnimationAdded;
         public event EventHandler<FileEventArgs> MapAdded;
+        public event EventHandler<FileEventArgs> ScriptAdded;
     }
 }

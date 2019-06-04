@@ -35,13 +35,19 @@ namespace Lunar.Editor.Controls
             this.treeProject = new DarkUI.Controls.DarkTreeView();
             this.projectExplorerMenu = new DarkUI.Controls.DarkContextMenu();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.npcExplorerMenu = new DarkUI.Controls.DarkContextMenu();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aggressiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectExplorerMenu.SuspendLayout();
+            this.npcExplorerMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeProject
             // 
-            this.treeProject.AllowMoveNodes = true;
-            this.treeProject.ContextMenuStrip = this.projectExplorerMenu;
             this.treeProject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeProject.Location = new System.Drawing.Point(0, 25);
             this.treeProject.MaxDragChange = 20;
@@ -69,6 +75,65 @@ namespace Lunar.Editor.Controls
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
+            // npcExplorerMenu
+            // 
+            this.npcExplorerMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.npcExplorerMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.npcExplorerMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.scriptToolStripMenuItem});
+            this.npcExplorerMenu.Name = "darkContextMenu1";
+            this.npcExplorerMenu.Size = new System.Drawing.Size(181, 70);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+            this.toolStripMenuItem1.Text = "Delete";
+            // 
+            // scriptToolStripMenuItem
+            // 
+            this.scriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.fromTemplateToolStripMenuItem,
+            this.loadToolStripMenuItem});
+            this.scriptToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
+            this.scriptToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scriptToolStripMenuItem.Text = "Script";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.loadToolStripMenuItem.Text = "Load";
+            // 
+            // fromTemplateToolStripMenuItem
+            // 
+            this.fromTemplateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aggressiveToolStripMenuItem});
+            this.fromTemplateToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.fromTemplateToolStripMenuItem.Name = "fromTemplateToolStripMenuItem";
+            this.fromTemplateToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.fromTemplateToolStripMenuItem.Text = "Create From Template";
+            // 
+            // aggressiveToolStripMenuItem
+            // 
+            this.aggressiveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.aggressiveToolStripMenuItem.Name = "aggressiveToolStripMenuItem";
+            this.aggressiveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aggressiveToolStripMenuItem.Text = "Aggressive";
+            // 
             // DockProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -82,6 +147,7 @@ namespace Lunar.Editor.Controls
             this.SerializationKey = "DockProject";
             this.Size = new System.Drawing.Size(280, 450);
             this.projectExplorerMenu.ResumeLayout(false);
+            this.npcExplorerMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -91,5 +157,12 @@ namespace Lunar.Editor.Controls
         private DarkTreeView treeProject;
         private DarkContextMenu projectExplorerMenu;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private DarkContextMenu npcExplorerMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem scriptToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fromTemplateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aggressiveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
     }
 }

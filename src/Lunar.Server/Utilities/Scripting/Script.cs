@@ -32,7 +32,15 @@ namespace Lunar.Server.Utilities.Scripting
 
         public T GetVariable<T>(string varName)
         {
-            return _scope.GetVariable<T>(varName);
+            try
+            {
+                return _scope.GetVariable<T>(varName);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+                return default;
+            }
         }
 
         public void SetVariable<T>(string varName, T value)

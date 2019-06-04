@@ -57,7 +57,7 @@ namespace Lunar.Core.World.Structure
 
         public void Resize(Vector dimensions)
         {
-            this.Tiles = HelperFunctions.ResizeArray<TileDescriptor>(this.Tiles, (int)dimensions.X, (int)dimensions.Y);
+            this.Tiles = Helpers.ResizeArray<TileDescriptor>(this.Tiles, (int)dimensions.X, (int)dimensions.Y);
         }
 
         public event EventHandler<EventArgs> DescriptorChanged;

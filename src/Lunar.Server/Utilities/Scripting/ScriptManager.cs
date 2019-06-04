@@ -30,9 +30,10 @@ namespace Lunar.Server.Utilities.Scripting
             _scripts = new Dictionary<string, Script>();
 
             _scriptEngine = Python.CreateEngine();
-            var oldSearchPaths = _scriptEngine.GetSearchPaths();
-            oldSearchPaths.Add(Constants.FILEPATH_SCRIPTS);
-            _scriptEngine.SetSearchPaths(oldSearchPaths);
+            var paths = _scriptEngine.GetSearchPaths();
+            paths.Add(Constants.FILEPATH_SCRIPTS);
+            paths.Add(Constants.FILEPATH_DATA + "/internal/iron_python2.7_libs");
+            _scriptEngine.SetSearchPaths(paths);
         }
 
         public Script CreateScript(string scriptPath)

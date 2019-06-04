@@ -64,11 +64,13 @@ namespace Lunar.Server.World.Actors
 
         public bool Alive => this.Descriptor.Stats.Health > 0;
 
-        public ActorBehaviorDefinition BehaviorDefinition => this.Descriptor.BehaviorDefinition;
+        public ActorBehaviorDefinition Behavior => this.Descriptor.BehaviorDefinition;
+
+        public ActorStateMachine<NPC> StateMachine { get; }
 
         public event EventHandler<SubjectEventArgs> EventOccured;
 
-        public GameTimerManager GameTimerManager { get; }
+        public GameTimerManager GameTimers { get; }
 
 
         public NPC(NPCDefinition definition, Map map)
@@ -79,7 +81,8 @@ namespace Lunar.Server.World.Actors
                 definition = new NPCDefinition(NPCDescriptor.Create());
             }
 
-            this.GameTimerManager = new GameTimerManager();
+            this.GameTimers = new GameTimerManager();
+            this.StateMachine = new ActorStateMachine<NPC>(this);
 
             _map = map;
             _definition = definition;
@@ -94,29 +97,25 @@ namespace Lunar.Server.World.Actors
 
             _map.AddActor(this);
 
-
             var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
             npcDataPacket.Message.Write(this.Pack());
             _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
 
             try
             {
-                this.Descriptor.BehaviorDefinition?.OnCreated(this);
+                this.Behavior?.OnCreated(this);
             }
             catch (Exception ex)
             {
                 Logger.LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
-            }
-            
+            }    
         }
-
-        
 
         public void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt)
         {
             try
             {
-                this.Descriptor.BehaviorDefinition?.Attacked(this, attacker, damageDelt);
+                this.Behavior?.Attacked(this, attacker, damageDelt);
             }
             catch (Exception ex)
             {
@@ -126,63 +125,20 @@ namespace Lunar.Server.World.Actors
 
         public void Update(GameTime gameTime)
         {
-            if (this.Target != null && _targetPath.Count == 0)
-            {
-                this.GoTo(this.Target);
-            }
+            this.GameTimers.Update(gameTime);
 
             this.ProcessMovement(gameTime);
-            this.ProcessCombat(gameTime);
 
             try
             {
-                this.Descriptor.BehaviorDefinition?.Update(this, gameTime);
+                this.Behavior?.Update(this, gameTime);
             }
             catch (Exception ex)
             {
                 Logger.LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
             }
-        }
 
-        private void ProcessCombat(GameTime gameTime)
-        {
-            if (_nextAttackTime > gameTime.TotalElapsedTime || this.Target == null || !this.Aggrevated || !this.Target.Attackable) return;
-
-            Vector posDiff = this.Descriptor.Position - this.Target.Descriptor.Position;
-
-            posDiff = new Vector(Math.Abs(posDiff.X), Math.Abs(posDiff.Y));
-
-            if (posDiff.X.IsWithin(0, this.Descriptor.AttackRange)
-                && posDiff.Y.IsWithin(0, this.Descriptor.AttackRange))
-            {
-
-                if (this.Target is Player player)
-                {
-                    if (player.InLoadingScreen)
-                        return;
-                }
-
-                int damageDelt = 0;
-                try
-                {
-                    damageDelt = (int)this.Descriptor.BehaviorDefinition?.Attack(this, this.Target);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogEvent("Error handling Attack: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
-                }
-
-                try
-                {
-                    this.Target.OnAttacked(this, Convert.ToInt32(damageDelt));
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
-                }
-
-                _nextAttackTime = gameTime.TotalElapsedTime + 1000;
-            }
+            this.StateMachine.Update(gameTime);
         }
 
         public bool HasTarget()

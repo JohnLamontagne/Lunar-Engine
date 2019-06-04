@@ -18,7 +18,7 @@ namespace Lunar.Client
 {
     public static class Constants
     {
-#if DEBUG
+#if DEV_MODE
         public static readonly string FILEPATH_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory + "../../../../";
 #else
         public static readonly string FILEPATH_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;

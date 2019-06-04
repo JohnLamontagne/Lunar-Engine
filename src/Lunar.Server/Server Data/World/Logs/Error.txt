@@ -1,0 +1,1188 @@
+
+Log Entry: 12:41:29 AM Friday, May 31, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:41:29 AM Friday, May 31, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:41:49 AM Friday, May 31, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:41:49 AM Friday, May 31, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:09:39 AM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:09:39 AM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:11:41 AM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:11:41 AM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:16:55 AM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:16:55 AM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:19:04 AM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:19:04 AM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 1:23:04 AM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 1:23:04 AM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:58:16 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 5:58:16 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:05:29 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:05:29 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:07:05 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:07:06 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:07:34 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:07:34 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:08:43 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:08:43 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:09:04 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:09:04 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:09:28 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:09:28 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:11:39 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:11:39 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:12:48 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:12:48 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:25:00 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:25:00 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:41:30 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:41:30 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:53:17 PM Saturday, June 1, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 6:53:17 PM Saturday, June 1, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:33:48 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:33:48 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:35:18 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:35:19 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:36:48 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:36:48 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:43:04 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:43:04 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:59:15 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:59:15 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:07:50 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:07:50 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:08:59 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:08:59 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:09:52 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:09:52 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:11:13 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:11:13 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:11:42 PM Monday, June 3, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:11:42 PM Monday, June 3, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:22:43 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:22:44 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:24:31 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:24:31 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:25:20 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:25:20 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:25:50 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:25:50 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:26:03 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:26:03 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:27:23 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:27:23 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:30:46 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:30:46 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:31:24 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:31:24 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:33:20 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:33:20 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:35:27 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:35:27 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:36:39 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:36:39 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:37:48 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:37:48 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:49:05 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:49:05 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:50:51 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:50:51 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:52:06 AM Tuesday, June 4, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:52:06 AM Tuesday, June 4, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

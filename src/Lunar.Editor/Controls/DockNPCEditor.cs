@@ -1,16 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-using System;
+﻿using System;
 using DarkUI.Forms;
 using System.Drawing;
 using System.IO;
@@ -39,36 +27,6 @@ namespace Lunar.Editor.Controls
         private DockNPCEditor()
         {
             InitializeComponent();
-
-            this.txtEditor.Lexer = Lexer.Python;
-
-            this.txtEditor.StyleResetDefault();
-
-            this.txtEditor.Styles[Style.Default].Font = "Consolas";
-            this.txtEditor.Styles[Style.Default].Size = 12;
-
-            this.txtEditor.Styles[Style.Default].BackColor = Color.FromArgb(29, 31, 33);
-            this.txtEditor.Styles[Style.Default].ForeColor = Color.FromArgb(197, 200, 198);
-
-            this.txtEditor.StyleClearAll();
-
-            this.txtEditor.Styles[Style.Python.CommentBlock].ForeColor = Color.FromArgb(181, 189, 104);
-            this.txtEditor.Styles[Style.Python.CommentLine].ForeColor = Color.FromArgb(181, 189, 104);
-            this.txtEditor.Styles[Style.Python.CommentLine].Italic = true;
-
-            this.txtEditor.Styles[Style.Python.String].ForeColor = Color.FromArgb(222, 147, 95);
-
-            this.txtEditor.Styles[Style.Python.Operator].ForeColor = Color.FromArgb(240, 198, 116);
-
-            this.txtEditor.Styles[Style.Python.Number].ForeColor = Color.FromArgb(138, 190, 183);
-
-            this.txtEditor.Styles[Style.Python.Identifier].ForeColor = Color.FromArgb(178, 148, 187);
-
-            this.txtEditor.Styles[Style.Python.Word].ForeColor = Color.FromArgb(130, 239, 104);
-
-            this.txtEditor.CaretForeColor = Color.White;
-
-            this.txtEditor.SetKeywords(0, "if not def");
 
             this.cmbVarType.Items.AddRange(new object[] { typeof(int), typeof(float), typeof(string) });
         }
@@ -106,9 +64,6 @@ namespace Lunar.Editor.Controls
             this.txtSpeed.Text = _npc.Speed.ToString();
             this.txtAttackRange.Text = _npc.AttackRange.ToString();
 
-            this.UpdateScriptEditor();
-                
-
             this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
             this.cmbEquipSlot.SelectedItem = EquipmentSlots.MainArm;
 
@@ -126,7 +81,24 @@ namespace Lunar.Editor.Controls
                 this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
                 this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
             }
+
+            this.cmbScript.Items.AddRange(new object[] 
+            {
+                new ScriptComboMenuOption("", null),
+                new ScriptComboMenuOption("New Script", this.HandleCreateNewScript),
+                new ScriptComboMenuOption("Load Script", this.HandleLoadScript)
+            });
                 
+        }
+
+        private void HandleLoadScript()
+        {
+
+        }
+
+        private void HandleCreateNewScript()
+        {
+            
         }
 
         private void UpdateCustomVariablesView()
@@ -148,21 +120,6 @@ namespace Lunar.Editor.Controls
                 this.lstVariables.SelectItem(prevIndex);
         }
 
-        private void UpdateScriptEditor()
-        {
-            if (File.Exists(_project.ServerRootDirectory.FullName + "/Scripts/" + _npc.BehaviorScriptPath))
-            {
-                this.txtEditor.Text = File.ReadAllText(_project.ServerRootDirectory.FullName + "/Scripts/" + _npc.BehaviorScriptPath);
-                this.scriptSectorPanel.SectionHeader = "Script Editor: " + Path.GetFileName(_npc.BehaviorScriptPath);
-                this.txtEditor.Enabled = true;
-            }
-            else
-            {
-                this.scriptSectorPanel.SectionHeader = "Script Editor";
-            }
-
-            
-        }
 
         public override void Close()
         {
@@ -441,7 +398,7 @@ namespace Lunar.Editor.Controls
                 {
                     string path = dialog.FileName;
 
-                    _npc.TexturePath = HelperFunctions.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
+                    _npc.TexturePath = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
                     
                     this.picSpriteSheet.Load(path);
                     _npc.FrameSize = new Vector(this.picSpriteSheet.Image.Width, this.picSpriteSheet.Image.Height);
@@ -527,55 +484,6 @@ namespace Lunar.Editor.Controls
             _npc.AttackRange = newAttackRange;
         }
 
-        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (SaveFileDialog dialog = new SaveFileDialog())
-            {
-                dialog.RestoreDirectory = true;
-                dialog.InitialDirectory = _project.ServerRootDirectory.FullName + "/Scripts/";
-                dialog.Filter = @"Python script Files (*.py)|*.py";
-                dialog.DefaultExt = ".py";
-                dialog.AddExtension = true;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    string path = dialog.FileName;
-                    _npc.BehaviorScriptPath = HelperFunctions.MakeRelative(path, _project.ServerRootDirectory.FullName + "/Scripts/");
-
-                    File.CreateText(path).Write(Constants.DEFAULT_PY_ACTOR_BEHAVIOR);
-
-                    this.txtEditor.Text = Constants.DEFAULT_PY_ACTOR_BEHAVIOR;
-                    this.scriptSectorPanel.SectionHeader = "Script Editor: " + Path.GetFileName(_npc.BehaviorScriptPath);
-                    this.txtEditor.Enabled = true;
-
-                    this.MarkUnsaved();
-                }
-            }
-        }
-
-        private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                dialog.RestoreDirectory = true;
-                dialog.InitialDirectory = _project.ServerRootDirectory.FullName + "/Scripts/";
-                dialog.Filter = @"Python script Files (*.py)|*.py";
-                dialog.DefaultExt = ".py";
-                dialog.AddExtension = true;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    string path = dialog.FileName;
-
-                    _npc.BehaviorScriptPath = HelperFunctions.MakeRelative(path, _project.ServerRootDirectory.FullName + "/Scripts/");
-
-                    this.UpdateScriptEditor();
-
-                    this.MarkUnsaved();
-                }
-            }
-        }
-
         private void FillCustomVariableFields(string varName)
         {
             if (_npc.CustomVariables.ContainsKey(varName))
@@ -654,6 +562,30 @@ namespace Lunar.Editor.Controls
                 }
                 
             }
+        }
+
+        private void CmbScript_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ((ScriptComboMenuOption)this.cmbScript.SelectedItem)?.Handler();
+        }
+    }
+
+    public class ScriptComboMenuOption
+    {
+        private string _caption;
+        private Action _handler;
+
+        public Action Handler => _handler;
+
+        public ScriptComboMenuOption(string caption, Action handler)
+        {
+            _caption = caption;
+            _handler = handler;
+        }
+
+        public override string ToString()
+        {
+            return _caption;
         }
     }
 }

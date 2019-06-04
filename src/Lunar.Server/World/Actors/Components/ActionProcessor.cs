@@ -13,6 +13,7 @@
 using System.Collections.Generic;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
+using Lunar.Server.World.Actors.Actions;
 
 namespace Lunar.Server.World.Actors.Components
 {

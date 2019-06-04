@@ -16,8 +16,6 @@ namespace Lunar.Server.Utilities
 {
     public class GameTimerManager
     {
-        private static GameTimerManager _instance;
-
         private Dictionary<string, GameTimer> _gameTimers;
 
         public GameTimerManager()
@@ -31,12 +29,12 @@ namespace Lunar.Server.Utilities
                 _gameTimers.Add(name, gameTimer);
         }
 
-        public void DeRegister(string name)
+        public void Remove(string name)
         {
             _gameTimers.Remove(name);
         }
 
-        public GameTimer GetTimer(string name)
+        public GameTimer Get(string name)
         {
             if (!_gameTimers.ContainsKey(name))
                 return null;

@@ -1,16 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-using Lunar.Editor.Utilities;
+﻿using Lunar.Editor.Utilities;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using Lunar.Core.Utilities.Logic;
@@ -41,7 +29,7 @@ namespace Lunar.Editor.World
 
                 _mapObject.Sprite = new Sprite(_textureLoader.LoadFromFile(value))
                 {
-                    Texture = {Tag = HelperFunctions.MakeRelative(value, _project.ClientRootDirectory.FullName + "/")}
+                    Texture = {Tag = Helpers.MakeRelative(value, _project.ClientRootDirectory.FullName + "/")}
                 };
 
                 _spriteFilePath = _mapObject.Sprite.Texture.Tag.ToString();
@@ -94,7 +82,7 @@ namespace Lunar.Editor.World
         public string LuaScript
         {
             get => _mapObject.LuaScriptPath;
-            set => _mapObject.LuaScriptPath = HelperFunctions.MakeRelative(value, _project.ServerRootDirectory.FullName + "/");
+            set => _mapObject.LuaScriptPath = Helpers.MakeRelative(value, _project.ServerWorldDirectory.FullName + "/");
         }
 
 

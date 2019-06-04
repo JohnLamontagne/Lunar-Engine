@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 using System;
+using System.Linq.Expressions;
 
 namespace Lunar.Server.Utilities
 {
@@ -20,6 +21,8 @@ namespace Lunar.Server.Utilities
         private bool _finished;
         private bool _reset;
         private long _duration;
+
+        private Func<bool> _resetWhen;
 
         public bool Finished { get { return _finished; } }
         public long Duration { get { return _duration; } }
@@ -52,13 +55,45 @@ namespace Lunar.Server.Utilities
             _reset = true;
         }
 
+        public bool ResetWhen(Func<bool> expression, bool futureEval = false)
+        {
+            if (expression())
+            {
+                this.Reset();
+                return true;
+            }
+            else if (futureEval)
+            {
+                _resetWhen = expression;
+            }
+
+            return false;
+        }
+
+        public bool ResetWhen(Func<bool> expression, int duration, bool futureEval = false)
+        {
+            if (expression())
+            {
+                this.Reset(duration);
+                return true;
+            }
+            else if (futureEval)
+            {
+                _duration = duration;
+                _resetWhen = expression;
+            }
+
+            return false;
+        }
+
         internal void Update(GameTime gameTime)
         {
             if (gameTime.TotalElapsedTime > _endTime)
             {
                 _finished = true;
                 this.TimerFinished?.Invoke(this, new EventArgs());
-            } else if (_reset)
+            }
+            else if (_reset)
             {
                 _endTime = gameTime.TotalElapsedTime + _duration;
                 _reset = false;
