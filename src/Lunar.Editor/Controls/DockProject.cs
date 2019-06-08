@@ -1,17 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Docking;
 using Lunar.Core;
 using Lunar.Core.Utilities.Logic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Lunar.Editor.Controls
 {
     public partial class DockProject : DarkToolWindow
     {
         private Project _project;
+
+        private JObject _scriptMap;
 
         #region Constructor Region
 
@@ -23,7 +29,6 @@ namespace Lunar.Editor.Controls
             this.treeProject.MouseDoubleClick += TreeProject_MouseDoubleClick;
 
             this.treeProject.MouseDown += TreeProject_MouseDown;
-            
         }
 
         #endregion
@@ -99,30 +104,65 @@ namespace Lunar.Editor.Controls
             }
         }
 
-        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
+        private FileInfo AddScriptToGameContent(FileInfo contentFile, string scriptName)
         {
+            string directory = contentFile.DirectoryName + "./scripts/";
+
+            // Make sure the .scripts directory exists.
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            string filePath = directory + scriptName + ".py";
+
+            if (!_scriptMap.ContainsKey(contentFile.Name))
+            {
+                _scriptMap.Add(contentFile.Name, JToken.FromObject(new List<string>()));
+            }
+
+            _scriptMap.Value<JArray>(contentFile.Name).Add(filePath);
+
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+            
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                _scriptMap.WriteTo(writer);
+            }
+            sw.Close();
+            File.WriteAllText(_project.ServerRootDirectory + "/internal/" + ".scriptmap", sb.ToString());
+
+            FileInfo scriptFile = _project.AddScript(this.GetNextAvailableFilename(filePath));
+
+            var fileNode = new DarkTreeNode(scriptFile.Name)
+            {
+                Tag = scriptFile,
+                Icon = Icons.document_16xLG,
+            };
+
+            this.treeProject.SelectedNodes[0].Nodes.Add(fileNode);
+
+            return scriptFile;
+        }
+
+        private void NewNPCScriptMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.treeProject.SelectedNodes.Count <= 0)
+                return;
+
             var createScriptDialog = new CreateScriptDialog();
 
             if (createScriptDialog.ShowDialog() == DialogResult.OK)
             {
-                string directory = (this.treeProject.SelectedNodes[0].Tag as FileInfo).DirectoryName + "./scripts/";
+                var scriptFile = this.AddScriptToGameContent(this.treeProject.SelectedNodes[0].Tag as FileInfo, createScriptDialog.ScriptName);
 
-                // Make sure the .scripts directory exists.
-                if (!Directory.Exists(directory))
-                    Directory.CreateDirectory(directory);
+                // We have to load up the NPC and attach the script to it.
+                var npcFile = (this.treeProject.SelectedNodes[0].Tag as FileInfo);
+                var npc = _project.LoadNPC(npcFile.FullName);
+                npc.Scripts.Add(Helpers.MakeRelative(scriptFile.FullName, _project.ServerRootDirectory.FullName + "/"));
+                this.FileSelected.Invoke(this, new FileEventArgs(npcFile));
 
-                var filePath = directory + createScriptDialog.ScriptName + ".py";
-
-                var scriptFile = _project.AddScript(this.GetNextAvailableFilename(filePath));
+                // We do this at the very end to ensure our script document is focused, because attaching a script to a NPC will inherently load and open it as a document even if it wasn't prior.
                 this.FileCreated?.Invoke(this, new FileEventArgs(scriptFile));
-
-                var fileNode = new DarkTreeNode(scriptFile.Name)
-                {
-                    Tag = scriptFile,
-                    Icon = Icons.document_16xLG,
-                };
-
-                this.treeProject.SelectedNodes[0].Nodes.Add(fileNode);
             }
         }
 
@@ -152,7 +192,7 @@ namespace Lunar.Editor.Controls
                     using (SaveFileDialog dialog = new SaveFileDialog())
                     {
                         dialog.RestoreDirectory = true;
-                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"\Animations";
+                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Animations";
                         dialog.Filter = $@"Lunar Engine Animation Files (*{EngineConstants.ANIM_FILE_EXT})|*{EngineConstants.ANIM_FILE_EXT}";
                         dialog.DefaultExt = EngineConstants.ANIM_FILE_EXT;
                         dialog.AddExtension = true;
@@ -199,7 +239,7 @@ namespace Lunar.Editor.Controls
                     using (SaveFileDialog dialog = new SaveFileDialog())
                     {
                         dialog.RestoreDirectory = true;
-                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"\Scripts";
+                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Scripts";
                         dialog.Filter = $@"Python Script Files (*{EngineConstants.SCRIPT_FILE_EXT})|*{EngineConstants.SCRIPT_FILE_EXT}";
                         dialog.DefaultExt = EngineConstants.SCRIPT_FILE_EXT;
                         dialog.AddExtension = true;
@@ -246,7 +286,7 @@ namespace Lunar.Editor.Controls
                     using (SaveFileDialog dialog = new SaveFileDialog())
                     {
                         dialog.RestoreDirectory = true;
-                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"\Maps";
+                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Maps";
                         dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.MAP_FILE_EXT})|*{EngineConstants.MAP_FILE_EXT}";
                         dialog.DefaultExt = EngineConstants.MAP_FILE_EXT;
                         dialog.AddExtension = true;
@@ -292,7 +332,7 @@ namespace Lunar.Editor.Controls
                 {
                     using (SaveFileDialog dialog = new SaveFileDialog())
                     {
-                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"\Items";
+                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Items";
                         dialog.RestoreDirectory = true;
                         dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.ITEM_FILE_EXT})|*{EngineConstants.ITEM_FILE_EXT}";
                         dialog.DefaultExt = EngineConstants.ITEM_FILE_EXT;
@@ -331,6 +371,20 @@ namespace Lunar.Editor.Controls
                     Icon = Icons.document_16xLG,
                 };
                 npcPathNode.Nodes.Add(fileNode);
+
+                if (_scriptMap.ContainsKey(npcFile.Name))
+                {
+                    foreach (var scriptPath in _scriptMap[npcFile.Name].ToObject<string[]>())
+                    {
+                        var scriptFile = new FileInfo(scriptPath);
+                        var scriptNode = new DarkTreeNode(scriptFile.Name)
+                        {
+                            Tag = scriptFile,
+                            Icon = Icons.document_16xLG
+                        };
+                        fileNode.Nodes.Add(scriptNode);
+                    }
+                }
             }
 
             var addNode = new DarkTreeNode("Add NPC")
@@ -340,7 +394,7 @@ namespace Lunar.Editor.Controls
                 {
                     using (SaveFileDialog dialog = new SaveFileDialog())
                     {
-                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"\Npcs";
+                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Npcs";
                         dialog.RestoreDirectory = true;
                         dialog.Filter = $@"Lunar Engine NPC Files (*{EngineConstants.NPC_FILE_EXT})|*{EngineConstants.NPC_FILE_EXT}";
                         dialog.DefaultExt = EngineConstants.NPC_FILE_EXT;
@@ -411,6 +465,16 @@ namespace Lunar.Editor.Controls
                 Icon = Icons.folder_closed,
                 ExpandedIcon = Icons.folder_open
             };
+
+            if (File.Exists(_project.ServerRootDirectory + "/internal/.scriptmap"))
+            {
+                string text = File.ReadAllText(_project.ServerRootDirectory + "/internal/.scriptmap");
+                _scriptMap = JObject.Parse(text);
+            }
+            else
+            {
+                _scriptMap = new JObject();
+            }
 
             node.Nodes.Add(this.InitalizeProjectTree());
 

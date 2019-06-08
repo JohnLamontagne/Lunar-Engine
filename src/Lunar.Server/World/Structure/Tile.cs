@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using Lidgren.Network;
 using Lunar.Core.Net;
+using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Structure;
 using Lunar.Server.Utilities;

@@ -12,6 +12,7 @@
 */
 using System.Collections.Generic;
 using System.IO;
+using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Core.World.Actor.Descriptors
@@ -27,7 +28,8 @@ namespace Lunar.Core.World.Actor.Descriptors
         private int _aggresiveRange;
         private Vector _maxRoam;
         private int _attackRange;
-        private Dictionary<string, string> _scripts;
+        private List<string> _scripts;
+
 
         public string Name { get; set; }
 
@@ -53,13 +55,13 @@ namespace Lunar.Core.World.Actor.Descriptors
     
         public int AttackRange { get; set; }
 
-        public string BehaviorScriptPath { get; set; }
+        public List<string> Scripts => _scripts;
 
         public Dictionary<string, object> CustomVariables { get; }
 
         protected NPCDescriptor()
         {
-            _scripts = new Dictionary<string, string>();
+            _scripts = new List<string>();
             this.CustomVariables = new Dictionary<string, object>();
 
             this.Stats = new Stats();
@@ -91,7 +93,10 @@ namespace Lunar.Core.World.Actor.Descriptors
                     binaryWriter.Write(this.FrameSize.X);
                     binaryWriter.Write(this.FrameSize.Y);
                     binaryWriter.Write(this.AttackRange);
-                    binaryWriter.Write(this.BehaviorScriptPath);
+
+                    binaryWriter.Write(this.Scripts.Count);
+                    foreach (var script in this.Scripts)
+                        binaryWriter.Write(script);
                 }
             }
         }
@@ -109,65 +114,78 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public static NPCDescriptor Load(string filePath)
         {
-            string name = "";
-            int level = 0;
-            float speed = 0f;
-            int maximumHealth = 0;
-            Rect collisionBounds = new Rect();
-            int aggresiveRange = 0;
-            string texturePath = "";
-            Vector maxRoam = new Vector();
-            Vector frameSize = new Vector();
-            int attackRange = 0;
-            Actor.Stats stats;
-            string behaviorScriptPath = "";
-
-            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
+            try
             {
-                using (var binaryReader = new BinaryReader(fileStream))
+                string name = "";
+                int level = 0;
+                float speed = 0f;
+                Rect collisionBounds = new Rect();
+                int aggresiveRange = 0;
+                string texturePath = "";
+                Vector maxRoam = new Vector();
+                Vector frameSize = new Vector();
+                int attackRange = 0;
+                Actor.Stats stats;
+                List<string> scripts = new List<string>();
+
+                using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
                 {
-                    name = binaryReader.ReadString();
-                    level = binaryReader.ReadInt32();
-                    speed = binaryReader.ReadSingle();
-
-                    stats = new Stats()
+                    using (var binaryReader = new BinaryReader(fileStream))
                     {
-                        Strength = binaryReader.ReadInt32(),
-                        Defense = binaryReader.ReadInt32(),
-                        Dexterity = binaryReader.ReadInt32(),
-                        Health = binaryReader.ReadInt32(),
-                        Intelligence = binaryReader.ReadInt32(),
-                        MaximumHealth = binaryReader.ReadInt32()
-                    };
+                        name = binaryReader.ReadString();
+                        level = binaryReader.ReadInt32();
+                        speed = binaryReader.ReadSingle();
 
-                    collisionBounds = new Rect(binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
-                    aggresiveRange = binaryReader.ReadInt32();
-                    texturePath = binaryReader.ReadString();
-                    maxRoam = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                    frameSize = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                    attackRange = binaryReader.ReadInt32();
-                    behaviorScriptPath = binaryReader.ReadString();
+                        stats = new Stats()
+                        {
+                            Strength = binaryReader.ReadInt32(),
+                            Defense = binaryReader.ReadInt32(),
+                            Dexterity = binaryReader.ReadInt32(),
+                            Health = binaryReader.ReadInt32(),
+                            Intelligence = binaryReader.ReadInt32(),
+                            MaximumHealth = binaryReader.ReadInt32()
+                        };
+
+                        collisionBounds = new Rect(binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
+                        aggresiveRange = binaryReader.ReadInt32();
+                        texturePath = binaryReader.ReadString();
+                        maxRoam = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
+                        frameSize = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
+                        attackRange = binaryReader.ReadInt32();
+
+
+                        int scriptCount = binaryReader.ReadInt32();
+                        for (int i = 0; i < scriptCount; i++)
+                        {
+                            scripts.Add(binaryReader.ReadString());
+                        }
+                    }
                 }
+
+                NPCDescriptor desc = new NPCDescriptor
+                {
+                    Name = name,
+                    Level = level,
+                    Speed = speed,
+                    Stats = stats,
+                    CollisionBounds = collisionBounds,
+                    AggresiveRange = aggresiveRange,
+                    TexturePath = texturePath,
+                    MaxRoam = maxRoam,
+                    FrameSize = frameSize,
+                    AttackRange = attackRange,
+                    StatBoosts = new Stats(),
+                };
+                desc.Scripts.AddRange(scripts);
+
+                return desc;
             }
-
-            NPCDescriptor desc = new NPCDescriptor
+            catch (IOException exception)
             {
-                Name = name,
-                Level = level,
-                Speed = speed,
-                Stats = stats,
-                CollisionBounds = collisionBounds,
-                AggresiveRange = aggresiveRange,
-                TexturePath = texturePath,
-                MaxRoam = maxRoam,
-                FrameSize = frameSize,
-                AttackRange = attackRange,
-                StatBoosts = new Stats(),
-                BehaviorScriptPath = behaviorScriptPath
-            };
-
-
-            return desc;
+                Logger.LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception.StackTrace);
+                return null;
+            }
+            
         }
 
         public override string ToString()

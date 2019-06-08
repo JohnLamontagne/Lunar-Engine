@@ -10,6 +10,7 @@ using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using ScintillaNET;
+using DarkUI.Docking;
 
 namespace Lunar.Editor.Controls
 {
@@ -44,8 +45,18 @@ namespace Lunar.Editor.Controls
             Icon = icon;
 
             _file = file;
+        }
 
-            _npc = _project.LoadNPC(file.FullName);
+        public void Initalize()
+        {
+            _npc = _project.LoadNPC(_file.FullName);
+
+            if (_npc == null)
+            {
+                base.Close();
+                DarkMessageBox.ShowError("Error loading npc!", "Error!");
+                return;
+            }
 
             this.txtName.Text = _npc.Name;
 
@@ -68,7 +79,7 @@ namespace Lunar.Editor.Controls
             this.cmbEquipSlot.SelectedItem = EquipmentSlots.MainArm;
 
             this.UpdateCustomVariablesView();
-            
+
 
             if (File.Exists(_project.ClientRootDirectory + "/" + _npc.TexturePath))
             {
@@ -82,13 +93,14 @@ namespace Lunar.Editor.Controls
                 this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
             }
 
-            this.cmbScript.Items.AddRange(new object[] 
+            this.cmbScript.Items.AddRange(new object[]
             {
                 new ScriptComboMenuOption("", null),
                 new ScriptComboMenuOption("New Script", this.HandleCreateNewScript),
                 new ScriptComboMenuOption("Load Script", this.HandleLoadScript)
             });
-                
+
+            _unsaved = true;
         }
 
         private void HandleLoadScript()
@@ -336,7 +348,7 @@ namespace Lunar.Editor.Controls
         {
             const string notLoadedMessage = "Load Spritesheet Image";
 
-            if (string.IsNullOrEmpty(_npc.TexturePath))
+            if (string.IsNullOrEmpty(_npc?.TexturePath))
             {
                 e.Graphics.DrawString(notLoadedMessage, DefaultFont, Brushes.White, new Point((int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(notLoadedMessage, DefaultFont).Width / 2f),
                     (int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(notLoadedMessage, DefaultFont).Height / 2f)));
@@ -360,7 +372,7 @@ namespace Lunar.Editor.Controls
 
         private void picCollisionPreview_Paint(object sender, PaintEventArgs e)
         {
-            if (string.IsNullOrEmpty(_npc.TexturePath))
+            if (string.IsNullOrEmpty(_npc?.TexturePath))
                 return;
 
             float factor_x = this.picSpriteSheet.Image.Width / (float)this.picSpriteSheet.Width;

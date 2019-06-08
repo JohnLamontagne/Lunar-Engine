@@ -38,10 +38,10 @@ namespace Lunar.Editor.Controls
             this.npcExplorerMenu = new DarkUI.Controls.DarkContextMenu();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newNPCScriptMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aggressiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectExplorerMenu.SuspendLayout();
             this.npcExplorerMenu.SuspendLayout();
             this.SuspendLayout();
@@ -84,18 +84,19 @@ namespace Lunar.Editor.Controls
             this.scriptToolStripMenuItem});
             this.npcExplorerMenu.Name = "darkContextMenu1";
             this.npcExplorerMenu.Size = new System.Drawing.Size(181, 70);
+            this.npcExplorerMenu.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Text = "Delete";
             // 
             // scriptToolStripMenuItem
             // 
             this.scriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
+            this.newNPCScriptMenuItem,
             this.fromTemplateToolStripMenuItem,
             this.loadToolStripMenuItem});
             this.scriptToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
@@ -103,20 +104,13 @@ namespace Lunar.Editor.Controls
             this.scriptToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.scriptToolStripMenuItem.Text = "Script";
             // 
-            // newToolStripMenuItem
+            // newNPCScriptMenuItem
             // 
-            this.newToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.newToolStripMenuItem.Text = "New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
-            // 
-            // loadToolStripMenuItem
-            // 
-            this.loadToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.loadToolStripMenuItem.Text = "Load";
+            this.newNPCScriptMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.newNPCScriptMenuItem.Name = "newNPCScriptMenuItem";
+            this.newNPCScriptMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.newNPCScriptMenuItem.Text = "New";
+            this.newNPCScriptMenuItem.Click += new System.EventHandler(this.NewNPCScriptMenuItem_Click);
             // 
             // fromTemplateToolStripMenuItem
             // 
@@ -131,8 +125,15 @@ namespace Lunar.Editor.Controls
             // 
             this.aggressiveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.aggressiveToolStripMenuItem.Name = "aggressiveToolStripMenuItem";
-            this.aggressiveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aggressiveToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.aggressiveToolStripMenuItem.Text = "Aggressive";
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.loadToolStripMenuItem.Text = "Load";
             // 
             // DockProject
             // 
@@ -160,7 +161,7 @@ namespace Lunar.Editor.Controls
         private DarkContextMenu npcExplorerMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem scriptToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newNPCScriptMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromTemplateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aggressiveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;

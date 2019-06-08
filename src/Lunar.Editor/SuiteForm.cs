@@ -121,9 +121,9 @@ namespace Lunar.Editor
             this.CloseDocument(e.File);
         }
 
-        public void OpenLuaDocument(FileInfo file)
+        public void OpenPythonDocument(FileInfo file)
         {
-            var luaDoc = new DockScriptDocument(file.Name, Icons.document_16xLG, file)
+            var pyDoc = new DockScriptDocument(file.Name, Icons.document_16xLG, file)
             {
                 Tag = file
             };
@@ -139,10 +139,11 @@ namespace Lunar.Editor
                 }
             }
 
-            luaDoc.Enter += LuaDoc_Enter;
+            pyDoc.Enter += LuaDoc_Enter;
+            pyDoc.Parent = this.DockPanel;
 
-            _editorDocuments.Add(luaDoc);
-            DockPanel.AddContent(luaDoc);
+            _editorDocuments.Add(pyDoc);
+            this.DockPanel.AddContent(pyDoc);
         }
 
         public void OpenItemDocument(FileInfo file)
@@ -163,9 +164,10 @@ namespace Lunar.Editor
             }
 
             itemDoc.Enter += ItemDoc_Enter;
+            itemDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(itemDoc);
-            DockPanel.AddContent(itemDoc);
+            this.DockPanel.AddContent(itemDoc);
         }
 
         public void OpenAnimationDocument(FileInfo file)
@@ -186,9 +188,10 @@ namespace Lunar.Editor
             }
 
             animDoc.Enter += AnimationDoc_Enter;
+            animDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(animDoc);
-            DockPanel.AddContent(animDoc);
+            this.DockPanel.AddContent(animDoc);
         }
 
         private void CloseDocument(FileInfo file)
@@ -240,9 +243,10 @@ namespace Lunar.Editor
             }
 
             mapDoc.Enter += MapDoc_Enter;
+            mapDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(mapDoc);
-            DockPanel.AddContent(mapDoc);
+            this.DockPanel.AddContent(mapDoc);
         }
 
         public void OpenNPCDocument(FileInfo file)
@@ -266,7 +270,9 @@ namespace Lunar.Editor
             npcDoc.Enter += NPCDoc_Enter;
 
             _editorDocuments.Add(npcDoc);
-            DockPanel.AddContent(npcDoc);
+            this.DockPanel.AddContent(npcDoc);
+
+            npcDoc.Initalize();
         }
 
         private void NPCDoc_Enter(object sender, EventArgs e)
@@ -288,7 +294,7 @@ namespace Lunar.Editor
         {
             if (e.File.Extension == EngineConstants.SCRIPT_FILE_EXT)
             {
-                this.OpenLuaDocument(e.File);
+                this.OpenPythonDocument(e.File);
             }
             else if (e.File.Extension == EngineConstants.MAP_FILE_EXT)
             {
@@ -312,7 +318,7 @@ namespace Lunar.Editor
         {
             if (e.File.Extension == EngineConstants.SCRIPT_FILE_EXT)
             {
-                this.OpenLuaDocument(e.File);
+                this.OpenPythonDocument(e.File);
             }
             else if (e.File.Extension == EngineConstants.MAP_FILE_EXT)
             {

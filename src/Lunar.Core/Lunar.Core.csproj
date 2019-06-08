@@ -70,6 +70,7 @@
     <Compile Include="Net\ChannelType.cs" />
     <Compile Include="Net\LidgrenExtensions.cs" />
     <Compile Include="Net\PacketType.cs" />
+    <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Utilities\Role.cs" />
     <Compile Include="Utilities\SecurePasswordHasher.cs" />
     <Compile Include="Utilities\ServiceLocator.cs" />

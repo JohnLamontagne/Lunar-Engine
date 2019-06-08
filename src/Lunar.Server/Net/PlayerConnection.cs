@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using Lidgren.Network;
 using Lunar.Core.Net;
+using Lunar.Core.Utilities;
 using Lunar.Server.Utilities;
 
 namespace Lunar.Server.Net

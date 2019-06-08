@@ -51,6 +51,11 @@ namespace Lunar.Server
         {
             Console.WriteLine("Initalizing server...");
 
+            // Point the logger towards the current directory
+            Logger.LogPath = Constants.FILEPATH_LOGS;
+
+            Console.WriteLine("Log output set to: " + Logger.LogPath);
+
             Console.WriteLine("Loading server settings...");
             Settings.Initalize();
 
@@ -152,26 +157,21 @@ namespace Lunar.Server
 
         private void CheckFileIntegrity()
         {
-            if (!Directory.Exists(Constants.FILEPATH_DATA))
-                Directory.CreateDirectory(Constants.FILEPATH_DATA);
+            Directory.CreateDirectory(Constants.FILEPATH_DATA);
 
-            if (!Directory.Exists(Constants.FILEPATH_SCRIPTS))
-                Directory.CreateDirectory(Constants.FILEPATH_SCRIPTS);
+            Directory.CreateDirectory(Constants.FILEPATH_SCRIPTS);
 
-            if (!Directory.Exists(Constants.FILEPATH_ACCOUNTS))
-                Directory.CreateDirectory(Constants.FILEPATH_ACCOUNTS);
+            Directory.CreateDirectory(Constants.FILEPATH_ACCOUNTS);
 
-            if (!Directory.Exists(Constants.FILEPATH_ITEMS))
-                Directory.CreateDirectory(Constants.FILEPATH_ITEMS);
+            Directory.CreateDirectory(Constants.FILEPATH_ITEMS);
 
-            if (!Directory.Exists(Constants.FILEPATH_LOGS))
-                Directory.CreateDirectory(Constants.FILEPATH_LOGS);
+            Directory.CreateDirectory(Constants.FILEPATH_LOGS);
 
-            if (!Directory.Exists(Constants.FILEPATH_MAPS))
-                Directory.CreateDirectory(Constants.FILEPATH_MAPS);
+            Directory.CreateDirectory(Constants.FILEPATH_MAPS);
 
-            if (!Directory.Exists(Constants.FILEPATH_NPCS))
-                Directory.CreateDirectory(Constants.FILEPATH_NPCS);
+            Directory.CreateDirectory(Constants.FILEPATH_NPCS);
+
+            Directory.CreateDirectory(Constants.FILEPATH_ANIMATIONS);
         }
     }
 }

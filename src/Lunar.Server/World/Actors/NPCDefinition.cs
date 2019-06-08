@@ -26,10 +26,12 @@ namespace Lunar.Server.World.Actors
     {
         public ActorBehaviorDefinition BehaviorDefinition { get; set; }
 
-        private Script _script;
+        private List<Script> _scripts;
 
         public NPCDefinition(NPCDescriptor descriptor)
         {
+            _scripts = new List<Script>();
+
             this.Name = descriptor.Name;
             this.Level = descriptor.Level;
             this.MaxRoam = descriptor.MaxRoam;
@@ -47,20 +49,23 @@ namespace Lunar.Server.World.Actors
             this.Stats.MaximumHealth = descriptor.Stats.MaximumHealth;
             this.Stats.Strength = descriptor.Stats.Strength;
             this.Stats.Intelligence = descriptor.Stats.Intelligence;
-            this.BehaviorScriptPath = descriptor.BehaviorScriptPath;
 
-
-            this.InitalizeScripts();
+            
+            this.InitalizeScripts(descriptor.Scripts);
             this.InitalizeDefaultBehavior();
         }
 
-        private void InitalizeScripts()
+        private void InitalizeScripts(IEnumerable<string> scriptPaths)
         {
-            _script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + this.BehaviorScriptPath);
-
-            if (_script != null)
+            foreach (var scriptPath in scriptPaths)
             {
-                this.BehaviorDefinition = _script.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
+                Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + scriptPath);
+                ActorBehaviorDefinition behaviorDefinition = script?.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
+
+                if (behaviorDefinition != null)
+                {
+                    this.BehaviorDefinition = behaviorDefinition;
+                }
             }
         }
 

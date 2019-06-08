@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 using System;
+using Lunar.Core.Utilities;
 using Lunar.Core.World;
 using Lunar.Server.Utilities;
 

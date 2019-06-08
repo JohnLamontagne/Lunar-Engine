@@ -1186,3 +1186,241 @@ Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition'
    at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
    at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:56:34 PM Friday, June 7, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 10:56:34 PM Friday, June 7, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:30:44 PM Friday, June 7, 2019:
+Error: Script Error: No module named random in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at Microsoft.Scripting.Runtime.LightExceptions.CheckAndThrow(Object value)
+   at Microsoft.Scripting.Interpreter.FuncCallInstruction`2.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.Interpreter.Run(InterpretedFrame frame)
+   at Microsoft.Scripting.Interpreter.LightLambda.Run2[T0,T1,TRet](T0 arg0, T1 arg1)
+   at IronPython.Compiler.PythonScriptCode.RunWorker(CodeContext ctx)
+   at IronPython.Compiler.PythonScriptCode.Run(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.InvokeTarget(Scope scope)
+   at IronPython.Compiler.RuntimeScriptCode.Run(Scope scope)
+   at Microsoft.Scripting.SourceUnit.Execute(Scope scope, ErrorSink errorSink)
+   at Microsoft.Scripting.Hosting.ScriptSource.Execute(ScriptScope scope)
+   at Lunar.Server.Utilities.Scripting.Script..ctor(ScriptEngine scriptEngine, ScriptSource compiledScript) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 20
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 11:30:44 PM Friday, June 7, 2019:
+Error: Script Error: 'ScopeStorage' object has no attribute 'BehaviorDefinition' in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\bin\Debug\../../Server Data//World//Scripts/aggressive_npc.py: .
+   at CallSite.Target(Closure , CallSite , Object )
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name, Boolean ignoreCase)
+   at Microsoft.Scripting.Runtime.DynamicOperations.GetMember[T](Object obj, String name)
+   at Microsoft.Scripting.Runtime.LanguageContext.ScopeGetVariable[T](Scope scope, String name)
+   at IronPython.Runtime.PythonContext.ScopeGetVariable[T](Scope scope, String name)
+   at Microsoft.Scripting.Hosting.ScriptScope.GetVariable[T](String name)
+   at Lunar.Server.Utilities.Scripting.Script.GetVariable[T](String varName) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Server\Utilities\Scripting\Script.cs:line 37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Entry: 12:53:44 AM Saturday, June 8, 2019:
+Error: Unable to load NPC: Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 12:54:01 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:30:46 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:33:02 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:33:19 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:34:20 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:34:46 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:35:07 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:35:51 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:36:07 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:36:38 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:37:05 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:43:22 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:44:51 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:45:16 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:45:47 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:46:16 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:48:34 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:49:00 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:49:27 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:49:51 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:50:09 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------
+
+Log Entry: 1:51:12 AM Saturday, June 8, 2019:
+Error: Unable to load NPC. Unable to read beyond the end of the stream..
+   at System.IO.BinaryReader.ReadByte()
+   at System.IO.BinaryReader.Read7BitEncodedInt()
+   at System.IO.BinaryReader.ReadString()
+   at Lunar.Core.World.Actor.Descriptors.NPCDescriptor.Load(String filePath) in C:\Users\jdlam\Documents\GitHub\Lunar-Engine\src\Lunar.Core\World\Actor\Descriptors\NPCDescriptior.cs:line 135
+------------------------------------------------------------------------

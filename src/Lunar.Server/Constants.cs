@@ -61,5 +61,7 @@ namespace Lunar.Server
         public static readonly string FILEPATH_SCRIPTS = Constants.FILEPATH_WORLD + "/Scripts/";
 
         public static readonly string FILEPATH_PLUGINS = Constants.FILEPATH_WORLD + "/Plugins/";
+
+        public static readonly string FILEPATH_ANIMATIONS = Constants.FILEPATH_WORLD + "/Animations/";
     }
 }

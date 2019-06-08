@@ -5,6 +5,9 @@
         public const int NEW_MAP_X = 35;
         public const int NEW_MAP_Y = 35;
 
+        /// <summary>
+        /// I am not proud of this. Will replace soon /John
+        /// </summary>
         public const string DEFAULT_PY_ACTOR_BEHAVIOR = @"import sys
 import clr
 clr.AddReference('Lunar.Core')

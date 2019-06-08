@@ -40,10 +40,12 @@ namespace Lunar.Server.World.Actors
             foreach (var file in files)
             {
                 NPCDescriptor npcDesc = NPCDescriptor.Load(file.FullName);
-                _npcs.Add(npcDesc.Name, new NPCDefinition(npcDesc));
+
+                if (npcDesc != null)
+                    _npcs.Add(npcDesc.Name, new NPCDefinition(npcDesc));
             }
 
-            Console.WriteLine($"Loaded {files.Length} NPCs.");
+            Console.WriteLine($"Loaded {_npcs.Count} NPCs.");
         }
 
         public NPCDefinition GetNPC(string npcName)

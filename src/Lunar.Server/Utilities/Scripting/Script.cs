@@ -1,4 +1,5 @@
-﻿using Microsoft.Scripting.Hosting;
+﻿using Lunar.Core.Utilities;
+using Microsoft.Scripting.Hosting;
 using System;
 
 namespace Lunar.Server.Utilities.Scripting
