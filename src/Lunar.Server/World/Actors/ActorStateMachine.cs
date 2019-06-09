@@ -24,7 +24,8 @@ namespace Lunar.Server.World.Actors
             // The state machine should only be started once. This forces script developers to transition to new states through the return-based scene flow paradigm.
             if (_started)
             {
-                Logger.LogEvent("Error: State Machine already started for Actor " + this.Actor.Descriptor.Name + " with behavior definition " + this.Actor.Behavior?.GetType().Name, LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent("Error: State Machine already started for Actor " + this.Actor.Descriptor.Name + " with behavior definition " + this.Actor.Behavior?.GetType().Name, LogTypes.ERROR, 
+                    new Exception("Error: State Machine already started for Actor " + this.Actor.Descriptor.Name + " with behavior definition " + this.Actor.Behavior?.GetType().Name));
                 return;
             }
 
@@ -40,14 +41,14 @@ namespace Lunar.Server.World.Actors
 
                 if (this.CurrentState != nextState)
                 {
-                    this.CurrentState.OnExit(this.Actor);
+                    this.CurrentState?.OnExit(this.Actor);
                     this.CurrentState = nextState;
-                    this.CurrentState.OnEnter(this.Actor);
+                    this.CurrentState?.OnEnter(this.Actor);
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent("Error: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
     }

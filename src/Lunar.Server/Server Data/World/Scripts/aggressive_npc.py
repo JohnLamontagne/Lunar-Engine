@@ -1,8 +1,5 @@
 import sys
 import clr
-clr.AddReference('Lunar.Core')
-clr.AddReference('Lunar.Server')
-clr.AddReference('System')
 import npc_common 
 from Lunar.Server.Utilities import *
 from Lunar.Server.World.BehaviorDefinition import *

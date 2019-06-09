@@ -32,7 +32,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             if (player.Inventory.GetSlot(_slotNum) == null)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, Environment.StackTrace);
+                Logger.LogEvent($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, new Exception($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}."));
 
                 return;
             }

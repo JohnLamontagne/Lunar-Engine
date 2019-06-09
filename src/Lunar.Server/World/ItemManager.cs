@@ -51,7 +51,7 @@ namespace Lunar.Server.World
         {
             if (!_items.ContainsKey(itemName))
             {
-                Logger.LogEvent($"Item {itemName} does not exist", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent($"Item {itemName} does not exist", LogTypes.ERROR, new Exception($"Item {itemName} does not exist"));
                 return null;
             }
 

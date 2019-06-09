@@ -59,5 +59,64 @@ namespace Lunar.Editor.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to import sys
+        ///import clr
+        ///clr.AddReference(&apos;Lunar.Core&apos;)
+        ///clr.AddReference(&apos;Lunar.Server&apos;)
+        ///clr.AddReference(&apos;System&apos;)
+        ///import npc_common 
+        ///from Lunar.Server.Utilities import *
+        ///from Lunar.Server.World.BehaviorDefinition import *
+        ///from Lunar.Server.World.Actors import *
+        ///import random
+        ///
+        ///class CombatNPCState(IActorState[NPC]):
+        ///	def __init__(self):
+        ///		return
+        ///		
+        ///	def OnEnter(self, npc):
+        ///		nextAttackTimer = GameTimer(1000)
+        ///		npc.GameTimers.Register(&quot;nextAttackTimer&quot;, nextAttackTimer)
+        ///		
+        ///	def OnExit(self,  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AggressiveNPCBehavior {
+            get {
+                return ResourceManager.GetString("AggressiveNPCBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to import sys
+        ///import clr
+        ///import npc_common
+        ///from Lunar.Server.Utilities import *
+        ///from Lunar.Server.World.BehaviorDefinition import *
+        ///
+        ///
+        ///class AggressiveNPCBehaviorDefinition(ActorBehaviorDefinition):
+        ///	def __init__(self):
+        ///		print(&apos;not implemented&apos;)
+        ///	
+        ///	def Update(self, npc, gameTime):
+        ///		print(&apos;not implemented&apos;)
+        ///
+        ///	def OnCreated(self, npc):
+        ///		print(&apos;not implemented&apos;)
+        ///		
+        ///
+        ///	def Attack(self, npc, target):
+        ///		print(&apos;not implemented&apos;)
+        ///        return 0
+        ///		
+        ///	def Attacked(self, npc, attacker, damage_delt [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DefaultNPCBehavior {
+            get {
+                return ResourceManager.GetString("DefaultNPCBehavior", resourceCulture);
+            }
+        }
     }
 }

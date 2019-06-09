@@ -59,7 +59,7 @@ namespace Lunar.Server.World.Structure
             {
                 var attributeData = ((NPCSpawnAttributeData)this.Descriptor.AttributeData);
 
-                if (_nextNPCSpawnTime <= gameTime.TotalElapsedTime && _heartbeatListener.NPCs.Count <= attributeData.MaxSpawns)
+                if (_nextNPCSpawnTime <= gameTime.TotalElapsedTime && _heartbeatListener.NPCs.Count < attributeData.MaxSpawns)
                 {
                     this.NPCSpawnerEvent?.Invoke(this, new NPCSpawnerEventArgs(attributeData.NPCID, attributeData.MaxSpawns, this.Descriptor.Position, _heartbeatListener));
 
@@ -100,7 +100,8 @@ namespace Lunar.Server.World.Structure
                         else
                         {
 
-                            Logger.LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR, Environment.StackTrace);
+                            Logger.LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR, 
+                                new Exception($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!"));
                             return;
                         }
                        
@@ -173,7 +174,7 @@ namespace Lunar.Server.World.Structure
 
         public class NPCSpawnerEventArgs : EventArgs
         {
-            public string Name { get; }
+            public string NPCID { get; }
 
             public int Count { get; }
 
@@ -181,9 +182,9 @@ namespace Lunar.Server.World.Structure
 
             public NPCHeartbeatListener HeartbeatListener { get; }
 
-            public NPCSpawnerEventArgs(string name, int count, Vector position, NPCHeartbeatListener heartBeatListener)
+            public NPCSpawnerEventArgs(string npcID, int count, Vector position, NPCHeartbeatListener heartBeatListener)
             {
-                this.Name = name;
+                this.NPCID = npcID;
                 this.Count = count;
                 this.Position = position;
 

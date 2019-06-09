@@ -12,14 +12,16 @@
     <Max_Level>100</Max_Level>
   </Gameplay>
   <Advanced>
-    <Tick_Rate>120</Tick_Rate>
+    <Tick_Rate>60</Tick_Rate>
     <Tile_Size>32</Tile_Size>
     <Map_Item_Width>32</Map_Item_Width>
     <Map_Item_Height>32</Map_Item_Height>
+    <Iron_Python_Libs_Dir>C:/Program Files/IronPython 2.7/Lib</Iron_Python_Libs_Dir>
+    <Suppress_Errors>true</Suppress_Errors>
   </Advanced>
   <Roles>
     <User>0</User>
     <Admin>1</Admin>
   </Roles>
-  <DefaultRole>User</DefaultRole>
+  <Default_Role>User</Default_Role>
 </Config>

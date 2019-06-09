@@ -268,11 +268,20 @@ namespace Lunar.Editor
             }
 
             npcDoc.Enter += NPCDoc_Enter;
+            npcDoc.Closed += NpcDoc_Closed;
 
             _editorDocuments.Add(npcDoc);
             this.DockPanel.AddContent(npcDoc);
 
             npcDoc.Initalize();
+        }
+
+        private void NpcDoc_Closed(object sender, EventArgs e)
+        {
+            var npcFile = (sender as DockNPCEditor).ContentFile;
+            _project.UnloadNPC(npcFile.FullName);
+
+            _dockProject.RefreshNPCScripts(npcFile);
         }
 
         private void NPCDoc_Enter(object sender, EventArgs e)

@@ -15,7 +15,6 @@ namespace Lunar.Editor.Controls
 {
     public partial class DockAnimationEditor : SavableDocument
     {
-        private  FileInfo _file;
         private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
@@ -29,17 +28,13 @@ namespace Lunar.Editor.Controls
         private Animation _subSurfaceAnimation;
         private Animation _surfaceAnimation;
 
-        private DockAnimationEditor()
+        public DockAnimationEditor(Project project, string text, Image icon, FileInfo file)
+            : base(file)
         {
             InitializeComponent();
 
             _activeScript = "";
 
-        }
-
-        public DockAnimationEditor(Project project, string text, Image icon, FileInfo file)
-            : this()
-        {
             _project = project;
 
             _regularDockText = text;
@@ -48,8 +43,6 @@ namespace Lunar.Editor.Controls
 
             DockText = text;
             Icon = icon;
-
-            _file = file;
 
             _animationDescription = _project.LoadAnimation(file.FullName);
 
@@ -124,14 +117,14 @@ namespace Lunar.Editor.Controls
             this.DockText = _regularDockText;
             _unsaved = false;
 
-            if (_animationDescription.Name + EngineConstants.ITEM_FILE_EXT != _file.Name)
+            if (_animationDescription.Name + EngineConstants.ITEM_FILE_EXT != this.ContentFile.Name)
             {
-                File.Move(_file.FullName, _file.DirectoryName + "/" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
+                File.Move(this.ContentFile.FullName, this.ContentFile.DirectoryName + "/" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
 
-                _file = _project.ChangeItem(_file.FullName, _file.DirectoryName + "\\" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
+                this.ContentFile = _project.ChangeItem(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
             }
 
-            _animationDescription.Save(_file.FullName);
+            _animationDescription.Save(this.ContentFile.FullName);
         }
 
         private void buttonSave_Click(object sender, System.EventArgs e)

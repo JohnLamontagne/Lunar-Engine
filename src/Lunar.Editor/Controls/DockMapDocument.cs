@@ -60,13 +60,15 @@ namespace Lunar.Editor.Controls
 
         public DockMapDocument()
         {
-            InitializeComponent();
+
         }
 
         public DockMapDocument(string text, Image icon, FileInfo file, Project project, 
             DockTilesetTools dockTilesetTools, DockLayers dockLayers, DockMapObjectProperties dockMapObject, DockMapAttributes dockMapAttributes)
-            : this()
+            : base(file)
         {
+            InitializeComponent();
+
             _regularDockText = text;
             _unsavedDockText = text + "*";
 

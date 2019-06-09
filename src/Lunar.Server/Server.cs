@@ -51,13 +51,17 @@ namespace Lunar.Server
         {
             Console.WriteLine("Initalizing server...");
 
+            Console.WriteLine("Loading server settings...");
+            Settings.Initalize();
+
+            Logger.SuppressErrors = Settings.SuppressErrors;
+
             // Point the logger towards the current directory
             Logger.LogPath = Constants.FILEPATH_LOGS;
 
-            Console.WriteLine("Log output set to: " + Logger.LogPath);
+            Logger.Start();
 
-            Console.WriteLine("Loading server settings...");
-            Settings.Initalize();
+            Console.WriteLine($"Log output set to: {Logger.LogPath} with error suppression {(Logger.SuppressErrors ? "on" : "off")}.");
 
             Console.WriteLine("Checking file integrity...");
             this.CheckFileIntegrity();

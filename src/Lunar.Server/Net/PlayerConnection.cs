@@ -59,7 +59,7 @@ namespace Lunar.Server.Net
         {
             if (_netConnection == null)
             {
-                Logger.LogEvent($"Invalid player connection socket!!", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
                 return;
             }
 
@@ -70,7 +70,7 @@ namespace Lunar.Server.Net
         {
             if (_netConnection == null)
             {
-                Logger.LogEvent($"Invalid player connection socket at!", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
                 return;
             }
 

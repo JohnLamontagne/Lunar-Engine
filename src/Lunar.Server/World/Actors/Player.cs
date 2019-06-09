@@ -88,7 +88,15 @@ namespace Lunar.Server.World.Actors
         /// </summary>
         public bool InLoadingScreen => !this.MapLoaded;
 
-        public bool Attackable => this.MapLoaded;
+        public bool Alive => (this.Descriptor.Stats.Health + this.Descriptor.StatBoosts.Health) >= 0;
+
+        public bool Attackable
+        {
+            get
+            {
+                return (this.Alive && !this.InLoadingScreen);
+            }
+        }
 
         public ActorStates State { get; set; }
 
@@ -124,13 +132,18 @@ namespace Lunar.Server.World.Actors
 
             if (this.Behavior == null)
             {
-                Logger.LogEvent("Error hooking player behavior definition!", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent("Error hooking player behavior definition.", LogTypes.ERROR, new Exception("Error hooking player behavior definition."));
             }
             else
             {
                 this.Behavior.OnCreated(this);
                 this.Behavior.EventOccured += this.BehaviorDescriptor_EventOccured;
             }
+
+            this.Descriptor.Stats.Changed += (o, args) => 
+            {
+                this.NetworkComponent.SendPlayerStats();
+            };
         }
 
         private void OnDeath()
@@ -146,10 +159,14 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Unhandled OnDeath event for " + this.GetType().ToString() + " named " + this.Descriptor.Name, LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent("Error in OnDeath handling: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
 
+        public void SendChatMessage(string message, ChatMessageType messageType)
+        {
+            this.NetworkComponent.SendChatMessage(message, messageType);
+        }
         public void InflictDamage(int amount)
         {
             this.Descriptor.Stats.Health -= amount;

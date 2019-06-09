@@ -11,20 +11,35 @@
 	limitations under the License.
 */
 using System;
+using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.ExceptionServices;
+using System.Threading;
 using Lunar.Core;
 
 namespace Lunar.Core.Utilities
 {
     public static class Logger
     {
+        private static BackgroundWorker _loggerWorker;
+        private static bool _shuttingDown;
+        private static ConcurrentQueue<Tuple<string[], string>> _logQueue;
+
         private static string _previousConsoleLog;
         private static int _previousConsoleLogY;
         private static int _sameErrorCount;
 
+        public static bool SuppressErrors { get; set; }
+
         public static string LogPath { get; set; }
 
-        public static void LogEvent(string eventDetails, LogTypes logType, string stackTrace)
+        static Logger()
+        {
+            Logger.SuppressErrors = true;
+        }
+
+        public static void LogEvent(string eventDetails, LogTypes logType, Exception exception = null)
         {
             switch (logType)
             {
@@ -52,40 +67,83 @@ namespace Lunar.Core.Utilities
                         _previousConsoleLog = newConsoleLog;
                     }
 
-                    TextLog($"Error: {eventDetails}.", stackTrace, Logger.LogPath + "Error.txt");
+                    TextLog($"Error: {eventDetails}.", exception.StackTrace, Logger.LogPath + "Error.txt");
+
+                    if (!Logger.SuppressErrors)
+                    {
+                        if (exception.InnerException != null)
+                            ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+                        else
+                            throw exception;
+                    }
+
                     break;
 
                 case LogTypes.GAME:
-                    TextLog($"Game event: {eventDetails}", stackTrace, Logger.LogPath + "Game_Event.txt");
+                    TextLog($"Game event: {eventDetails}", exception?.StackTrace, Logger.LogPath + "Game_Event.txt");
                     break;
 
                 case LogTypes.GEN_SERVER:
-                    TextLog($"Event: {eventDetails}", stackTrace, Logger.LogPath + "General_Server.txt");
+                    TextLog($"Event: {eventDetails}", exception?.StackTrace, Logger.LogPath + "General_Server.txt");
                     break;
             }
         }
 
-        private static void TextLog(string logMessage, string stackTrace, string filePath)
+        public static void Start()
         {
-            try
-            {
-                using (var sw = File.AppendText(filePath))
-                {
-                    sw.Write("\r\nLog Entry: ");
-                    sw.WriteLine("{0} {1}:", DateTime.Now.ToLongTimeString(), DateTime.Now.ToLongDateString());
-                    sw.WriteLine("{0}", logMessage);
-                    sw.WriteLine(stackTrace);
+            _logQueue = new ConcurrentQueue<Tuple<string[], string>>();
+            _loggerWorker = new BackgroundWorker();
+            _loggerWorker.DoWork += _loggerWorker_DoWork;
 
-                    sw.WriteLine(new string('-', logMessage.Length));
+            var timer = new System.Timers.Timer(5000);
+            timer.Elapsed += Timer_Elapsed;
+
+        }
+
+        private static void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (!_loggerWorker.IsBusy)
+                _loggerWorker.RunWorkerAsync();
+        }
+
+        private static void _loggerWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (_logQueue.TryDequeue(out Tuple<string[], string> logs))
+            {
+                try
+                {
+                    using (var sw = File.AppendText(logs.Item2))
+                    {
+                        foreach (var line in logs.Item1)
+                            sw.WriteLine(line);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Core error fault! Could not write to error log file.");
+                    Console.WriteLine(ex);
+                    Console.WriteLine("Original log: ");
+                    Console.WriteLine(logs.Item1[2]);
                 }
             }
-            catch (Exception ex)
+
+        }
+
+        public static void Stop()
+        {
+            _shuttingDown = true;
+        }
+
+        private static void TextLog(string logMessage, string stackTrace, string filePath)
+        {
+            _logQueue.Enqueue(new Tuple<string[], string>(new string[]
             {
-                Console.WriteLine("Core error fault! Could not write to error log file.");
-                Console.WriteLine(ex);
-                Console.WriteLine("Original log: ");
-                Console.WriteLine(logMessage);
-            }
+                "\r\nLog Entry: ",
+                "{0} {1}:", DateTime.Now.ToLongTimeString(), DateTime.Now.ToLongDateString(),
+                "{0}", logMessage,
+                stackTrace,
+                new string('-', logMessage.Length)
+            }, filePath));
         }
     }
 

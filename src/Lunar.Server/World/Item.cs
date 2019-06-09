@@ -33,7 +33,7 @@ namespace Lunar.Server.World
         {
             if (descriptor == null)
             {
-                Logger.LogEvent("Null item!", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent("Null item!", LogTypes.ERROR, new Exception("Null item"));
 
                 Descriptor = new ItemDescriptor()
                 {

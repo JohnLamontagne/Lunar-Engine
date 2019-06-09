@@ -61,6 +61,10 @@ namespace Lunar.Server
 
         public static Dictionary<string, Role> UserPermissions { get; private set; }
 
+        public static string IronPythonLibsDirectory { get; private set; }
+
+        public static bool SuppressErrors { get; private set; }
+
         public static void Initalize()
         {
             LoadConfig();
@@ -82,11 +86,13 @@ namespace Lunar.Server
                     new XElement("NPC_Rest_Period", 400),
                     new XElement("Max_Level", 100)
                 ),
-                new XElement("Advanced", 
+                new XElement("Advanced",
                     new XElement("Tick_Rate", 60),
                     new XElement("Tile_Size", 32),
                     new XElement("Map_Item_Width", 32),
-                    new XElement("Map_Item_Height", 32)
+                    new XElement("Map_Item_Height", 32),
+                    new XElement("Iron_Python_Libs_Dir", "C:/Program Files/IronPython 2.7/Lib"),
+                    new XElement("Suppress_Errors", "true")
                 ),
                 new XElement("Roles",
                     new XElement("User", 0),
@@ -122,6 +128,8 @@ namespace Lunar.Server
                 Settings.TileSize = int.Parse(advancedSettings.Elements("Tile_Size").FirstOrDefault().Value);
                 Settings.MapItemWidth = int.Parse(advancedSettings.Elements("Map_Item_Width").FirstOrDefault().Value);
                 Settings.MapItemHeight = int.Parse(advancedSettings.Elements("Map_Item_Height").FirstOrDefault().Value);
+                Settings.IronPythonLibsDirectory = advancedSettings.Elements("Iron_Python_Libs_Dir").FirstOrDefault().Value;
+                Settings.SuppressErrors = bool.Parse(advancedSettings.Elements("Suppress_Errors").FirstOrDefault().Value);
 
                 // Get the roles
                 Settings.Roles = new Dictionary<string, Role>();
@@ -131,11 +139,11 @@ namespace Lunar.Server
                     Settings.Roles.Add(role.Name.ToString(), new Role(role.Name.ToString(), int.Parse(role.Value)));
                 }
 
-                Settings.DefaultRole =
-                    Settings.Roles[doc.Elements("Config").Elements("DefaultRole").FirstOrDefault().Value.ToString()] ??
-                    Role.Default;
+                string defaultRole = doc.Elements("Config").Elements("Default_Role").FirstOrDefault().Value.ToString();
+
+                Settings.DefaultRole = Settings.Roles[defaultRole] ?? Role.Default;
             }
-            catch (IndexOutOfRangeException ex)
+            catch (Exception ex) when (ex is IndexOutOfRangeException || ex is NullReferenceException)
             {
                 Console.WriteLine("The server config file appears to be corrupted!");
                 Console.Write("Would you like to restore the configuration to its original state? [y/n]");
@@ -143,6 +151,7 @@ namespace Lunar.Server
                 if (Console.ReadLine() == "y")
                 {
                     CreateConfig();
+                    LoadConfig();
                 }
                 else
                 {
@@ -159,7 +168,7 @@ namespace Lunar.Server
 
             if (!File.Exists(_filePathUserPermissions))
             {
-                Logger.LogEvent($"Could not load user permissions: file does not exist at {_filePathUserPermissions}!", LogTypes.ERROR, "");
+                Logger.LogEvent($"Could not load user permissions: file does not exist at {_filePathUserPermissions}!", LogTypes.ERROR);
                 return;
             }
                 
@@ -183,7 +192,7 @@ namespace Lunar.Server
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Could not load user permissions: {ex.Message}", LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent($"Could not load user permissions: {ex.Message}", LogTypes.ERROR, ex);
             }
         }
 
@@ -198,7 +207,7 @@ namespace Lunar.Server
             {
                 if (i >= Settings.ExperienceThreshhold.Length)
                 {
-                    Logger.LogEvent("Experience chart exceeds maximum level!", LogTypes.ERROR, Environment.StackTrace);
+                    Logger.LogEvent("Experience chart exceeds maximum level!", LogTypes.ERROR, new Exception("Experience chart exceeds maximum level!"));
                     return;
                 }
 

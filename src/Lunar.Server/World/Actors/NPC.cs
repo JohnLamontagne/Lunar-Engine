@@ -54,7 +54,7 @@ namespace Lunar.Server.World.Actors
 
         public bool Aggrevated { get; set; }
 
-        public ActorStates State { get; set; }
+        public bool Moving { get; private set; }
 
         public Map Map => _map;
 
@@ -77,8 +77,8 @@ namespace Lunar.Server.World.Actors
         {
             if (definition == null)
             {
-                Logger.LogEvent($"Null npc spawned on map {map.Descriptor.Name}!", LogTypes.ERROR, Environment.StackTrace);
-                definition = new NPCDefinition(NPCDescriptor.Create());
+                Logger.LogEvent($"Null npc spawned on map {map.Descriptor.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Descriptor.Name}!"));
+                definition = new NPCDefinition(NPCDescriptor.Create("null"));
             }
 
             this.GameTimers = new GameTimerManager();
@@ -107,7 +107,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex);
             }    
         }
 
@@ -119,7 +119,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
 
@@ -135,7 +135,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex);
             }
 
             this.StateMachine.Update(gameTime);
@@ -151,10 +151,9 @@ namespace Lunar.Server.World.Actors
             _targetPath = this.Map.GetPathfinder(this.Layer).FindPath(this.Descriptor.Position, targetDest);
             _targetPath.Reverse();
 
-            this.State = ActorStates.Moving;
-
             if (_targetPath.Count > 0)
             {
+                this.Moving = true;
                 this.SendMovementPacket(_targetPath);
             }
         }
@@ -199,6 +198,17 @@ namespace Lunar.Server.World.Actors
                 this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
 
             Rect collisionBoundsLeft = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left - Settings.TileSize, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
+                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+
+            return (collisionBoundsRight.Intersects(actor.Descriptor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.Descriptor.CollisionBounds));
+        }
+
+        public bool WithinAttackingRangeOf(IActor<IActorDescriptor> actor)
+        {
+            Rect collisionBoundsRight = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left + this.Descriptor.AttackRange, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
+                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+
+            Rect collisionBoundsLeft = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left - +this.Descriptor.AttackRange, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
                 this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
 
             return (collisionBoundsRight.Intersects(actor.Descriptor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.Descriptor.CollisionBounds));
@@ -283,11 +293,16 @@ namespace Lunar.Server.World.Actors
                     if (_targetPath.Count > 0)
                         _targetPath.RemoveAt(_targetPath.Count - 1);
                 }
-
-                if (_targetPath.Count == 0 && _nextMoveTime <= gameTime.TotalElapsedTime)
+            }
+            else
+            {
+                // If we no longer have a path and were previously moving, switch moving to false and update the clients.
+                if (this.Moving)
                 {
+                    this.Moving = false;
+                    Console.WriteLine("Finished moving. Now at " + this.Descriptor.Position.ToString());
                     _nextMoveTime = gameTime.TotalElapsedTime + Settings.NPCRestPeriod;
-                    this.State = ActorStates.Idle;
+                    this.Moving = false;
                     this.SendMovementPacket();
                 }
             }
@@ -330,8 +345,8 @@ namespace Lunar.Server.World.Actors
                     continue;
                 }
 
-                if (actor.Descriptor.Position.X >= this.Descriptor.Position.X - this.Descriptor.AggresiveRange * Settings.TileSize && actor.Descriptor.Position.X <= this.Descriptor.Position.X + this.Descriptor.AggresiveRange * Settings.TileSize &&
-                    actor.Descriptor.Position.Y >= this.Descriptor.Position.Y - this.Descriptor.AggresiveRange * Settings.TileSize && actor.Descriptor.Position.Y <= this.Descriptor.Position.Y + this.Descriptor.AggresiveRange * Settings.TileSize)
+                if (actor.Descriptor.Position.X >= this.Descriptor.Position.X - this.Descriptor.AggresiveRange && actor.Descriptor.Position.X <= this.Descriptor.Position.X + this.Descriptor.AggresiveRange &&
+                    actor.Descriptor.Position.Y >= this.Descriptor.Position.Y - this.Descriptor.AggresiveRange && actor.Descriptor.Position.Y <= this.Descriptor.Position.Y + this.Descriptor.AggresiveRange)
                 {
                     return actor;
                 }

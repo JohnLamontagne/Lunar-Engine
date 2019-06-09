@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 using System;
+using Lunar.Core.Utilities.Logic;
 using Microsoft.Xna.Framework;
 
 namespace Lunar.Core.Utilities.Data
@@ -165,6 +166,11 @@ namespace Lunar.Core.Utilities.Data
         public static float Dot(Vector vectorA, Vector vectorB)
         {
             return (vectorA.X * vectorB.X) + (vectorA.Y * vectorB.Y);
+        }
+
+        public bool IsWithin(Vector lower, Vector upper)
+        {
+            return (this.X.IsWithin(lower.X, upper.X) && this.Y.IsWithin(lower.Y, upper.Y));
         }
 
         public override int GetHashCode()

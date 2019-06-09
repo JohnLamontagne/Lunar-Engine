@@ -26,6 +26,8 @@ namespace Lunar.Server.World.Actors
         long UniqueID { get; }
 
         bool Attackable { get; }
+
+        bool Alive { get; }
        
         Layer Layer { get; set; }
 

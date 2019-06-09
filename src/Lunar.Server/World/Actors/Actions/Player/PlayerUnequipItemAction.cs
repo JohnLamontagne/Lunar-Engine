@@ -32,7 +32,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             if (player.Equipment.GetSlot(_slotNum) == null)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to unequip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, Environment.StackTrace);
+                Logger.LogEvent($"Player attempted to unequip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
 
                 return;
             }
@@ -42,7 +42,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             if (item.Descriptor.ItemType != ItemTypes.Equipment || item.Descriptor.SlotType == EquipmentSlots.NE)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to unequip unequippable item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, Environment.StackTrace);
+                Logger.LogEvent($"Player attempted to unequip unequippable item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
 
                 return;
             }

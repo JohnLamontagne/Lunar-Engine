@@ -3,35 +3,29 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using ScintillaNET;
+using System.Text.RegularExpressions;
 
 namespace Lunar.Editor.Controls
 {
     public partial class DockScriptDocument : SavableDocument
     {
-        private FileInfo _file;
         private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
+        private int _maxLineNumberCharLength;
 
-        public FileInfo ScriptFile => _file;
-
-        public DockScriptDocument()
+        public DockScriptDocument(string text, Image icon, FileInfo file)
+            : base(file)
         {
             InitializeComponent();
 
             this.InitalizeStyling();
-        }
 
-        public DockScriptDocument(string text, Image icon, FileInfo file)
-            : this()
-        {
             _regularDockText = text;
             _unsavedDockText = text + "*";
 
             DockText = text;
             Icon = icon;
-
-            _file = file;
         }
 
         public override void Close()
@@ -48,8 +42,6 @@ namespace Lunar.Editor.Controls
 
         private void DockLUADocument_Load(object sender, System.EventArgs e)
         {
-            // Load the file contents.
-            this.txtEditor.Text = File.ReadAllText(_file.FullName);
 
             this.DockText = _regularDockText;
             _unsaved = false;
@@ -61,6 +53,13 @@ namespace Lunar.Editor.Controls
 
             this.txtEditor.StyleResetDefault();
 
+            this.txtEditor.CaretForeColor = Color.White;
+
+            this.txtEditor.Margins[0].Width = 16;
+            //this.txtEditor.Margins[0].Type = MarginType.BackColor;
+
+            
+
             this.txtEditor.Styles[Style.Default].Font = "Consolas";
             this.txtEditor.Styles[Style.Default].Size = 12;
 
@@ -68,6 +67,8 @@ namespace Lunar.Editor.Controls
             this.txtEditor.Styles[Style.Default].ForeColor = Color.FromArgb(197, 200, 198);
 
             this.txtEditor.StyleClearAll();
+
+            this.txtEditor.Styles[Style.LineNumber].BackColor = Color.FromArgb(29, 31, 33);
 
             this.txtEditor.Styles[Style.Python.CommentLine].ForeColor = Color.FromArgb(181, 189, 104);
             this.txtEditor.Styles[Style.Python.CommentLine].Italic = true;
@@ -87,11 +88,30 @@ namespace Lunar.Editor.Controls
             this.txtEditor.Styles[Style.Python.Word].ForeColor = Color.FromArgb(130, 239, 104);
 
             this.txtEditor.SetKeywords(0, "if and or def not return from import class");
+
+            this.txtEditor.InsertCheck += TxtEditor_InsertCheck;
+        }
+
+        private void TxtEditor_InsertCheck(object sender, InsertCheckEventArgs e)
+        {
+            if ((e.Text.EndsWith("\r") || e.Text.EndsWith("\n")))
+            {
+                var curLine = this.txtEditor.LineFromPosition(e.Position);
+                var curLineText = this.txtEditor.Lines[curLine].Text;
+
+                var indent = Regex.Match(curLineText, @"^\s*");
+                string txt = indent.Value.Replace("\r", "").Replace("\n", "");
+                e.Text += txt;// Add indent following "\r\n"
+
+                // Current line end with bracket?
+                if (Regex.IsMatch(curLineText, @":\s*$") || this.txtEditor.GetCharAt(this.txtEditor.CurrentPosition - 1) == ':')
+                    e.Text += '\t'; // Add tab
+            }
         }
 
         public override void Save()
         {
-            File.WriteAllText(_file.FullName, this.txtEditor.Text);
+            File.WriteAllText(this.ContentFile.FullName, this.txtEditor.Text);
             this.DockText = _regularDockText;
             _unsaved = false;
         }
@@ -100,6 +120,16 @@ namespace Lunar.Editor.Controls
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
+
+            var maxLineNumberCharLength = this.txtEditor.Lines.Count.ToString().Length;
+            if (maxLineNumberCharLength == _maxLineNumberCharLength)
+                return;
+
+            // Calculate the width required to display the last line number
+            // and include some padding for good measure.
+            const int padding = 2;
+            this.txtEditor.Margins[0].Width = this.txtEditor.TextWidth(Style.LineNumber, new string('9', maxLineNumberCharLength + 1)) + padding;
+            _maxLineNumberCharLength = maxLineNumberCharLength;
         }
 
         private void txtEditor_KeyDown(object sender, KeyEventArgs e)

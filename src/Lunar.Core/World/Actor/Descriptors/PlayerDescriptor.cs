@@ -123,9 +123,6 @@ namespace Lunar.Core.World.Actor.Descriptors
             return descriptor;
         }
 
-
-      
-        public event EventHandler StatChanged;
         public event EventHandler ExperienceChanged;
     }
 }

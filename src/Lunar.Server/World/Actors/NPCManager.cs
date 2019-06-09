@@ -42,7 +42,7 @@ namespace Lunar.Server.World.Actors
                 NPCDescriptor npcDesc = NPCDescriptor.Load(file.FullName);
 
                 if (npcDesc != null)
-                    _npcs.Add(npcDesc.Name, new NPCDefinition(npcDesc));
+                    _npcs.Add(npcDesc.UniqueID, new NPCDefinition(npcDesc));
             }
 
             Console.WriteLine($"Loaded {_npcs.Count} NPCs.");

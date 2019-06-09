@@ -24,9 +24,9 @@ namespace Lunar.Core.World.Structure
 
         public int MaxSpawns { get; set; }
 
-        public NPCSpawnAttributeData(NPCDescriptor npc, int respawnTime, int maxSpawns)
+        public NPCSpawnAttributeData(string npcID, int respawnTime, int maxSpawns)
         {
-            this.NPCID = npc.Name;
+            this.NPCID = npcID;
             this.RespawnTime = respawnTime;
             this.MaxSpawns = maxSpawns;
         }

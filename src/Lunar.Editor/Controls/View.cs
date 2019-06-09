@@ -15,10 +15,6 @@ namespace Lunar.Editor.Controls
         private PresentationParameters _presentationParams;
         private GraphicsDevice _graphicsDevice;
         private SpriteBatch _spriteBatch;
-        private Thread _gameLoopThread;
-
-        private ContentManager _contentManager;
-
 
         private GameTime _gameTime;
         private Stopwatch _timer;

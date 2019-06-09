@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using DarkUI.Forms;
 using Lunar.Core.World.Actor.Descriptors;
@@ -9,7 +10,7 @@ namespace Lunar.Editor.Controls
     {
         private Form _parentForm;
 
-        public NPCDescriptor NPC { get; private set; }
+        public string NPC { get; private set; }
 
         public int RespawnTime { get; private set; }
 
@@ -25,9 +26,9 @@ namespace Lunar.Editor.Controls
             InitializeComponent();
 
             this.cmbNPC.Items.Clear();
-            foreach (var npc in project.NPCs.Values)
+            foreach (var npcFile in project.NPCFiles)
             {
-                this.cmbNPC.Items.Add(npc);
+                this.cmbNPC.Items.Add(Path.GetFileNameWithoutExtension(npcFile.Name));
             }
         }
 
@@ -42,14 +43,14 @@ namespace Lunar.Editor.Controls
 
         private void txtMaxSpawns_TextChanged(object sender, EventArgs e)
         {
-            int.TryParse(txtRespawnTime.Text, out int maxSpawns);
+            int.TryParse(this.txtMaxSpawns.Text, out int maxSpawns);
 
             this.MaxSpawns = maxSpawns;
         }
 
         private void cmbNPC_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.NPC = (NPCDescriptor)this.cmbNPC.SelectedItem;
+            this.NPC = this.cmbNPC.SelectedItem.ToString();
         }
 
         private void txtRespawnTime_TextChanged(object sender, EventArgs e)

@@ -165,6 +165,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Server Data\internal\.scriptmap" />
+    <None Include="Server Data\World\Accounts\1.acc" />
+    <None Include="Server Data\World\Accounts\11.acc" />
+    <None Include="Server Data\World\Accounts\admin.acc" />
+    <None Include="Server Data\World\Npcs\sadfasdf.ndat" />
+    <None Include="Server Data\World\Npcs\test.ndat" />
     <None Include="Server.licenseheader" />
   </ItemGroup>
   <ItemGroup>
@@ -186,26 +192,26 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Server Data\internal\iron_python2.7_libs\" />
+    <Folder Include="Server Data\World\Animations\" />
+    <Folder Include="Server Data\World\Items\" />
+    <Folder Include="Server Data\World\Maps\" />
+    <Folder Include="Server Data\World\Plugins\" />
     <Folder Include="Utilities\Language\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Server Data\Animations\test.adat" />
-    <Content Include="Server Data\Animations\test.lanim" />
     <Content Include="Server Data\config.xml" />
     <Content Include="Server Data\experience.conf" />
-    <Content Include="Server Data\Items\asdfasdf.idat" />
-    <Content Include="Server Data\Items\Emerald Ring.idat" />
-    <Content Include="Server Data\Items\health_potion.lua" />
-    <Content Include="Server Data\Items\ruby_ring.lua" />
     <Content Include="Server Data\Logs\Error.txt" />
-    <Content Include="Server Data\Maps\default.mdat" />
-    <Content Include="Server Data\Npcs\asdfasdfasdf.ndat" />
-    <Content Include="Server Data\Npcs\test.ndat" />
-    <Content Include="Server Data\Scripts\aggressive_npc.py" />
-    <Content Include="Server Data\Scripts\commands_handler.py" />
-    <Content Include="Server Data\Scripts\npc_common.py" />
-    <Content Include="Server Data\Scripts\player.py" />
     <Content Include="Server Data\user_permissions.xml" />
+    <Content Include="Server Data\World\Logs\Error.txt" />
+    <Content Include="Server Data\World\Npcs\scripts\sdafasdfasdf.py" />
+    <Content Include="Server Data\World\Scripts\aggressive_npc.py" />
+    <Content Include="Server Data\World\Scripts\command_handler.py" />
+    <Content Include="Server Data\World\Scripts\NPCs\test1_test.ndat.py" />
+    <Content Include="Server Data\World\Scripts\npc_common.py" />
+    <Content Include="Server Data\World\Scripts\player.py" />
+    <Content Include="Server Data\World\Scripts\test.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

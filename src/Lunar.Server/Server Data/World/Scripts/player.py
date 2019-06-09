@@ -1,9 +1,4 @@
-import sys
-import clr
-clr.AddReference('Lunar.Core')
-clr.AddReference('Lunar.Server')
-clr.AddReference('System')
-import npc_common
+from Lunar.Core import *
 from Lunar.Server.Utilities import *
 from Lunar.Server.World.BehaviorDefinition import *
 
@@ -24,12 +19,11 @@ class PlayerBehaviorDefinition(ActorBehaviorDefinition):
 
     def Attacked(self, player, attacker, damage_delt):
         player.Descriptor.Stats.Health -= damage_delt
-        player.NetworkComponent.SendPlayerStats()
 
     def OnDeath(self, player):
+        player.Descriptor.Stats.Health = player.Descriptor.Stats.MaximumHealth
         player.SendChatMessage("You are dead!", ChatMessageType.Alert)
-        player.Description.Stats.Health = player.Description.Stats.MaximumHealth
-        player.JointMap(player.Map)
+        player.JoinMap(player.Map)
 
 
 BehaviorDefinition = PlayerBehaviorDefinition()

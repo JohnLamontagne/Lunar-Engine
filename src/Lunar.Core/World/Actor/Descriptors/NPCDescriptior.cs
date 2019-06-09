@@ -30,6 +30,7 @@ namespace Lunar.Core.World.Actor.Descriptors
         private int _attackRange;
         private List<string> _scripts;
 
+        public string UniqueID { get; private set; }
 
         public string Name { get; set; }
 
@@ -97,18 +98,21 @@ namespace Lunar.Core.World.Actor.Descriptors
                     binaryWriter.Write(this.Scripts.Count);
                     foreach (var script in this.Scripts)
                         binaryWriter.Write(script);
+
+                    binaryWriter.Write(this.UniqueID);
                 }
             }
         }
 
-        public static NPCDescriptor Create()
+        public static NPCDescriptor Create(string uniqueID)
         {
             return new NPCDescriptor()
             {
                 Name = "",
                 AggresiveRange = 0,
                 AttackRange = 0,
-                TexturePath = ""
+                TexturePath = "",
+                UniqueID = uniqueID
             };
         }
 
@@ -127,6 +131,7 @@ namespace Lunar.Core.World.Actor.Descriptors
                 int attackRange = 0;
                 Actor.Stats stats;
                 List<string> scripts = new List<string>();
+                string uniqueID = "";
 
                 using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
                 {
@@ -159,6 +164,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                         {
                             scripts.Add(binaryReader.ReadString());
                         }
+
+                        uniqueID = binaryReader.ReadString();
                     }
                 }
 
@@ -175,6 +182,7 @@ namespace Lunar.Core.World.Actor.Descriptors
                     FrameSize = frameSize,
                     AttackRange = attackRange,
                     StatBoosts = new Stats(),
+                    UniqueID = uniqueID
                 };
                 desc.Scripts.AddRange(scripts);
 
@@ -182,7 +190,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             }
             catch (IOException exception)
             {
-                Logger.LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception.StackTrace);
+                Logger.LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception);
                 return null;
             }
             

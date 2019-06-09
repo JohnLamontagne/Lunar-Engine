@@ -71,7 +71,7 @@ namespace Lunar.Server.Utilities.Plugin
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Could not load plugin: {ex.Message}", LogTypes.ERROR, Environment.StackTrace);
+                Logger.LogEvent($"Could not load plugin: {ex.Message}", LogTypes.ERROR, new Exception($"Could not load plugin: {ex.Message}"));
             }
            
         }

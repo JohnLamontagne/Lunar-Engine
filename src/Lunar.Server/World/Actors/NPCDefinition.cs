@@ -49,6 +49,7 @@ namespace Lunar.Server.World.Actors
             this.Stats.MaximumHealth = descriptor.Stats.MaximumHealth;
             this.Stats.Strength = descriptor.Stats.Strength;
             this.Stats.Intelligence = descriptor.Stats.Intelligence;
+            this.CollisionBounds = descriptor.CollisionBounds;
 
             
             this.InitalizeScripts(descriptor.Scripts);
@@ -59,7 +60,7 @@ namespace Lunar.Server.World.Actors
         {
             foreach (var scriptPath in scriptPaths)
             {
-                Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + scriptPath);
+                Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
                 ActorBehaviorDefinition behaviorDefinition = script?.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
 
                 if (behaviorDefinition != null)

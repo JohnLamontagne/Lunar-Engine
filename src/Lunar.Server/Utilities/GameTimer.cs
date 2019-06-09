@@ -88,15 +88,15 @@ namespace Lunar.Server.Utilities
 
         internal void Update(GameTime gameTime)
         {
-            if (gameTime.TotalElapsedTime > _endTime)
-            {
-                _finished = true;
-                this.TimerFinished?.Invoke(this, new EventArgs());
-            }
-            else if (_reset)
+            if (_reset)
             {
                 _endTime = gameTime.TotalElapsedTime + _duration;
                 _reset = false;
+            }
+            else if (gameTime.TotalElapsedTime > _endTime)
+            {
+                _finished = true;
+                this.TimerFinished?.Invoke(this, new EventArgs());
             }
         }
 

@@ -47,6 +47,8 @@ namespace Lunar.Client.Utilities
                         _textures.Add(path, Texture2D.FromStream(
                             ((IGraphicsDeviceService) cM.ServiceProvider.GetService(typeof(IGraphicsDeviceService)))
                             .GraphicsDevice, fS));
+
+                        fS.Close();
                     }
                     else
                     {

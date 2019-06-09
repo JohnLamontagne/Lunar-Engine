@@ -12,7 +12,6 @@ namespace Lunar.Editor.Controls
 {
     public partial class DockItemDocument : SavableDocument
     {
-        private FileInfo _file;
         private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
@@ -22,7 +21,13 @@ namespace Lunar.Editor.Controls
 
         private ItemDescriptor _item;
 
-        private DockItemDocument()
+        public DockItemDocument()
+        {
+
+        }
+
+        private DockItemDocument(FileInfo file)
+            : base(file)
         {
             InitializeComponent();
 
@@ -60,15 +65,13 @@ namespace Lunar.Editor.Controls
         }
 
         public DockItemDocument(Project project, string text, Image icon, FileInfo file)
-            : this()
+            : this(file)
         {
             _project = project;
 
         
             DockText = text;
             Icon = icon;
-
-            _file = file;
 
             _item = _project.LoadItem(file.FullName);
 
@@ -127,14 +130,14 @@ namespace Lunar.Editor.Controls
             this.DockText = _regularDockText;
             _unsaved = false;
 
-            if (_item.Name + EngineConstants.ITEM_FILE_EXT != _file.Name)
+            if (_item.Name + EngineConstants.ITEM_FILE_EXT != this.ContentFile.Name)
             {
-                File.Move(_file.FullName, _file.DirectoryName + "/" + _item.Name + EngineConstants.ITEM_FILE_EXT);
+                File.Move(this.ContentFile.FullName, this.ContentFile.DirectoryName + "/" + _item.Name + EngineConstants.ITEM_FILE_EXT);
 
-                _file = _project.ChangeItem(_file.FullName, _file.DirectoryName + "\\" + _item.Name + EngineConstants.ITEM_FILE_EXT);
+                this.ContentFile = _project.ChangeItem(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _item.Name + EngineConstants.ITEM_FILE_EXT);
             }
 
-            _item.Save(_file.FullName);
+            _item.Save(this.ContentFile.FullName);
         }
 
         private void txtEditor_TextChanged(object sender, System.EventArgs e)

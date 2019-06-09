@@ -23,11 +23,11 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Microsoft.Scripting.SyntaxErrorException ex)
             {
-                Logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Script Error: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent($"Script Error: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex);
                 return default;
             }
         }
@@ -58,11 +58,11 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Microsoft.Scripting.SyntaxErrorException ex)
             {
-                Logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Script Error: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex.StackTrace);
+                Logger.LogEvent($"Script Error: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
         }
 

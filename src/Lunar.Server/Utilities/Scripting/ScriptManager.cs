@@ -17,6 +17,7 @@ using IronPython.Hosting;
 using Lunar.Core;
 using Lunar.Core.Utilities;
 using Microsoft.Scripting.Hosting;
+using System.Reflection;
 
 namespace Lunar.Server.Utilities.Scripting
 {
@@ -29,10 +30,15 @@ namespace Lunar.Server.Utilities.Scripting
         {
             _scripts = new Dictionary<string, Script>();
 
-            _scriptEngine = Python.CreateEngine();
+            ScriptRuntime runtime = Python.CreateRuntime();
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                runtime.LoadAssembly(assembly);
+
+            _scriptEngine = runtime.GetEngine("py");
             var paths = _scriptEngine.GetSearchPaths();
             paths.Add(Constants.FILEPATH_SCRIPTS);
-            paths.Add(Constants.FILEPATH_DATA + "/internal/iron_python2.7_libs");
+            paths.Add(Settings.IronPythonLibsDirectory);
             _scriptEngine.SetSearchPaths(paths);
         }
 
@@ -69,7 +75,7 @@ namespace Lunar.Server.Utilities.Scripting
         {
             ExceptionOperations eo = _scriptEngine.GetService<ExceptionOperations>();
             string error = eo.FormatException(ex);
-            Logger.LogEvent($"Script error: {error}", LogTypes.ERROR, ex.StackTrace);
+            Logger.LogEvent($"Script error: {error}", LogTypes.ERROR, ex);
         }
 
         public void Initalize()

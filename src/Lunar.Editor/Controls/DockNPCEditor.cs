@@ -16,7 +16,6 @@ namespace Lunar.Editor.Controls
 {
     public partial class DockNPCEditor : SavableDocument
     {
-        private FileInfo _file;
         private string _regularDockText;
         private string _unsavedDockText;
         private bool _unsaved;
@@ -25,16 +24,13 @@ namespace Lunar.Editor.Controls
 
         private NPCDescriptor _npc;
 
-        private DockNPCEditor()
+        public DockNPCEditor(Project project, string text, Image icon, FileInfo file)
+            : base(file)
         {
             InitializeComponent();
 
             this.cmbVarType.Items.AddRange(new object[] { typeof(int), typeof(float), typeof(string) });
-        }
 
-        public DockNPCEditor(Project project, string text, Image icon, FileInfo file)
-            : this()
-        {
             _project = project;
 
             _regularDockText = text;
@@ -43,13 +39,11 @@ namespace Lunar.Editor.Controls
 
             DockText = text;
             Icon = icon;
-
-            _file = file;
         }
 
         public void Initalize()
         {
-            _npc = _project.LoadNPC(_file.FullName);
+            _npc = _project.LoadNPC(this.ContentFile.FullName);
 
             if (_npc == null)
             {
@@ -74,6 +68,7 @@ namespace Lunar.Editor.Controls
             this.txtMaxRoam.Text = _npc.MaxRoam.X.ToString();
             this.txtSpeed.Text = _npc.Speed.ToString();
             this.txtAttackRange.Text = _npc.AttackRange.ToString();
+            this.txtAggressiveRange.Text = _npc.AggresiveRange.ToString();
 
             this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
             this.cmbEquipSlot.SelectedItem = EquipmentSlots.MainArm;
@@ -92,13 +87,6 @@ namespace Lunar.Editor.Controls
                 this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
                 this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
             }
-
-            this.cmbScript.Items.AddRange(new object[]
-            {
-                new ScriptComboMenuOption("", null),
-                new ScriptComboMenuOption("New Script", this.HandleCreateNewScript),
-                new ScriptComboMenuOption("Load Script", this.HandleLoadScript)
-            });
 
             _unsaved = true;
         }
@@ -157,14 +145,14 @@ namespace Lunar.Editor.Controls
             this.DockText = _regularDockText;
             _unsaved = false;
 
-            if (_npc.Name + EngineConstants.NPC_FILE_EXT != _file.Name)
+            if (_npc.Name + EngineConstants.NPC_FILE_EXT != this.ContentFile.Name)
             {
-                File.Move(_file.FullName, _file.DirectoryName + "/" + _npc.Name + EngineConstants.NPC_FILE_EXT);
+                File.Move(this.ContentFile.FullName, this.ContentFile.DirectoryName + "/" + _npc.Name + EngineConstants.NPC_FILE_EXT);
 
-                _file = _project.ChangeNPC(_file.FullName, _file.DirectoryName + "\\" + _npc.Name + EngineConstants.NPC_FILE_EXT);
+                this.ContentFile = _project.ChangeNPC(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _npc.Name + EngineConstants.NPC_FILE_EXT);
             }
 
-            _npc.Save(_file.FullName);
+            _npc.Save(this.ContentFile.FullName);
         }
 
         private void txtEditor_TextChanged(object sender, System.EventArgs e)
@@ -223,9 +211,6 @@ namespace Lunar.Editor.Controls
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             _npc.Name = txtName.Text;
-
-            this.DockText = _npc.Name + EngineConstants.NPC_FILE_EXT;
-            _unsavedDockText = _npc.Name + EngineConstants.NPC_FILE_EXT + "*";
 
             this.MarkUnsaved();
         }
@@ -401,7 +386,7 @@ namespace Lunar.Editor.Controls
             {
                 dialog.RestoreDirectory = true;
                 dialog.InitialDirectory = _project.ClientRootDirectory.FullName;
-                dialog.Filter = @"Tileset Files (*.png)|*.png";
+                dialog.Filter = @"Image Files (*.png)|*.png";
                 dialog.DefaultExt = ".png";
                 dialog.AddExtension = true;
                 dialog.Multiselect = true;
@@ -496,6 +481,15 @@ namespace Lunar.Editor.Controls
             _npc.AttackRange = newAttackRange;
         }
 
+        private void TxtAggressiveRange_TextChanged(object sender, EventArgs e)
+        {
+            this.MarkUnsaved();
+
+            int.TryParse(this.txtAggressiveRange.Text, out int newAggressiveRange);
+
+            _npc.AggresiveRange = newAggressiveRange;
+        }
+
         private void FillCustomVariableFields(string varName)
         {
             if (_npc.CustomVariables.ContainsKey(varName))
@@ -510,6 +504,7 @@ namespace Lunar.Editor.Controls
         {
             _npc.TexturePath = string.Empty;
             this.picCollisionPreview.Image = null;
+            this.picSpriteSheet.Image = null;
         }
 
         private void ButtonAddVariable_Click(object sender, EventArgs e)
@@ -576,10 +571,12 @@ namespace Lunar.Editor.Controls
             }
         }
 
-        private void CmbScript_SelectedIndexChanged(object sender, EventArgs e)
+        private void PicCollisionPreview_Click(object sender, EventArgs e)
         {
-            ((ScriptComboMenuOption)this.cmbScript.SelectedItem)?.Handler();
+
         }
+
+        
     }
 
     public class ScriptComboMenuOption
