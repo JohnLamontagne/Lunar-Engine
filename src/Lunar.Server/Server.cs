@@ -25,6 +25,7 @@ using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Server.Utilities.Commands;
 using Lunar.Server.Utilities.Events;
 using Lunar.Server.Utilities.Plugin;
+using System.Diagnostics;
 
 namespace Lunar.Server
 {
@@ -108,46 +109,27 @@ namespace Lunar.Server
 
         private void BeginServerLoop()
         {
+            
+
             _netThread = new Thread(() =>
             {
-                float millisecondsPerUpdate = 1000f / Settings.TickRate;
-                float nextUpdateTime = 0;
-                var gameTime = new GameTime();
-
-                gameTime.Start();
+                var gametime = new GameTime();
+                var serverWorldHeartbeat = new ServerHeartbeat(_netHandler.Update);
 
                 while (!Server.ShutDown)
                 {
-                    if (gameTime.TotalElapsedTime >= nextUpdateTime)
-                    {
-                        _netHandler.Update();
-
-                        nextUpdateTime = gameTime.TotalElapsedTime + millisecondsPerUpdate;
-
-                        gameTime.Update();
-                    }
+                    serverWorldHeartbeat.Update(gametime);
                 }
             });
 
             _worldThread = new Thread(() =>
             {
-                float millisecondsPerUpdate = 1000f / Settings.TickRate;
-                float nextUpdateTime = 0;
-                var gameTime = new GameTime();
-
-                gameTime.Start();
+                var gametime = new GameTime();
+                var serverWorldHeartbeat = new ServerHeartbeat(Server.ServiceLocator.Get<WorldManager>().Update);
 
                 while (!Server.ShutDown)
                 {
-                    if (gameTime.TotalElapsedTime >= nextUpdateTime)
-                    {
-                        Server.ServiceLocator.Get<WorldManager>().Update(gameTime);
-
-
-                        nextUpdateTime = gameTime.TotalElapsedTime + millisecondsPerUpdate;
-
-                        gameTime.Update();
-                    }
+                    serverWorldHeartbeat.Update(gametime);
                 }
 
                 // Save the game world

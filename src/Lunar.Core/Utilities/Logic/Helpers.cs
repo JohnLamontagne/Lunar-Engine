@@ -145,5 +145,10 @@ namespace Lunar.Core.Utilities.Logic
                        .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                        .ToUpperInvariant();
         }
+
+        public static Vector WorldToMapCoords(Vector worldCoords)
+        {
+            return worldCoords / EngineConstants.TILE_SIZE;
+        }
     }
 }

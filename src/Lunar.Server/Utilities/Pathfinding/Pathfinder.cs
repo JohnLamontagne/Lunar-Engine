@@ -80,7 +80,7 @@ namespace Lunar.Server.Utilities.Pathfinding
         /// <summary>
         /// Returns the node with the smallest distance to goal.
         /// </summary>
-        private SearchNode FindBestNode()
+        private SearchNode FindBestNode(CollisionBody collisionBody)
         {
             SearchNode currentTile = openList[0];
 
@@ -89,7 +89,7 @@ namespace Lunar.Server.Utilities.Pathfinding
             // Find the closest node to the goal.
             for (int i = 0; i < openList.Count; i++)
             {
-                if (openList[i].DistanceToGoal < smallestDistanceToGoal)
+                if (openList[i].DistanceToGoal < smallestDistanceToGoal && !collisionBody.Collides(openList[i].CollisionArea))
                 {
                     currentTile = openList[i];
                     smallestDistanceToGoal = currentTile.DistanceToGoal;
@@ -101,7 +101,7 @@ namespace Lunar.Server.Utilities.Pathfinding
         /// <summary>
         /// Finds the optimal path from one point to another.
         /// </summary>
-        public List<Vector> FindPath(Vector startPoint, Vector endPoint)
+        public List<Vector> FindPath(Vector startPoint, Vector endPoint, CollisionBody collisionBody)
         {
             Vector normStartPoint = new Vector((int)(startPoint.X / Settings.TileSize), (int)(startPoint.Y / Settings.TileSize));
             Vector normEndPoint = new Vector((int)(endPoint.X / Settings.TileSize), (int)(endPoint.Y / Settings.TileSize));
@@ -153,7 +153,7 @@ namespace Lunar.Server.Utilities.Pathfinding
                 // a) : Loop through the Open List and find the node that 
                 //      has the smallest F value.
                 /////////////////////////////////////////////////////////////////
-                SearchNode currentNode = FindBestNode();
+                SearchNode currentNode = FindBestNode(collisionBody);
 
                 /////////////////////////////////////////////////////////////////
                 // b) : If the Open List empty or no node can be found, 
@@ -283,6 +283,7 @@ namespace Lunar.Server.Utilities.Pathfinding
                                           closedList[i].Position.Y * Settings.TileSize));
             }
 
+            finalPath.Reverse();
             return finalPath;
         }
 
@@ -296,13 +297,8 @@ namespace Lunar.Server.Utilities.Pathfinding
                 {
                     var node = new SearchNode(new Vector(x, y))
                     {
-                        Walkable = true
+                        Walkable = !(_layer.CheckCollision(new Rect(x * Settings.TileSize, y * Settings.TileSize, Settings.TileSize, Settings.TileSize)))
                     };
-
-                    if (_layer.CheckCollision(new Vector(x * Settings.TileSize, y * Settings.TileSize), new Rect(0, 0, 32, 32)))
-                    {
-                        node.Walkable = false;
-                    }
 
                     _searchNodes[x, y] = node;
                 }

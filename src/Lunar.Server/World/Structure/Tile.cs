@@ -29,7 +29,7 @@ namespace Lunar.Server.World.Structure
     {
         private TileDescriptor _descriptor;
         private NPCHeartbeatListener _heartbeatListener;
-        private long _nextNPCSpawnTime;
+        private double _nextNPCSpawnTime;
         private Rect _collisionArea;
 
         public TileDescriptor Descriptor => _descriptor;
@@ -59,20 +59,17 @@ namespace Lunar.Server.World.Structure
             {
                 var attributeData = ((NPCSpawnAttributeData)this.Descriptor.AttributeData);
 
-                if (_nextNPCSpawnTime <= gameTime.TotalElapsedTime && _heartbeatListener.NPCs.Count < attributeData.MaxSpawns)
+                if (_nextNPCSpawnTime <= gameTime.TotalGameTime.TotalMilliseconds && _heartbeatListener.NPCs.Count < attributeData.MaxSpawns)
                 {
                     this.NPCSpawnerEvent?.Invoke(this, new NPCSpawnerEventArgs(attributeData.NPCID, attributeData.MaxSpawns, this.Descriptor.Position, _heartbeatListener));
 
-                    _nextNPCSpawnTime = gameTime.TotalElapsedTime + ((NPCSpawnAttributeData)this.Descriptor.AttributeData).RespawnTime * 1000;
+                    _nextNPCSpawnTime = gameTime.TotalGameTime.TotalMilliseconds + ((NPCSpawnAttributeData)this.Descriptor.AttributeData).RespawnTime * 1000;
                 }
             }
         }
 
-        public bool CheckCollision(Vector position, Rect collisionBounds)
+        public bool CheckCollision(Rect collisionArea)
         {
-            Rect collisionArea = new Rect((int)(position.X + collisionBounds.Left), (int)(position.Y + collisionBounds.Top),
-                collisionBounds.Width, collisionBounds.Height);
-
             return (_collisionArea.Intersects(collisionArea));
         }
 

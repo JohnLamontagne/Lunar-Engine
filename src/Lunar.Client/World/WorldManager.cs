@@ -168,7 +168,7 @@ namespace Lunar.Client.World
 
             _mapLoaded = true;
 
-            _camera.Bounds = new Rectangle(_map.Bounds.X * EngineConstants.TILE_WIDTH, _map.Bounds.Y * EngineConstants.TILE_HEIGHT, _map.Bounds.Width * EngineConstants.TILE_WIDTH, _map.Bounds.Height * EngineConstants.TILE_HEIGHT);
+            _camera.Bounds = new Rectangle(_map.Bounds.X * EngineConstants.TILE_SIZE, _map.Bounds.Y * EngineConstants.TILE_SIZE, _map.Bounds.Width * EngineConstants.TILE_SIZE, _map.Bounds.Height * EngineConstants.TILE_SIZE);
 
             this.EventOccured?.Invoke(this, new SubjectEventArgs("finishedLoadingMap", new object[] { _map }));
         }

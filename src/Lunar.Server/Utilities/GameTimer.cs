@@ -17,7 +17,7 @@ namespace Lunar.Server.Utilities
 {
     public class GameTimer
     {
-        private long _endTime;
+        private double _endTime;
         private bool _finished;
         private bool _reset;
         private long _duration;
@@ -90,10 +90,11 @@ namespace Lunar.Server.Utilities
         {
             if (_reset)
             {
-                _endTime = gameTime.TotalElapsedTime + _duration;
+                _endTime = gameTime.TotalGameTime.TotalMilliseconds + _duration;
                 _reset = false;
+                _finished = false;
             }
-            else if (gameTime.TotalElapsedTime > _endTime)
+            else if (gameTime.TotalGameTime.TotalMilliseconds > _endTime)
             {
                 _finished = true;
                 this.TimerFinished?.Invoke(this, new EventArgs());

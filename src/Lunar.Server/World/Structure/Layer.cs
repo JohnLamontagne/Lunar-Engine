@@ -33,18 +33,18 @@ namespace Lunar.Server.World.Structure
 
         private readonly Tile[,] _tiles;
 
-        private Dictionary<Vector, CollisionDescriptor> _collisionDescriptors;
+        private Dictionary<Vector, CollisionBody> _collisionDescriptors;
         private Dictionary<Player, List<Tile>> _playerCollidingTiles;
         private List<MapObject> _mapObjects;
 
-        public Dictionary<Vector, CollisionDescriptor> CollisionDescriptors { get { return _collisionDescriptors; } }
+        public Dictionary<Vector, CollisionBody> CollisionDescriptors { get { return _collisionDescriptors; } }
 
         public Layer(LayerDescriptor descriptor)
         {
             _layerDescriptor = descriptor;
             _tiles = new Tile[descriptor.Tiles.GetLength(0), descriptor.Tiles.GetLength(0)];
             _playerCollidingTiles = new Dictionary<Player, List<Tile>>(); ;
-            _collisionDescriptors = new Dictionary<Vector, CollisionDescriptor>();
+            _collisionDescriptors = new Dictionary<Vector, CollisionBody>();
             _mapObjects = new List<MapObject>();
 
             this.LoadData();
@@ -63,13 +63,13 @@ namespace Lunar.Server.World.Structure
                     }
                     else
                     {
-                        _tiles[x, y] = new Tile(new Vector(x * EngineConstants.TILE_WIDTH, y * EngineConstants.TILE_HEIGHT));
+                        _tiles[x, y] = new Tile(new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE));
                     }
                 }
             }
         }
 
-        public CollisionDescriptor GetCollisionDescriptor(Vector position)
+        public CollisionBody GetCollisionDescriptor(Vector position)
         {
             if (_collisionDescriptors.Keys.Contains(position))
                 return _collisionDescriptors[position];
@@ -77,7 +77,7 @@ namespace Lunar.Server.World.Structure
                 return null;
         }
 
-        public CollisionDescriptor GetCollisionDescriptor(int x, int y)
+        public CollisionBody GetCollisionDescriptor(int x, int y)
         {
             return this.GetCollisionDescriptor(new Vector(x, y));
         }
@@ -93,7 +93,7 @@ namespace Lunar.Server.World.Structure
             this.RemoveCollisionDescriptor(new Vector(x, y));
         }
 
-        public void AddCollisionDescriptor(Vector position, CollisionDescriptor descriptor)
+        public void AddCollisionDescriptor(Vector position, CollisionBody descriptor)
         {
             _collisionDescriptors.Add(position, descriptor);
         }
@@ -189,6 +189,14 @@ namespace Lunar.Server.World.Structure
             return _tiles;
         }
 
+        public Tile GetTile(Vector position)
+        {
+            if (position.X >= _tiles.GetLength(0) || position.X < 0 || position.Y >= _tiles.GetLength(1) || position.Y < 0)
+                return null;
+
+            return _tiles[(int)position.X, (int)position.Y];
+        }
+
         public Tile GetTile(int x, int y)
         {
             if (x >= _tiles.GetLength(0) || x < 0 || y >= _tiles.GetLength(1) || y < 0)
@@ -207,34 +215,29 @@ namespace Lunar.Server.World.Structure
 
         public List<Tile> GetCollidingTiles(IActor<IActorDescriptor> actor)
         {
-            return this.GetCollidingTiles(actor.Descriptor.Position, actor.Descriptor.CollisionBounds);
+            return this.GetCollidingTiles(actor.CollisionBody.CollisionArea);
         }
 
-        public List<Tile> GetCollidingTiles(Vector position, Rect collisionBounds)
+        public List<Tile> GetCollidingTiles(Rect collisionArea)
         {
             List<Tile> collidingTiles = new List<Tile>();
 
-            int leftCheck = (int)(position.X + collisionBounds.Left) / Settings.TileSize;
-            int topCheck = (int)(position.Y + collisionBounds.Top) / Settings.TileSize;
-            int tilesWidth = ((collisionBounds.Left + collisionBounds.Width) / Settings.TileSize) + 1;
-            int tilesHeight = ((collisionBounds.Top + collisionBounds.Height) / Settings.TileSize) + 1;
+            int leftCheck = collisionArea.Left / Settings.TileSize;
+            int topCheck =  collisionArea.Top / Settings.TileSize;
+            int tilesWidth = (((collisionArea.Left + collisionArea.Width) / Settings.TileSize) + 1) - leftCheck;
+            int tilesHeight = (((collisionArea.Top + collisionArea.Height) / Settings.TileSize) + 1) - topCheck;
 
-            if (tilesWidth < 1)
-                tilesWidth = 1;
-
-            if (tilesHeight < 1)
-                tilesHeight = 1;
 
             for (int x = 0; x < tilesWidth; x++)
             {
-                if (this.GetTile(leftCheck + x, topCheck) != null && this.GetTile(leftCheck + x, topCheck).CheckCollision(position, collisionBounds))
+                if (this.GetTile(leftCheck + x, topCheck) != null && this.GetTile(leftCheck + x, topCheck).CheckCollision(collisionArea))
                 {
                     collidingTiles.Add(this.GetTile(leftCheck + x, topCheck));
                 }
               
                 for (int y = 0; y < tilesHeight; y++)
                 {
-                    if (this.GetTile(leftCheck + x, topCheck + y) != null && this.GetTile(leftCheck + x, topCheck + y).CheckCollision(position, collisionBounds))
+                    if (this.GetTile(leftCheck + x, topCheck + y) != null && this.GetTile(leftCheck + x, topCheck + y).CheckCollision(collisionArea))
                     {
                         collidingTiles.Add(this.GetTile(leftCheck + x, topCheck + y));
                     }
@@ -244,14 +247,10 @@ namespace Lunar.Server.World.Structure
             return collidingTiles; // Returns the resultant list with null tiles removed
         }
 
-        public bool CheckCollision(Vector position, Rect collisionBounds)
+        public bool CheckCollision(Rect collisionArea)
         {
-
-            Rect collisionArea = new Rect((int)(position.X + collisionBounds.Left), (int)(position.Y + collisionBounds.Top),
-                collisionBounds.Width, collisionBounds.Height);
-
             if (collisionArea.Left < 0 || collisionArea.Top < 0 ||
-                collisionArea.Left + collisionArea.Width >= (_tiles.GetLength(0) * EngineConstants.TILE_WIDTH) || collisionArea.Top + collisionArea.Height >= (_tiles.GetLength(1) * EngineConstants.TILE_HEIGHT))
+                collisionArea.Left + collisionArea.Width >= (_tiles.GetLength(0) * Settings.TileSize) || collisionArea.Top + collisionArea.Height >= (_tiles.GetLength(1) * Settings.TileSize))
                 return true;
 
             foreach (var collisionDescriptor in _collisionDescriptors.Values)
@@ -262,7 +261,7 @@ namespace Lunar.Server.World.Structure
                 }
             }
 
-            var collidingTiles = this.GetCollidingTiles(position, collisionBounds);
+            var collidingTiles = this.GetCollidingTiles(collisionArea);
 
             foreach (var collidingTile in collidingTiles)
             {

@@ -108,27 +108,27 @@ namespace Lunar.Editor.Controls
             if (mouseX < _selectPosition.X)
             {
                 left = mouseX;
-                width = (int)Math.Abs((((mouseX / EngineConstants.TILE_WIDTH)) * EngineConstants.TILE_WIDTH) -
+                width = (int)Math.Abs((((mouseX / EngineConstants.TILE_SIZE)) * EngineConstants.TILE_SIZE) -
                                       _selectPosition.X);
             }
             else
             {
-                width = (int)Math.Abs((((mouseX / EngineConstants.TILE_WIDTH) + 1) * EngineConstants.TILE_WIDTH) -
+                width = (int)Math.Abs((((mouseX / EngineConstants.TILE_SIZE) + 1) * EngineConstants.TILE_SIZE) -
                                       _selectPosition.X);
             }
-            width = width < EngineConstants.TILE_WIDTH ? EngineConstants.TILE_WIDTH : width;
+            width = width < EngineConstants.TILE_SIZE ? EngineConstants.TILE_SIZE : width;
 
             int height = 0;
             if (mouseY < _selectPosition.Y)
             {
                 top = mouseY;
-                height = (int)Math.Abs((((mouseY / EngineConstants.TILE_HEIGHT)) * EngineConstants.TILE_HEIGHT) - _selectPosition.Y);
+                height = (int)Math.Abs((((mouseY / EngineConstants.TILE_SIZE)) * EngineConstants.TILE_SIZE) - _selectPosition.Y);
             }
             else
             {
-                height = (int)Math.Abs((((mouseY / EngineConstants.TILE_HEIGHT) + 1) * EngineConstants.TILE_HEIGHT) - _selectPosition.Y);
+                height = (int)Math.Abs((((mouseY / EngineConstants.TILE_SIZE) + 1) * EngineConstants.TILE_SIZE) - _selectPosition.Y);
             }
-            height = height < EngineConstants.TILE_HEIGHT ? EngineConstants.TILE_HEIGHT : height;
+            height = height < EngineConstants.TILE_SIZE ? EngineConstants.TILE_SIZE : height;
 
             _selectRectangle = new Rectangle(left, top, width, height);
             _tilesetDragging = false;
@@ -137,9 +137,9 @@ namespace Lunar.Editor.Controls
 
         private void tilesetView_MouseDown(object sender, MouseEventArgs e)
         {
-            _selectPosition = new Vector2((e.X / EngineConstants.TILE_WIDTH) * EngineConstants.TILE_WIDTH, (e.Y / EngineConstants.TILE_HEIGHT) * EngineConstants.TILE_HEIGHT);
-            _selectPosition = new Vector2(_selectPosition.X + ((int)_camera.Position.X / EngineConstants.TILE_WIDTH) * EngineConstants.TILE_WIDTH, _selectPosition.Y + ((int)_camera.Position.Y / EngineConstants.TILE_HEIGHT) * EngineConstants.TILE_HEIGHT);
-            _selectRectangle = new Rectangle((int)_selectPosition.X, (int)_selectPosition.Y, EngineConstants.TILE_WIDTH, EngineConstants.TILE_HEIGHT);
+            _selectPosition = new Vector2((e.X / EngineConstants.TILE_SIZE) * EngineConstants.TILE_SIZE, (e.Y / EngineConstants.TILE_SIZE) * EngineConstants.TILE_SIZE);
+            _selectPosition = new Vector2(_selectPosition.X + ((int)_camera.Position.X / EngineConstants.TILE_SIZE) * EngineConstants.TILE_SIZE, _selectPosition.Y + ((int)_camera.Position.Y / EngineConstants.TILE_SIZE) * EngineConstants.TILE_SIZE);
+            _selectRectangle = new Rectangle((int)_selectPosition.X, (int)_selectPosition.Y, EngineConstants.TILE_SIZE, EngineConstants.TILE_SIZE);
             _tilesetDragging = true;
         }
 

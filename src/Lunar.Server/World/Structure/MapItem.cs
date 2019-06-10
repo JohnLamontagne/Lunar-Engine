@@ -19,7 +19,7 @@ namespace Lunar.Server.World.Structure
     public class MapItem
     {
         private readonly Item _item;
-        private CollisionDescriptor _collisionDescriptor;
+        private CollisionBody _collisionDescriptor;
         private Vector _position;
         private Layer _layer;
 
@@ -37,7 +37,7 @@ namespace Lunar.Server.World.Structure
             {
                 _position = value;
 
-                _collisionDescriptor = new CollisionDescriptor(new Rect((int)_position.X, (int)_position.Y, Constants.MAP_ITEM_WIDTH, Constants.MAP_ITEM_HEIGHT));
+                _collisionDescriptor = new CollisionBody(new Rect((int)_position.X, (int)_position.Y, Constants.MAP_ITEM_WIDTH, Constants.MAP_ITEM_HEIGHT));
             }
         }
 

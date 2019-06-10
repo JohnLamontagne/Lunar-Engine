@@ -33,6 +33,8 @@ namespace Lunar.Server.World.Actors
 
         ActorBehaviorDefinition Behavior { get; }
 
+        CollisionBody CollisionBody { get; }
+
         IActor<IActorDescriptor> Target { get; set; }
 
         void Update(GameTime gameTime);

@@ -97,7 +97,7 @@ namespace Lunar.Client.World
                collisionBounds.Width, collisionBounds.Height);
 
             if (collisionArea.Left < 0 || collisionArea.Top < 0 ||
-                collisionArea.Left + collisionArea.Width >= (_tiles.GetLength(0) * EngineConstants.TILE_WIDTH) || collisionArea.Top + collisionArea.Height >= (_tiles.GetLength(1) * EngineConstants.TILE_HEIGHT))
+                collisionArea.Left + collisionArea.Width >= (_tiles.GetLength(0) * EngineConstants.TILE_SIZE) || collisionArea.Top + collisionArea.Height >= (_tiles.GetLength(1) * EngineConstants.TILE_SIZE))
                 return true;
 
 

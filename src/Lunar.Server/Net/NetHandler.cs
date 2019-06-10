@@ -14,6 +14,7 @@ using Lidgren.Network;
 using System;
 using System.Collections.Generic;
 using Lunar.Core.Net;
+using Lunar.Server.Utilities;
 
 namespace Lunar.Server.Net
 {
@@ -47,7 +48,7 @@ namespace Lunar.Server.Net
             _netServer = new NetServer(config);
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             NetIncomingMessage message;
             while ((message = _netServer.ReadMessage()) != null)

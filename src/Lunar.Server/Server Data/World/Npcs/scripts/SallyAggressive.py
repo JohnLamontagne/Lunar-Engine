@@ -15,6 +15,7 @@ class CombatNPCState(IActorState[NPC]):
         return
 
     def OnEnter(self, npc):
+        print("In combat with " + str(npc.Target))
         nextAttackTimer = GameTimer(2000)
         npc.GameTimers.Register('nextAttackTimer', nextAttackTimer)
 
@@ -22,7 +23,7 @@ class CombatNPCState(IActorState[NPC]):
         return
 
     def Update(self, gameTime, npc):
-        if not npc.Target or not npc.Aggrevated or not npc.Target.Attackable:
+        if not npc.HasTarget() or not npc.Target.Attackable:
             return IdleState()
 
         if npc.GameTimers.Get('nextAttackTimer').Finished:
@@ -30,8 +31,11 @@ class CombatNPCState(IActorState[NPC]):
                 npc.Behavior.Attack(npc, npc.Target)
                 npc.GameTimers.Get('nextAttackTimer').Reset()
             else:
-                npc.GoTo(npc.Target)
-                return MovingState(self)
+                if (npc.GoTo(npc.Target)):
+                    return MovingState(self)
+                else:
+                    print("Lost target")
+                    return IdleState()
 
         return self
 
@@ -51,7 +55,6 @@ class IdleState(IActorState[NPC]):
         
         if target:
             npc.Target = target
-            npc.Aggrevated = True
             return CombatNPCState()
         elif npc.GameTimers.Get('randomWalkTmr').Finished:
             return WanderState()
@@ -77,8 +80,6 @@ class MovingState(IActorState[NPC]):
             target = npc.FindPlayerTarget()
             if target:
                 npc.Target = target
-                npc.Aggrevated = True
-                print("combat")
                 return CombatNPCState()
             else:
                 return self
@@ -98,15 +99,14 @@ class WanderState(IActorState[NPC]):
         if npc.GameTimers.Get('randomWalkTmr').Finished:
             npc.GameTimers.Get('randomWalkTmr').Reset()
             direction = (-1 if random.random() < .5 else 1)
-            randomX = random.random() * (npc.Descriptor.MaxRoam.X * EngineConstants.TILE_WIDTH) * direction
-            randomY = random.random() * (npc.Descriptor.MaxRoam.Y * EngineConstants.TILE_HEIGHT) * direction
-            dest = Vector(randomX, randomY)
+            randomX = random.random() * (npc.Descriptor.MaxRoam.X * EngineConstants.TILE_SIZE) * direction
+            randomY = random.random() * (npc.Descriptor.MaxRoam.Y * EngineConstants.TILE_SIZE) * direction
+            dest = npc.Descriptor.Position + Vector(randomX, randomY)
             print("Moving to " + str(dest))
             npc.GoTo(dest)
             return MovingState(self)  # will return to this state when it is finished
         else:
-            print("returning to idle")
-            return IdleState(npc)
+            return IdleState()
 
 
 class AggressiveNPCBehaviorDefinition(ActorBehaviorDefinition):

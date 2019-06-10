@@ -119,8 +119,8 @@ namespace Lunar.Client.World
                     PointLight pointLight = new PointLight();
                     pointLight.Color = lightColor;
                     pointLight.Radius = lightRadius;
-                    pointLight.Position = new Vector2(position.X - (lightRadius / 2f) + (EngineConstants.TILE_WIDTH / 2f),
-                        position.Y - (lightRadius / 2f) + (EngineConstants.TILE_HEIGHT / 2f));
+                    pointLight.Position = new Vector2(position.X - (lightRadius / 2f) + (EngineConstants.TILE_SIZE / 2f),
+                        position.Y - (lightRadius / 2f) + (EngineConstants.TILE_SIZE / 2f));
                     Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Add(pointLight);
                 }
 

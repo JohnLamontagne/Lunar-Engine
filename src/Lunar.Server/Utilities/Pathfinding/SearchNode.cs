@@ -48,11 +48,14 @@ namespace Lunar.Server.Utilities.Pathfinding
 
         public Vector Position { get; private set; }
 
+        public Rect CollisionArea { get; }
+
         public bool Walkable { get; set; }
 
         public SearchNode(Vector position)
         {
             this.Position = position;
+            this.CollisionArea = new Rect(this.Position.X * Settings.TileSize, this.Position.Y * Settings.TileSize, Settings.TileSize, Settings.TileSize);
         }
 
         public void SetNeighbors(SearchNode[] neighbors)

@@ -16,32 +16,45 @@ using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.World.Structure
 {
-    public class CollisionDescriptor
+    public class CollisionBody
     {
         private Rect _collisionArea;
+        private IActor<IActorDescriptor> _actor;
 
         public Rect CollisionArea
         {
-            get => _collisionArea;
-            set => _collisionArea = value;
+            get
+            {
+                if (_actor?.Descriptor?.CollisionBounds != null)
+                {
+                    return new Rect(_actor.Descriptor.Position.X + _actor.Descriptor.CollisionBounds.Left, _actor.Descriptor.Position.Y + _actor.Descriptor.CollisionBounds.Top,
+                        _actor.Descriptor.CollisionBounds.Width, _actor.Descriptor.CollisionBounds.Height);
+                }
+                else
+                {
+                    return _collisionArea;
+                }
+            }
         }
 
-        public CollisionDescriptor(Rect collisionArea)
+        public CollisionBody(Rect collisionArea)
         {
             _collisionArea = collisionArea;
         }
 
+        public CollisionBody(IActor<IActorDescriptor> actor)
+        {
+            _actor = actor;
+        }
+
         public bool Collides(IActor<IActorDescriptor> actor)
         {
-            Rect collisionArea = new Rect((int)(actor.Descriptor.Position.X + actor.Descriptor.CollisionBounds.Left), (int)(actor.Descriptor.Position.Y + actor.Descriptor.CollisionBounds.Top),
-                (actor.Descriptor.Position.X + actor.Descriptor.CollisionBounds.Left) + actor.Descriptor.CollisionBounds.Width, (actor.Descriptor.Position.Y + actor.Descriptor.CollisionBounds.Top) + actor.Descriptor.CollisionBounds.Height);
-
-            return (_collisionArea.Intersects(collisionArea));
+            return (this.CollisionArea.Intersects(actor.CollisionBody.CollisionArea));
         }
 
         public bool Collides(Rect area)
         {
-            return (_collisionArea.Intersects(area));
+            return (this.CollisionArea.Intersects(area));
         }
     }
 }

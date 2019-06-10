@@ -40,7 +40,7 @@ namespace Lunar.Server.World.Structure
 
             foreach (var player in this.InteractingEntities.OfType<Player>())
             {
-                if (this.Cooldowns[player] <= gameTime.TotalElapsedTime)
+                if (this.Cooldowns[player] <= gameTime.TotalGameTime.TotalMilliseconds)
                 {
                     // Process special tile functionality.
 
@@ -52,11 +52,11 @@ namespace Lunar.Server.World.Structure
                     playSoundPacket.Message.Write(100f);
                     player.NetworkComponent.SendPacket(playSoundPacket, NetDeliveryMethod.ReliableOrdered);
 
-                    this.Cooldowns[player] = gameTime.TotalElapsedTime + this.EffectCooldown;
+                    this.Cooldowns[player] = gameTime.TotalGameTime.TotalMilliseconds + this.EffectCooldown;
                 }
                 else if (this.Cooldowns[player] <= 0)
                 {
-                    this.Cooldowns[player] = gameTime.TotalElapsedTime + this.EffectCooldown;
+                    this.Cooldowns[player] = gameTime.TotalGameTime.TotalMilliseconds + this.EffectCooldown;
                 }
             }
         }

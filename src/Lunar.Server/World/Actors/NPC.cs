@@ -33,13 +33,14 @@ namespace Lunar.Server.World.Actors
     public sealed class NPC : IActor<NPCDefinition>
     {
         private Map _map;
-        private List<Vector> _targetPath;
-        private long _nextAttackTime;
+        private Stack<Vector> _targetPath;
         private Random _random;
         private long _nextMoveTime;
         private NPCDefinition _definition;
 
-        private int _health;
+        private float _avgMoveSpeedX = 0;
+        private float _avgMoveSpeedY = 0;
+
         public SpriteInfo Sprite { get; set; }
 
         public NPCDefinition Descriptor => _definition;
@@ -51,8 +52,6 @@ namespace Lunar.Server.World.Actors
 
 
         public Direction Direction { get; set; }
-
-        public bool Aggrevated { get; set; }
 
         public bool Moving { get; private set; }
 
@@ -72,6 +71,8 @@ namespace Lunar.Server.World.Actors
 
         public GameTimerManager GameTimers { get; }
 
+        public CollisionBody CollisionBody { get; }
+
 
         public NPC(NPCDefinition definition, Map map)
         {
@@ -84,6 +85,8 @@ namespace Lunar.Server.World.Actors
             this.GameTimers = new GameTimerManager();
             this.StateMachine = new ActorStateMachine<NPC>(this);
 
+            this.CollisionBody = new CollisionBody(this);
+
             _map = map;
             _definition = definition;
 
@@ -93,7 +96,7 @@ namespace Lunar.Server.World.Actors
             _random = new Random();
 
             this.UniqueID = Guid.NewGuid().GetHashCode();
-            _targetPath = new List<Vector>();
+            _targetPath = new Stack<Vector>();
 
             _map.AddActor(this);
 
@@ -146,44 +149,44 @@ namespace Lunar.Server.World.Actors
             return (this.Target != null);
         }
 
-        public void GoTo(Vector targetDest)
+        public bool GoTo(Vector targetDest)
         {
-            _targetPath = this.Map.GetPathfinder(this.Layer).FindPath(this.Descriptor.Position, targetDest);
-            _targetPath.Reverse();
+            var rawPath = this.Map.GetPathfinder(this.Layer).FindPath(this.Descriptor.Position, targetDest, this.CollisionBody);
+            _targetPath = new Stack<Vector>(rawPath);
 
             if (_targetPath.Count > 0)
             {
                 this.Moving = true;
-                this.SendMovementPacket(_targetPath);
+                Console.WriteLine(rawPath[0]);
+                this.SendMovementPacket(rawPath);
+                return true;
             }
+
+            // Return false if we were not able to find a valid path to the target.
+            return false;
         }
 
-        public void GoTo(IActor<IActorDescriptor> target)
+        public bool GoTo(IActor<IActorDescriptor> target)
         {
             float targetX = target.Descriptor.Position.X;
             float targetY = target.Descriptor.Position.Y;
 
-            if (targetX < this.Descriptor.Position.X)
+            // Don't mother moving if we're within range of the target
+            if (!this.WithinAttackingRangeOf(target))
             {
-                targetX -= this.Descriptor.CollisionBounds.Width;
-            }
-            else
-            {
-                targetX += this.Descriptor.CollisionBounds.Width;
-            }
+                var foundPath = this.GoTo(new Vector(targetX, targetY));
 
-            if (targetY < this.Descriptor.Position.Y)
-            {
-                targetY -= this.Descriptor.CollisionBounds.Height;
-            }
-            else
-            {
-                targetY += this.Descriptor.CollisionBounds.Height;
-            }
+                if (!foundPath)
+                {
+                    this.Target = null;
+                }
 
-            // Don't mother moving if we're not within range of the target
-            if (!this.WithinRangeOf(target))
-                this.GoTo(new Vector(targetX, targetY));
+                return foundPath;
+            }
+            else if (!this.WithinRangeOf(target, this.Descriptor.AggresiveRange)) // Clear the target if it is no longer within range.
+                this.Target = null;
+
+            return false;
         }
 
         /// <summary>
@@ -191,34 +194,28 @@ namespace Lunar.Server.World.Actors
         /// </summary>
         /// <param name="actor"></param>
         /// <returns></returns>
-        public bool WithinRangeOf(IActor<IActorDescriptor> actor)
+        public bool WithinRangeOf(IActor<IActorDescriptor> actor, int range)
         {
-            // We consider within range to be either 1 tile to the right or left of the player. This of course will correspond to whatever tile size is set within the engine.
-            Rect collisionBoundsRight = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left + Settings.TileSize, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
-                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
 
-            Rect collisionBoundsLeft = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left - Settings.TileSize, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
-                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+            Rect collisionBoundsRight = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top,
+                this.CollisionBody.CollisionArea.Width + range, this.CollisionBody.CollisionArea.Height + range);
 
-            return (collisionBoundsRight.Intersects(actor.Descriptor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.Descriptor.CollisionBounds));
+            Rect collisionBoundsLeft = new Rect(this.CollisionBody.CollisionArea.Left - range, this.CollisionBody.CollisionArea.Top - range,
+                this.CollisionBody.CollisionArea.Width, this.CollisionBody.CollisionArea.Height);
+
+            return (actor.CollisionBody.Collides(collisionBoundsRight) || actor.CollisionBody.Collides(collisionBoundsLeft));
         }
 
         public bool WithinAttackingRangeOf(IActor<IActorDescriptor> actor)
         {
-            Rect collisionBoundsRight = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left + this.Descriptor.AttackRange, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
-                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
-
-            Rect collisionBoundsLeft = new Rect(this.Descriptor.Position.X + this.Descriptor.CollisionBounds.Left - +this.Descriptor.AttackRange, this.Descriptor.Position.Y + this.Descriptor.CollisionBounds.Top,
-                this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
-
-            return (collisionBoundsRight.Intersects(actor.Descriptor.CollisionBounds) || collisionBoundsLeft.Intersects(actor.Descriptor.CollisionBounds));
+            return this.WithinRangeOf(actor, this.Descriptor.AggresiveRange);
         }
 
         private void ProcessMovement(GameTime gameTime)
         {
             if (_targetPath.Count > 0)
             {
-                var targetDest = _targetPath[_targetPath.Count - 1];
+                var targetDest = _targetPath.Peek();
 
                 if (targetDest.X < this.Descriptor.Position.X)
                 {
@@ -229,12 +226,7 @@ namespace Lunar.Server.World.Actors
 
                         this.Descriptor.Position = new Vector(targetDest.X, this.Descriptor.Position.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-
+                        _targetPath.Pop();
                     }
                 }
                 else if (targetDest.X > this.Descriptor.Position.X)
@@ -245,12 +237,7 @@ namespace Lunar.Server.World.Actors
                     {
                         this.Descriptor.Position = new Vector(targetDest.X, this.Descriptor.Position.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-
+                        _targetPath.Pop();
                     }
                 }
                 else if (targetDest.Y < this.Descriptor.Position.Y)
@@ -261,12 +248,7 @@ namespace Lunar.Server.World.Actors
                     {
                         this.Descriptor.Position = new Vector(this.Descriptor.Position.X, targetDest.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-
+                        _targetPath.Pop();
                     }
                 }
                 else if (targetDest.Y > this.Descriptor.Position.Y)
@@ -277,21 +259,12 @@ namespace Lunar.Server.World.Actors
                     {
                         this.Descriptor.Position = new Vector(this.Descriptor.Position.X, targetDest.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-
+                        _targetPath.Pop();
                     }
                 }
                 else
                 {
-                    // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                    // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                    // if it encounters a blocked tile in its way.
-                    if (_targetPath.Count > 0)
-                        _targetPath.RemoveAt(_targetPath.Count - 1);
+                    _targetPath.Pop();
                 }
             }
             else
@@ -301,11 +274,40 @@ namespace Lunar.Server.World.Actors
                 {
                     this.Moving = false;
                     Console.WriteLine("Finished moving. Now at " + this.Descriptor.Position.ToString());
-                    _nextMoveTime = gameTime.TotalElapsedTime + Settings.NPCRestPeriod;
+                    Console.WriteLine("Avg Update: " + new Vector(_avgMoveSpeedX, _avgMoveSpeedY).ToString());
+                    _nextMoveTime = (long)gameTime.TotalGameTime.TotalMilliseconds + Settings.NPCRestPeriod;
                     this.Moving = false;
                     this.SendMovementPacket();
+
+                    _avgMoveSpeedX = 0;
+                    _avgMoveSpeedY = 0;
                 }
             }
+        }
+        private bool CanMove(float delta)
+        {
+            Rect destCollisionArea;
+
+            switch (this.Direction)
+            {
+                case Direction.Right:
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left + delta, this.CollisionBody.CollisionArea.Top, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    break;
+
+                case Direction.Left:
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left - delta, this.CollisionBody.CollisionArea.Top, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    break;
+
+                case Direction.Up:
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top - delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    break;
+
+                case Direction.Down:
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top + delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    break;
+            }
+
+            return !(this.Layer.CheckCollision(destCollisionArea));
         }
 
         private void UpdateMovement(Direction direction, GameTime gameTime)
@@ -313,27 +315,45 @@ namespace Lunar.Server.World.Actors
             this.Direction = direction;
             
             float dX = 0, dY = 0;
+            float delta = this.Descriptor.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            switch (this.Direction)
+            if (this.CanMove(delta))
             {
-                case Direction.Right:
-                    dX = this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
-                    break;
+                switch (this.Direction)
+                {
+                    case Direction.Right:
+                        dX = delta;
+                        break;
 
-                case Direction.Left:
-                    dX = -this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
-                    break;
+                    case Direction.Left:
+                        dX = -delta;
+                        break;
 
-                case Direction.Up:
-                    dY = -this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
-                    break;
+                    case Direction.Up:
+                        dY = -delta;
+                        break;
 
-                case Direction.Down:
-                    dY = this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
-                    break;
+                    case Direction.Down:
+                        dY = delta;
+                        break;
+                }
+
+                if (_avgMoveSpeedX == 0)
+                    _avgMoveSpeedX = dX;
+                else
+                    _avgMoveSpeedX = (_avgMoveSpeedX + dX) / 2;
+
+                if (_avgMoveSpeedY == 0)
+                    _avgMoveSpeedY = dY;
+                else
+                    _avgMoveSpeedY = (_avgMoveSpeedY + dY) / 2;
+
+                this.Descriptor.Position = new Vector(this.Descriptor.Position.X + dX, this.Descriptor.Position.Y + dY);
             }
-
-            this.Descriptor.Position = new Vector(this.Descriptor.Position.X + dX, this.Descriptor.Position.Y + dY);
+            else
+            {
+                this.Descriptor.Position = _targetPath.Peek();
+            }
         }
 
         public T FindTarget<T>() where T : IActor<IActorDescriptor>

@@ -23,6 +23,8 @@ using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Graphics;
 using Lunar.Graphics.Effects;
+using System;
+using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Client.World.Actors
 {
@@ -36,15 +38,15 @@ namespace Lunar.Client.World.Actors
         private Vector2 _position;
         private SpriteSheet _spriteSheet;
         private long _uniqueID;
-        private List<Vector2> _targetPath;
+        private Stack<Vector2> _targetPath;
         private bool _moving;
         private Direction _direction;
         private double _nextUpdateSpritesheetTime;
         private Layer _layer;
         private Vector2 _frameSize;
         private Rectangle _collisionBounds;
-
-        private bool _resetTmr;
+        private double _avgMoveSpeedX;
+        private double _avgMoveSpeedY;
 
         public string Name => _name;
 
@@ -134,9 +136,19 @@ namespace Lunar.Client.World.Actors
 
                 // Update NPC to final position dictated by server.
                 this.Direction = (Direction)args.Message.ReadInt32();
+
+                Console.WriteLine("Our final pos: " + this.Position.ToString());
+
+                Console.WriteLine("Avg Update: " + new Vector((float)_avgMoveSpeedX, (float)_avgMoveSpeedY).ToString());
+
                 this.Position = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
 
+                Console.WriteLine("Server final pos: " + this.Position.ToString());
+
                 this.SpriteSheet.HorizontalFrameIndex = (int)this.Direction;
+
+                _avgMoveSpeedX = 0;
+                _avgMoveSpeedY = 0;
 
                 return;
             }
@@ -146,11 +158,11 @@ namespace Lunar.Client.World.Actors
 
             int pathCount = args.Message.ReadInt32();
 
-            _targetPath = new List<Vector2>();
+            _targetPath = new Stack<Vector2>();
 
             for(int i = 0; i < pathCount; i++)
             {
-                _targetPath.Add(new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat()));
+                _targetPath.Push(new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat()));
             }
         }
 
@@ -168,11 +180,7 @@ namespace Lunar.Client.World.Actors
         {
             if (_targetPath != null && _targetPath.Count > 0)
             {
-                if (_resetTmr)
-                {
-                }
-
-                var targetDest = _targetPath[_targetPath.Count - 1];
+                var targetDest = _targetPath.Peek();
 
                 if (targetDest.X < this.Position.X)
                 {
@@ -182,15 +190,10 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(targetDest.X, this.Position.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-                        
+                        _targetPath.Pop();
                     }
                 }
-                else if (_targetPath[_targetPath.Count - 1].X > this.Position.X)
+                else if (targetDest.X > this.Position.X)
                 {
                     this.Move(Direction.Right, gameTime);
 
@@ -198,15 +201,11 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(targetDest.X, this.Position.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-                        
+                        _targetPath.Pop();
+
                     }
                 }
-                else if (_targetPath[_targetPath.Count - 1].Y < this.Position.Y)
+                else if (targetDest.Y < this.Position.Y)
                 {
                     this.Move(Direction.Up, gameTime);
 
@@ -214,15 +213,11 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(this.Position.X, targetDest.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-                        
+                        _targetPath.Pop();
+
                     }
                 }
-                else if (_targetPath[_targetPath.Count - 1].Y > this.Position.Y)
+                else if (targetDest.Y > this.Position.Y)
                 {
                     this.Move(Direction.Down, gameTime);
 
@@ -230,12 +225,8 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(this.Position.X, targetDest.Y);
 
-                        // Check to make sure that our target path wasn't cleared due to a blocked path whilst moving.
-                        // The reason that we have to check for this AGAIN is due to the fact that the method Move can clear the target path
-                        // if it encounters a blocked tile in its way.
-                        if (_targetPath.Count > 0)
-                            _targetPath.RemoveAt(_targetPath.Count - 1);
-                        
+                        _targetPath.Pop();
+
                     }
                 }
             }
@@ -245,24 +236,24 @@ namespace Lunar.Client.World.Actors
         {
             this.Direction = direction;
 
-            float dX = 0, dY = 0;
+            double dX = 0, dY = 0;
 
             switch (this.Direction)
             {
                 case Direction.Right:
-                    dX = this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                    dX = this.Speed * gameTime.ElapsedGameTime.TotalMilliseconds;
                     break;
 
                 case Direction.Left:
-                    dX = -this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                    dX = -this.Speed * gameTime.ElapsedGameTime.TotalMilliseconds;
                     break;
 
                 case Direction.Up:
-                    dY = -this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                    dY = -this.Speed * gameTime.ElapsedGameTime.TotalMilliseconds;
                     break;
 
                 case Direction.Down:
-                    dY = this.Speed * gameTime.ElapsedGameTime.Milliseconds;
+                    dY = this.Speed * gameTime.ElapsedGameTime.TotalMilliseconds;
                     break;
             }
 
@@ -274,7 +265,28 @@ namespace Lunar.Client.World.Actors
                 _nextUpdateSpritesheetTime = (long)gameTime.TotalGameTime.TotalMilliseconds + (long)((_frameSize.Y / this.Speed) / (this.SpriteSheet.Sprite.Texture.Width / _frameSize.X));
             }
 
-            this.Position = new Vector2(this.Position.X + dX, this.Position.Y + dY);
+            if (_avgMoveSpeedX == 0)
+                _avgMoveSpeedX = dX;
+            else
+                _avgMoveSpeedX = (_avgMoveSpeedX + dX) / 2;
+
+            if (_avgMoveSpeedY == 0)
+                _avgMoveSpeedY = dY;
+            else
+                _avgMoveSpeedY = (_avgMoveSpeedY + dY) / 2;
+
+            var newPosition = new Vector2(this.Position.X + (float)dX, this.Position.Y + (float)dY);
+
+            if (!this.Layer.CheckCollision(newPosition, this.CollisionBounds))
+            {
+                this.Position = new Vector2(this.Position.X + (float)dX, this.Position.Y + (float)dY);
+            }
+            else
+            {
+                this.Position = _targetPath.Peek();
+            }
+
+            
         }
 
         public void Unpack(NetBuffer buffer, ContentManager contentManager)

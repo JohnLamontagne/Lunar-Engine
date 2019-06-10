@@ -104,6 +104,8 @@ namespace Lunar.Server.World.Actors
 
         public ActorBehaviorDefinition Behavior { get; }
 
+        public CollisionBody CollisionBody { get; }
+
         public Player(PlayerDescriptor descriptor, PlayerConnection connection)
         {
             _descriptor = descriptor;
@@ -111,6 +113,8 @@ namespace Lunar.Server.World.Actors
             this.State = ActorStates.Idle;
 
             this.Descriptor.CollisionBounds = new Rect(16, 52, 16, 20);
+
+            this.CollisionBody = new CollisionBody(this);
 
             _inventory = new Inventory(this);
             _equipment = new Equipment(this);
@@ -285,44 +289,28 @@ namespace Lunar.Server.World.Actors
 
         public bool CanMove(float delta)
         {
-            var canMove = true;
+            Rect destCollisionArea;
          
             switch (this.Direction)
             {
                 case Direction.Right:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X + delta, this.Descriptor.Position.Y), this.Descriptor.CollisionBounds))
-                    {
-                        // The player can't move anymore.
-                        canMove = false;
-                    }
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left + delta, this.CollisionBody.CollisionArea.Top, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
 
                 case Direction.Left:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X - delta, this.Descriptor.Position.Y), this.Descriptor.CollisionBounds))
-                    {
-                        // The player can't move anymore.
-                        canMove = false;
-                    }
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left - delta, this.CollisionBody.CollisionArea.Top, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
 
                 case Direction.Up:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X, this.Descriptor.Position.Y - delta), this.Descriptor.CollisionBounds))
-                    {
-                        // The player can't move anymore.
-                        canMove = false;
-                    }
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top - delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
 
                 case Direction.Down:
-                    if (this.Layer.CheckCollision(new Vector(this.Descriptor.Position.X, this.Descriptor.Position.Y + delta), this.Descriptor.CollisionBounds))
-                    {
-                        // The player can't move anymore.
-                        canMove = false;
-                    }
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top + delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
             }
 
-            return canMove;
+            return !(this.Layer.CheckCollision(destCollisionArea));
         }
 
         public void Update(GameTime gameTime)
@@ -339,7 +327,7 @@ namespace Lunar.Server.World.Actors
 
                 if (this.State == ActorStates.Moving)
                 {
-                    if (!this.CanMove(this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds))
+                    if (!this.CanMove(this.Descriptor.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds))
                     {
                         this.State = ActorStates.Idle;
 
@@ -352,19 +340,19 @@ namespace Lunar.Server.World.Actors
                         switch (this.Direction)
                         {
                             case Direction.Right:
-                                dX = this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
+                                dX = this.Descriptor.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                                 break;
 
                             case Direction.Left:
-                                dX = -this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
+                                dX = -this.Descriptor.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                                 break;
 
                             case Direction.Up:
-                                dY = -this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
+                                dY = -this.Descriptor.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                                 break;
 
                             case Direction.Down:
-                                dY = this.Descriptor.Speed * gameTime.UpdateTimeInMilliseconds;
+                                dY = this.Descriptor.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                                 break;
                         }
 

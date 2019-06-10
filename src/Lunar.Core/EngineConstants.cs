@@ -33,9 +33,6 @@ namespace Lunar.Core
 
         public const string ACC_FILE_EXT = ".acc";
 
-        public const int TILE_WIDTH = 32;
-
-        public const int TILE_HEIGHT = 32;
-
+        public const int TILE_SIZE = 32;
     }
 }

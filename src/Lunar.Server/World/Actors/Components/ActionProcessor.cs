@@ -23,7 +23,7 @@ namespace Lunar.Server.World.Actors.Components
 
         private Queue<IAction<T>> _actionQueue { get; }
 
-        private long _nextActionTime;
+        private double _nextActionTime;
 
         public ActionProcessor(T actor)
         {
@@ -34,13 +34,13 @@ namespace Lunar.Server.World.Actors.Components
 
         public void Update(GameTime gameTime)
         {
-            if (gameTime.TotalElapsedTime <= _nextActionTime)
+            if (gameTime.TotalGameTime.TotalMilliseconds <= _nextActionTime)
             {
                 var action = _actionQueue.Dequeue();
 
                 action.Execute(this.Actor);
 
-                _nextActionTime = gameTime.TotalElapsedTime + (1000 / Constants.ACTIONS_PER_SECOND);
+                _nextActionTime = gameTime.TotalGameTime.TotalMilliseconds + (1000 / Constants.ACTIONS_PER_SECOND);
             }
         }
 

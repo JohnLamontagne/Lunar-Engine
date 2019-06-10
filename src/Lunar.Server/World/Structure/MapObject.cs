@@ -28,17 +28,17 @@ namespace Lunar.Server.World.Structure
     public class MapObject
     {
         private List<IActor<IActorDescriptor>> _interactingEntities;
-        private Dictionary<IActor<IActorDescriptor>, long> _cooldowns;
+        private Dictionary<IActor<IActorDescriptor>, double> _cooldowns;
         private bool _blocked;
 
-        protected Dictionary<IActor<IActorDescriptor>, long> Cooldowns { get { return _cooldowns; } }
+        protected Dictionary<IActor<IActorDescriptor>, double> Cooldowns { get { return _cooldowns; } }
         protected List<IActor<IActorDescriptor>> InteractingEntities { get { return _interactingEntities; } }
 
         public Vector Position { get; set; }
         public SpriteInfo Sprite { get; set; }
         public bool Interactable { get; set; }
         public Layer Layer { get; set; }
-        public CollisionDescriptor CollisionDescriptor { get; set; }
+        public CollisionBody CollisionDescriptor { get; set; }
         public bool Animated { get; set; }
         public int FrameTime { get; set; }
         public LightInformation LightInformation { get; set; }
@@ -58,7 +58,7 @@ namespace Lunar.Server.World.Structure
         public MapObject(Layer layer)
         {
             _interactingEntities = new List<IActor<IActorDescriptor>>();
-            _cooldowns = new Dictionary<IActor<IActorDescriptor>, long>();
+            _cooldowns = new Dictionary<IActor<IActorDescriptor>, double>();
 
             this.MapObjectBehaviorDefinition = new MapObjectBehaviorDefinition();
 
@@ -164,7 +164,7 @@ namespace Lunar.Server.World.Structure
 
             if (mapObject.Sprite != null)
             {
-                mapObject.CollisionDescriptor = new CollisionDescriptor(new Rect(
+                mapObject.CollisionDescriptor = new CollisionBody(new Rect(
                     mapObject.Position.X, mapObject.Position.Y,
                     mapObject.Sprite.Transform.Rect.Width,
                     mapObject.Sprite.Transform.Rect.Height));
@@ -172,7 +172,7 @@ namespace Lunar.Server.World.Structure
             else
             {
 
-                mapObject.CollisionDescriptor = new CollisionDescriptor(new Rect(
+                mapObject.CollisionDescriptor = new CollisionBody(new Rect(
                     mapObject.Position.X, mapObject.Position.Y,
                     Settings.TileSize, Settings.TileSize));
             }

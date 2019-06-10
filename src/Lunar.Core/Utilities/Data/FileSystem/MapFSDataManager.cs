@@ -73,8 +73,8 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                                 if (bR.ReadBoolean())
                                 {
 
-                                    layer.Tiles[x, y] = new TileDescriptor(new Vector(x * EngineConstants.TILE_WIDTH,
-                                        y * EngineConstants.TILE_HEIGHT))
+                                    layer.Tiles[x, y] = new TileDescriptor(new Vector(x * EngineConstants.TILE_SIZE,
+                                        y * EngineConstants.TILE_SIZE))
                                     {
                                         Attribute = (TileAttributes)bR.ReadByte()
                                     };
@@ -95,7 +95,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                                         {
                                             Transform =
                                             {
-                                                Position = new Vector(x * EngineConstants.TILE_WIDTH, y * EngineConstants.TILE_HEIGHT),
+                                                Position = new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE),
                                                 Color = new Color(bR.ReadByte(), bR.ReadByte(), bR.ReadByte(), bR.ReadByte()),
                                                 Rect = new Rect(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32()),
                                                 LayerDepth = zIndex
