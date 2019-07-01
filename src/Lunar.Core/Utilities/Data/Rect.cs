@@ -53,5 +53,10 @@ namespace Lunar.Core.Utilities.Data
         {
             return _rectangle.Intersects(new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height));
         }
+
+        public Rect Move(float dX, float dY)
+        {
+            return new Rect(this.Left + dX, this.Top + dY, this.Width, this.Height);
+        }
     }
 }

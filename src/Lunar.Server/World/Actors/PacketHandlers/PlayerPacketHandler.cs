@@ -107,16 +107,8 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             if (wantsToMove)
             {
                 _player.State = ActorStates.Moving;
-            }
-            else
-            {
-                _player.State = ActorStates.Idle;
-            }
-
-            if (wantsToMove)
-            {
                 // Can the player actually move based on the minimum update time from the tick rate
-                if (_player.CanMove(_player.Descriptor.Speed * (1000f / Settings.TileSize)))
+                if (_player.CanMove(_player.Direction, _player.Descriptor.Speed * (1000f / Settings.TickRate)))
                 {
                     _player.NetworkComponent.SendMovementPacket();
                 }
@@ -129,6 +121,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             }
             else // The player wishes to cease moving.
             {
+                _player.State = ActorStates.Idle;
                 _player.NetworkComponent.SendMovementPacket();
             }
         }

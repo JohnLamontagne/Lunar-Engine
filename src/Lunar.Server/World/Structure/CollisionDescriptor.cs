@@ -47,6 +47,11 @@ namespace Lunar.Server.World.Structure
             _actor = actor;
         }
 
+        public bool Collides(CollisionBody collisionBody)
+        {
+            return (this.CollisionArea.Intersects(collisionBody.CollisionArea));
+        }
+
         public bool Collides(IActor<IActorDescriptor> actor)
         {
             return (this.CollisionArea.Intersects(actor.CollisionBody.CollisionArea));

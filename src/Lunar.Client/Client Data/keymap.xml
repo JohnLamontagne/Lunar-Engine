@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<KeyMap>
+	<Up>Up</Up>
+	<Down>Down</Down>
+	<Left>Left</Left>
+	<Right>Right</Right>
+	<Inventory>I</Inventory>
+	<Charactor>C</Charactor>
+</KeyMap>

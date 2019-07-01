@@ -385,7 +385,7 @@ namespace Lunar.Client.World.Actors
                 this.Position = new Vector2(this.Position.X + dX, this.Position.Y + dY);
             }
 
-            _camera.Update(gameTime);
+            _camera?.Update(gameTime);
 
             
             _light.Position = new Vector2(this.Position.X + (this.SpriteSheet.Sprite.SourceRectangle.Width/2f) - _light.Radius / 2f, this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - _light.Radius / 2f);

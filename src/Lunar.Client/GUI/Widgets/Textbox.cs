@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Lunar.Client.Utilities.Input;
+using Lunar.Graphics;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -27,8 +28,9 @@ namespace Lunar.Client.GUI.Widgets
         private Vector2 _position;
         private Rectangle _area;
         private Texture2D _sprite;
-        private long _nextCursorBlinkTime;
+        private double _nextCursorBlinkTime;
         private bool _cursorVisible;
+        private Rectangle _cursorRect;
         private Vector2 _textOffset;
         private string _mask;
         private string _displayText;
@@ -45,6 +47,11 @@ namespace Lunar.Client.GUI.Widgets
         public bool Visible { get; set; }
 
         public bool Active { get; set; }
+
+        /// <summary>
+        /// The duration of a cursor blink (in milliseconds), DEFAULT: 750
+        /// </summary>
+        public int BlinkTime { get; set; }
 
         public event EventHandler<EventArgs> TabPressed;
 
@@ -63,6 +70,9 @@ namespace Lunar.Client.GUI.Widgets
         public string Tag { get; set; }
 
         public int ZOrder { get; set; }
+
+
+        private bool _blinkCursorVisible;
 
         public Texture2D Sprite
         {
@@ -83,8 +93,9 @@ namespace Lunar.Client.GUI.Widgets
             {
                 _position = value;
 
-                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString(_text).Y / 2));
 
+                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString(_displayText).Y / 2));
+                _cursorRect = new Rectangle((int)(_textPosition.X + this.Font.MeasureString(_displayText).X + this.Font.MeasureString("|").X), (int)_textPosition.Y, 2, (int)(this.Font.MeasureString("|").Y));
                 _area = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
             }
         }
@@ -161,45 +172,45 @@ namespace Lunar.Client.GUI.Widgets
                     _text = _text.Substring(0, _text.Length - 1);
                 }
 
-                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString(_text).Y / 2f) + _textOffset.Y);
+                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString(_displayText).Y / 2f) + _textOffset.Y);
+
+                _cursorRect = new Rectangle((int)(_textPosition.X + this.Font.MeasureString(_displayText).X + this.Font.MeasureString("|").X), (int)_textPosition.Y, 2, (int)(this.Font.MeasureString("|").Y));
             }
         }
 
-
-        public Textbox(Texture2D sprite, SpriteFont font, Vector2 textOffset, uint charSize = 15)
+        private Textbox(SpriteFont font)
         {
-            this.Text = "";
-            this.Sprite = sprite;
             _font = font;
-            _charSize = charSize;
-
+            this.Text = "";
             this.ForeColor = Color.White;
             this.Scale = new Vector2(1, 1);
             this.Origin = Vector2.Zero;
             this.Visible = true;
-
-            _textOffset = textOffset;
-            _area = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
+            this.BlinkTime = 500;
 
             EventInput.CharEntered += EventInput_CharEntered;
         }
 
-        public Textbox(Texture2D sprite, string caption, SpriteFont font, Vector2 textOffset, uint charSize = 15)
-        {
-            this.Text = "";
-            _sprite = sprite;
-            _text = caption;
-            _font = font;
-            _charSize = charSize;
 
-            this.ForeColor = Color.White;
-            this.Scale = new Vector2(1, 1);
-            this.Selectable = true;
-            this.Origin = Vector2.Zero;
+        public Textbox(Texture2D sprite, SpriteFont font, Vector2 textOffset, uint charSize = 15)
+            : this(font)
+        {
+            this.Sprite = sprite;
+            _charSize = charSize;
 
             _textOffset = textOffset;
             _area = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
-            EventInput.CharEntered += EventInput_CharEntered;
+        }
+
+        public Textbox(Texture2D sprite, string caption, SpriteFont font, Vector2 textOffset, uint charSize = 15)
+            : this(font)
+        {
+            _sprite = sprite;
+            _text = caption;
+            _charSize = charSize;
+
+            _textOffset = textOffset;
+            _area = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
         }
 
         public void OnMouseHover(MouseState mouseState)
@@ -274,10 +285,11 @@ namespace Lunar.Client.GUI.Widgets
 
             if (this.Active)
             {
-                if (_nextCursorBlinkTime < gameTime.ElapsedGameTime.Milliseconds)
+                if (_nextCursorBlinkTime < gameTime.TotalGameTime.TotalMilliseconds)
                 {
                     _cursorVisible = !_cursorVisible;
-                    _nextCursorBlinkTime = gameTime.ElapsedGameTime.Milliseconds + 500;
+                    // Blink at a rate of once per second
+                    _nextCursorBlinkTime = gameTime.TotalGameTime.TotalMilliseconds + this.BlinkTime;
                 }
             }
 
@@ -297,6 +309,11 @@ namespace Lunar.Client.GUI.Widgets
         public void Draw(SpriteBatch spriteBatch, int widgetCount)
         {
             if (!this.Visible) return;
+
+            if (_cursorVisible && this.Active)
+            {
+                spriteBatch.DrawOpaqueBox(_cursorRect, this.ForeColor);
+            }
 
             spriteBatch.Draw(this._sprite, this.Position + this.Origin, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, (float)this.ZOrder / widgetCount);
             spriteBatch.DrawString(_font, _displayText, _textPosition + this.Origin, this.ForeColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ((float)this.ZOrder / widgetCount) + .01f);

@@ -108,7 +108,7 @@ namespace Lunar.Client.Scenes
 
             // Prepare the world for lighting.
             // This also ensures that GuiManager can call Begin and render outside of worldspace
-            spriteBatch.End();
+            //spriteBatch.End();
 
             Client.ServiceLocator.Get<LightManagerService>().Component.Draw(gameTime);
 

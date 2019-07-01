@@ -20,6 +20,7 @@ using Lunar.Client.Utilities;
 using Lunar.Client.Utilities.Services;
 using Lunar.Client.World.Actors;
 using Lunar.Core.Net;
+using Lunar.Graphics;
 
 namespace Lunar.Client.World
 {
@@ -39,6 +40,8 @@ namespace Lunar.Client.World
         public bool Dark { get; private set; }
 
         public IEnumerable<Layer> Layers => _layers.Values;
+
+        public List<Vector2> Path { get; set; }
 
         public Map(Vector2 dimensions, string name)
         {
@@ -128,6 +131,7 @@ namespace Lunar.Client.World
                 }
             }
 
+            
         }
 
         public Layer GetLayer(string name)

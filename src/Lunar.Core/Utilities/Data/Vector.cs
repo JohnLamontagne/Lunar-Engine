@@ -173,6 +173,11 @@ namespace Lunar.Core.Utilities.Data
             return (this.X.IsWithin(lower.X, upper.X) && this.Y.IsWithin(lower.Y, upper.Y));
         }
 
+        public Vector Move(float dX, float dY)
+        {
+            return new Vector(this.X + dX, this.Y + dY);
+        }
+
         public override int GetHashCode()
         {  
             return this.X.GetHashCode() ^ this.Y.GetHashCode() << 2;

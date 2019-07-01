@@ -23,14 +23,20 @@ namespace Lunar.Graphics
         {
             _texture = new Texture2D(graphicsDevice, 1, 1);
             _texture.SetData(new[] { Color.White });
+           
+        }
+
+        public static void DrawOpaqueBox(this SpriteBatch spriteBatch, Rectangle area, Color color)
+        {
+            spriteBatch.Draw(_texture, new Rectangle(area.Left, area.Top, area.Width, area.Height), null, color, 0f, Vector2.Zero, SpriteEffects.None, 1f); 
         }
 
         public static void DrawWireFrameBox(this SpriteBatch spriteBatch, Rectangle area, Color color, int borderWidth)
         {
-            spriteBatch.Draw(_texture, new Rectangle(area.Left, area.Top, borderWidth, area.Height), color); // Left
-            spriteBatch.Draw(_texture, new Rectangle(area.Right, area.Top, borderWidth, area.Height), color); // Right
-            spriteBatch.Draw(_texture, new Rectangle(area.Left, area.Top, area.Width, borderWidth), color); // Top
-            spriteBatch.Draw(_texture, new Rectangle(area.Left, area.Bottom, area.Width, borderWidth), color); // Bottom
+            spriteBatch.Draw(_texture, new Rectangle(area.Left, area.Top, borderWidth, area.Height), null, color,0f, Vector2.Zero, SpriteEffects.None, 1f); // Left
+            spriteBatch.Draw(_texture, new Rectangle(area.Right, area.Top, borderWidth, area.Height), null, color, 0f, Vector2.Zero, SpriteEffects.None, 1f); // Right
+            spriteBatch.Draw(_texture, new Rectangle(area.Left, area.Top, area.Width, borderWidth), null, color, 0f, Vector2.Zero, SpriteEffects.None, 1f); // Top
+            spriteBatch.Draw(_texture, new Rectangle(area.Left, area.Bottom, area.Width, borderWidth), null, color, 0f, Vector2.Zero, SpriteEffects.None, 1f); // Bottom
         }
 
         public static void Draw(this SpriteBatch spriteBatch, Sprite sprite)

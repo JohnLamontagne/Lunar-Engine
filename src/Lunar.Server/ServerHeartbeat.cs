@@ -31,7 +31,7 @@ namespace Lunar.Server
             _currentTicks = 0;
             _previousTicks = 0;
             _accumulatedElapsedTime = TimeSpan.Zero;
-            _targetElapsedTime =  TimeSpan.FromTicks(166667);
+            _targetElapsedTime =  TimeSpan.FromTicks(83334);
             _maxElapsedTime = TimeSpan.FromMilliseconds(500);
         }
 

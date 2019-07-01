@@ -42,7 +42,7 @@ namespace Lunar.Server.World.Structure
         public Layer(LayerDescriptor descriptor)
         {
             _layerDescriptor = descriptor;
-            _tiles = new Tile[descriptor.Tiles.GetLength(0), descriptor.Tiles.GetLength(0)];
+            _tiles = new Tile[descriptor.Tiles.GetLength(0), descriptor.Tiles.GetLength(1)];
             _playerCollidingTiles = new Dictionary<Player, List<Tile>>(); ;
             _collisionDescriptors = new Dictionary<Vector, CollisionBody>();
             _mapObjects = new List<MapObject>();
@@ -267,10 +267,14 @@ namespace Lunar.Server.World.Structure
             {
                 if (collidingTile.Descriptor.Attribute == TileAttributes.Blocked)
                     return true;
-
             }
 
             return false;
+        }
+
+        public bool CheckCollision(CollisionBody collisionBody)
+        {
+            return this.CheckCollision(collisionBody.CollisionArea);
         }
 
         public NetBuffer PackData()

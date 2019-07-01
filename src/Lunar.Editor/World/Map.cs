@@ -26,8 +26,10 @@ namespace Lunar.Editor.World
             set { this.Descriptor.Name = value; }
         }
 
+        [Browsable(false)]
         public MapDescriptor Descriptor => _descriptor;
 
+        [Browsable(false)]
         public IEnumerable<Texture2D> Tilesets => _tilesets.Values;
 
         [Browsable(false)]
@@ -37,6 +39,10 @@ namespace Lunar.Editor.World
 
         [Browsable(false)]
         public Rectangle Bounds { get; private set; }
+
+        public int Height { get => (int)this.Descriptor.Dimensions.Y; set => this.Descriptor.Dimensions = new Core.Utilities.Data.Vector(this.Descriptor.Dimensions.X, value); }
+
+        public int Width { get => (int)this.Descriptor.Dimensions.X; set => this.Descriptor.Dimensions = new Core.Utilities.Data.Vector(value, this.Descriptor.Dimensions.Y); }
 
         public bool Dark { get; set; }
 
@@ -79,7 +85,8 @@ namespace Lunar.Editor.World
 
         public void AddTileset(Texture2D texture)
         {
-            _tilesets.Add(Path.GetFileName(texture.Tag.ToString()), texture);
+            if (!_tilesets.ContainsKey(Path.GetFileName(texture.Tag.ToString())))
+                _tilesets.Add(Path.GetFileName(texture.Tag.ToString()), texture);
 
             if (!this.Descriptor.TilesetPaths.Contains(texture.Tag.ToString()))
                 this.Descriptor.TilesetPaths.Add(texture.Tag.ToString());

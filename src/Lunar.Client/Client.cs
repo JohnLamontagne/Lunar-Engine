@@ -91,6 +91,7 @@ namespace Lunar.Client
             this.InitalizeScenes();
 
             _consoleComponent = new ConsoleComponent(this);
+            _consoleComponent.FontColor = Color.Wheat;
             this.Components.Add(_consoleComponent);
             this.InitalizeCommands();
 

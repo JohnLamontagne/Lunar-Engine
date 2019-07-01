@@ -158,6 +158,7 @@ namespace Lunar.Server.World.Actors
             {
                 this.Moving = true;
                 Console.WriteLine(rawPath[0]);
+                rawPath.Reverse(); // Reverse for the client which uses a queue 
                 this.SendMovementPacket(rawPath);
                 return true;
             }

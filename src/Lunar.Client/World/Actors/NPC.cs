@@ -38,7 +38,7 @@ namespace Lunar.Client.World.Actors
         private Vector2 _position;
         private SpriteSheet _spriteSheet;
         private long _uniqueID;
-        private Stack<Vector2> _targetPath;
+        private Queue<Vector2> _targetPath;
         private bool _moving;
         private Direction _direction;
         private double _nextUpdateSpritesheetTime;
@@ -47,6 +47,8 @@ namespace Lunar.Client.World.Actors
         private Rectangle _collisionBounds;
         private double _avgMoveSpeedX;
         private double _avgMoveSpeedY;
+
+        private Vector2 _serverPos;
 
         public string Name => _name;
 
@@ -119,6 +121,8 @@ namespace Lunar.Client.World.Actors
             this.Light = new PointLight();
 
             Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.NPC_MOVING, this.Handle_NPCMoving);
+
+            _targetPath = new Queue<Vector2>();
         }
 
         private void Handle_NPCMoving(PacketReceivedEventArgs args)
@@ -128,24 +132,21 @@ namespace Lunar.Client.World.Actors
             if (_uniqueID != uniqueID)
                 return;
 
-            _moving = args.Message.ReadBoolean();
-
-            if (!_moving)
+            if (!args.Message.ReadBoolean())
             {
-                _targetPath?.Clear();
-
-                // Update NPC to final position dictated by server.
-                this.Direction = (Direction)args.Message.ReadInt32();
+               
 
                 Console.WriteLine("Our final pos: " + this.Position.ToString());
 
                 Console.WriteLine("Avg Update: " + new Vector((float)_avgMoveSpeedX, (float)_avgMoveSpeedY).ToString());
 
-                this.Position = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
+                
 
-                Console.WriteLine("Server final pos: " + this.Position.ToString());
+                var newPos = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
+                Console.WriteLine("Server final pos: " + newPos.ToString());
 
-                this.SpriteSheet.HorizontalFrameIndex = (int)this.Direction;
+                _serverPos = newPos;
+                
 
                 _avgMoveSpeedX = 0;
                 _avgMoveSpeedY = 0;
@@ -153,17 +154,16 @@ namespace Lunar.Client.World.Actors
                 return;
             }
 
-
             this.Direction = (Direction)args.Message.ReadInt32();
 
             int pathCount = args.Message.ReadInt32();
 
-            _targetPath = new Stack<Vector2>();
-
             for(int i = 0; i < pathCount; i++)
             {
-                _targetPath.Push(new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat()));
+                _targetPath.Enqueue(new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat()));
             }
+
+            Client.ServiceLocator.Get<WorldManager>().Map.Path = new List<Vector2>(_targetPath.ToArray());
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -190,7 +190,7 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(targetDest.X, this.Position.Y);
 
-                        _targetPath.Pop();
+                        _targetPath.Dequeue();
                     }
                 }
                 else if (targetDest.X > this.Position.X)
@@ -201,7 +201,7 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(targetDest.X, this.Position.Y);
 
-                        _targetPath.Pop();
+                        _targetPath.Dequeue();
 
                     }
                 }
@@ -213,7 +213,7 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(this.Position.X, targetDest.Y);
 
-                        _targetPath.Pop();
+                        _targetPath.Dequeue();
 
                     }
                 }
@@ -225,10 +225,14 @@ namespace Lunar.Client.World.Actors
                     {
                         this.Position = new Vector2(this.Position.X, targetDest.Y);
 
-                        _targetPath.Pop();
+                        _targetPath.Dequeue();
 
                     }
                 }
+            }
+            else
+            {
+                _moving = false;
             }
         }
 
