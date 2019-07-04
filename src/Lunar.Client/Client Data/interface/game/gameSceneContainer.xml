@@ -42,24 +42,26 @@
 			<x>30</x>
 			<y>223</y>
 		</padding>
+		<draggable>true</draggable>
+		<Widgets>
+			<textbox name="messageEntry">
+				<texture>gfx/Interface/textboxNormal.png</texture>
+				<font>chatFont</font>
+				<position>
+					<x>17</x>
+					<y>100%</y>
+				</position>
+				<scale>
+					<x>1.6</x>
+					<y>1</y>
+				</scale>
+				<padding>
+					<x>12</x>
+					<y>0</y>
+				</padding>
+			</textbox>
+		</Widgets>
 	</chatbox>
-
-	<textbox name="messageEntry">
-		<texture>gfx/Interface/textboxNormal.png</texture>
-		<font>chatFont</font>
-		<position>
-			<x>1.7%</x>
-			<y>88.5%</y>
-		</position>
-		<scale>
-			<x>1.6</x>
-			<y>1</y>
-		</scale>
-		<padding>
-			<x>12</x>
-			<y>0</y>
-		</padding>
-	</textbox>
 
 	<statusbar name="healthStatusBar">
 		<font>interfaceFont</font>
@@ -88,7 +90,7 @@
 		<fillSprite>gfx/Interface/manaFillSprite.png</fillSprite>
 		<color>Black</color>
 		<position>
-			<x>51.50%</x>
+			<x>45%</x>
 			<y>3%</y>
 		</position>
 		<padding>
@@ -125,7 +127,7 @@
 
 	<label name="lblExperience">
 		<position>
-			<x>44.5%</x>
+			<x>40%</x>
 			<y>2.5%</y>
 		</position>
 		<text>0000/0000</text>

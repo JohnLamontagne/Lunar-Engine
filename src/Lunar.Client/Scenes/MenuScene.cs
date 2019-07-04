@@ -61,12 +61,18 @@ namespace Lunar.Client.Scenes
 
         private void Handle_AuthenticationSuccess(PacketReceivedEventArgs args)
         {
+            if (!this.Active)
+                return;
+
             Client.ServiceLocator.Get<SceneManager>().GetScene<GameScene>("gameScene").InitalizeInterface();
             Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
         }
 
         private void Handle_AuthenticationFailure(PacketReceivedEventArgs args)
         {
+            if (!this.Active)
+                return;
+
             var failMessage = args.Message.ReadString();
 
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Label>("lblStatus").Text =

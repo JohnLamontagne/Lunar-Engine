@@ -196,7 +196,7 @@ namespace Lunar.Client.Scenes
 
                     this.GuiManager.GetWidget<StatusBar>("experienceBar").Value = (player.Experience / player.NextLevelExperience) * 100;
 
-                    this.GuiManager.GetWidget<Label>("lblExperience").Text = $"{player.Experience}/{player.NextLevelExperience}";
+                    this.GuiManager.GetWidget<Label>("lblExperience").Text = $"{this.GuiManager.GetWidget<StatusBar>("experienceBar").Value:P2}";
 
                     var characterWindow = this.GuiManager.GetWidget<WidgetContainer>("characterWindow");
 
@@ -475,7 +475,7 @@ namespace Lunar.Client.Scenes
             this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/game/game_interface.xml", this.ContentManager);
 
             var chat = this.GuiManager.GetWidget<Chatbox>("chatbox");
-            var messageEntry = this.GuiManager.GetWidget<Textbox>("messageEntry");
+            var messageEntry = chat.GetWidget<Textbox>("messageEntry");
             var logoutButton = this.GuiManager.GetWidget<Button>("btnLogout");
             var toggleInventoryButton = this.GuiManager.GetWidget<Button>("btnInventory");
             var toggleCharacterWindowButton = this.GuiManager.GetWidget<Button>("btnCharacter");
@@ -483,8 +483,6 @@ namespace Lunar.Client.Scenes
             var manaStatusBar = this.GuiManager.GetWidget<StatusBar>("manaStatusBar");
             var targetHealthBar = this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer").GetWidget<StatusBar>("targetHealthBar");
 
-            messageEntry.BindTo(chat);
-            messageEntry.Visible = true;
             messageEntry.ReturnPressed += messageEntry_ReturnPressed;
             
             logoutButton.Clicked += logoutButton_ButtonClicked;

@@ -18,59 +18,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Lunar.Client.GUI.Widgets
 {
-    public class Chatbox : ILexicalWidget
+    public class Chatbox : WidgetContainer, ILexicalWidget
     {
-        private readonly WidgetContainer _container;
         private SpriteFont _font;
-        private bool _active;
-        private string _id;
-
-        public bool Visible { get { return _container.Visible; } set { _container.Visible = value; } }
-
-        public bool Active
-        {
-            get => _active;
-            set
-            {
-                _active = value;
-
-                if (_active)
-                    this.Activated?.Invoke(this, new EventArgs());
-            }
-        }
-
-        public Vector2 Position { get { return _container.Position; } set { _container.Position = value; } }
-
-        public Vector2 Origin { get; set; }
 
         public Vector2 ChatOffset { get; set; }
-
-        public bool Selectable { get; set; }
-
-        public string Name
-        {
-            get { return _id; }
-            set
-            {
-                string oldID = _id;
-                _id = value;
-
-                // Only fire the event after the name has been set for the first time.
-                if (!string.IsNullOrEmpty(oldID))
-                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
-            }
-        }
-
-        public object Tag { get; set; }
-
-        public int ZOrder { get; set; }
-
-        public event EventHandler<WidgetClickedEventArgs> Clicked;
-
-        public event EventHandler Activated;
-
-        public event EventHandler Mouse_Hover;
-        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public SpriteFont Font
         {
@@ -79,23 +31,20 @@ namespace Lunar.Client.GUI.Widgets
             {
                 _font = value;
 
-                foreach (var widget in _container.GetWidgets<ILexicalWidget>())
+                foreach (var widget in this.GetWidgets<ILexicalWidget>())
                 {
                     widget.Font = value;
                 }
             }
         }
 
-        public bool Draggable { get => _container.Draggable;
-            set => _container.Draggable = value;
-        }
 
         public int MaxEntries { get; set; }
 
 
         public Chatbox(Texture2D backSprite, SpriteFont font, int maxEntries)
+            : base(backSprite)
         {
-            _container = new WidgetContainer(backSprite);
             this.Font = font;
             this.MaxEntries = maxEntries;
             this.Selectable = true;
@@ -104,7 +53,7 @@ namespace Lunar.Client.GUI.Widgets
 
         public void Clear()
         {
-            _container.RemoveWidgets<Label>();
+            this.RemoveWidgets<Label>();
         }
 
         public void AddEntry(string message, Color color)
@@ -113,22 +62,22 @@ namespace Lunar.Client.GUI.Widgets
             {
                 Text = message
             };
-            label.WrapText(_container.Size.X - this.Font.MeasureString("X").X - this.ChatOffset.X);
+            label.WrapText(this.Size.X - this.Font.MeasureString("X").X - this.ChatOffset.X);
 
             label.Color = color;
             label.Position = this.Position + this.ChatOffset;
             label.Visible = true;
             label.ZOrder = this.ZOrder + 1; // Ensure that it is displayed above the chatbox.
 
-            _container.AddWidget(label, "entry" + label.GetHashCode() + Environment.TickCount);
+            this.AddWidget(label, "entry" + label.GetHashCode() + Environment.TickCount);
 
-            foreach (var widget in _container.GetWidgets<Label>())
+            foreach (var widget in this.GetWidgets<Label>())
             {
                 widget.Position = new Vector2(widget.Position.X, widget.Position.Y - (this.Font.MeasureString(label.Text).Y));
             }
 
             var toRemove = new List<string>();
-            foreach (var entry in _container.GetWidgetEntries())
+            foreach (var entry in this.GetWidgetEntries())
             {
                 if (entry.Value.Position.Y < this.Position.Y + (this.ChatOffset.Y + 1) - (this.MaxEntries * this.Font.MeasureString("X").Y))
                 {
@@ -138,44 +87,8 @@ namespace Lunar.Client.GUI.Widgets
 
             foreach (var key in toRemove)
             {
-                _container.RemoveWidget(key);
+                this.RemoveWidget(key);
             }
-        }
-
-
-
-        public void OnMouseHover(MouseState mouseState)
-        {
-
-        }
-
-        public void OnLeftMouseDown(MouseState mouseState)
-        {
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            _container.Update(gameTime);
-        }
-
-        public void Draw(SpriteBatch spriteBatch, int widgetCount)
-        {
-            _container.Draw(spriteBatch, widgetCount);
-        }
-
-        public bool Contains(Point point)
-        {
-            return _container.Contains(point);
-        }
-
-        public void BindTo(IWidget widget)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnRightMouseDown(MouseState mouseState)
-        {
-
         }
 
     }

@@ -326,6 +326,8 @@ namespace Lunar.Client.GUI
             var position = parent.ParsePosition(chatboxElement.Element("position")?.Element("x")?.Value.ToString(),
                 chatboxElement.Element("position")?.Element("y")?.Value.ToString());
 
+            bool.TryParse(chatboxElement.Element("draggable")?.Value, out bool draggable);
+
             if (!bool.TryParse(chatboxElement.Element("visible")?.Value, out bool visible))
             {
                 visible = true;
@@ -337,8 +339,12 @@ namespace Lunar.Client.GUI
                 Position = position,
                 ChatOffset = new Vector2(offX, offY),
                 ZOrder = zOrder,
-                Visible = visible
+                Visible = visible,
+                Draggable = draggable
             };
+
+            // load its children if it has them
+            this.LoadWidgets(chatboxElement.Element("Widgets"), fonts, content, chatBox);
 
             parent.AddWidget(chatBox, chatboxName);
         }

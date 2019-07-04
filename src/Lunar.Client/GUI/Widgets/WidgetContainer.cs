@@ -160,7 +160,7 @@ namespace Lunar.Client.GUI.Widgets
             {
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
-                    if (this.Draggable && !_dragStarted && this.Contains(Mouse.GetState().Position) && this.Active)
+                    if (this.Draggable && !_dragStarted  && this.Active)
                     {
                         // Get the starting mouse position.
                         _relativeDragX = (int)this.Position.X - Mouse.GetState().Position.X;
