@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+using System;
 using System.IO;
 using System.Text;
 using QuakeConsole;
@@ -30,12 +31,12 @@ namespace Lunar.Client.Utilities
 
         public override void Write(string value)
         {
-            _consoleComponent.Output.Append(value);
+            _consoleComponent.Output.Append($"[{DateTime.Now}]: " + value);
         }
 
         public override void WriteLine(string value)
         {
-            _consoleComponent.Output.Append(value);
+            _consoleComponent.Output.Append($"[{DateTime.Now}]: " + value);
         }
     }
 }

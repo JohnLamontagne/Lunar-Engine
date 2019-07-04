@@ -22,19 +22,48 @@ namespace Lunar.Client.GUI.Widgets
         private Rectangle _checkBoxArea;
         private Vector2 _position;
         private WidgetStates _state;
+        private bool _active;
+        private string _id;
 
         public bool Visible { get; set; }
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
 
         public bool Value { get; set; }
 
-        public string Tag { get; set; }
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
+
+        public object Tag { get; set; }
 
         public int ZOrder { get; set; }
 
         public event EventHandler<WidgetClickedEventArgs> Clicked;
 
+        public event EventHandler Activated;
+
         public event EventHandler Mouse_Hover;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public Vector2 Position
         {
@@ -122,6 +151,6 @@ namespace Lunar.Client.GUI.Widgets
         {
         }
 
-        public bool Selected { get; set; }
+        
     }
 }

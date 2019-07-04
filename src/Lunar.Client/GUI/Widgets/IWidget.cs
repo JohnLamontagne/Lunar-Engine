@@ -31,7 +31,9 @@ namespace Lunar.Client.GUI.Widgets
 
         Vector2 Origin { get; set; }
 
-        string Tag { get; set; }
+        string Name { get; set; }
+
+        object Tag { get; set; }
 
         void Update(GameTime gameTime);
 
@@ -59,5 +61,9 @@ namespace Lunar.Client.GUI.Widgets
         event EventHandler<WidgetClickedEventArgs> Clicked;
 
         event EventHandler Mouse_Hover;
+
+        event EventHandler Activated;
+
+        event EventHandler<WidgetNameChangedEventArgs> NameChanged;
     }
 }

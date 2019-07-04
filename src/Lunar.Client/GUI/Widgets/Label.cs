@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Lunar.Client.GUI.Widgets
 {
-    public class Label : IWidget
+    public class Label : ILexicalWidget
     {
         private WidgetStates _previousState;
         private MouseButtons _previousPressedButton;
@@ -27,6 +27,8 @@ namespace Lunar.Client.GUI.Widgets
         private string _text;
         private SpriteFont _font;
         private bool _mouseWithin;
+        private bool _active;
+        private string _id;
 
         public Vector2 Position
         {
@@ -73,13 +75,37 @@ namespace Lunar.Client.GUI.Widgets
 
         public bool Visible { get; set; }
 
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
 
         public Color Color { get; set; }
 
         public bool Selectable { get; set; }
 
-        public string Tag { get; set; }
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
+
+        public object Tag { get; set; }
 
         public int ZOrder { get; set; }
 
@@ -88,6 +114,9 @@ namespace Lunar.Client.GUI.Widgets
         public event EventHandler Mouse_Hover;
 
         public event EventHandler Mouse_Left;
+
+        public event EventHandler Activated;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public Label(SpriteFont font)
         {
@@ -190,6 +219,5 @@ namespace Lunar.Client.GUI.Widgets
             this.Text = sb.ToString();
         }
 
-        public bool Selected { get; set; }
     }
 }

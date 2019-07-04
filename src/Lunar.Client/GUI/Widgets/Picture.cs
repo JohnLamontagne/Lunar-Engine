@@ -24,18 +24,47 @@ namespace Lunar.Client.GUI.Widgets
         private Rectangle _area;
         private Vector2 _position;
         private Vector2 _scale;
-        
+        private bool _active;
+        private string _id;
+
         public event EventHandler<WidgetClickedEventArgs> Clicked;
 
         public event EventHandler Mouse_Hover;
+
+        public event EventHandler Activated;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public bool Visible { get; set; }
 
         public Texture2D Sprite { get; set; }
 
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
 
-        public string Tag { get; set; }
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
+
+        public object Tag { get; set; }
 
         public int ZOrder { get; set; }
 

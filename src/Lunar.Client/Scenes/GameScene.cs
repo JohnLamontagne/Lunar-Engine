@@ -271,7 +271,7 @@ namespace Lunar.Client.Scenes
 
                 equipSlot.Position = position;
                 equipSlot.Visible = true;
-                equipSlot.Tag = i.ToString();
+                equipSlot.Name = i.ToString();
 
                 equipSlot.Clicked += EquipSlot_Clicked;
 
@@ -319,7 +319,7 @@ namespace Lunar.Client.Scenes
             if (e.MouseButton == MouseButtons.Right)
             {
                 // Get the slot number, which is stored in the tag property.
-                int slotNum = int.Parse(((Picture)sender).Tag);
+                int slotNum = int.Parse(((Picture)sender).Name);
 
                 // Unequip the item
                 var packet = new Packet(PacketType.REQ_UNEQUIP_ITEM);

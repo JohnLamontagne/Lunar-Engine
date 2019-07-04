@@ -63,6 +63,7 @@
     <Compile Include="GUI\Widgets\Chatbox.cs" />
     <Compile Include="GUI\Widgets\Checkbox.cs" />
     <Compile Include="GUI\Widgets\DisplayMode.cs" />
+    <Compile Include="GUI\Widgets\ILexicalWidget.cs" />
     <Compile Include="GUI\Widgets\IWidget.cs" />
     <Compile Include="GUI\Widgets\Label.cs" />
     <Compile Include="GUI\Widgets\Picture.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="GUI\Widgets\Textbox.cs" />
     <Compile Include="GUI\Widgets\WidgetClickedEventArgs.cs" />
     <Compile Include="GUI\Widgets\WidgetContainer.cs" />
+    <Compile Include="GUI\Widgets\WidgetIDChangedEventArgs.cs" />
     <Compile Include="GUI\Widgets\WidgetStates.cs" />
     <Compile Include="IGameComponentContainer.cs" />
     <Compile Include="Net\NetHandler.cs" />

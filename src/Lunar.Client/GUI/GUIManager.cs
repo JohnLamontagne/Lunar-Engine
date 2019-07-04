@@ -22,20 +22,35 @@ using Lunar.Client.Utilities.Services;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework.Content;
 using Lunar.Client.Utilities;
+using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Client.GUI
 {
     public class GUIManager
     {
+        private FlexibleStack<IWidget> _orderedWidgets;
+
         protected Dictionary<string, IWidget> _widgets;
 
-        private IWidget _activeWidget;
-
         private readonly RenderTarget2D _renderTarget;
+
+        public IWidget ActiveWidget
+        {
+            get
+            {
+                var topWidget = _orderedWidgets.Peek();
+
+                if (topWidget.Active)
+                    return topWidget;
+                else
+                    return null;
+            }
+        }
 
         public GUIManager()
         {
             _widgets = new Dictionary<string, IWidget>();
+            _orderedWidgets = new FlexibleStack<IWidget>();
 
             var graphicsDevice = Client.ServiceLocator.Get<GraphicsDeviceService>().GraphicsDevice;
 
@@ -46,7 +61,16 @@ namespace Lunar.Client.GUI
 
         public virtual void AddWidget(IWidget widget, string name)
         {
+            widget.NameChanged += (w, a) =>
+            {
+                var changedWidget = w as IWidget;
+                _widgets.Remove(a.OldName);
+                _widgets.Add(changedWidget.Name, changedWidget);
+            };
+
+            widget.Name = name;
             _widgets.Add(name, widget);
+            _orderedWidgets.Push(widget);
         }
 
         public virtual void RemoveWidgets<T>() where T : IWidget
@@ -56,6 +80,8 @@ namespace Lunar.Client.GUI
                         where !(pair.Value is T)
                         select pair).ToDictionary(pair => pair.Key,
                                                pair => pair.Value);
+            _orderedWidgets.Clear();
+            _orderedWidgets.Add(_widgets.Values);
         }
 
         public T GetWidget<T>(string id) where T : IWidget
@@ -89,123 +115,90 @@ namespace Lunar.Client.GUI
 
         public void RemoveWidget(string id)
         {
+            _orderedWidgets.Remove(_widgets[id]);
             _widgets.Remove(id);
+        }
+
+        public void RemoveWidget(IWidget widget)
+        {
+            string key = _widgets.FirstOrDefault(e => e.Value == widget).Key;
+            _orderedWidgets.Remove(_widgets[key]);
+            _widgets.Remove(key);
         }
 
         public void ClearWidgets()
         {
-            _activeWidget = null;
             _widgets.Clear();
+            _orderedWidgets.Clear();
         }
 
         public virtual void Update(GameTime gameTime)
         {
-           
             var mouseState = Mouse.GetState();
-            IWidget oldActive = _activeWidget;
 
-            // Process input for the active widget first.
-            if (_activeWidget != null)
+            for (int i = 0; i < _orderedWidgets.Count; i++)
             {
-                if (mouseState.LeftButton == ButtonState.Pressed)
-                {
-                    if (_activeWidget.Contains(mouseState.Position))
-                    {
-                        _activeWidget.OnLeftMouseDown(mouseState);
-                    }
-                    else
-                    {
-                        Console.WriteLine("{0} no longer active!", _activeWidget.GetType().ToString());
+                var widget = _orderedWidgets[i];
 
-                        oldActive = _activeWidget;
-                        _activeWidget.Active = false;
-                        _activeWidget = null;
-                    }
-                }
-                else if (mouseState.RightButton == ButtonState.Pressed)
-                {
-                    if (_activeWidget.Contains(mouseState.Position))
-                    {
-                        _activeWidget.OnRightMouseDown(mouseState);
-                    }
-                }
-                else
-                {
-                    if (_activeWidget.Contains(mouseState.Position))
-                    {
-                        _activeWidget.OnMouseHover(mouseState);
-                    }
-                }
-            }
-
-            foreach (var widget in _widgets.Values)
-            {
-                if (widget == _activeWidget)
+                if (!widget.Visible)
                     continue;
 
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    if (widget.Contains(mouseState.Position) && (_activeWidget == null || !_activeWidget.Contains(mouseState.Position)))
+                    if (widget.Contains(mouseState.Position))
                     {
                         widget.OnLeftMouseDown(mouseState);
 
-                        if (widget.Selectable)
+                        if (widget == this.ActiveWidget)
                         {
-                            widget.Active = true;
-
-
-                            if (_activeWidget != null)
-                            {
-                                _activeWidget.Active = false;
-                            }
-
-                            _activeWidget = widget;
-                                
-
-                            Console.WriteLine("{0} now active!", widget.GetType().ToString());
-
+                            // If our mouse is within the active widget and we are clicking,
+                            // there's no reason to process widgets behind this one for selection
+                            // so we'll just break out.
                             break;
+                        }
+                        else
+                        {
+                            if (widget.Selectable)
+                            {
+                                if (this.ActiveWidget != null)
+                                    this.ActiveWidget.Active = false;
+
+                                widget.Active = true;
+                                _orderedWidgets.Remove(widget);
+                                _orderedWidgets.Push(widget);
+                                Console.WriteLine("Widget {0} now active!", widget.Name);
+                                break;
+                            }
                         }
                     }
                     else
                     {
-                        if (_activeWidget == widget)
+                        if (this.ActiveWidget == widget)
                         {
                             widget.Active = false;
-                            oldActive = _activeWidget;
-                            _activeWidget = null;
 
-                            Console.WriteLine("{0} no longer active!", widget.GetType().ToString());
+                            Console.WriteLine("Widget {0} no longer active!", widget.Name);
                         }
                     }
                 }
-                else if (mouseState.RightButton== ButtonState.Pressed)
+                else if (mouseState.RightButton == ButtonState.Pressed)
                 {
-                    if (widget.Contains(mouseState.Position) && (_activeWidget == null || !_activeWidget.Contains(mouseState.Position)))
+                    if (widget.Contains(mouseState.Position) && (this.ActiveWidget == null || !this.ActiveWidget.Contains(mouseState.Position)))
                     {
                         widget.OnRightMouseDown(mouseState);
                     }
                 }
                 else
                 {
-                    if (widget.Contains(mouseState.Position) && (_activeWidget == null || !_activeWidget.Contains(mouseState.Position)))
+                    if (widget.Contains(mouseState.Position) && (this.ActiveWidget == null || !this.ActiveWidget.Contains(mouseState.Position)))
                     {
                         widget.OnMouseHover(mouseState);
                     }
                 }
             }
-            
 
-            if (_activeWidget == null && oldActive != null)
-            {
-                _activeWidget = oldActive;
-                _activeWidget.Active = true;
-            }
-
-            foreach (var widget in _widgets.Values)
-            {
+            foreach (var widget in _orderedWidgets)
                 widget.Update(gameTime);
-            }
         }
 
         public virtual void Begin(SpriteBatch spriteBatch)
@@ -228,15 +221,10 @@ namespace Lunar.Client.GUI
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-           
-            foreach (var widget in _widgets.Values)
+            foreach (var widget in _orderedWidgets.Values.Reverse())
             {
-                if (widget != _activeWidget)
-                    widget.Draw(spriteBatch, _widgets.Count);
+                widget.Draw(spriteBatch, _widgets.Count);
             }
-
-            // Active widget is always on top.
-            _activeWidget?.Draw(spriteBatch, _widgets.Count);
         }
 
         public void LoadFromFile(string filePath, ContentManager content)

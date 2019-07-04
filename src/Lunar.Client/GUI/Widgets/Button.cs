@@ -18,7 +18,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Lunar.Client.GUI.Widgets
 {
-    public class Button : IWidget
+    public class Button : ILexicalWidget
     {
         #region Fields
 
@@ -30,6 +30,8 @@ namespace Lunar.Client.GUI.Widgets
         private WidgetStates _state;
         private Rectangle _buttonArea;
         private Vector2 _position;
+        private bool _active;
+        private string _id;
 
         #endregion Fields
 
@@ -41,11 +43,35 @@ namespace Lunar.Client.GUI.Widgets
 
         public bool Visible { get; set; }
 
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
 
         public bool Selectable { get; set; }
 
-        public string Tag { get; set; }
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
+
+        public object Tag { get; set; }
 
         public Rectangle Area => _buttonArea;
 
@@ -200,6 +226,9 @@ namespace Lunar.Client.GUI.Widgets
 
         public event EventHandler Mouse_Hover;
 
+        public event EventHandler Activated;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
+
         #endregion Event Handlers
 
         /// <summary>
@@ -309,7 +338,5 @@ namespace Lunar.Client.GUI.Widgets
         public void OnRightMouseDown(MouseState mouseState)
         {
         }
-
-        public bool Selected { get; set; }
     }
 }

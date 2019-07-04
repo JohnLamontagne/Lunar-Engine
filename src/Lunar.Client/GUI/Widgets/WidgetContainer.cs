@@ -27,16 +27,42 @@ namespace Lunar.Client.GUI.Widgets
         private int _relativeDragY;
         private bool _dragStarted;
         private Vector2 _size;
+        private bool _active;
+        private string _id;
 
         public bool Visible { get; set; }
 
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
 
         public bool Draggable { get; set; }
 
         public bool Selectable { get; set; }
 
-        public string Tag { get; set; }
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
+
+        public object Tag { get; set; }
 
         public int ZOrder { get; set; }
 
@@ -91,6 +117,8 @@ namespace Lunar.Client.GUI.Widgets
         public event EventHandler<WidgetClickedEventArgs> Clicked;
 
         public event EventHandler Mouse_Hover;
+        public event EventHandler Activated;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public WidgetContainer(Texture2D backSprite)
         {
@@ -143,13 +171,6 @@ namespace Lunar.Client.GUI.Widgets
                 else
                 {
                     _dragStarted = false;
-                }
-            }
-            else
-            {
-                if (!_dragStarted)
-                {
-                    this.Active = false;
                 }
             }
 
@@ -231,7 +252,5 @@ namespace Lunar.Client.GUI.Widgets
 
             return new Vector2(x + this.Position.X, y + this.Position.Y);
         }
-
-        public bool Selected { get; set; }
     }
 }

@@ -19,7 +19,7 @@ using Lunar.Graphics;
 
 namespace Lunar.Client.GUI.Widgets
 {
-    public class Textbox : IWidget
+    public class Textbox : ILexicalWidget
     {
         private string _text;
         private uint _charSize;
@@ -46,7 +46,17 @@ namespace Lunar.Client.GUI.Widgets
 
         public bool Visible { get; set; }
 
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
 
         /// <summary>
         /// The duration of a cursor blink (in milliseconds), DEFAULT: 750
@@ -63,16 +73,33 @@ namespace Lunar.Client.GUI.Widgets
 
         public event EventHandler Mouse_Hover;
 
+        public event EventHandler Activated;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
+
         public bool Selected { get; set; }
 
         public bool Selectable { get; set; }
 
-        public string Tag { get; set; }
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
+
+        public object Tag { get; set; }
 
         public int ZOrder { get; set; }
 
-
-        private bool _blinkCursorVisible;
+        private bool _active;
+        private string _id;
 
         public Texture2D Sprite
         {
@@ -94,7 +121,7 @@ namespace Lunar.Client.GUI.Widgets
                 _position = value;
 
 
-                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString(_displayText).Y / 2));
+                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString("|").Y / 2) + _textOffset.Y);
                 _cursorRect = new Rectangle((int)(_textPosition.X + this.Font.MeasureString(_displayText).X + this.Font.MeasureString("|").X), (int)_textPosition.Y, 2, (int)(this.Font.MeasureString("|").Y));
                 _area = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
             }
@@ -140,6 +167,13 @@ namespace Lunar.Client.GUI.Widgets
                 {
                     _text = value;
                     _displayText = value;
+
+                    if (_sprite != null)
+                    {
+                        _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString("|").Y / 2) + _textOffset.Y);
+                        _cursorRect = new Rectangle((int)(_textPosition.X + this.Font.MeasureString(_displayText).X + this.Font.MeasureString("|").X), (int)_textPosition.Y, 2, (int)(this.Font.MeasureString("|").Y));
+                    }
+
                     return;
                 }
 
@@ -149,6 +183,8 @@ namespace Lunar.Client.GUI.Widgets
                 {
                     if (_font.Characters.Contains(c))
                         filteredText += c;
+                    else if (c == '\b' && filteredText.Length > 0)
+                        filteredText = filteredText.Substring(0, filteredText.Length - 1);
                 }
                 _text = filteredText;
 
@@ -172,8 +208,9 @@ namespace Lunar.Client.GUI.Widgets
                     _text = _text.Substring(0, _text.Length - 1);
                 }
 
-                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString(_displayText).Y / 2f) + _textOffset.Y);
+                var y = this.Font.MeasureString(_displayText).Y;
 
+                _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString("|").Y / 2) + _textOffset.Y);
                 _cursorRect = new Rectangle((int)(_textPosition.X + this.Font.MeasureString(_displayText).X + this.Font.MeasureString("|").X), (int)_textPosition.Y, 2, (int)(this.Font.MeasureString("|").Y));
             }
         }
@@ -187,6 +224,7 @@ namespace Lunar.Client.GUI.Widgets
             this.Origin = Vector2.Zero;
             this.Visible = true;
             this.BlinkTime = 500;
+            this.Selectable = true;
 
             EventInput.CharEntered += EventInput_CharEntered;
         }
@@ -240,15 +278,7 @@ namespace Lunar.Client.GUI.Widgets
             {
                 if (_prevKeyState.IsKeyUp(key))
                 {
-                    if (keyState.IsKeyDown(Keys.Back) && _prevKeyState.IsKeyUp(Keys.Back))
-                    {
-                        if (this.Text.Length > 0)
-                            this.Text = this.Text.Substring(0, Text.Length - 1);
-
-                        _nextInputProcessTime = (long)gameTime.TotalGameTime.TotalMilliseconds + 100;
-                        return;
-                    }
-                    else if (keyState.IsKeyDown(Keys.Enter) && _prevKeyState.IsKeyUp(Keys.Enter))
+                    if (keyState.IsKeyDown(Keys.Enter) && _prevKeyState.IsKeyUp(Keys.Enter))
                     {
                         this.ReturnPressed?.Invoke(this, new EventArgs());
                         _nextInputProcessTime = (long)gameTime.TotalGameTime.TotalMilliseconds + 100;
@@ -265,23 +295,6 @@ namespace Lunar.Client.GUI.Widgets
             if (!this.Visible) return;
 
             this.ProcessSpecialInput(gameTime);
-
-            var mouseState = Mouse.GetState();
-
-            if (_area.Contains(mouseState.Position))
-            {
-                if (mouseState.LeftButton == ButtonState.Pressed)
-                {
-                    this.Active = true;
-                }
-            }
-            else
-            {
-                if (mouseState.LeftButton == ButtonState.Pressed)
-                {
-                    this.Active = false;
-                }
-            }
 
             if (this.Active)
             {

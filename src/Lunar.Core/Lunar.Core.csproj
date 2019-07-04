@@ -59,6 +59,7 @@
     <Compile Include="Utilities\Data\FileSystem\FSDataManager.cs" />
     <Compile Include="Utilities\Data\FileSystem\MapFSDataManager.cs" />
     <Compile Include="Utilities\Data\FileSystem\PlayerFSDataManager.cs" />
+    <Compile Include="Utilities\Data\FlexibleStack.cs" />
     <Compile Include="Utilities\Data\Management\IDataFactoryArguments.cs" />
     <Compile Include="Utilities\Data\Management\IDataManagerArguments.cs" />
     <Compile Include="Utilities\Data\Management\IDataManagerFactory.cs" />

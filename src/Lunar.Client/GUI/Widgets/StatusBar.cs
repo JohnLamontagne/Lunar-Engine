@@ -17,7 +17,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Lunar.Client.GUI.Widgets
 {
-    public class StatusBar : IWidget
+    public class StatusBar : ILexicalWidget
     {
         private float _value;
         private Rectangle _fillBounds;
@@ -28,8 +28,22 @@ namespace Lunar.Client.GUI.Widgets
         private int _zOrder;
 
         private Rectangle _fillSpriteDest;
+        private bool _active;
+        private string _id;
 
-        public string Tag { get; set; }
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
 
         public int ZOrder
         {
@@ -55,7 +69,17 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
 
         public Vector2 Position
         {
@@ -109,10 +133,14 @@ namespace Lunar.Client.GUI.Widgets
         }
 
         public bool Selectable { get; set; }
+        public object Tag { get; set; }
 
         public event EventHandler<WidgetClickedEventArgs> Clicked;
 
         public event EventHandler Mouse_Hover;
+
+        public event EventHandler Activated;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public StatusBar(Texture2D sprite, Texture2D fillSprite, Rectangle fillBounds, SpriteFont font)
         {

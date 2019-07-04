@@ -18,14 +18,26 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Lunar.Client.GUI.Widgets
 {
-    public class Chatbox : IWidget
+    public class Chatbox : ILexicalWidget
     {
         private readonly WidgetContainer _container;
         private SpriteFont _font;
+        private bool _active;
+        private string _id;
 
         public bool Visible { get { return _container.Visible; } set { _container.Visible = value; } }
 
-        public bool Active { get; set; }
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+
+                if (_active)
+                    this.Activated?.Invoke(this, new EventArgs());
+            }
+        }
 
         public Vector2 Position { get { return _container.Position; } set { _container.Position = value; } }
 
@@ -35,13 +47,30 @@ namespace Lunar.Client.GUI.Widgets
 
         public bool Selectable { get; set; }
 
-        public string Tag { get; set; }
+        public string Name
+        {
+            get { return _id; }
+            set
+            {
+                string oldID = _id;
+                _id = value;
+
+                // Only fire the event after the name has been set for the first time.
+                if (!string.IsNullOrEmpty(oldID))
+                    this.NameChanged?.Invoke(this, new WidgetNameChangedEventArgs(oldID));
+            }
+        }
+
+        public object Tag { get; set; }
 
         public int ZOrder { get; set; }
 
         public event EventHandler<WidgetClickedEventArgs> Clicked;
 
+        public event EventHandler Activated;
+
         public event EventHandler Mouse_Hover;
+        public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public SpriteFont Font
         {
@@ -50,17 +79,7 @@ namespace Lunar.Client.GUI.Widgets
             {
                 _font = value;
 
-                foreach (var widget in _container.GetWidgets<Label>())
-                {
-                    widget.Font = value;
-                }
-
-                foreach (var widget in _container.GetWidgets<Textbox>())
-                {
-                    widget.Font = value;
-                }
-
-                foreach (var widget in _container.GetWidgets<Button>())
+                foreach (var widget in _container.GetWidgets<ILexicalWidget>())
                 {
                     widget.Font = value;
                 }
