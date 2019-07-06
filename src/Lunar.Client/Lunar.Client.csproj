@@ -103,6 +103,7 @@
     <Compile Include="World\Map.cs" />
     <Compile Include="World\MapItem.cs" />
     <Compile Include="World\MapObject.cs" />
+    <Compile Include="World\PlayerJoinedEventArgs.cs" />
     <Compile Include="World\Tile.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>

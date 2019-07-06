@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -24,7 +25,7 @@ using Lunar.Core.World.Actor;
 
 namespace Lunar.Client.World
 {
-    public class WorldManager : ISubject, IService
+    public class WorldManager : IService
     {
         private Map _map;
 
@@ -42,6 +43,12 @@ namespace Lunar.Client.World
         /// The client's player.
         /// </summary>
         public Player Player => _player;
+
+        public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
+
+        public event EventHandler LoadingMap;
+
+        public event EventHandler LoadedMap;
 
         public WorldManager(ContentManager contentManager, Camera camera)
         {
@@ -67,7 +74,6 @@ namespace Lunar.Client.World
                 player.Layer = _map.GetLayer(layerName);
                 player.Position = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
             }
-                
         }
 
         private void Handle_PlayerLeft(PacketReceivedEventArgs args)
@@ -79,7 +85,7 @@ namespace Lunar.Client.World
         private void Handle_NPCData(PacketReceivedEventArgs args)
         {
             var uniqueID = args.Message.ReadInt64();
-          
+
             if (!_map.EntityExists(uniqueID))
             {
                 var npc = new NPC(uniqueID);
@@ -99,8 +105,6 @@ namespace Lunar.Client.World
             if (uniqueID == Client.ServiceLocator.Get<NetHandler>().UniqueID)
             {
                 _player.Unpack(args.Message, _contentManager);
-
-                this.EventOccured?.Invoke(this, new SubjectEventArgs("playerUpdated", new object[] { _player }));
             }
             else
             {
@@ -108,11 +112,8 @@ namespace Lunar.Client.World
                 if (player != null)
                 {
                     player.Unpack(args.Message, _contentManager);
-                    this.EventOccured?.Invoke(this, new SubjectEventArgs("playerUpdated", new object[] {player}));
                 }
             }
-
-            
         }
 
         private void Handle_PlayerJoined(PacketReceivedEventArgs args)
@@ -131,9 +132,6 @@ namespace Lunar.Client.World
                 }
 
                 player = _player;
-
-                player.EventOccured += (sender, eventArgs) =>
-                    this.EventOccured?.Invoke(this, new SubjectEventArgs(eventArgs.EventName, player));
             }
             else
             {
@@ -141,18 +139,16 @@ namespace Lunar.Client.World
                 player.Unpack(args.Message, _contentManager);
             }
 
-
             _map?.AddEntity(uniqueID, player);
 
-            this.EventOccured?.Invoke(this, new SubjectEventArgs("playerJoined", new object[] { player }));
-            this.EventOccured?.Invoke(this, new SubjectEventArgs("playerUpdated", new object[] { player }));
+            this.PlayerJoined?.Invoke(this, new PlayerJoinedEventArgs(player));
         }
 
         private void Handle_MapData(PacketReceivedEventArgs args)
         {
             _mapLoaded = false;
 
-            this.EventOccured?.Invoke(this, new SubjectEventArgs("loadingMap", new object[] { _map }));
+            this.LoadingMap?.Invoke(this, new EventArgs());
 
             // Make sure the player is no longer moving
             if (_player != null)
@@ -170,12 +166,12 @@ namespace Lunar.Client.World
 
             _camera.Bounds = new Rectangle(_map.Bounds.X * EngineConstants.TILE_SIZE, _map.Bounds.Y * EngineConstants.TILE_SIZE, _map.Bounds.Width * EngineConstants.TILE_SIZE, _map.Bounds.Height * EngineConstants.TILE_SIZE);
 
-            this.EventOccured?.Invoke(this, new SubjectEventArgs("finishedLoadingMap", new object[] { _map }));
+            this.LoadedMap?.Invoke(this, new EventArgs());
         }
 
         public void Update(GameTime gameTime)
         {
-            if (_mapLoaded)   
+            if (_mapLoaded)
                 _map?.Update(gameTime);
         }
 
@@ -196,8 +192,6 @@ namespace Lunar.Client.World
             _map = null;
             _player = null;
         }
-
-        public event EventHandler<SubjectEventArgs> EventOccured;
 
         public void Initalize()
         {

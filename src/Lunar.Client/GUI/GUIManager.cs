@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,22 @@ namespace Lunar.Client.GUI
                 var changedWidget = w as IWidget;
                 _widgets.Remove(a.OldName);
                 _widgets.Add(changedWidget.Name, changedWidget);
+            };
+
+            widget.Activated += (w, a) =>
+            {
+                // Only one widget may be active at a time, so disable the
+                // previously active one if one existed.
+                if (this.ActiveWidget != null)
+                {
+                    Console.WriteLine("Widget {0} no longer active!", this.ActiveWidget.Name);
+                    this.ActiveWidget.Active = false;
+                }
+
+                _orderedWidgets.Remove(widget);
+                _orderedWidgets.Push(widget);
+
+                Console.WriteLine("Widget {0} now active!", widget.Name);
             };
 
             widget.Name = name;
@@ -160,13 +177,7 @@ namespace Lunar.Client.GUI
                         {
                             if (widget.Selectable)
                             {
-                                if (this.ActiveWidget != null)
-                                    this.ActiveWidget.Active = false;
-
                                 widget.Active = true;
-                                _orderedWidgets.Remove(widget);
-                                _orderedWidgets.Push(widget);
-                                Console.WriteLine("Widget {0} now active!", widget.Name);
                                 break;
                             }
                         }
@@ -176,8 +187,6 @@ namespace Lunar.Client.GUI
                         if (this.ActiveWidget == widget)
                         {
                             widget.Active = false;
-
-                            Console.WriteLine("Widget {0} no longer active!", widget.Name);
                         }
                     }
                 }
@@ -197,8 +206,10 @@ namespace Lunar.Client.GUI
                 }
             }
 
-            foreach (var widget in _orderedWidgets)
-                widget.Update(gameTime);
+            for (int i = 0; i < _orderedWidgets.Count; i++)
+            {
+                _orderedWidgets[i].Update(gameTime);
+            }
         }
 
         public virtual void Begin(SpriteBatch spriteBatch)
@@ -429,8 +440,7 @@ namespace Lunar.Client.GUI
             string mask = textboxElement.Element("mask")?.Value.ToString() ?? null;
 
             var texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
-           
-            
+
             var position = parent.ParsePosition(textboxElement.Element("position")?.Element("x")?.Value.ToString(),
                 textboxElement.Element("position")?.Element("y")?.Value.ToString());
 
@@ -576,7 +586,6 @@ namespace Lunar.Client.GUI
             };
 
             parent.AddWidget(chkBox, chkBoxName);
-
         }
 
         private void LoadLabelFromXML(XElement lblElement, Dictionary<string, SpriteFont> fonts, GUIManager parent)
@@ -600,7 +609,7 @@ namespace Lunar.Client.GUI
             }
 
             SpriteFont font = fonts[fontName];
-            var label = new Label(font) 
+            var label = new Label(font)
             {
                 Text = text,
                 Position = position,
@@ -626,7 +635,7 @@ namespace Lunar.Client.GUI
                 buttonElement.Element("position")?.Element("y")?.Value.ToString());
 
             Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
-            
+
             SpriteFont font = fonts[fontName];
 
             int.TryParse(buttonElement.Element("zorder")?.Value.ToString(), out int zOrder);

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,13 +37,17 @@ namespace Lunar.Client.GUI.Widgets
         private string _displayText;
         private Vector2 _scale;
         private KeyboardState _prevKeyState;
-        private long _nextInputProcessTime;
+        private double _nextInputProcessTime;
 
         // For widget binding.
         private IWidget _boundWidget;
 
         private Vector2 _lastBoundWidgetPos;
         // end for widget binding
+
+        // Used to ensure we don't process input the same frame that the widget was activated.
+        // Doing so would result in input handling outside of what user desires to do.
+        private bool _activatedInputCooldown;
 
         public bool Visible { get; set; }
 
@@ -54,7 +59,10 @@ namespace Lunar.Client.GUI.Widgets
                 _active = value;
 
                 if (_active)
+                {
                     this.Activated?.Invoke(this, new EventArgs());
+                    _activatedInputCooldown = true;
+                }
             }
         }
 
@@ -74,6 +82,7 @@ namespace Lunar.Client.GUI.Widgets
         public event EventHandler Mouse_Hover;
 
         public event EventHandler Activated;
+
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public bool Selected { get; set; }
@@ -120,7 +129,6 @@ namespace Lunar.Client.GUI.Widgets
             {
                 _position = value;
 
-
                 _textPosition = new Vector2(_position.X + _textOffset.X, this.Position.Y + ((this._sprite.Height) / 2f) - (this.Font.MeasureString("|").Y / 2) + _textOffset.Y);
                 _cursorRect = new Rectangle((int)(_textPosition.X + this.Font.MeasureString(_displayText).X + this.Font.MeasureString("|").X), (int)_textPosition.Y, 2, (int)(this.Font.MeasureString("|").Y));
                 _area = new Rectangle((int)_position.X, (int)_position.Y, _sprite.Width, _sprite.Height);
@@ -152,7 +160,9 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
-        public SpriteFont Font { get => _font;
+        public SpriteFont Font
+        {
+            get => _font;
             set => _font = value;
         }
 
@@ -229,7 +239,6 @@ namespace Lunar.Client.GUI.Widgets
             EventInput.CharEntered += EventInput_CharEntered;
         }
 
-
         public Textbox(Texture2D sprite, SpriteFont font, Vector2 textOffset, uint charSize = 15)
             : this(font)
         {
@@ -255,7 +264,6 @@ namespace Lunar.Client.GUI.Widgets
         {
         }
 
-
         public void OnLeftMouseDown(MouseState mouseState)
         {
         }
@@ -265,6 +273,12 @@ namespace Lunar.Client.GUI.Widgets
             if (!this.Active)
                 return;
 
+            if (_activatedInputCooldown)
+            {
+                _activatedInputCooldown = false;
+                _nextInputProcessTime = gameTime.TotalGameTime.TotalMilliseconds + 200;
+            }
+
             if (_nextInputProcessTime > gameTime.TotalGameTime.TotalMilliseconds)
             {
                 return;
@@ -272,19 +286,17 @@ namespace Lunar.Client.GUI.Widgets
 
             KeyboardState keyState = Keyboard.GetState();
 
-            var pressedKeys = keyState.GetPressedKeys();
-
-            foreach (Keys key in pressedKeys)
+            if (keyState.IsKeyDown(Keys.Enter) && _prevKeyState.IsKeyUp(Keys.Enter))
             {
-                if (_prevKeyState.IsKeyUp(key))
-                {
-                    if (keyState.IsKeyDown(Keys.Enter) && _prevKeyState.IsKeyUp(Keys.Enter))
-                    {
-                        this.ReturnPressed?.Invoke(this, new EventArgs());
-                        _nextInputProcessTime = (long)gameTime.TotalGameTime.TotalMilliseconds + 100;
-                        return;
-                    }
-                }
+                this.ReturnPressed?.Invoke(this, new EventArgs());
+                _nextInputProcessTime = gameTime.TotalGameTime.TotalMilliseconds + 100;
+                return;
+            }
+            else if (keyState.IsKeyDown(Keys.Tab) && _prevKeyState.IsKeyUp(Keys.Tab))
+            {
+                this.TabPressed?.Invoke(this, new EventArgs());
+                _nextInputProcessTime = gameTime.TotalGameTime.TotalMilliseconds + 100;
+                return;
             }
 
             _prevKeyState = keyState;
@@ -356,6 +368,5 @@ namespace Lunar.Client.GUI.Widgets
         public void OnRightMouseDown(MouseState mouseState)
         {
         }
-
     }
 }

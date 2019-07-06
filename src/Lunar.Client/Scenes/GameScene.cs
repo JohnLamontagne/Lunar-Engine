@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
@@ -54,9 +55,73 @@ namespace Lunar.Client.Scenes
 
             Client.ServiceLocator.Get<NetHandler>().Disconnected += Handle_Disconnected;
 
-            _worldManager.EventOccured += _worldManager_EventOccured;
+            _worldManager.LoadingMap += _worldManager_LoadingMap;
+            _worldManager.LoadedMap += _worldManager_LoadedMap;
+            _worldManager.PlayerJoined += _worldManager_PlayerJoined;
 
             Client.ServiceLocator.Register(_worldManager);
+        }
+
+        private void _worldManager_PlayerJoined(object sender, PlayerJoinedEventArgs e)
+        {
+            if (_worldManager.Player != null)
+            {
+                _worldManager.Player.DataChanged += Player_StatsChanged;
+            }
+        }
+
+        private void _worldManager_LoadedMap(object sender, EventArgs e)
+        {
+            Client.ServiceLocator.Get<SceneManager>().GetScene<LoadingScene>("loadingScene").OnFinishedLoading();
+        }
+
+        private void _worldManager_LoadingMap(object sender, EventArgs e)
+        {
+            _loadingScreen = true;
+            Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
+        }
+
+        private void Player_StatsChanged(object sender, EventArgs e)
+        {
+            var player = (Player)sender;
+
+            this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Value = ((float)player.Health / player.MaximumHealth) * 100;
+            this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text = $"HP {player.Health}/{player.MaximumHealth}";
+            this.GuiManager.GetWidget<StatusBar>("healthStatusBar").TextOffset =
+                new Vector2(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Width - this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Font.MeasureString(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text).X,
+                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Height / 2f);
+
+            this.GuiManager.GetWidget<StatusBar>("experienceBar").Value = (player.Experience / player.NextLevelExperience) * 100;
+
+            this.GuiManager.GetWidget<Label>("lblExperience").Text = $"{this.GuiManager.GetWidget<StatusBar>("experienceBar").Value:P2}";
+
+            var characterWindow = this.GuiManager.GetWidget<WidgetContainer>("characterWindow");
+
+            characterWindow.GetWidget<Label>("charWindowNameLabel").Text = player.Name;
+            characterWindow.GetWidget<Label>("charHealthLabel").Text = "Health: " + player.Health + "/" + player.MaximumHealth;
+            characterWindow.GetWidget<Label>("charStrengthLabel").Text = "Strength: " + player.Strength;
+            characterWindow.GetWidget<Label>("charIntLabel").Text = "Intelligence: " + player.Intelligence;
+            characterWindow.GetWidget<Label>("charDexLabel").Text = "Dexterity: " + player.Dexterity;
+            characterWindow.GetWidget<Label>("charDefLabel").Text = "Defence: " + player.Strength;
+
+            characterWindow.GetWidget<Label>("charLevelLabel").Text = "Level: " + player.Level;
+
+            if (!characterWindow.WidgetExists("characterPicture"))
+            {
+                AnimatedPicture characterPicture = new AnimatedPicture(player.SpriteSheet.Sprite.Texture, (int)((72 / player.Speed) / (player.SpriteSheet.Sprite.Texture.Width / 52f)),
+                    new Vector2(player.SpriteSheet.FrameSize.X, player.SpriteSheet.FrameSize.Y))
+                {
+                    Position = new Vector2(characterWindow.Position.X + 210, characterWindow.Position.Y + 150),
+                    Visible = true
+                };
+                characterWindow.AddWidget(characterPicture, "characterPicture");
+            }
+            else
+            {
+                characterWindow.GetWidget<AnimatedPicture>("characterPicture").Sprite = player.SpriteSheet.Sprite.Texture;
+                characterWindow.GetWidget<AnimatedPicture>("characterPicture").FrameTime =
+                    (int)((72 / player.Speed) / (player.SpriteSheet.Sprite.Texture.Width / 52f));
+            }
         }
 
         private void Handle_LoadingScreen(PacketReceivedEventArgs obj)
@@ -64,7 +129,6 @@ namespace Lunar.Client.Scenes
             _loadingScreen = true;
             Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
         }
-
 
         private void Handle_DialogueEnd(PacketReceivedEventArgs obj)
         {
@@ -149,7 +213,6 @@ namespace Lunar.Client.Scenes
             _target = _worldManager.Map.GetEntity(uniqueID);
 
             enemyPortraitContainer.GetWidget<Picture>("portraitGraphic").Visible = _target is NPC;
-            
 
             enemyPortraitContainer.GetWidget<StatusBar>("targetHealthBar").Value = ((float)_target.Health / (float)_target.MaximumHealth) * 100f;
             enemyPortraitContainer.GetWidget<StatusBar>("targetHealthBar").Text = $"{_target.Health} / {_target.MaximumHealth}";
@@ -180,70 +243,12 @@ namespace Lunar.Client.Scenes
             Client.ServiceLocator.Get<SceneManager>().SetActiveScene("menuScene");
         }
 
-        private void _worldManager_EventOccured(object sender, Core.Utilities.SubjectEventArgs e)
-        {
-            if (e.EventName == "playerUpdated")
-            {
-                Player player = (Player)e.Args[0];
-
-                if ((Player)e.Args[0] == ((WorldManager)sender).Player)
-                {
-                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Value = ((float)player.Health / player.MaximumHealth) * 100;
-                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text = $"HP {player.Health}/{player.MaximumHealth}";
-                    this.GuiManager.GetWidget<StatusBar>("healthStatusBar").TextOffset =
-                        new Vector2(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Width - this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Font.MeasureString(this.GuiManager.GetWidget<StatusBar>("healthStatusBar").Text).X,
-                            this.GuiManager.GetWidget<StatusBar>("healthStatusBar").FillSprite.Height / 2f);
-
-                    this.GuiManager.GetWidget<StatusBar>("experienceBar").Value = (player.Experience / player.NextLevelExperience) * 100;
-
-                    this.GuiManager.GetWidget<Label>("lblExperience").Text = $"{this.GuiManager.GetWidget<StatusBar>("experienceBar").Value:P2}";
-
-                    var characterWindow = this.GuiManager.GetWidget<WidgetContainer>("characterWindow");
-
-                    characterWindow.GetWidget<Label>("charWindowNameLabel").Text = player.Name;
-                    characterWindow.GetWidget<Label>("charHealthLabel").Text = "Health: " + player.Health + "/" + player.MaximumHealth;
-                    characterWindow.GetWidget<Label>("charStrengthLabel").Text = "Strength: " + player.Strength;
-                    characterWindow.GetWidget<Label>("charIntLabel").Text = "Intelligence: " + player.Intelligence;
-                    characterWindow.GetWidget<Label>("charDexLabel").Text = "Dexterity: " + player.Dexterity;
-                    characterWindow.GetWidget<Label>("charDefLabel").Text = "Defence: " + player.Strength;
-
-                    characterWindow.GetWidget<Label>("charLevelLabel").Text = "Level: " + player.Level;
-
-                    if (!characterWindow.WidgetExists("characterPicture"))
-                    {
-                        AnimatedPicture characterPicture = new AnimatedPicture(player.SpriteSheet.Sprite.Texture, (int)((72 / player.Speed) / (player.SpriteSheet.Sprite.Texture.Width / 52f)), 
-                            new Vector2(player.SpriteSheet.FrameSize.X, player.SpriteSheet.FrameSize.Y))
-                        {
-                            Position = new Vector2(characterWindow.Position.X + 210, characterWindow.Position.Y + 150),
-                            Visible = true
-                        };
-                        characterWindow.AddWidget(characterPicture, "characterPicture");
-                    }
-                    else
-                    {
-                        characterWindow.GetWidget<AnimatedPicture>("characterPicture").Sprite = player.SpriteSheet.Sprite.Texture;
-                        characterWindow.GetWidget<AnimatedPicture>("characterPicture").FrameTime =
-                            (int) ((72 / player.Speed) / (player.SpriteSheet.Sprite.Texture.Width / 52f));
-                    }
-                }
-            }
-            else if (e.EventName == "loadingMap")
-            {
-                _loadingScreen = true;
-                Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
-            }
-            else if (e.EventName == "finishedLoadingMap")
-            {
-                Client.ServiceLocator.Get<SceneManager>().GetScene<LoadingScene>("loadingScene").OnFinishedLoading();
-            }
-        }
-
         private void Handle_EquipmentUpdate(PacketReceivedEventArgs args)
         {
             var equipmentContainer = this.GuiManager.GetWidget<WidgetContainer>("characterWindow").GetWidget<WidgetContainer>("equipmentContainer");
 
             equipmentContainer.ClearWidgets();
-            
+
             for (int i = 0; i < Enum.GetNames(typeof(EquipmentSlots)).Length; i++)
             {
                 bool hasItem = args.Message.ReadBoolean();
@@ -251,7 +256,6 @@ namespace Lunar.Client.Scenes
                 if (!hasItem)
                     continue;
 
- 
                 var itemName = args.Message.ReadString();
                 var textureName = args.Message.ReadString();
                 EquipmentSlots slotType = (EquipmentSlots)args.Message.ReadInt32();
@@ -279,8 +283,6 @@ namespace Lunar.Client.Scenes
             }
         }
 
-       
-
         private void Handle_InventoryUpdate(PacketReceivedEventArgs args)
         {
             var inventoryWidget = this.GuiManager.GetWidget<WidgetContainer>("inventoryWidget");
@@ -301,13 +303,12 @@ namespace Lunar.Client.Scenes
                     Texture2D texture2D = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName);
 
                     var invSlot = new Picture(texture2D);
-                    invSlot.Position = new Vector2(((i % 5) * Constants.INV_SLOT_OFFSET) + Constants.INVENTORY_OFFSET_X, ((i / 5) * Constants.INV_SLOT_OFFSET) + 
+                    invSlot.Position = new Vector2(((i % 5) * Constants.INV_SLOT_OFFSET) + Constants.INVENTORY_OFFSET_X, ((i / 5) * Constants.INV_SLOT_OFFSET) +
                         Constants.INVENTORY_OFFSET_Y) + inventoryWidget.Position;
 
                     invSlot.Visible = true;
 
                     invSlot.Clicked += InvSlot_Clicked;
-                   
 
                     inventoryWidget.AddWidget(invSlot, "slot" + i);
                 }
@@ -358,7 +359,6 @@ namespace Lunar.Client.Scenes
                 }
             }
         }
-
 
         private void Handle_PlayerMessage(PacketReceivedEventArgs args)
         {
@@ -484,28 +484,24 @@ namespace Lunar.Client.Scenes
             var targetHealthBar = this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer").GetWidget<StatusBar>("targetHealthBar");
 
             messageEntry.ReturnPressed += messageEntry_ReturnPressed;
-            
+
             logoutButton.Clicked += logoutButton_ButtonClicked;
 
             toggleInventoryButton.Clicked += toggleInventoryButton_ButtonClicked;
 
             toggleCharacterWindowButton.Clicked += toggleCharacterWindowButton_ButtonClicked;
 
-
             healthStatusBar.TextOffset =
                 new Vector2(healthStatusBar.FillSprite.Width - healthStatusBar.Font.MeasureString(healthStatusBar.Text).X,
                     healthStatusBar.FillSprite.Height / 2f);
-
 
             manaStatusBar.TextOffset =
                new Vector2(manaStatusBar.FillSprite.Width - manaStatusBar.Font.MeasureString(manaStatusBar.Text).X,
                    manaStatusBar.FillSprite.Height / 2f);
 
-
             targetHealthBar.TextOffset =
                 new Vector2(targetHealthBar.FillSprite.Width - targetHealthBar.Font.MeasureString(targetHealthBar.Text).X,
                     targetHealthBar.FillSprite.Height / 2f);
-
         }
 
         private void toggleCharacterWindowButton_ButtonClicked(object sender, EventArgs e)
@@ -534,7 +530,7 @@ namespace Lunar.Client.Scenes
                 packet.Message.Write(text);
                 Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.Unreliable, ChannelType.UNASSIGNED);
                 ((Textbox)sender).Text = string.Empty;
-                ((Textbox) sender).Active = false;
+                ((Textbox)sender).Active = false;
             }
         }
     }

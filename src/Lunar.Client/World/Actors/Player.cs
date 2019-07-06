@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
@@ -29,7 +30,7 @@ using Lunar.Graphics.Effects;
 
 namespace Lunar.Client.World.Actors
 {
-    public class Player : IActor, ISubject
+    public class Player : IActor
     {
         private readonly long _uniqueID;
         private readonly Camera _camera;
@@ -57,7 +58,7 @@ namespace Lunar.Client.World.Actors
 
         private PointLight _light;
 
-        public event EventHandler<SubjectEventArgs> EventOccured;
+        public event EventHandler DataChanged;
 
         public long UniqueID => _uniqueID;
 
@@ -94,16 +95,11 @@ namespace Lunar.Client.World.Actors
             {
                 _position = value;
 
-
                 if (_spriteSheet != null)
                 {
                     _spriteSheet.Position = value;
 
                     _requestMoving = false;
-
-                    ///if (_mainPlayer)
-                     ///   _camera.Position = new Vector2(this.Position.X + (_spriteSheet.Sprite.SourceRectangle.Width / 2f) - (Settings.ResolutionX / 2f), 
-                       ///     this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - (Settings.ResolutionY / 2f));
                 }
             }
         }
@@ -152,7 +148,6 @@ namespace Lunar.Client.World.Actors
                 Scale = new Vector2(500),
                 Intensity = .7f
             };
-          
 
             this.InitalizePacketHandlers();
         }
@@ -192,7 +187,7 @@ namespace Lunar.Client.World.Actors
             _dexterity = args.Message.ReadInt32();
             _defence = args.Message.ReadInt32();
 
-            this.EventOccured?.Invoke(this, new SubjectEventArgs("playerUpdated"));
+            this.DataChanged?.Invoke(this, new EventArgs());
         }
 
         public void Handle_PlayerMoving(PacketReceivedEventArgs args)
@@ -208,7 +203,7 @@ namespace Lunar.Client.World.Actors
             this.State = (ActorStates)args.Message.ReadByte();
             this.Position = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
             this.SpriteSheet.HorizontalFrameIndex = 1;
-            this.SpriteSheet.VerticalFrameIndex = (int) this.Direction;
+            this.SpriteSheet.VerticalFrameIndex = (int)this.Direction;
         }
 
         public bool CanMove(float delta, Direction direction)
@@ -255,7 +250,6 @@ namespace Lunar.Client.World.Actors
 
         private void CheckInput(GameTime gameTime)
         {
-            
             // Don't spam the server with movement requests
             if (!_requestMoving && !this.InChat)
             {
@@ -289,7 +283,6 @@ namespace Lunar.Client.World.Actors
 
                             _requestMoving = true;
                         }
-
                     }
                 }
                 else if (keyboardState.IsKeyDown(Keys.W))
@@ -387,8 +380,7 @@ namespace Lunar.Client.World.Actors
 
             _camera?.Update(gameTime);
 
-            
-            _light.Position = new Vector2(this.Position.X + (this.SpriteSheet.Sprite.SourceRectangle.Width/2f) - _light.Radius / 2f, this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - _light.Radius / 2f);
+            _light.Position = new Vector2(this.Position.X + (this.SpriteSheet.Sprite.SourceRectangle.Width / 2f) - _light.Radius / 2f, this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - _light.Radius / 2f);
 
             this.Emitter?.Update(gameTime);
         }
@@ -431,15 +423,14 @@ namespace Lunar.Client.World.Actors
                     VerticalFrameIndex = (int)this.Direction
                 };
 
-
-
             _collisionBounds = new Rectangle(buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32());
 
             var layerName = buffer.ReadString();
             this.Layer = Client.ServiceLocator.Get<WorldManager>().Map.GetLayer(layerName);
 
             _requestMoving = false;
-            
+
+            this.DataChanged?.Invoke(this, new EventArgs());
         }
     }
 }

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
@@ -58,7 +59,6 @@ namespace Lunar.Client.Scenes
             base.OnExit();
         }
 
-
         private void Handle_AuthenticationSuccess(PacketReceivedEventArgs args)
         {
             if (!this.Active)
@@ -83,7 +83,6 @@ namespace Lunar.Client.Scenes
             var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/userInputError.png");
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userLoginTextbox").Sprite = textboxUserSprite;
 
-
             var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/passInputError.png");
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userPasswordTextbox").Sprite = textboxPassSprite;
         }
@@ -91,17 +90,22 @@ namespace Lunar.Client.Scenes
         private void HookInterfaceEvents()
         {
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userLoginTextbox").Text_Entered += UserLoginTextbox_Text_Entered;
-            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userLoginTextbox").ReturnPressed += MenuScene_ReturnPressed;
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userLoginTextbox").ReturnPressed += UserText_ReturnPressed;
 
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userPasswordTextbox").Text_Entered += PasswordLoginTextbox_Text_Entered;
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userPasswordTextbox").ReturnPressed += PasswordText_ReturnPressed; ;
 
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnLogin").Clicked += loginButton_ButtonClicked;
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnRegister").Clicked += registerButton_ButtonClicked;
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnWebsite").Clicked += WebsiteButton_Clicked;
-
         }
 
-        private void MenuScene_ReturnPressed(object sender, EventArgs e)
+        private void PasswordText_ReturnPressed(object sender, EventArgs e)
+        {
+            this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userLoginTextbox").Active = true;
+        }
+
+        private void UserText_ReturnPressed(object sender, EventArgs e)
         {
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Textbox>("userPasswordTextbox").Active = true;
         }
@@ -115,7 +119,7 @@ namespace Lunar.Client.Scenes
         private void UserLoginTextbox_Text_Entered(object sender, EventArgs e)
         {
             var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/userInputSuccess.png");
-            ((Textbox) sender).Sprite = textboxUserSprite;
+            ((Textbox)sender).Sprite = textboxUserSprite;
         }
 
         private void WebsiteButton_Clicked(object sender, WidgetClickedEventArgs e)
@@ -146,7 +150,6 @@ namespace Lunar.Client.Scenes
                     packet.Message.Write(registerMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
                     netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
                 }
-
             }
         }
 
@@ -178,13 +181,11 @@ namespace Lunar.Client.Scenes
             {
                 netHandler.Connect();
 
-
                 var packet = new Packet(PacketType.LOGIN);
                 packet.Message.Write(loginMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
                 packet.Message.Write(loginMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
                 netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
             }
-            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch drawer)
