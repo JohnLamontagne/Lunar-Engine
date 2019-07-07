@@ -190,7 +190,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             }
             catch (IOException exception)
             {
-                Logger.LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception);
+                Engine.Services.Get<Logger>().LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception);
                 return null;
             }
             

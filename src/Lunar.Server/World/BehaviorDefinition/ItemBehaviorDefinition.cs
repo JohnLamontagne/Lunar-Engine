@@ -20,26 +20,26 @@ namespace Lunar.Server.World.BehaviorDefinition
         /// <summary>
         /// Invoked when the item is used
         /// </summary>
-        public Action<GameEventArgs> OnUse { get; set; }
+        public Action<ServerArgs> OnUse { get; set; }
 
         /// <summary>
         /// Invoked when the item is equipped
         /// </summary>
-        public Action<GameEventArgs> OnEquip { get; set; }
+        public Action<ServerArgs> OnEquip { get; set; }
 
         /// <summary>
         /// Invoked when the item is acquired by an actor
         /// </summary>
-        public Action<GameEventArgs> OnAcquired { get; set; }
+        public Action<ServerArgs> OnAcquired { get; set; }
 
         /// <summary>
         /// Invoked when the item is dropped by an actor
         /// </summary>
-        public Action<GameEventArgs> OnDropped { get; set; }
+        public Action<ServerArgs> OnDropped { get; set; }
 
         /// <summary>
         /// Invoked when the item is created within the gameworld
         /// </summary>
-        public Action<GameEventArgs> OnCreated { get; set; }
+        public Action<ServerArgs> OnCreated { get; set; }
     }
 }

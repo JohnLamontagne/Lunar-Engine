@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,9 +32,7 @@ namespace Lunar.Server.World.Structure
         {
             _maps = new Dictionary<string, Map>();
 
-            _mapDataLoader = Server.ServiceLocator.Get<FSDataFactory>().Create<MapFSDataManager>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
-
-            this.LoadMaps();
+            _mapDataLoader = Engine.Services.Get<FSDataFactory>().Create<MapFSDataManager>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
         }
 
         private void LoadMaps()
@@ -64,11 +63,9 @@ namespace Lunar.Server.World.Structure
             return _maps[mapName];
         }
 
-      
-
         public void Initalize()
         {
-            throw new NotImplementedException();
+            this.LoadMaps();
         }
     }
 }

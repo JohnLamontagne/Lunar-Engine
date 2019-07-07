@@ -10,7 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
+using Lunar.Core;
 using Lunar.Core.Utilities;
 using Lunar.Core.World;
 using Lunar.Server.Utilities;
@@ -32,7 +34,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             if (player.Equipment.GetSlot(_slotNum) == null)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to unequip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
+                Engine.Services.Get<Logger>().LogEvent($"Player attempted to unequip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
 
                 return;
             }
@@ -42,7 +44,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             if (item.Descriptor.ItemType != ItemTypes.Equipment || item.Descriptor.SlotType == EquipmentSlots.NE)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to unequip unequippable item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
+                Engine.Services.Get<Logger>().LogEvent($"Player attempted to unequip unequippable item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
 
                 return;
             }

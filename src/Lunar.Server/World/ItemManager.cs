@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,8 +28,6 @@ namespace Lunar.Server.World
         public ItemManager()
         {
             _items = new Dictionary<string, ItemDescriptor>();
-
-            this.LoadItems();
         }
 
         private void LoadItems()
@@ -47,11 +46,11 @@ namespace Lunar.Server.World
             Console.WriteLine($"Loaded {files.Length} items.");
         }
 
-        public ItemDescriptor GetItem(string itemName)
+        public ItemDescriptor Get(string itemName)
         {
             if (!_items.ContainsKey(itemName))
             {
-                Logger.LogEvent($"Item {itemName} does not exist", LogTypes.ERROR, new Exception($"Item {itemName} does not exist"));
+                Engine.Services.Get<Logger>().LogEvent($"Item {itemName} does not exist", LogTypes.ERROR, new Exception($"Item {itemName} does not exist"));
                 return null;
             }
 
@@ -60,6 +59,7 @@ namespace Lunar.Server.World
 
         public void Initalize()
         {
+            this.LoadItems();
         }
     }
 }

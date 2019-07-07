@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +30,7 @@ namespace Lunar.Server
     {
         private static readonly string _filePathConfig = Constants.FILEPATH_DATA + "config.xml";
         private static readonly string _filePathExperience = Constants.FILEPATH_DATA + "experience.conf";
-        private static readonly string _filePathUserPermissions = Constants. FILEPATH_DATA + "user_permissions.xml";
+        private static readonly string _filePathUserPermissions = Constants.FILEPATH_DATA + "user_permissions.xml";
 
         public static string GameName { get; private set; }
 
@@ -112,34 +113,34 @@ namespace Lunar.Server
             {
                 var doc = XDocument.Load(_filePathConfig);
 
-                var generalSettings = doc.Elements("Config").Elements("General");
-                Settings.ServerPort = int.Parse(generalSettings.Elements("Port").FirstOrDefault().Value);
-                Settings.GameName = generalSettings.Elements("Game_Name").FirstOrDefault().Value;
-                Settings.WelcomeMessage = generalSettings.Elements("Welcome_Message").FirstOrDefault().Value;
+                var generalSettings = doc.Element("Config").Element("General");
+                Settings.ServerPort = int.Parse(generalSettings.Element("Port").Value);
+                Settings.GameName = generalSettings.Element("Game_Name").Value;
+                Settings.WelcomeMessage = generalSettings.Element("Welcome_Message").Value;
 
-                var gameplaySettings = doc.Elements("Config").Elements("Gameplay");
-                Settings.StartingMap = gameplaySettings.Elements("Starting_Map").FirstOrDefault().Value;
-                Settings.MaxInventoryItems = int.Parse(gameplaySettings.Elements("Max_Inventory_Slots").FirstOrDefault().Value);
-                Settings.NPCRestPeriod = int.Parse(gameplaySettings.Elements("NPC_Rest_Period").FirstOrDefault().Value);
-                Settings.MaxLevel = int.Parse(gameplaySettings.Elements("Max_Level").FirstOrDefault().Value);
+                var gameplaySettings = doc.Element("Config").Element("Gameplay");
+                Settings.StartingMap = gameplaySettings.Element("Starting_Map").Value;
+                Settings.MaxInventoryItems = int.Parse(gameplaySettings.Element("Max_Inventory_Slots").Value);
+                Settings.NPCRestPeriod = int.Parse(gameplaySettings.Element("NPC_Rest_Period").Value);
+                Settings.MaxLevel = int.Parse(gameplaySettings.Element("Max_Level").Value);
 
-                var advancedSettings = doc.Elements("Config").Elements("Advanced");
-                Settings.TickRate = int.Parse(advancedSettings.Elements("Tick_Rate").FirstOrDefault().Value);
-                Settings.TileSize = int.Parse(advancedSettings.Elements("Tile_Size").FirstOrDefault().Value);
-                Settings.MapItemWidth = int.Parse(advancedSettings.Elements("Map_Item_Width").FirstOrDefault().Value);
-                Settings.MapItemHeight = int.Parse(advancedSettings.Elements("Map_Item_Height").FirstOrDefault().Value);
-                Settings.IronPythonLibsDirectory = advancedSettings.Elements("Iron_Python_Libs_Dir").FirstOrDefault().Value;
-                Settings.SuppressErrors = bool.Parse(advancedSettings.Elements("Suppress_Errors").FirstOrDefault().Value);
+                var advancedSettings = doc.Element("Config").Element("Advanced");
+                Settings.TickRate = int.Parse(advancedSettings.Element("Tick_Rate").Value);
+                Settings.TileSize = int.Parse(advancedSettings.Element("Tile_Size").Value);
+                Settings.MapItemWidth = int.Parse(advancedSettings.Element("Map_Item_Width").Value);
+                Settings.MapItemHeight = int.Parse(advancedSettings.Element("Map_Item_Height").Value);
+                Settings.IronPythonLibsDirectory = advancedSettings.Element("Iron_Python_Libs_Dir").Value;
+                Settings.SuppressErrors = bool.Parse(advancedSettings.Element("Suppress_Errors").Value);
 
                 // Get the roles
                 Settings.Roles = new Dictionary<string, Role>();
-                var roleSettings = doc.Elements("Config").Elements("Roles").FirstOrDefault();
+                var roleSettings = doc.Element("Config").Element("Roles");
                 foreach (var role in roleSettings.Elements())
                 {
                     Settings.Roles.Add(role.Name.ToString(), new Role(role.Name.ToString(), int.Parse(role.Value)));
                 }
 
-                string defaultRole = doc.Elements("Config").Elements("Default_Role").FirstOrDefault().Value.ToString();
+                string defaultRole = doc.Element("Config").Element("Default_Role").Value.ToString();
 
                 Settings.DefaultRole = Settings.Roles[defaultRole] ?? Role.Default;
             }
@@ -168,10 +169,9 @@ namespace Lunar.Server
 
             if (!File.Exists(_filePathUserPermissions))
             {
-                Logger.LogEvent($"Could not load user permissions: file does not exist at {_filePathUserPermissions}!", LogTypes.ERROR);
+                Engine.Services.Get<Logger>().LogEvent($"Could not load user permissions: file does not exist at {_filePathUserPermissions}!", LogTypes.ERROR);
                 return;
             }
-                
 
             try
             {
@@ -192,7 +192,7 @@ namespace Lunar.Server
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Could not load user permissions: {ex.Message}", LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent($"Could not load user permissions: {ex.Message}", LogTypes.ERROR, ex);
             }
         }
 
@@ -207,7 +207,7 @@ namespace Lunar.Server
             {
                 if (i >= Settings.ExperienceThreshhold.Length)
                 {
-                    Logger.LogEvent("Experience chart exceeds maximum level!", LogTypes.ERROR, new Exception("Experience chart exceeds maximum level!"));
+                    Engine.Services.Get<Logger>().LogEvent("Experience chart exceeds maximum level!", LogTypes.ERROR, new Exception("Experience chart exceeds maximum level!"));
                     return;
                 }
 

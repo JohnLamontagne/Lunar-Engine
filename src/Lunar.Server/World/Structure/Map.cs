@@ -68,11 +68,11 @@ namespace Lunar.Server.World.Structure
 
                 layer.NPCSpawnerEvent += (sender, args) =>
                 {
-                    var npcDesc = Server.ServiceLocator.Get<NPCManager>().GetNPC(args.NPCID);
+                    var npcDesc = Engine.Services.Get<NPCManager>().GetNPC(args.NPCID);
 
                     if (npcDesc == null)
                     {
-                        Logger.LogEvent($"Error spawning NPC: {args.NPCID} does not exist!", LogTypes.ERROR, new Exception($"Error spawning NPC: {args.NPCID} does not exist!"));
+                        Engine.Services.Get<Logger>().LogEvent($"Error spawning NPC: {args.NPCID} does not exist!", LogTypes.ERROR, new Exception($"Error spawning NPC: {args.NPCID} does not exist!"));
                         return;
                     }
 
@@ -160,7 +160,7 @@ namespace Lunar.Server.World.Structure
             }
             else
             {
-                Logger.LogEvent($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}", LogTypes.ERROR, new Exception($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}"));
+                Engine.Services.Get<Logger>().LogEvent($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}", LogTypes.ERROR, new Exception($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}"));
             }
 
           
@@ -315,7 +315,7 @@ namespace Lunar.Server.World.Structure
         {
             if (!_actors.ContainsKey(actorID))
             {
-                Logger.LogEvent($"Actor {actorID} does not exist in map!", LogTypes.ERROR, new Exception($"Actor {actorID} does not exist in map!"));
+                Engine.Services.Get<Logger>().LogEvent($"Actor {actorID} does not exist in map!", LogTypes.ERROR, new Exception($"Actor {actorID} does not exist in map!"));
                 return;;
             }
 

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Lidgren.Network;
 using Lunar.Core.Content.Graphics;
@@ -20,6 +21,7 @@ using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
 using Lunar.Server.World.Actors;
 using Lunar.Core.Utilities;
+using Lunar.Core;
 
 namespace Lunar.Server.World
 {
@@ -33,7 +35,7 @@ namespace Lunar.Server.World
         {
             if (descriptor == null)
             {
-                Logger.LogEvent("Null item!", LogTypes.ERROR, new Exception("Null item"));
+                Engine.Services.Get<Logger>().LogEvent("Null item!", LogTypes.ERROR, new Exception("Null item"));
 
                 Descriptor = new ItemDescriptor()
                 {
@@ -45,7 +47,7 @@ namespace Lunar.Server.World
 
             this.InitalizeHooks();
 
-            this.BehaviorDefinition.OnCreated?.Invoke(new GameEventArgs(this));
+            this.BehaviorDefinition.OnCreated?.Invoke(new ItemArgs(this));
         }
 
         private void InitalizeHooks()
@@ -57,12 +59,12 @@ namespace Lunar.Server.World
                 string scriptActionHook = pair.Key;
                 string scriptContent = pair.Value;
 
-                Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScriptFromSource(scriptContent);
+                Script script = Engine.Services.Get<ScriptManager>().CreateScriptFromSource(scriptContent);
 
                 switch (scriptActionHook)
                 {
                     case "OnAcquired":
-                        BehaviorDefinition.OnAcquired = new Action<GameEventArgs>((args) => 
+                        BehaviorDefinition.OnAcquired = new Action<ServerArgs>((args) =>
                             {
                                 script.Invoke("on_acquired", args);
                             }
@@ -70,31 +72,31 @@ namespace Lunar.Server.World
                         break;
 
                     case "OnCreated":
-                        BehaviorDefinition.OnCreated = new Action<GameEventArgs>((args) =>
+                        BehaviorDefinition.OnCreated = new Action<ServerArgs>((args) =>
                             {
-                            script.Invoke("on_created", args);
+                                script.Invoke("on_created", args);
                             }
                         );
                         break;
 
                     case "OnDropped":
-                        BehaviorDefinition.OnDropped = new Action<GameEventArgs>((args) =>
+                        BehaviorDefinition.OnDropped = new Action<ServerArgs>((args) =>
                             {
-                            script.Invoke("on_dropped", args);
+                                script.Invoke("on_dropped", args);
                             }
                         );
                         break;
 
                     case "OnEquip":
-                        BehaviorDefinition.OnEquip = new Action<GameEventArgs>((args) =>
+                        BehaviorDefinition.OnEquip = new Action<ServerArgs>((args) =>
                             {
-                            script.Invoke("on_equip", args);
+                                script.Invoke("on_equip", args);
                             }
                         );
                         break;
 
                     case "OnUse":
-                        BehaviorDefinition.OnUse = new Action<GameEventArgs>((args) =>
+                        BehaviorDefinition.OnUse = new Action<ServerArgs>((args) =>
                             {
                                 script.Invoke("on_use", args);
                             }
@@ -106,14 +108,14 @@ namespace Lunar.Server.World
 
         public void OnUse(IActor<IActorDescriptor> user)
         {
-            this.BehaviorDefinition?.OnUse?.Invoke(new GameEventArgs(this, user));
+            this.BehaviorDefinition?.OnUse?.Invoke(new ItemInteractionArgs(this, user));
         }
 
         public void OnEquip(IActor<IActorDescriptor> user)
         {
-            this.BehaviorDefinition?.OnEquip?.Invoke(new GameEventArgs(this, user));
+            this.BehaviorDefinition?.OnEquip?.Invoke(new ItemInteractionArgs(this, user));
         }
-        
+
         public NetBuffer PackData()
         {
             var netBuffer = new NetBuffer();

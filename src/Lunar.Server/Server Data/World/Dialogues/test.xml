@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dialogue name="bla">
+	<Script>test.py</Script>
+	<Branch name="BranchA">
+		<Text>Hello there, {Adventurer}</Text>
+		<Response>No time to talk</Response>
+		<Response function="somePyFunc">Fuck you!!!</Response>
+		<Response next="BranchB">Who are you?</Response>
+	</Branch>
+	<Branch name="BranchB">
+		<Text>I am some random NPC.</Text>
+		<Response>Ok bye</Response>
+	</Branch>
+</Dialogue>

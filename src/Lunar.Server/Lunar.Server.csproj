@@ -108,6 +108,7 @@
     <Compile Include="Server.cs" />
     <Compile Include="ServerHeartbeat.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Utilities\Commands\CommandArgs.cs" />
     <Compile Include="Utilities\Commands\CommandHandler.cs" />
     <Compile Include="Utilities\Events\GameEventArgs.cs" />
     <Compile Include="Utilities\Events\GameEventListener.cs" />
@@ -120,7 +121,7 @@
     <Compile Include="Utilities\Pathfinding\SearchNode.cs" />
     <Compile Include="Utilities\Plugin\PluginManager.cs" />
     <Compile Include="Utilities\Scripting\Script.cs" />
-    <Compile Include="Utilities\Scripting\GameEventArgs.cs" />
+    <Compile Include="Utilities\Scripting\ScriptArgs.cs" />
     <Compile Include="Utilities\Scripting\ScriptManager.cs" />
     <Compile Include="Utilities\Scripting\ScriptUtilities.cs" />
     <Compile Include="Net\WebCommunicator.cs" />
@@ -149,6 +150,11 @@
     <Compile Include="World\Actors\NPCManager.cs" />
     <Compile Include="World\Actors\Player.cs" />
     <Compile Include="World\Actors\PlayerManager.cs" />
+    <Compile Include="World\Dialogue\DialogueBranch.cs" />
+    <Compile Include="World\Dialogue\DialogueManager.cs" />
+    <Compile Include="World\Dialogue\DialogueResponseArgs.cs" />
+    <Compile Include="World\ItemArgs.cs" />
+    <Compile Include="World\ItemInteractionArgs.cs" />
     <Compile Include="World\Structure\CollisionDescriptor.cs" />
     <Compile Include="World\Structure\LightInformation.cs" />
     <Compile Include="World\Structure\MapItem.cs" />
@@ -214,6 +220,7 @@
     <Content Include="Server Data\World\Scripts\npc_common.py" />
     <Content Include="Server Data\World\Scripts\player.py" />
     <Content Include="Server Data\World\Scripts\test.py" />
+    <Compile Include="World\Dialogue\DialogueResponse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

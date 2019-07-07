@@ -53,6 +53,7 @@
     <Compile Include="Content\Graphics\SpriteInfo.cs" />
     <Compile Include="Content\Graphics\SpriteSheet.cs" />
     <Compile Include="Content\Graphics\Transform.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="EngineConstants.cs" />
     <Compile Include="Utilities\Data\FileSystem\FSDataFactory.cs" />
     <Compile Include="Utilities\Data\FileSystem\FSDataFactoryArguments.cs" />

@@ -10,19 +10,23 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
+using Lunar.Server.World.Actors;
 using System;
 
 namespace Lunar.Server.World.Structure
 {
     public class MapObjectBehaviorDefinition
     {
-        public Action<EventArgs> OnEntered { get; set; }
+        public Action<MapObject, IActor<IActorDescriptor>> OnEntered { get; set; }
 
-        public Action<EventArgs> OnLeft { get; set; }
+        public Action<MapObject, IActor<IActorDescriptor>> OnLeft { get; set; }
 
-        public Action<EventArgs> OnInteract { get; set; }
+        public Action<MapObject, IActor<IActorDescriptor>> OnInteract { get; set; }
 
-        public Action<EventArgs> Update { get; set; }
+        public Action<MapObject, GameTime> Update { get; set; }
     }
 }

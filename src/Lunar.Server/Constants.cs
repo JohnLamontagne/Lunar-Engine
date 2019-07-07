@@ -27,7 +27,6 @@ namespace Lunar.Server
 
         public const int ACTIONS_PER_SECOND = 5;
 
-
 #if DEV_MODE
         public static readonly string FILEPATH_DATA = AppDomain.CurrentDomain.BaseDirectory + "../../Server Data/";
 #else
@@ -63,5 +62,7 @@ namespace Lunar.Server
         public static readonly string FILEPATH_PLUGINS = Constants.FILEPATH_WORLD + "/Plugins/";
 
         public static readonly string FILEPATH_ANIMATIONS = Constants.FILEPATH_WORLD + "/Animations/";
+
+        public static readonly string FILEPATH_DIALOGUE = Constants.FILEPATH_WORLD + "/Dialogues/";
     }
 }

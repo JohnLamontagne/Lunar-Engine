@@ -60,7 +60,7 @@ namespace Lunar.Server.World.Actors
         {
             foreach (var scriptPath in scriptPaths)
             {
-                Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
+                Script script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
                 ActorBehaviorDefinition behaviorDefinition = script?.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
 
                 if (behaviorDefinition != null)

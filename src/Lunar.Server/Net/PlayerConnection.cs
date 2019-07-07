@@ -10,12 +10,15 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using Lidgren.Network;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Server.Utilities;
+using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.Net
 {
@@ -23,20 +26,27 @@ namespace Lunar.Server.Net
     {
         private NetConnection _netConnection;
         private NetHandler _netHandler;
-        private Dictionary<PacketType, Action<PacketReceivedEventArgs>> _handlers;
+
+        // Used to keep reference to the Actions we create to filter our incoming packets to the correct players.
+        private Dictionary<Action<PacketReceivedEventArgs>, Action<PacketReceivedEventArgs>> _handlerFilters;
+
+        private Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _handlers;
 
         public long UniqueIdentifier => _netConnection.RemoteUniqueIdentifier;
+
+        public Player Player { get; set; }
 
         public PlayerConnection(NetConnection netConnection, NetHandler netHandler)
         {
             _netConnection = netConnection;
             _netHandler = netHandler;
-            _handlers = new Dictionary<PacketType, Action<PacketReceivedEventArgs>>();
+            _handlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
+            _handlerFilters = new Dictionary<Action<PacketReceivedEventArgs>, Action<PacketReceivedEventArgs>>();
         }
 
         public void AddPacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
         {
-            Action<PacketReceivedEventArgs> mHandler = args => 
+            Action<PacketReceivedEventArgs> mHandler = args =>
             {
                 if (args.Connection.UniqueIdentifier == _netConnection.RemoteUniqueIdentifier)
                 {
@@ -44,22 +54,26 @@ namespace Lunar.Server.Net
                 }
             };
 
-            _handlers.Add(packetType, mHandler);
+            if (!_handlers.ContainsKey(packetType))
+                _handlers.Add(packetType, new List<Action<PacketReceivedEventArgs>>());
 
+            _handlers[packetType].Add(handler);
             _netHandler.AddPacketHandler(packetType, mHandler);
+            _handlerFilters.Add(handler, mHandler);
         }
 
         public void RemovePacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
         {
-            _netHandler.RemovePacketHandler(packetType, _handlers[packetType]);
+            _netHandler.RemovePacketHandler(packetType, _handlerFilters[handler]);
             _handlers.Remove(packetType);
+            _handlerFilters.Remove(handler);
         }
 
         public void SendPacket(Packet packet, NetDeliveryMethod method)
         {
             if (_netConnection == null)
             {
-                Logger.LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
+                Engine.Services.Get<Logger>().LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
                 return;
             }
 
@@ -70,12 +84,11 @@ namespace Lunar.Server.Net
         {
             if (_netConnection == null)
             {
-                Logger.LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
+                Engine.Services.Get<Logger>().LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
                 return;
             }
 
             _netConnection.Disconnect(byeMessage);
         }
- 
     }
 }

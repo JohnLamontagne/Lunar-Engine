@@ -10,14 +10,16 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
+using Lunar.Core;
 using Lunar.Core.Utilities;
 using Lunar.Core.World;
 using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World.Actors.Actions.Player
 {
-    class PlayerUseItemAction : IAction<Actors.Player>
+    internal class PlayerUseItemAction : IAction<Actors.Player>
     {
         private readonly int _slotNum;
 
@@ -32,7 +34,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             if (player.Inventory.GetSlot(_slotNum) == null)
             {
                 // Log it!
-                Logger.LogEvent($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, new Exception($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}."));
+                Engine.Services.Get<Logger>().LogEvent($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, new Exception($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}."));
 
                 return;
             }

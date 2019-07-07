@@ -127,8 +127,8 @@ namespace Lunar.Client.World
                 if (_player == null)
                 {
                     player = new Player(_camera, uniqueID);
-                    player.Unpack(args.Message, _contentManager);
                     _player = player;
+                    this.PlayerJoined?.Invoke(this, new PlayerJoinedEventArgs(player));
                 }
 
                 player = _player;
@@ -136,12 +136,12 @@ namespace Lunar.Client.World
             else
             {
                 player = new Player(uniqueID);
-                player.Unpack(args.Message, _contentManager);
+                this.PlayerJoined?.Invoke(this, new PlayerJoinedEventArgs(player));
             }
 
-            _map?.AddEntity(uniqueID, player);
+            player.Unpack(args.Message, _contentManager);
 
-            this.PlayerJoined?.Invoke(this, new PlayerJoinedEventArgs(player));
+            _map?.AddEntity(uniqueID, player);
         }
 
         private void Handle_MapData(PacketReceivedEventArgs args)

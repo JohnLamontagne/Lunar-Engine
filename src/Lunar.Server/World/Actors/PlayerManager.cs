@@ -35,7 +35,7 @@ namespace Lunar.Server.World.Actors
         {
             _players = new Dictionary<long, Player>();
 
-            _playerDataManager = Server.ServiceLocator.Get<FSDataFactory>().Create<PlayerFSDataLoader>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
+            _playerDataManager = Engine.Services.Get<FSDataFactory>().Create<PlayerFSDataLoader>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
         }
 
         private void AddPlayer(Player player)

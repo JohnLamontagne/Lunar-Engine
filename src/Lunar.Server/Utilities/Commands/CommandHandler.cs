@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using Lidgren.Network;
@@ -44,7 +45,7 @@ namespace Lunar.Server.Utilities.Commands
 
         private void LoadScript()
         {
-            _script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "command_handler.py");
+            _script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "command_handler.py");
             _script?.SetVariable<CommandHandler>("command_handler", this);
         }
 
@@ -64,17 +65,17 @@ namespace Lunar.Server.Utilities.Commands
             if (_scriptedCommandHandlers.ContainsKey(command))
             {
                 // Get the player
-                var player = Server.ServiceLocator.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
+                var player = Engine.Services.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
 
-                _scriptedCommandHandlers[command].ForEach(a => 
+                _scriptedCommandHandlers[command].ForEach(a =>
                     {
                         try
                         {
-                            a(new GameEventArgs(this, player, cArgs));
+                            a(new CommandArgs(this, player, cArgs));
                         }
                         catch (Exception ex)
                         {
-                            Server.ServiceLocator.Get<ScriptManager>().HandleException(ex);
+                            Engine.Services.Get<ScriptManager>().HandleException(ex);
                         }
                     }
                 );

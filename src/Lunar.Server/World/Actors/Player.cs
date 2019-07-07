@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
@@ -74,8 +75,6 @@ namespace Lunar.Server.World.Actors
 
         public Equipment Equipment => _equipment;
 
-        public PlayerConnection Connection => _connection;
-
         public IActor<IActorDescriptor> Target { get; set; }
 
         /// <summary>
@@ -110,6 +109,7 @@ namespace Lunar.Server.World.Actors
         {
             _descriptor = descriptor;
             _connection = connection;
+            _connection.Player = this;
             this.State = ActorStates.Idle;
 
             this.Descriptor.CollisionBounds = new Rect(16, 52, 16, 20);
@@ -118,13 +118,13 @@ namespace Lunar.Server.World.Actors
 
             _inventory = new Inventory(this);
             _equipment = new Equipment(this);
+            _networkComponent = new PlayerNetworkComponent(this, connection);
             _packetHandler = new PlayerPacketHandler(this);
-            _networkComponent = new PlayerNetworkComponent(this);
             _actionProcessor = new ActionProcessor<Player>(this);
 
             _eventHandlers = new Dictionary<string, List<Action<EventArgs>>>();
 
-            Script script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "player.py");
+            Script script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "player.py");
             _script = script;
 
             try
@@ -132,11 +132,10 @@ namespace Lunar.Server.World.Actors
                 this.Behavior = script.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
             }
             catch { }
-            
 
             if (this.Behavior == null)
             {
-                Logger.LogEvent("Error hooking player behavior definition.", LogTypes.ERROR, new Exception("Error hooking player behavior definition."));
+                Engine.Services.Get<Logger>().LogEvent("Error hooking player behavior definition.", LogTypes.ERROR, new Exception("Error hooking player behavior definition."));
             }
             else
             {
@@ -144,7 +143,7 @@ namespace Lunar.Server.World.Actors
                 this.Behavior.EventOccured += this.BehaviorDescriptor_EventOccured;
             }
 
-            this.Descriptor.Stats.Changed += (o, args) => 
+            this.Descriptor.Stats.Changed += (o, args) =>
             {
                 this.NetworkComponent.SendPlayerStats();
             };
@@ -163,7 +162,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error in OnDeath handling: " + ex.Message, LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent("Error in OnDeath handling: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
 
@@ -171,6 +170,7 @@ namespace Lunar.Server.World.Actors
         {
             this.NetworkComponent.SendChatMessage(message, messageType);
         }
+
         public void InflictDamage(int amount)
         {
             this.Descriptor.Stats.Health -= amount;
@@ -187,7 +187,6 @@ namespace Lunar.Server.World.Actors
 
             this.Behavior?.Attacked(this, attacker, damageDelt);
         }
-
 
         private void BehaviorDescriptor_EventOccured(object sender, SubjectEventArgs e)
         {
@@ -217,15 +216,8 @@ namespace Lunar.Server.World.Actors
             this.NetworkComponent.SendPlayerStats();
         }
 
-     
-
-
-
         private void OnEvent(string eventName, params object[] args)
         {
-            if (_eventHandlers.ContainsKey(eventName))
-                _eventHandlers[eventName].ForEach(a => a.Invoke(new GameEventArgs(this, args)));
-
             this.EventOccured?.Invoke(this, new SubjectEventArgs(eventName, args));
         }
 
@@ -237,20 +229,17 @@ namespace Lunar.Server.World.Actors
             _eventHandlers[eventName].Add(handler);
         }
 
-       
-       
         public void WarpTo(Vector position)
         {
             this.Descriptor.Position = position;
 
             this.Layer.OnPlayerWarped(this);
-            
+
             this.NetworkComponent.SendPositionUpdate();
-           
+
             this.OnEvent("moved");
         }
 
-      
         public void JoinMap(Map map)
         {
             this.State = ActorStates.Idle;
@@ -258,9 +247,9 @@ namespace Lunar.Server.World.Actors
             this.Layer = map.Layers.ElementAt(0);
 
             this.NetworkComponent.SendLoadingScreen();
-            
+
             this.MapLoaded = false;
-           
+
             this.Map?.OnPlayerQuit(this);
             _map = map;
 
@@ -343,7 +332,6 @@ namespace Lunar.Server.World.Actors
                 }
             }
         }
-
 
         public NetBuffer Pack()
         {

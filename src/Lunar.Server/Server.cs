@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
@@ -26,6 +27,7 @@ using Lunar.Server.Utilities.Commands;
 using Lunar.Server.Utilities.Events;
 using Lunar.Server.Utilities.Plugin;
 using System.Diagnostics;
+using Lunar.Server.World.Dialogue;
 
 namespace Lunar.Server
 {
@@ -42,55 +44,76 @@ namespace Lunar.Server
 
         private NetHandler _netHandler;
 
-        public static ServiceLocator ServiceLocator { get { return _serviceLocator = _serviceLocator ?? new ServiceLocator(); } }
-
         public Server()
         {
         }
 
         public void Initalize()
         {
+            Console.WriteLine("Firing up engine...");
+
+            Engine.Initialize();
+
             Console.WriteLine("Initalizing server...");
 
             Console.WriteLine("Loading server settings...");
             Settings.Initalize();
 
-            Logger.SuppressErrors = Settings.SuppressErrors;
+            Engine.Services.Get<Logger>().SuppressErrors = Settings.SuppressErrors;
 
             // Point the logger towards the current directory
-            Logger.LogPath = Constants.FILEPATH_LOGS;
+            Engine.Services.Get<Logger>().LogPath = Constants.FILEPATH_LOGS;
 
-            Logger.Start();
+            Engine.Services.Get<Logger>().Start();
 
-            Console.WriteLine($"Log output set to: {Logger.LogPath} with error suppression {(Logger.SuppressErrors ? "on" : "off")}.");
+            Console.WriteLine($"Log output set to: {Engine.Services.Get<Logger>().LogPath} with error suppression {(Engine.Services.Get<Logger>().SuppressErrors ? "on" : "off")}.");
 
             Console.WriteLine("Checking file integrity...");
             this.CheckFileIntegrity();
 
-            Server.ServiceLocator.Register(new ScriptManager());
+            Engine.Services.Register(new ScriptManager());
 
             _netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
             Packet.Initalize(_netHandler);
 
             // Register the data loader factories
-            Server.ServiceLocator.Register(new FSDataFactory());
+            Engine.Services.Register(new FSDataFactory());
 
             // Create and initalize the game content managers.
-            Server.ServiceLocator.Register(new ItemManager());
-            Server.ServiceLocator.Register(new NPCManager());
-            Server.ServiceLocator.Register(new MapManager());
+            var itemManager = new ItemManager();
+            Engine.Services.Register(itemManager);
+            itemManager.Initalize();
 
-            Server.ServiceLocator.Register(new WorldManager(_netHandler));
-            Server.ServiceLocator.Register(new PlayerManager());
+            var npcManager = new NPCManager();
+            Engine.Services.Register(npcManager);
+            npcManager.Initalize();
 
-            Server.ServiceLocator.Register(new GameEventListener());
+            var mapManager = new MapManager();
+            Engine.Services.Register(mapManager);
+            mapManager.Initalize();
+
+            var worldManager = new WorldManager(_netHandler);
+            Engine.Services.Register(worldManager);
+            worldManager.Initalize();
+
+            var playerManager = new PlayerManager();
+            Engine.Services.Register(playerManager);
+            playerManager.Initalize();
+
+            var dialogueManager = new DialogueManager();
+            Engine.Services.Register(dialogueManager);
+            dialogueManager.Initalize();
+
+            var gameEventListener = new GameEventListener();
+            Engine.Services.Register(gameEventListener);
+            gameEventListener.Initalize();
 
             var pluginManager = new PluginManager();
             pluginManager.Initalize();
-            Server.ServiceLocator.Register(pluginManager);
+            Engine.Services.Register(pluginManager);
 
             CommandHandler commandHandler = new CommandHandler(_netHandler);
-            Server.ServiceLocator.Register(commandHandler);
+            Engine.Services.Register(commandHandler);
             commandHandler.Initalize();
 
             _webCommunicator = new WebCommunicator();
@@ -109,8 +132,6 @@ namespace Lunar.Server
 
         private void BeginServerLoop()
         {
-            
-
             _netThread = new Thread(() =>
             {
                 var gametime = new GameTime();
@@ -125,7 +146,7 @@ namespace Lunar.Server
             _worldThread = new Thread(() =>
             {
                 var gametime = new GameTime();
-                var serverWorldHeartbeat = new ServerHeartbeat(Server.ServiceLocator.Get<WorldManager>().Update);
+                var serverWorldHeartbeat = new ServerHeartbeat(Engine.Services.Get<WorldManager>().Update);
 
                 while (!Server.ShutDown)
                 {
@@ -133,12 +154,11 @@ namespace Lunar.Server
                 }
 
                 // Save the game world
-                Server.ServiceLocator.Get<WorldManager>().Save();
+                Engine.Services.Get<WorldManager>().Save();
             });
 
             _netThread.Start();
             _worldThread.Start();
-
         }
 
         private void CheckFileIntegrity()

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Lunar.Server.Net;
 using Lidgren.Network;
@@ -27,6 +28,7 @@ using Lunar.Server.Utilities;
 using Lunar.Server.World.Structure;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
+using Lunar.Core;
 
 namespace Lunar.Server.World.Actors
 {
@@ -45,11 +47,9 @@ namespace Lunar.Server.World.Actors
 
         public NPCDefinition Descriptor => _definition;
 
-
         public Layer Layer { get; set; }
 
         public long UniqueID { get; }
-
 
         public Direction Direction { get; set; }
 
@@ -73,12 +73,11 @@ namespace Lunar.Server.World.Actors
 
         public CollisionBody CollisionBody { get; }
 
-
         public NPC(NPCDefinition definition, Map map)
         {
             if (definition == null)
             {
-                Logger.LogEvent($"Null npc spawned on map {map.Descriptor.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Descriptor.Name}!"));
+                Engine.Services.Get<Logger>().LogEvent($"Null npc spawned on map {map.Descriptor.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Descriptor.Name}!"));
                 definition = new NPCDefinition(NPCDescriptor.Create("null"));
             }
 
@@ -92,7 +91,7 @@ namespace Lunar.Server.World.Actors
 
             this.Sprite = new SpriteInfo(this.Descriptor.TexturePath);
             this.Layer = map.Layers.ElementAt(0);
-            
+
             _random = new Random();
 
             this.UniqueID = Guid.NewGuid().GetHashCode();
@@ -110,8 +109,8 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex);
-            }    
+                Engine.Services.Get<Logger>().LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex);
+            }
         }
 
         public void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt)
@@ -122,7 +121,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
 
@@ -138,7 +137,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Logger.LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex);
             }
 
             this.StateMachine.Update(gameTime);
@@ -158,7 +157,7 @@ namespace Lunar.Server.World.Actors
             {
                 this.Moving = true;
                 Console.WriteLine(rawPath[0]);
-                rawPath.Reverse(); // Reverse for the client which uses a queue 
+                rawPath.Reverse(); // Reverse for the client which uses a queue
                 this.SendMovementPacket(rawPath);
                 return true;
             }
@@ -197,7 +196,6 @@ namespace Lunar.Server.World.Actors
         /// <returns></returns>
         public bool WithinRangeOf(IActor<IActorDescriptor> actor, int range)
         {
-
             Rect collisionBoundsRight = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top,
                 this.CollisionBody.CollisionArea.Width + range, this.CollisionBody.CollisionArea.Height + range);
 
@@ -224,7 +222,6 @@ namespace Lunar.Server.World.Actors
 
                     if (targetDest.X >= this.Descriptor.Position.X)
                     {
-
                         this.Descriptor.Position = new Vector(targetDest.X, this.Descriptor.Position.Y);
 
                         _targetPath.Pop();
@@ -285,6 +282,7 @@ namespace Lunar.Server.World.Actors
                 }
             }
         }
+
         private bool CanMove(float delta)
         {
             Rect destCollisionArea;
@@ -314,7 +312,7 @@ namespace Lunar.Server.World.Actors
         private void UpdateMovement(Direction direction, GameTime gameTime)
         {
             this.Direction = direction;
-            
+
             float dX = 0, dY = 0;
             float delta = this.Descriptor.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
@@ -385,7 +383,6 @@ namespace Lunar.Server.World.Actors
         {
             return this.FindTarget<NPC>();
         }
-     
 
         private void SendMovementPacket(List<Vector> targetPath)
         {
@@ -402,7 +399,7 @@ namespace Lunar.Server.World.Actors
 
             _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
-        
+
         /// <summary>
         /// Sends a packet telling clients that the NPC is no longer moving.
         /// </summary>

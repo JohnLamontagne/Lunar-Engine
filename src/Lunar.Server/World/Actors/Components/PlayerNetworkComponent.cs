@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using Lidgren.Network;
 using Lunar.Core;
@@ -24,15 +25,18 @@ namespace Lunar.Server.World.Actors.Components
     {
         private readonly Player _player;
 
-        public PlayerNetworkComponent(Player player)
+        public PlayerConnection Connection { get; }
+
+        public PlayerNetworkComponent(Player player, PlayerConnection connection)
         {
             _player = player;
+            this.Connection = connection;
         }
 
         public void SendAvailableCommands()
         {
             var packet = new Packet(PacketType.AVAILABLE_COMMANDS, ChannelType.UNASSIGNED);
-            packet.Message.Write(Server.ServiceLocator.Get<CommandHandler>().Pack());
+            packet.Message.Write(Engine.Services.Get<CommandHandler>().Pack());
             this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
 
@@ -64,7 +68,7 @@ namespace Lunar.Server.World.Actors.Components
 
         public void SendPacket(Packet packet, NetDeliveryMethod method)
         {
-            _player.Connection.SendPacket(packet, method);
+            _player.NetworkComponent.Connection.SendPacket(packet, method);
         }
 
         public void SendPlayerStats()
@@ -81,8 +85,6 @@ namespace Lunar.Server.World.Actors.Components
             packet.Message.Write(_player.Descriptor.Stats.Defense + _player.Descriptor.StatBoosts.Defense);
             _player.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
-
-        
 
         public void SendInventoryUpdate()
         {

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
 using System;
@@ -43,7 +44,6 @@ namespace Lunar.Server.World.Structure
         public int FrameTime { get; set; }
         public LightInformation LightInformation { get; set; }
         public MapObjectBehaviorDefinition MapObjectBehaviorDefinition { get; set; }
-        
 
         public bool Blocked
         {
@@ -71,8 +71,8 @@ namespace Lunar.Server.World.Structure
             {
                 _interactingEntities.Remove(actor);
                 _cooldowns.Remove(actor);
-                this.MapObjectBehaviorDefinition?.OnLeft?.Invoke(new GameEventArgs(this, actor));
-            }  
+                this.MapObjectBehaviorDefinition?.OnLeft?.Invoke(this, actor);
+            }
         }
 
         public virtual void OnEntered(IActor<IActorDescriptor> actor)
@@ -80,28 +80,25 @@ namespace Lunar.Server.World.Structure
             if (this.Blocked)
                 return;
 
-
             if (actor.Layer == this.Layer)
             {
                 if (!_interactingEntities.Contains(actor))
                 {
                     _interactingEntities.Add(actor);
                     _cooldowns.Add(actor, 0);
-                    this.MapObjectBehaviorDefinition?.OnEntered?.Invoke(new GameEventArgs(this, actor));
+                    this.MapObjectBehaviorDefinition?.OnEntered?.Invoke(this, actor);
                 }
             }
-            
         }
 
         public void OnInteract(IActor<IActorDescriptor> actor)
         {
-            this.MapObjectBehaviorDefinition.OnInteract?.Invoke(new GameEventArgs(this, actor));
+            this.MapObjectBehaviorDefinition.OnInteract?.Invoke(this, actor);
         }
-
 
         public virtual void Update(GameTime gameTime)
         {
-            this.MapObjectBehaviorDefinition?.Update?.Invoke(new GameEventArgs(this, gameTime));
+            this.MapObjectBehaviorDefinition?.Update?.Invoke(this, gameTime);
         }
 
         public NetBuffer Pack()
@@ -171,18 +168,16 @@ namespace Lunar.Server.World.Structure
             }
             else
             {
-
                 mapObject.CollisionDescriptor = new CollisionBody(new Rect(
                     mapObject.Position.X, mapObject.Position.Y,
                     Settings.TileSize, Settings.TileSize));
             }
-           
 
             string scriptPath = bR.ReadString();
             if (!string.IsNullOrEmpty(scriptPath))
             {
-                var script = Server.ServiceLocator.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
-                mapObject.MapObjectBehaviorDefinition = script.Invoke<MapObjectBehaviorDefinition>("get_behavior_def", new GameEventArgs(null));
+                var script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
+                //mapObject.MapObjectBehaviorDefinition = script.Invoke<MapObjectBehaviorDefinition>("get_behavior_def", new ServerArgs(null));
             }
 
             var lightSource = bR.ReadBoolean();

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Linq;
 using Lidgren.Network;
@@ -32,15 +33,15 @@ namespace Lunar.Server.World.Actors.PacketHandlers
         {
             _player = player;
 
-            player.Connection.AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
-            player.Connection.AddPacketHandler(PacketType.DROP_ITEM, this.Handle_DropItem);
-            player.Connection.AddPacketHandler(PacketType.MAP_LOADED, this.Handle_MapLoaded);
-            player.Connection.AddPacketHandler(PacketType.REQ_USE_ITEM, this.Handle_UseItem);
-            player.Connection.AddPacketHandler(PacketType.REQ_UNEQUIP_ITEM, this.Handle_UnequipItem);
-            player.Connection.AddPacketHandler(PacketType.REQ_TARGET, this.Handle_ReqTarget);
-            player.Connection.AddPacketHandler(PacketType.DESELECT_TARGET, this.Handle_DeselectTarget);
-            player.Connection.AddPacketHandler(PacketType.PICKUP_ITEM, this.Handle_PickupItem);
-            player.Connection.AddPacketHandler(PacketType.PLAYER_INTERACT, this.Handle_PlayerInteract);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.DROP_ITEM, this.Handle_DropItem);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.MAP_LOADED, this.Handle_MapLoaded);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.REQ_USE_ITEM, this.Handle_UseItem);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.REQ_UNEQUIP_ITEM, this.Handle_UnequipItem);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.REQ_TARGET, this.Handle_ReqTarget);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.DESELECT_TARGET, this.Handle_DeselectTarget);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.PICKUP_ITEM, this.Handle_PickupItem);
+            player.NetworkComponent.Connection.AddPacketHandler(PacketType.PLAYER_INTERACT, this.Handle_PlayerInteract);
         }
 
         private void Handle_DeselectTarget(PacketReceivedEventArgs obj)
@@ -126,7 +127,6 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             }
         }
 
-
         private void Handle_PickupItem(PacketReceivedEventArgs obj)
         {
             _player.ActionProcessor.Process(new PlayerPickupItemAction());
@@ -138,6 +138,5 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
             _player.ActionProcessor.Process(new PlayerUnequipItemAction(slotNum));
         }
-
     }
 }

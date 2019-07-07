@@ -10,12 +10,14 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Lidgren.Network;
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
@@ -81,7 +83,7 @@ namespace Lunar.Server.World.Structure
                     WarpAttributeData attributeData = (WarpAttributeData)this.Descriptor.AttributeData;
                     if (player.MapID != attributeData.WarpMap)
                     {
-                        var map  = Server.ServiceLocator.Get<WorldManager>().GetMap(attributeData.WarpMap);
+                        var map = Engine.Services.Get<WorldManager>().GetMap(attributeData.WarpMap);
 
                         if (map != null)
                         {
@@ -96,12 +98,11 @@ namespace Lunar.Server.World.Structure
                         }
                         else
                         {
-
-                            Logger.LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR, 
+                            Engine.Services.Get<Logger>().LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR,
                                 new Exception($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!"));
+
                             return;
                         }
-                       
                     }
                     player.WarpTo(new Vector(attributeData.X, attributeData.Y));
                     break;
@@ -110,7 +111,6 @@ namespace Lunar.Server.World.Structure
 
         public void OnPlayerLeft(Player player)
         {
-            
         }
 
         public NetBuffer PackData()
@@ -140,7 +140,6 @@ namespace Lunar.Server.World.Structure
 
         public void Load(BinaryReader bR, Vector tilePosition)
         {
-           
         }
 
         public event EventHandler<NPCSpawnerEventArgs> NPCSpawnerEvent;

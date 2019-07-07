@@ -75,7 +75,7 @@ namespace Lunar.Server.Utilities.Scripting
         {
             ExceptionOperations eo = _scriptEngine.GetService<ExceptionOperations>();
             string error = eo.FormatException(ex);
-            Logger.LogEvent($"Script error: {error}", LogTypes.ERROR, ex);
+            Engine.Services.Get<Logger>().LogEvent($"Script error: {error}", LogTypes.ERROR, ex);
         }
 
         public void Initalize()

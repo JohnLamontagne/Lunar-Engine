@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,8 +27,6 @@ namespace Lunar.Server.World.Actors
         public NPCManager()
         {
             _npcs = new Dictionary<string, NPCDefinition>();
-
-            this.LoadNPCS();
         }
 
         private void LoadNPCS()
@@ -55,7 +54,7 @@ namespace Lunar.Server.World.Actors
 
         public void Initalize()
         {
-            throw new NotImplementedException();
+            this.LoadNPCS();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Lunar.Core.Utilities;
+﻿using Lunar.Core;
+using Lunar.Core.Utilities;
 using Microsoft.Scripting.Hosting;
 using System;
 
@@ -23,11 +24,11 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Microsoft.Scripting.SyntaxErrorException ex)
             {
-                Logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
-            catch (Exception ex)
+            catch (MissingMemberException ex)
             {
-                Logger.LogEvent($"Script Error: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
         }
 
@@ -39,7 +40,7 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex);
                 return default;
             }
         }
@@ -49,7 +50,7 @@ namespace Lunar.Server.Utilities.Scripting
             _scope.SetVariable(varName, value);
         }
 
-        public void Invoke(string functionName, GameEventArgs args)
+        public void Invoke(string functionName, ServerArgs args)
         {
             try
             {
@@ -58,20 +59,19 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Microsoft.Scripting.SyntaxErrorException ex)
             {
-                Logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
             catch (Exception ex)
             {
-                Logger.LogEvent($"Script Error: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
+                Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
         }
 
-        public T Invoke<T>(string functionName, GameEventArgs args)
+        public T Invoke<T>(string functionName, ServerArgs args)
         {
             _compiledScript.Execute(_scope);
             dynamic funct = _scope.GetVariable(functionName);
             return funct(args);
         }
-
     }
 }

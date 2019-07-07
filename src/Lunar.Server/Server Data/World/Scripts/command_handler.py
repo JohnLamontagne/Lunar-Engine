@@ -1,8 +1,5 @@
-import clr
-clr.AddReference('System')
-clr.AddReference('Lunar.Server')
-clr.AddReference('Lunar.Core')
 from Lunar.Core import *
+from Lunar.Core.Utilities import *
 from Lunar.Core.Utilities.Data import *
 from Lunar.Server import *
 from Lunar.Server.Utilities.Commands import *
@@ -28,7 +25,7 @@ def warpToPlayerCommand(args):
     player.NetworkComponent.SendChatMessage("You do not have the correct permissions to use this command!", ChatMessageType.Alert)
     return
 
-  targetPlayer = Server.ServiceLocator.GetService("PlayerManager").GetPlayer(playerName)
+  targetPlayer = Engine.Services.Get[PlayerManager].GetPlayer(playerName)
 
   if not targetPlayer.Map.ActorInMap(player):
     player.JoinMap(targetPlayer.Map)
@@ -57,7 +54,7 @@ def spawnItemCommand(args):
     player.NetworkComponent.SendChatMessage("You do not have the correct permissions to use this command!", ChatMessageType.Alert)
     return
 
-  itemDesc = Server.ServiceLocator.GetService("ItemManager").GetItem(itemName)
+  itemDesc = Engine.Services.Get[ItemManager].GetItem(itemName)
   item = Item(itemDesc)
   player.AddToInventory(item, amount)
 
@@ -70,7 +67,7 @@ def spawnNPCCommand(args):
     player.NetworkComponent.SendChatMessage("You do not have the correct permissions to use this command!", ChatMessageType.Alert)
     return
 
-  npcDesc = Server.ServiceLocator.Get[NPCManager]().GetNPC(npcName)
+  npcDesc = Engine.Services.Get[NPCManager]().GetNPC(npcName)
   if npcDesc:
     npc = NPC(npcDesc, player.Map)
     npc.WarpTo(player.Descriptor.Position)
@@ -88,9 +85,9 @@ def setCollisionBoundsCommand(args):
   player.Descriptor.CollisionBounds = Rect(left, top, width, height)
   player.NetworkComponent.SendChatMessage("Set collision bounds to " + player.Descriptor.CollisionBounds.ToString(), ChatMessageType.Announcement)
 
-Server.ServiceLocator.Get[CommandHandler]().AddHandler("warpTo", warpToCommand)
-Server.ServiceLocator.Get[CommandHandler]().AddHandler("warpToPlayer", warpToPlayerCommand)
-Server.ServiceLocator.Get[CommandHandler]().AddHandler("setSpeed", setSpeedCommand)
-Server.ServiceLocator.Get[CommandHandler]().AddHandler("spawnItem", spawnItemCommand)
-Server.ServiceLocator.Get[CommandHandler]().AddHandler("spawnNPC", spawnNPCCommand)
-Server.ServiceLocator.Get[CommandHandler]().AddHandler("setCollision", setCollisionBoundsCommand)
+Engine.Services.Get[CommandHandler]().AddHandler("warpTo", warpToCommand)
+Engine.Services.Get[CommandHandler]().AddHandler("warpToPlayer", warpToPlayerCommand)
+Engine.Services.Get[CommandHandler]().AddHandler("setSpeed", setSpeedCommand)
+Engine.Services.Get[CommandHandler]().AddHandler("spawnItem", spawnItemCommand)
+Engine.Services.Get[CommandHandler]().AddHandler("spawnNPC", spawnNPCCommand)
+Engine.Services.Get[CommandHandler]().AddHandler("setCollision", setCollisionBoundsCommand)

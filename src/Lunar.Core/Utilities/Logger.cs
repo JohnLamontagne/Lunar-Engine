@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
@@ -20,26 +21,30 @@ using Lunar.Core;
 
 namespace Lunar.Core.Utilities
 {
-    public static class Logger
+    public class Logger : IService
     {
-        private static BackgroundWorker _loggerWorker;
-        private static bool _shuttingDown;
-        private static ConcurrentQueue<Tuple<string[], string>> _logQueue;
+        private BackgroundWorker _loggerWorker;
+        private bool _shuttingDown;
+        private ConcurrentQueue<Tuple<string[], string>> _logQueue;
 
-        private static string _previousConsoleLog;
-        private static int _previousConsoleLogY;
-        private static int _sameErrorCount;
+        private string _previousConsoleLog;
+        private int _previousConsoleLogY;
+        private int _sameErrorCount;
 
-        public static bool SuppressErrors { get; set; }
+        public bool SuppressErrors { get; set; }
 
-        public static string LogPath { get; set; }
+        public string LogPath { get; set; }
 
-        static Logger()
+        public Logger()
         {
-            Logger.SuppressErrors = true;
+            this.SuppressErrors = true;
         }
 
-        public static void LogEvent(string eventDetails, LogTypes logType, Exception exception = null)
+        public void Initalize()
+        {
+        }
+
+        public void LogEvent(string eventDetails, LogTypes logType, Exception exception = null)
         {
             switch (logType)
             {
@@ -67,9 +72,9 @@ namespace Lunar.Core.Utilities
                         _previousConsoleLog = newConsoleLog;
                     }
 
-                    TextLog($"Error: {eventDetails}.", exception.StackTrace, Logger.LogPath + "Error.txt");
+                    TextLog($"Error: {eventDetails}.", exception.StackTrace, Engine.Services.Get<Logger>().LogPath + "Error.txt");
 
-                    if (!Logger.SuppressErrors)
+                    if (!Engine.Services.Get<Logger>().SuppressErrors)
                     {
                         if (exception.InnerException != null)
                             ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
@@ -80,16 +85,16 @@ namespace Lunar.Core.Utilities
                     break;
 
                 case LogTypes.GAME:
-                    TextLog($"Game event: {eventDetails}", exception?.StackTrace, Logger.LogPath + "Game_Event.txt");
+                    TextLog($"Game event: {eventDetails}", exception?.StackTrace, Engine.Services.Get<Logger>().LogPath + "Game_Event.txt");
                     break;
 
                 case LogTypes.GEN_SERVER:
-                    TextLog($"Event: {eventDetails}", exception?.StackTrace, Logger.LogPath + "General_Server.txt");
+                    TextLog($"Event: {eventDetails}", exception?.StackTrace, Engine.Services.Get<Logger>().LogPath + "General_Server.txt");
                     break;
             }
         }
 
-        public static void Start()
+        public void Start()
         {
             _logQueue = new ConcurrentQueue<Tuple<string[], string>>();
             _loggerWorker = new BackgroundWorker();
@@ -97,16 +102,15 @@ namespace Lunar.Core.Utilities
 
             var timer = new System.Timers.Timer(5000);
             timer.Elapsed += Timer_Elapsed;
-
         }
 
-        private static void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (!_loggerWorker.IsBusy)
                 _loggerWorker.RunWorkerAsync();
         }
 
-        private static void _loggerWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void _loggerWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             if (_logQueue.TryDequeue(out Tuple<string[], string> logs))
             {
@@ -126,15 +130,14 @@ namespace Lunar.Core.Utilities
                     Console.WriteLine(logs.Item1[2]);
                 }
             }
-
         }
 
-        public static void Stop()
+        public void Stop()
         {
             _shuttingDown = true;
         }
 
-        private static void TextLog(string logMessage, string stackTrace, string filePath)
+        private void TextLog(string logMessage, string stackTrace, string filePath)
         {
             _logQueue.Enqueue(new Tuple<string[], string>(new string[]
             {

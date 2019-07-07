@@ -10,34 +10,18 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 
 namespace Lunar.Server.Utilities.Scripting
 {
-    public class GameEventArgs : EventArgs
+    /// <summary>
+    ///
+    /// </summary>
+    public class ServerArgs
     {
-        private object _invoker;
-        private object[] _args;
-
-        public object Invoker { get { return _invoker; } }
-
-        public object this[int index]
+        public ServerArgs()
         {
-            get
-            {
-                if (index >= _args.Length)
-                {
-                    Console.WriteLine($"Script error: attempting to access invalid argument at {index}!");
-                }
-
-                return _args[index];
-            }
-        }
-
-        public GameEventArgs(object invoker, params object[] args)
-        {
-            _invoker = invoker;
-            _args = args;
         }
     }
 }
