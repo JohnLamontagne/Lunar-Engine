@@ -16,6 +16,7 @@ using System;
 using Lunar.Server.World.Actors;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Core.Utilities;
+using System.Linq;
 using Lunar.Core;
 
 namespace Lunar.Server.World.Dialogue
@@ -26,7 +27,11 @@ namespace Lunar.Server.World.Dialogue
 
         public string Name { get; }
 
+        public string ScriptPath { get; set; }
+
         public Script Script { get; set; }
+
+        public IList<DialogueBranch> Branches => _branches.Values.ToList();
 
         public Dialogue(string name)
         {
@@ -59,6 +64,11 @@ namespace Lunar.Server.World.Dialogue
             }
 
             _branches.Add(branch.Name, branch);
+        }
+
+        public bool BranchExists(string name)
+        {
+            return _branches.ContainsKey(name);
         }
 
         /// <summary>

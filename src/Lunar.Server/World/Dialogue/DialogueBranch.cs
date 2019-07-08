@@ -7,13 +7,13 @@ using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lunar.Server.World.Dialogue
 {
     public class DialogueBranch
     {
         private string _uniqueID;
-        private Dialogue _dialogue;
         private Script _script;
 
         private Dictionary<string, DialogueResponse> _responses;
@@ -24,13 +24,17 @@ namespace Lunar.Server.World.Dialogue
 
         public string Name { get; }
 
+        public Dialogue Dialogue { get; }
+
+        public List<DialogueResponse> Responses => _responses.Values.ToList();
+
         public DialogueBranch(Dialogue dialogue, string name, string text)
         {
             _responses = new Dictionary<string, DialogueResponse>();
-            _dialogue = dialogue;
 
             this.Name = name;
             this.Text = text;
+            this.Dialogue = dialogue;
         }
 
         public void AddResponse(DialogueResponse response)
@@ -54,11 +58,11 @@ namespace Lunar.Server.World.Dialogue
 
                 if (response.IsScripted)
                 {
-                    _script.Invoke(response.Function, new DialogueArgs(_dialogue, player));
+                    _script.Invoke(response.Function, new DialogueArgs(this.Dialogue, player));
                 }
                 else
                 {
-                    _dialogue.Play(response.Next);
+                    this.Dialogue.Play(response.Next);
                 }
             }
             else
@@ -79,11 +83,11 @@ namespace Lunar.Server.World.Dialogue
             {
                 if (!string.IsNullOrEmpty(response.Condition))
                 {
-                    var displayable = _dialogue.Script?.Invoke<bool>(response.Condition, new DialogueArgs(_dialogue, player));
+                    var displayable = this.Dialogue.Script?.Invoke<bool>(response.Condition, new DialogueArgs(this.Dialogue, player));
 
                     if (!displayable.HasValue)
                     {
-                        Engine.Services.Get<Logger>().LogEvent($"Script for response {response.Text} in dialogue {_dialogue.Name} invalid!", LogTypes.ERROR);
+                        Engine.Services.Get<Logger>().LogEvent($"Script for response {response.Text} in dialogue {this.Dialogue.Name} invalid!", LogTypes.ERROR);
                     }
                     else if (displayable.Value)
                     {

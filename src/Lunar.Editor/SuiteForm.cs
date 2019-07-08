@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Lunar.Core;
 using Lunar.Editor.Controls;
 using Lunar.Editor.Utilities;
+using System.Diagnostics;
 
 namespace Lunar.Editor
 {
@@ -24,13 +25,12 @@ namespace Lunar.Editor
         private DockProperties _dockProperties;
         private DockMapObjectProperties _dockMapObject;
         private DockMapAttributes _dockMapAttributes;
-        
 
         private Project _project;
 
         public Project Project => _project;
 
-        #endregion
+        #endregion Field Region
 
         #region Constructor Region
 
@@ -75,7 +75,6 @@ namespace Lunar.Editor
             _dockProject.FileRemoved += _dockProject_File_Removed;
             _dockProject.FileChanged += DockProjectOnFileChanged;
 
-         
             this.DockPanel.AddContent(_dockProject);
             this.DockPanel.AddContent(_dockTilesetTools);
 
@@ -87,7 +86,7 @@ namespace Lunar.Editor
 
             this.DockPanel.AddContent(_dockMapObject, _dockTilesetTools.DockGroup);
 
-            this.DockPanel.AddContent(_dockMapAttributes,_dockTilesetTools.DockGroup);
+            this.DockPanel.AddContent(_dockMapAttributes, _dockTilesetTools.DockGroup);
 
             this.DockPanel.AddContent(_dockProperties, _dockTilesetTools.DockGroup);
 
@@ -129,17 +128,13 @@ namespace Lunar.Editor
             };
 
             // Make sure there isn't already an open document of this file
-            // and if there are, just activate it.
-            foreach (var lDoc in _editorDocuments)
+            var existingDoc = this.FindOpenDocument(file);
+            if (existingDoc != null)
             {
-                if (lDoc.Tag == file)
-                {
-                    this.DockPanel.ActiveContent = lDoc;
-                    return;
-                }
+                this.DockPanel.ActiveContent = existingDoc;
+                return;
             }
 
-            pyDoc.Enter += LuaDoc_Enter;
             pyDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(pyDoc);
@@ -153,17 +148,14 @@ namespace Lunar.Editor
                 Tag = file
             };
 
-            // and if there are, just activate it.
-            foreach (var iDoc in _editorDocuments)
+            // Make sure there isn't already an open document of this file
+            var existingDoc = this.FindOpenDocument(file);
+            if (existingDoc != null)
             {
-                if (iDoc.Tag == file)
-                {
-                    this.DockPanel.ActiveContent = iDoc;
-                    return;
-                }
+                this.DockPanel.ActiveContent = existingDoc;
+                return;
             }
 
-            itemDoc.Enter += ItemDoc_Enter;
             itemDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(itemDoc);
@@ -177,17 +169,14 @@ namespace Lunar.Editor
                 Tag = file
             };
 
-            // and if there are, just activate it.
-            foreach (var aDoc in _editorDocuments)
+            // Make sure there isn't already an open document of this file
+            var existingDoc = this.FindOpenDocument(file);
+            if (existingDoc != null)
             {
-                if (aDoc.Tag == file)
-                {
-                    this.DockPanel.ActiveContent = aDoc;
-                    return;
-                }
+                this.DockPanel.ActiveContent = existingDoc;
+                return;
             }
 
-            animDoc.Enter += AnimationDoc_Enter;
             animDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(animDoc);
@@ -209,23 +198,49 @@ namespace Lunar.Editor
             }
         }
 
-
-        private void ItemDoc_Enter(object sender, EventArgs e)
+        private SavableDocument FindOpenDocument(FileInfo file)
         {
-            _dockTilesetTools.DockGroup.Hide();
+            foreach (var doc in _editorDocuments)
+            {
+                if (doc.Tag == file)
+                {
+                    return doc;
+                }
+            }
+
+            return default(SavableDocument);
         }
 
-        private void AnimationDoc_Enter(object sender, EventArgs e)
+        private void OpenDialogueDocument(FileInfo file)
         {
-            _dockTilesetTools.DockGroup.Hide();
+            var dialogueDoc = new DockDialogueDocument(_project, file.Name, Icons.document_16xLG, file)
+            {
+                Tag = file
+            };
+
+            // Make sure there isn't already an open document of this file
+            var existingDoc = this.FindOpenDocument(file);
+            if (existingDoc != null)
+            {
+                this.DockPanel.ActiveContent = existingDoc;
+                return;
+            }
+
+            dialogueDoc.Closed += DialogueDoc_Closed;
+
+            _editorDocuments.Add(dialogueDoc);
+            this.DockPanel.AddContent(dialogueDoc);
         }
 
-        private void LuaDoc_Enter(object sender, EventArgs e)
+        private void DialogueDoc_Closed(object sender, EventArgs e)
         {
-            _dockTilesetTools.DockGroup.Hide();
+            var file = (sender as DockDialogueDocument).ContentFile;
+            _project.UnloadDialogue(file.FullName);
+
+            _dockProject.RefreshDialogueScripts(file);
         }
 
-        public void OpenMapDocument(FileInfo file)
+        private void OpenMapDocument(FileInfo file)
         {
             var mapDoc = new DockMapDocument(file.Name, Icons.document_16xLG, file, _project, _dockTilesetTools, _dockLayers, _dockMapObject, _dockMapAttributes)
             {
@@ -233,20 +248,29 @@ namespace Lunar.Editor
             };
 
             // Make sure there isn't already an open document of this file
-            foreach (var mDoc in _editorDocuments)
+            var existingDoc = this.FindOpenDocument(file);
+            if (existingDoc != null)
             {
-                if (mDoc.Tag == file)
-                {
-                    this.DockPanel.ActiveContent = mDoc;
-                    return;
-                }
+                this.DockPanel.ActiveContent = existingDoc;
+                return;
             }
 
             mapDoc.Enter += MapDoc_Enter;
+            mapDoc.Closed += MapDoc_Closed;
             mapDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(mapDoc);
             this.DockPanel.AddContent(mapDoc);
+        }
+
+        private void MapDoc_Closed(object sender, EventArgs e)
+        {
+            var mapFile = (sender as DockMapDocument).ContentFile;
+            _project.UnloadMap(mapFile.FullName);
+
+            _dockTilesetTools.DockGroup.Hide();
+
+            _dockProject.RefreshMapScripts(mapFile);
         }
 
         public void OpenNPCDocument(FileInfo file)
@@ -256,18 +280,14 @@ namespace Lunar.Editor
                 Tag = file
             };
 
-
             // Make sure there isn't already an open document of this file
-            foreach (var nDoc in _editorDocuments)
+            var existingDoc = this.FindOpenDocument(file);
+            if (existingDoc != null)
             {
-                if (((FileInfo)nDoc.Tag).Name == file.Name)
-                {
-                    this.DockPanel.ActiveContent = nDoc;
-                    return;
-                }
+                this.DockPanel.ActiveContent = existingDoc;
+                return;
             }
 
-            npcDoc.Enter += NPCDoc_Enter;
             npcDoc.Closed += NpcDoc_Closed;
 
             _editorDocuments.Add(npcDoc);
@@ -284,11 +304,6 @@ namespace Lunar.Editor
             _dockProject.RefreshNPCScripts(npcFile);
         }
 
-        private void NPCDoc_Enter(object sender, EventArgs e)
-        {
-            _dockTilesetTools.DockGroup.Hide();
-        }
-
         private void MapDoc_Enter(object sender, EventArgs e)
         {
             _dockTilesetTools.DockGroup?.Show();
@@ -299,55 +314,45 @@ namespace Lunar.Editor
             _dockMapAttributes.SetMapSubject(((DockMapDocument)sender).Map);
         }
 
+        private void OpenFile(FileInfo file)
+        {
+            if (file.Extension == EngineConstants.SCRIPT_FILE_EXT)
+            {
+                this.OpenPythonDocument(file);
+            }
+            else if (file.Extension == EngineConstants.MAP_FILE_EXT)
+            {
+                this.OpenMapDocument(file);
+            }
+            else if (file.Extension == EngineConstants.ITEM_FILE_EXT)
+            {
+                this.OpenItemDocument(file);
+            }
+            else if (file.Extension == EngineConstants.ANIM_FILE_EXT)
+            {
+                this.OpenAnimationDocument(file);
+            }
+            else if (file.Extension == EngineConstants.NPC_FILE_EXT)
+            {
+                this.OpenNPCDocument(file);
+            }
+            else if (file.Extension == EngineConstants.DIALOGUE_FILE_EXT)
+            {
+                this.OpenDialogueDocument(file);
+            }
+        }
+
         private void _dockProject_File_Created(object sender, FileEventArgs e)
         {
-            if (e.File.Extension == EngineConstants.SCRIPT_FILE_EXT)
-            {
-                this.OpenPythonDocument(e.File);
-            }
-            else if (e.File.Extension == EngineConstants.MAP_FILE_EXT)
-            {
-                this.OpenMapDocument(e.File);
-            }
-            else if (e.File.Extension == EngineConstants.ITEM_FILE_EXT)
-            {
-                this.OpenItemDocument(e.File);    
-            }
-            else if (e.File.Extension == EngineConstants.ANIM_FILE_EXT)
-            {
-                this.OpenAnimationDocument(e.File);
-            }
-            else if (e.File.Extension == EngineConstants.NPC_FILE_EXT)
-            {
-                this.OpenNPCDocument(e.File);
-            }
+            this.OpenFile(e.File);
         }
 
         private void _dockProject_File_Selected(object sender, FileEventArgs e)
         {
-            if (e.File.Extension == EngineConstants.SCRIPT_FILE_EXT)
-            {
-                this.OpenPythonDocument(e.File);
-            }
-            else if (e.File.Extension == EngineConstants.MAP_FILE_EXT)
-            {
-                this.OpenMapDocument(e.File);
-            }
-            else if (e.File.Extension == EngineConstants.ITEM_FILE_EXT)
-            {
-                this.OpenItemDocument(e.File);
-            }
-            else if (e.File.Extension == EngineConstants.ANIM_FILE_EXT)
-            {
-                this.OpenAnimationDocument(e.File);
-            }
-            else if (e.File.Extension == EngineConstants.NPC_FILE_EXT)
-            {
-                this.OpenNPCDocument(e.File);
-            }
+            this.OpenFile(e.File);
         }
 
-        #endregion
+        #endregion Constructor Region
 
         #region Method Region
 
@@ -357,11 +362,10 @@ namespace Lunar.Editor
 
             DockPanel.ContentAdded += DockPanel_ContentAdded;
             DockPanel.ContentRemoved += DockPanel_ContentRemoved;
-            
+
             mnuClose.Click += Close_Click;
 
             mnuProject.Click += Project_Click;
-
         }
 
         private void ToggleToolWindow(DarkToolWindow toolWindow)
@@ -377,7 +381,7 @@ namespace Lunar.Editor
             mnuProject.Checked = DockPanel.ContainsContent(_dockProject);
         }
 
-        #endregion
+        #endregion Method Region
 
         #region Event Handler Region
 
@@ -394,10 +398,9 @@ namespace Lunar.Editor
         {
             if (e.Content is SavableDocument)
             {
-                _editorDocuments.Remove((SavableDocument) e.Content);
+                _editorDocuments.Remove((SavableDocument)e.Content);
             }
         }
-
 
         private void Close_Click(object sender, EventArgs e)
         {
@@ -409,7 +412,7 @@ namespace Lunar.Editor
             ToggleToolWindow(_dockProject);
         }
 
-        #endregion
+        #endregion Event Handler Region
 
         #region Serialization Region
 
@@ -418,9 +421,8 @@ namespace Lunar.Editor
             var state = DockPanel.GetDockPanelState();
             SerializerHelper.Serialize(state, path);
         }
-     
 
-        #endregion
+        #endregion Serialization Region
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -481,7 +483,6 @@ namespace Lunar.Editor
                     DarkMessageBox.ShowError("At least one project directory path is missing!", "Error Creating Project!", DarkDialogButton.Ok);
                     return;
                 }
-                    
 
                 string clientDataPath = Path.GetFullPath(createProjectDialog.ClientDataPath);
                 string serverDataPath = Path.GetFullPath(createProjectDialog.ServerDataPath);
@@ -509,6 +510,11 @@ namespace Lunar.Editor
                     return;
                 }
             }
+        }
+
+        private void SuiteForm_Paint(object sender, PaintEventArgs e)
+        {
+            this.lblMemUsage.Text = $"Memory: {((Process.GetCurrentProcess().PrivateMemorySize64 / 1024) / 1024)} MB";
         }
     }
 }

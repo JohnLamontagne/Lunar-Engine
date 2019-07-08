@@ -36,12 +36,12 @@ namespace Lunar.Editor.Controls
 
             this.Resize += View_Resize;
 
-           Application.Idle += delegate
-           {
-               this.GameLoop();
+            Application.Idle += delegate
+            {
+                this.GameLoop();
 
-               this.ParentForm?.Invalidate();
-           };
+                this.ParentForm?.Invalidate();
+            };
 
             this.Load += View_Load;
         }
@@ -198,7 +198,6 @@ namespace Lunar.Editor.Controls
 
             return result;
         }
-
 
         public Action<View> OnDraw { get; set; }
         public Action<View> OnUpdate { get; set; }

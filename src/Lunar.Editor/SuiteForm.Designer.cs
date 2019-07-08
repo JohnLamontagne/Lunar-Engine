@@ -60,7 +60,7 @@ namespace Lunar.Editor
             this.stripMain = new DarkUI.Controls.DarkStatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblMemUsage = new System.Windows.Forms.ToolStripStatusLabel();
             this.DockPanel = new DarkUI.Docking.DarkDockPanel();
             this.darkSeparator1 = new DarkUI.Controls.DarkSeparator();
             this.mnuMain.SuspendLayout();
@@ -71,6 +71,8 @@ namespace Lunar.Editor
             // 
             this.mnuMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.mnuMain.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.mnuMain.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.mnuMain.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
             this.mnuView,
@@ -80,7 +82,7 @@ namespace Lunar.Editor
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
             this.mnuMain.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
-            this.mnuMain.Size = new System.Drawing.Size(1238, 24);
+            this.mnuMain.Size = new System.Drawing.Size(1238, 38);
             this.mnuMain.TabIndex = 0;
             this.mnuMain.Text = "darkMenuStrip1";
             // 
@@ -95,7 +97,7 @@ namespace Lunar.Editor
             this.mnuClose});
             this.mnuFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.mnuFile.Size = new System.Drawing.Size(62, 34);
             this.mnuFile.Text = "&File";
             // 
             // toolStripMenuItem1
@@ -104,7 +106,7 @@ namespace Lunar.Editor
             this.toolStripMenuItem1.Image = global::Lunar.Editor.Icons.folder_open;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(186, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(327, 40);
             this.toolStripMenuItem1.Text = "&Open Project";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -115,14 +117,14 @@ namespace Lunar.Editor
             this.recentToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.recentToolStripMenuItem.Image = global::Lunar.Editor.Icons.folder_open;
             this.recentToolStripMenuItem.Name = "recentToolStripMenuItem";
-            this.recentToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.recentToolStripMenuItem.Size = new System.Drawing.Size(327, 40);
             this.recentToolStripMenuItem.Text = "Open Recent";
             // 
             // mostRecentToolStripMenuItem
             // 
             this.mostRecentToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mostRecentToolStripMenuItem.Name = "mostRecentToolStripMenuItem";
-            this.mostRecentToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.mostRecentToolStripMenuItem.Size = new System.Drawing.Size(247, 40);
             this.mostRecentToolStripMenuItem.Text = "Most Recent";
             this.mostRecentToolStripMenuItem.Click += new System.EventHandler(this.mostRecentToolStripMenuItem_Click);
             // 
@@ -132,7 +134,7 @@ namespace Lunar.Editor
             this.mnuNewFile.Image = global::Lunar.Editor.Icons.NewFile_6276;
             this.mnuNewFile.Name = "mnuNewFile";
             this.mnuNewFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.mnuNewFile.Size = new System.Drawing.Size(186, 22);
+            this.mnuNewFile.Size = new System.Drawing.Size(327, 40);
             this.mnuNewFile.Text = "&New Project";
             this.mnuNewFile.Click += new System.EventHandler(this.mnuNewFile_Click);
             // 
@@ -141,7 +143,7 @@ namespace Lunar.Editor
             this.saveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.saveToolStripMenuItem.Image = global::Lunar.Editor.Icons.files;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(327, 40);
             this.saveToolStripMenuItem.Text = "Save Project";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -150,7 +152,7 @@ namespace Lunar.Editor
             this.toolStripSeparator1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 1);
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(183, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(324, 6);
             // 
             // mnuClose
             // 
@@ -158,7 +160,7 @@ namespace Lunar.Editor
             this.mnuClose.Image = global::Lunar.Editor.Icons.Close_16xLG;
             this.mnuClose.Name = "mnuClose";
             this.mnuClose.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.mnuClose.Size = new System.Drawing.Size(186, 22);
+            this.mnuClose.Size = new System.Drawing.Size(327, 40);
             this.mnuClose.Text = "&Close";
             // 
             // mnuView
@@ -167,7 +169,7 @@ namespace Lunar.Editor
             this.mnuDialog});
             this.mnuView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuView.Name = "mnuView";
-            this.mnuView.Size = new System.Drawing.Size(44, 20);
+            this.mnuView.Size = new System.Drawing.Size(75, 34);
             this.mnuView.Text = "&View";
             // 
             // mnuDialog
@@ -175,7 +177,7 @@ namespace Lunar.Editor
             this.mnuDialog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuDialog.Image = global::Lunar.Editor.Icons.properties_16xLG;
             this.mnuDialog.Name = "mnuDialog";
-            this.mnuDialog.Size = new System.Drawing.Size(130, 22);
+            this.mnuDialog.Size = new System.Drawing.Size(231, 40);
             this.mnuDialog.Text = "&Dialog test";
             // 
             // mnuTools
@@ -188,7 +190,7 @@ namespace Lunar.Editor
             this.checkedWithIconToolStripMenuItem});
             this.mnuTools.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuTools.Name = "mnuTools";
-            this.mnuTools.Size = new System.Drawing.Size(47, 20);
+            this.mnuTools.Size = new System.Drawing.Size(78, 34);
             this.mnuTools.Text = "&Tools";
             // 
             // checkableToolStripMenuItem
@@ -196,7 +198,7 @@ namespace Lunar.Editor
             this.checkableToolStripMenuItem.CheckOnClick = true;
             this.checkableToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.checkableToolStripMenuItem.Name = "checkableToolStripMenuItem";
-            this.checkableToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.checkableToolStripMenuItem.Size = new System.Drawing.Size(316, 40);
             this.checkableToolStripMenuItem.Text = "Checkable";
             // 
             // checkableWithIconToolStripMenuItem
@@ -205,7 +207,7 @@ namespace Lunar.Editor
             this.checkableWithIconToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.checkableWithIconToolStripMenuItem.Image = global::Lunar.Editor.Icons.properties_16xLG;
             this.checkableWithIconToolStripMenuItem.Name = "checkableWithIconToolStripMenuItem";
-            this.checkableWithIconToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.checkableWithIconToolStripMenuItem.Size = new System.Drawing.Size(316, 40);
             this.checkableWithIconToolStripMenuItem.Text = "Checkable with icon";
             // 
             // toolStripSeparator2
@@ -213,7 +215,7 @@ namespace Lunar.Editor
             this.toolStripSeparator2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 1);
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(313, 6);
             // 
             // checkedToolStripMenuItem
             // 
@@ -221,7 +223,7 @@ namespace Lunar.Editor
             this.checkedToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkedToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.checkedToolStripMenuItem.Name = "checkedToolStripMenuItem";
-            this.checkedToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.checkedToolStripMenuItem.Size = new System.Drawing.Size(316, 40);
             this.checkedToolStripMenuItem.Text = "Checked";
             // 
             // checkedWithIconToolStripMenuItem
@@ -231,7 +233,7 @@ namespace Lunar.Editor
             this.checkedWithIconToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.checkedWithIconToolStripMenuItem.Image = global::Lunar.Editor.Icons.properties_16xLG;
             this.checkedWithIconToolStripMenuItem.Name = "checkedWithIconToolStripMenuItem";
-            this.checkedWithIconToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.checkedWithIconToolStripMenuItem.Size = new System.Drawing.Size(316, 40);
             this.checkedWithIconToolStripMenuItem.Text = "Checked with icon";
             // 
             // mnuWindow
@@ -244,7 +246,7 @@ namespace Lunar.Editor
             this.mnuHistory});
             this.mnuWindow.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuWindow.Name = "mnuWindow";
-            this.mnuWindow.Size = new System.Drawing.Size(63, 20);
+            this.mnuWindow.Size = new System.Drawing.Size(107, 34);
             this.mnuWindow.Text = "&Window";
             // 
             // mnuProject
@@ -252,7 +254,7 @@ namespace Lunar.Editor
             this.mnuProject.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuProject.Image = global::Lunar.Editor.Icons.application_16x;
             this.mnuProject.Name = "mnuProject";
-            this.mnuProject.Size = new System.Drawing.Size(156, 22);
+            this.mnuProject.Size = new System.Drawing.Size(276, 40);
             this.mnuProject.Text = "&Project Explorer";
             // 
             // mnuProperties
@@ -260,7 +262,7 @@ namespace Lunar.Editor
             this.mnuProperties.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuProperties.Image = global::Lunar.Editor.Icons.properties_16xLG;
             this.mnuProperties.Name = "mnuProperties";
-            this.mnuProperties.Size = new System.Drawing.Size(156, 22);
+            this.mnuProperties.Size = new System.Drawing.Size(276, 40);
             this.mnuProperties.Text = "P&roperties";
             // 
             // mnuConsole
@@ -268,7 +270,7 @@ namespace Lunar.Editor
             this.mnuConsole.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuConsole.Image = global::Lunar.Editor.Icons.Console;
             this.mnuConsole.Name = "mnuConsole";
-            this.mnuConsole.Size = new System.Drawing.Size(156, 22);
+            this.mnuConsole.Size = new System.Drawing.Size(276, 40);
             this.mnuConsole.Text = "&Console";
             // 
             // mnuLayers
@@ -276,7 +278,7 @@ namespace Lunar.Editor
             this.mnuLayers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuLayers.Image = global::Lunar.Editor.Icons.Collection_16xLG;
             this.mnuLayers.Name = "mnuLayers";
-            this.mnuLayers.Size = new System.Drawing.Size(156, 22);
+            this.mnuLayers.Size = new System.Drawing.Size(276, 40);
             this.mnuLayers.Text = "&Layers";
             // 
             // mnuHistory
@@ -284,7 +286,7 @@ namespace Lunar.Editor
             this.mnuHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuHistory.Image = ((System.Drawing.Image)(resources.GetObject("mnuHistory.Image")));
             this.mnuHistory.Name = "mnuHistory";
-            this.mnuHistory.Size = new System.Drawing.Size(156, 22);
+            this.mnuHistory.Size = new System.Drawing.Size(276, 40);
             this.mnuHistory.Text = "&History";
             // 
             // mnuHelp
@@ -293,7 +295,7 @@ namespace Lunar.Editor
             this.mnuAbout});
             this.mnuHelp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuHelp.Name = "mnuHelp";
-            this.mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this.mnuHelp.Size = new System.Drawing.Size(74, 34);
             this.mnuHelp.Text = "&Help";
             // 
             // mnuAbout
@@ -301,7 +303,7 @@ namespace Lunar.Editor
             this.mnuAbout.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuAbout.Image = global::Lunar.Editor.Icons.StatusAnnotations_Information_16xLG_color;
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(145, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(257, 40);
             this.mnuAbout.Text = "&About DarkUI";
             // 
             // stripMain
@@ -309,10 +311,11 @@ namespace Lunar.Editor
             this.stripMain.AutoSize = false;
             this.stripMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.stripMain.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.stripMain.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.stripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel6,
-            this.toolStripStatusLabel5});
+            this.lblMemUsage});
             this.stripMain.Location = new System.Drawing.Point(0, 775);
             this.stripMain.Name = "stripMain";
             this.stripMain.Padding = new System.Windows.Forms.Padding(0, 5, 0, 3);
@@ -334,32 +337,32 @@ namespace Lunar.Editor
             // 
             this.toolStripStatusLabel6.Margin = new System.Windows.Forms.Padding(0, 0, 50, 2);
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(1051, 14);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(1014, 14);
             this.toolStripStatusLabel6.Spring = true;
             this.toolStripStatusLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // toolStripStatusLabel5
+            // lblMemUsage
             // 
-            this.toolStripStatusLabel5.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
-            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(46, 16);
-            this.toolStripStatusLabel5.Text = "120 MB";
-            this.toolStripStatusLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMemUsage.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+            this.lblMemUsage.Name = "lblMemUsage";
+            this.lblMemUsage.Size = new System.Drawing.Size(83, 16);
+            this.lblMemUsage.Text = "120 MB";
+            this.lblMemUsage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // DockPanel
             // 
             this.DockPanel.AutoSize = true;
             this.DockPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DockPanel.Location = new System.Drawing.Point(0, 26);
+            this.DockPanel.Location = new System.Drawing.Point(0, 40);
             this.DockPanel.Name = "DockPanel";
-            this.DockPanel.Size = new System.Drawing.Size(1238, 749);
+            this.DockPanel.Size = new System.Drawing.Size(1238, 735);
             this.DockPanel.TabIndex = 3;
             // 
             // darkSeparator1
             // 
             this.darkSeparator1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.darkSeparator1.Location = new System.Drawing.Point(0, 24);
+            this.darkSeparator1.Location = new System.Drawing.Point(0, 38);
             this.darkSeparator1.Name = "darkSeparator1";
             this.darkSeparator1.Size = new System.Drawing.Size(1238, 2);
             this.darkSeparator1.TabIndex = 4;
@@ -367,7 +370,7 @@ namespace Lunar.Editor
             // 
             // SuiteForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 30F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1238, 799);
             this.Controls.Add(this.DockPanel);
@@ -382,6 +385,7 @@ namespace Lunar.Editor
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Lunar Engine - Editor Suite";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.SuiteForm_Paint);
             this.mnuMain.ResumeLayout(false);
             this.mnuMain.PerformLayout();
             this.stripMain.ResumeLayout(false);
@@ -397,7 +401,7 @@ namespace Lunar.Editor
         private DarkStatusStrip stripMain;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+        private System.Windows.Forms.ToolStripStatusLabel lblMemUsage;
         private System.Windows.Forms.ToolStripMenuItem mnuFile;
         private System.Windows.Forms.ToolStripMenuItem mnuView;
         private System.Windows.Forms.ToolStripMenuItem mnuDialog;

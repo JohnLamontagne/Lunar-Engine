@@ -68,10 +68,6 @@
       <Project>{7dc32392-0f22-4082-a9f9-208f598dd170}</Project>
       <Name>Lunar.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Lunar.Editor\Lunar.Editor.csproj">
-      <Project>{fa334815-6d78-4e9a-9f4d-6c8a58222a57}</Project>
-      <Name>Lunar.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Lunar.Graphics\Lunar.Graphics.csproj">
       <Project>{afd594bc-5272-4b55-b30d-2dced67c6930}</Project>
       <Name>Lunar.Graphics</Name>

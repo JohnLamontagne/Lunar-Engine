@@ -31,7 +31,7 @@ namespace Lunar.Editor.Controls
             this.treeProject.MouseDown += TreeProject_MouseDown;
         }
 
-        #endregion
+        #endregion Constructor Region
 
         public void InitalizeFromProject(Project project)
         {
@@ -57,6 +57,9 @@ namespace Lunar.Editor.Controls
             _project.ScriptDeleted += ProjectOnScriptDeleted;
             _project.ScriptChanged += ProjectOnScriptChanged;
 
+            _project.DialogueAdded += ProjectOnDialogueAdded;
+            _project.DialogueDeleted += ProjectOnDialogueDeleted;
+            _project.DialogueChanged += ProjectOnDialogueChanged;
 
             treeProject.Nodes.Clear();
 
@@ -85,6 +88,29 @@ namespace Lunar.Editor.Controls
             treeProject.Nodes.Add(node);
         }
 
+        private void ProjectOnDialogueChanged(object sender, GameFileChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ProjectOnDialogueDeleted(object sender, FileEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ProjectOnDialogueAdded(object sender, FileEventArgs e)
+        {
+            this.OnFileAdded(e.File, "Dialogues");
+        }
+
+        public void RefreshMapScripts(FileInfo mapFile)
+        {
+        }
+
+        public void RefreshDialogueScripts(FileInfo file)
+        {
+        }
+
         public void RefreshNPCScripts(FileInfo npcFile)
         {
             var npcNode = treeProject.FindNode($"Default\\Game Data\\Npcs\\{npcFile.Name}");
@@ -94,7 +120,7 @@ namespace Lunar.Editor.Controls
             foreach (var childNode in npcNode.Nodes)
             {
                 string scriptName = Helpers.MakeRelative((childNode.Tag as FileInfo)?.FullName, _project.ServerRootDirectory.FullName + "/");
-                
+
                 if (!npc.Scripts.Contains(scriptName))
                 {
                     nodesToDelete.Add(childNode);
@@ -215,7 +241,7 @@ namespace Lunar.Editor.Controls
 
             this.SaveScriptMap();
 
-            FileInfo scriptFile = _project.AddScript(this.GetNextAvailableFilename(filePath));
+            FileInfo scriptFile = _project.AddScript(Helpers.GetNextAvailableFilename(filePath));
 
             var fileNode = new DarkTreeNode(scriptFile.Name)
             {
@@ -391,30 +417,77 @@ namespace Lunar.Editor.Controls
             var addNode = new DarkTreeNode("Add Map")
             {
                 Icon = Icons.Plus,
-                Tag = (Action<DarkTreeNode>) ((node) =>
+                Tag = (Action<DarkTreeNode>)((node) =>
+               {
+                   using (SaveFileDialog dialog = new SaveFileDialog())
+                   {
+                       dialog.RestoreDirectory = true;
+                       dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Maps";
+                       dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.MAP_FILE_EXT})|*{EngineConstants.MAP_FILE_EXT}";
+                       dialog.DefaultExt = EngineConstants.MAP_FILE_EXT;
+                       dialog.AddExtension = true;
+                       if (dialog.ShowDialog() == DialogResult.OK)
+                       {
+                           string path = dialog.FileName;
+
+                           var file = _project.AddMap(path);
+
+                           this.FileCreated?.Invoke(this, new FileEventArgs(file));
+                       }
+                   }
+               })
+            };
+
+            mapPathNode.Nodes.Add(addNode);
+
+            return mapPathNode;
+        }
+
+        private DarkTreeNode BuildDialogueTree()
+        {
+            var dialoguePathNode = new DarkTreeNode("Dialogues")
+            {
+                Icon = Icons.folder_closed,
+                ExpandedIcon = Icons.folder_open
+            };
+
+            foreach (var file in _project.DialogueFiles)
+            {
+                var fileNode = new DarkTreeNode(file.Name)
+                {
+                    Tag = file,
+                    Icon = Icons.document_16xLG,
+                };
+                dialoguePathNode.Nodes.Add(fileNode);
+            }
+
+            var addNode = new DarkTreeNode("Add Dialogue")
+            {
+                Icon = Icons.Plus,
+                Tag = (Action<DarkTreeNode>)((node) =>
                 {
                     using (SaveFileDialog dialog = new SaveFileDialog())
                     {
+                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Dialogues";
                         dialog.RestoreDirectory = true;
-                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Maps";
-                        dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.MAP_FILE_EXT})|*{EngineConstants.MAP_FILE_EXT}";
-                        dialog.DefaultExt = EngineConstants.MAP_FILE_EXT;
+                        dialog.Filter = $@"Lunar Engine Dialogue Files (*{EngineConstants.DIALOGUE_FILE_EXT})|*{EngineConstants.DIALOGUE_FILE_EXT}";
+                        dialog.DefaultExt = EngineConstants.DIALOGUE_FILE_EXT;
                         dialog.AddExtension = true;
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
                             string path = dialog.FileName;
 
-                            var file = _project.AddMap(path);
+                            var file = _project.AddDialogue(path);
 
                             this.FileCreated?.Invoke(this, new FileEventArgs(file));
                         }
                     }
                 })
             };
-            
-            mapPathNode.Nodes.Add(addNode);
 
-            return mapPathNode;
+            dialoguePathNode.Nodes.Add(addNode);
+
+            return dialoguePathNode;
         }
 
         private DarkTreeNode BuildItemTree()
@@ -438,27 +511,26 @@ namespace Lunar.Editor.Controls
             var addNode = new DarkTreeNode("Add Item")
             {
                 Icon = Icons.Plus,
-                Tag = (Action<DarkTreeNode>) ((node) =>
-                {
-                    using (SaveFileDialog dialog = new SaveFileDialog())
-                    {
-                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Items";
-                        dialog.RestoreDirectory = true;
-                        dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.ITEM_FILE_EXT})|*{EngineConstants.ITEM_FILE_EXT}";
-                        dialog.DefaultExt = EngineConstants.ITEM_FILE_EXT;
-                        dialog.AddExtension = true;
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                        {
-                            string path = dialog.FileName;
+                Tag = (Action<DarkTreeNode>)((node) =>
+               {
+                   using (SaveFileDialog dialog = new SaveFileDialog())
+                   {
+                       dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Items";
+                       dialog.RestoreDirectory = true;
+                       dialog.Filter = $@"Lunar Engine Item Files (*{EngineConstants.ITEM_FILE_EXT})|*{EngineConstants.ITEM_FILE_EXT}";
+                       dialog.DefaultExt = EngineConstants.ITEM_FILE_EXT;
+                       dialog.AddExtension = true;
+                       if (dialog.ShowDialog() == DialogResult.OK)
+                       {
+                           string path = dialog.FileName;
 
-                            var file = _project.AddItem(path);
+                           var file = _project.AddItem(path);
 
-                            this.FileCreated?.Invoke(this, new FileEventArgs(file));
-                        }
-                    }
-                })
+                           this.FileCreated?.Invoke(this, new FileEventArgs(file));
+                       }
+                   }
+               })
             };
-
 
             itemPathNode.Nodes.Add(addNode);
 
@@ -516,7 +588,7 @@ namespace Lunar.Editor.Controls
                         {
                             string path = dialog.FileName;
 
-                            var file = _project.AddNPC(this.GetNextAvailableFilename(path));
+                            var file = _project.AddNPC(Helpers.GetNextAvailableFilename(path));
 
                             this.FileCreated?.Invoke(this, new FileEventArgs(file));
                         }
@@ -539,14 +611,13 @@ namespace Lunar.Editor.Controls
 
             projectTreeNode.Nodes.Add(this.BuildMapTree());
             projectTreeNode.Nodes.Add(this.BuildItemTree());
+            projectTreeNode.Nodes.Add(this.BuildDialogueTree());
             projectTreeNode.Nodes.Add(this.BuildAnimationTree());
             projectTreeNode.Nodes.Add(this.BuildNPCTree());
             projectTreeNode.Nodes.Add(this.BuildScriptTree());
 
             return projectTreeNode;
         }
-
-
 
         private void ProjectOnScriptChanged(object sender, GameFileChangedEventArgs args)
         {
@@ -588,28 +659,32 @@ namespace Lunar.Editor.Controls
             nodeToDelete?.ParentNode.Nodes.Remove(nodeToDelete);
         }
 
-        private void ProjectOnScriptAdded(object sender, FileEventArgs args)
+        private void OnFileAdded(FileInfo file, string contentType)
         {
             // Make sure this isn't a content script
-            if (!Helpers.IsSubDirectoryOf(args.File.DirectoryName, new DirectoryInfo(_project.ServerRootDirectory + "/Scripts/").FullName))
+            if (!Helpers.IsSubDirectoryOf(file.DirectoryName, new DirectoryInfo(_project.ServerRootDirectory + contentType).FullName))
                 return;
 
-            DarkTreeNode fileNode = new DarkTreeNode(args.File.Name)
+            DarkTreeNode fileNode = new DarkTreeNode(file.Name)
             {
                 Icon = Icons.document_16xLG,
-                Tag = args.File
+                Tag = file
             };
 
-            var addNode = treeProject.FindNode($"Default\\Game Data\\Scripts\\Add Script");
+            var addNode = treeProject.FindNode($"Default\\Game Data\\{contentType}\\Add {contentType.TrimEnd('s')}");
 
-            var scriptsNode = treeProject.FindNode($"Default\\Game Data\\Scripts");
-            scriptsNode.Nodes.Remove(addNode);
+            var nodes = treeProject.FindNode($"Default\\Game Data\\{contentType}");
+            nodes.Nodes.Remove(addNode);
 
-            scriptsNode.Nodes.Add(fileNode);
-            scriptsNode.Nodes.Add(addNode);
-            scriptsNode.Expanded = true;
+            nodes.Nodes.Add(fileNode);
+            nodes.Nodes.Add(addNode);
+            nodes.Expanded = true;
         }
 
+        private void ProjectOnScriptAdded(object sender, FileEventArgs args)
+        {
+            this.OnFileAdded(args.File, "Scripts");
+        }
 
         private void ProjectOnItemChanged(object sender, GameFileChangedEventArgs args)
         {
@@ -672,20 +747,7 @@ namespace Lunar.Editor.Controls
 
         private void ProjectOnAnimationAdded(object sender, FileEventArgs args)
         {
-            DarkTreeNode fileNode = new DarkTreeNode(args.File.Name)
-            {
-                Icon = Icons.document_16xLG,
-                Tag = args.File
-            };
-
-            var addNode = treeProject.FindNode($"Default\\Game Data\\Animations\\Add Animation");
-            treeProject.Nodes.Remove(addNode);
-
-            var animationsNode = treeProject.FindNode($"Default\\Game Data\\Animations");
-
-            animationsNode.Nodes.Add(fileNode);
-            animationsNode.Nodes.Add(addNode);
-            animationsNode.Expanded = true;
+            this.OnFileAdded(args.File, "Animations");
         }
 
         private void ProjectOnMapDeleted(object sender, FileEventArgs args)
@@ -726,21 +788,7 @@ namespace Lunar.Editor.Controls
 
         private void ProjectOnNpcAdded(object sender, FileEventArgs args)
         {
-            DarkTreeNode fileNode = new DarkTreeNode(args.File.Name)
-            {
-                Icon = Icons.document_16xLG,
-                Tag = args.File
-            };
-
-            var npcsNode = treeProject.FindNode($"Default\\Game Data\\Npcs");
-
-            var addNode = treeProject.FindNode($"Default\\Game Data\\Npcs\\Add NPC");
-            npcsNode.Nodes.Remove(addNode);
-
-            npcsNode.Nodes.Add(fileNode);
-            npcsNode.Nodes.Add(addNode);
-
-            npcsNode.Expanded = true;
+            this.OnFileAdded(args.File, "Npcs");
         }
 
         private void ProjectOnItemDeleted(object sender, FileEventArgs args)
@@ -754,20 +802,7 @@ namespace Lunar.Editor.Controls
 
         private void ProjectOnItemAdded(object sender, FileEventArgs args)
         {
-            DarkTreeNode fileNode = new DarkTreeNode(args.File.Name)
-            {
-                Icon = Icons.document_16xLG,
-                Tag = args.File
-            };
-
-            var itemsNode = treeProject.FindNode($"Default\\Game Data\\Items");
-
-            var addNode = treeProject.FindNode($"Default\\Game Data\\Items\\Add Item");
-            itemsNode.Nodes.Remove(addNode);
-
-            itemsNode.Nodes.Add(fileNode);
-            itemsNode.Nodes.Add(addNode);
-            itemsNode.Expanded = true;
+            this.OnFileAdded(args.File, "Items");
         }
 
         private void TryAppendDirectoryNode(DirectoryInfo directory)
@@ -808,7 +843,7 @@ namespace Lunar.Editor.Controls
                             break;
 
                         case EngineConstants.NPC_FILE_EXT:
-                            
+                            _project.RemoveNPC(info.FullName);
                             break;
 
                         case EngineConstants.ANIM_FILE_EXT:
@@ -822,6 +857,10 @@ namespace Lunar.Editor.Controls
                         case EngineConstants.SCRIPT_FILE_EXT:
                             _project.RemoveScript(info.FullName);
                             break;
+
+                        case EngineConstants.DIALOGUE_FILE_EXT:
+                            _project.RemoveDialogue(info.FullName);
+                            break;
                     }
                 }
             }
@@ -834,24 +873,6 @@ namespace Lunar.Editor.Controls
         public event EventHandler<GameFileChangedEventArgs> FileChanged;
 
         public event EventHandler<FileEventArgs> FileRemoved;
-
-        
-        public string GetNextAvailableFilename(string fullFileName)
-        {
-            if (!System.IO.File.Exists(fullFileName)) return fullFileName;
-
-            string alternateFilename;
-            int fileNameIndex = 1;
-            do
-            {
-                fileNameIndex += 1;
-                string plainName = System.IO.Path.GetFileNameWithoutExtension(fullFileName);
-                string extension = System.IO.Path.GetExtension(fullFileName);
-                alternateFilename = string.Format("{0}{1}{2}", plainName, fileNameIndex, extension);
-            } while (File.Exists(alternateFilename));
-
-            return alternateFilename;
-        }
 
         private void DeleteNPCMenuItem_Click(object sender, EventArgs e)
         {

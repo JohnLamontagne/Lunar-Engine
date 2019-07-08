@@ -15,11 +15,13 @@ using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 using Lunar.Core.Utilities.Logic;
+using Lunar.Server.World.Dialogue;
 
 namespace Lunar.Editor
 {
     public class Project
     {
+        private DialogueFactory _dialogueFactory;
         private IDataManager<MapDescriptor> _mapDataManager;
 
         private readonly DirectoryInfo _serverRootDirectory;
@@ -34,16 +36,18 @@ namespace Lunar.Editor
 
         public DirectoryInfo ClientRootDirectory => _clientDirectory;
 
-        private readonly Dictionary<string, FileInfo> _mapFiles;
-        private readonly Dictionary<string, FileInfo> _itemFiles;
-        private readonly Dictionary<string, FileInfo> _npcFiles;
-        private readonly Dictionary<string, FileInfo> _animationFiles;
-        private readonly Dictionary<string, FileInfo> _scriptFiles;
+        private Dictionary<string, FileInfo> _mapFiles;
+        private Dictionary<string, FileInfo> _itemFiles;
+        private Dictionary<string, FileInfo> _npcFiles;
+        private Dictionary<string, FileInfo> _animationFiles;
+        private Dictionary<string, FileInfo> _scriptFiles;
+        private Dictionary<string, FileInfo> _dialogueFiles;
 
         private readonly Dictionary<string, Map> _maps;
         private readonly Dictionary<string, ItemDescriptor> _items;
         private readonly Dictionary<string, NPCDescriptor> _npcs;
         private readonly Dictionary<string, AnimationDescriptor> _animations;
+        private readonly Dictionary<string, Dialogue> _dialogues;
 
         public Dictionary<string, Map> Maps => _maps;
         public Dictionary<string, ItemDescriptor> Items => _items;
@@ -57,6 +61,8 @@ namespace Lunar.Editor
         public IEnumerable<FileInfo> ScriptFiles => _scriptFiles.Values;
         public IEnumerable<FileInfo> NPCFiles => _npcFiles.Values;
 
+        public IEnumerable<FileInfo> DialogueFiles => _dialogueFiles.Values;
+
         public IEnumerable<DirectoryInfo> Directories => _directories;
 
         public string GameName { get; set; }
@@ -68,16 +74,20 @@ namespace Lunar.Editor
             _serverWorldDirectory = new DirectoryInfo(serverDir + "/World/");
             _clientDirectory = new DirectoryInfo(clientDir);
 
+            _dialogueFactory = new DialogueFactory();
+
             _mapFiles = new Dictionary<string, FileInfo>();
             _npcFiles = new Dictionary<string, FileInfo>();
             _itemFiles = new Dictionary<string, FileInfo>();
             _animationFiles = new Dictionary<string, FileInfo>();
             _scriptFiles = new Dictionary<string, FileInfo>();
+            _dialogueFiles = new Dictionary<string, FileInfo>();
 
             _maps = new Dictionary<string, Map>();
             _items = new Dictionary<string, ItemDescriptor>();
-            _npcs= new Dictionary<string, NPCDescriptor>();
+            _npcs = new Dictionary<string, NPCDescriptor>();
             _animations = new Dictionary<string, AnimationDescriptor>();
+            _dialogues = new Dictionary<string, Dialogue>();
 
             _directories = new List<DirectoryInfo>();
 
@@ -96,7 +106,7 @@ namespace Lunar.Editor
 
             var project = new Project(projectPath, serverDataPath, clientDataPath);
             project.GameName = "Default";
-           
+
             return project;
         }
 
@@ -135,8 +145,7 @@ namespace Lunar.Editor
         public FileInfo LoadScript(string filePath)
         {
             return new FileInfo(filePath);
-            
-        } 
+        }
 
         public FileInfo AddMap(string filePath)
         {
@@ -153,7 +162,7 @@ namespace Lunar.Editor
         public Map LoadMap(string filePath, TextureLoader textureLoader)
         {
             var mapDescriptor = _mapDataManager.Load(new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
-            
+
             var map = new Map(mapDescriptor, textureLoader);
             map.Initalize(this, textureLoader);
 
@@ -186,6 +195,14 @@ namespace Lunar.Editor
             return file;
         }
 
+        public void UnloadMap(string filePath)
+        {
+            if (_maps.ContainsKey(Helpers.NormalizePath(filePath)))
+            {
+                _maps.Remove(Helpers.NormalizePath(filePath));
+            }
+        }
+
         public void RemoveMap(string filePath)
         {
             if (!_mapFiles.ContainsKey(Helpers.NormalizePath(filePath)))
@@ -198,6 +215,69 @@ namespace Lunar.Editor
             File.Delete(filePath);
 
             _mapFiles.Remove(Helpers.NormalizePath(filePath));
+        }
+
+        public FileInfo AddDialogue(string filePath)
+        {
+            var dialogue = _dialogueFactory.Create(filePath);
+            var dialogueFile = new FileInfo(filePath);
+
+            if (!_dialogueFiles.ContainsKey(Helpers.NormalizePath(filePath)))
+                _dialogueFiles.Add(Helpers.NormalizePath(filePath), dialogueFile);
+
+            this.DialogueAdded?.Invoke(this, new FileEventArgs(dialogueFile));
+
+            return dialogueFile;
+        }
+
+        public Dialogue LoadDialogue(string filePath)
+        {
+            if (_dialogues.ContainsKey(Helpers.NormalizePath(filePath)))
+                return _dialogues[Helpers.NormalizePath(filePath)];
+
+            var dialogue = _dialogueFactory.LoadDialogue(filePath);
+            _dialogues.Add(Helpers.NormalizePath(filePath), dialogue);
+
+            return dialogue;
+        }
+
+        public void UnloadDialogue(string filePath)
+        {
+            if (_dialogues.ContainsKey(Helpers.NormalizePath(filePath)))
+            {
+                _dialogues.Remove(Helpers.NormalizePath(filePath));
+            }
+        }
+
+        public FileInfo ChangeDialogue(string oldFilePath, string newFilePath)
+        {
+            var oldFile = _dialogueFiles[Helpers.NormalizePath(oldFilePath)];
+            _dialogueFiles.Remove(Helpers.NormalizePath(oldFilePath));
+            var file = new FileInfo(newFilePath);
+            _dialogueFiles.Add(Helpers.NormalizePath(newFilePath), new FileInfo(newFilePath));
+
+            var dialogue = _dialogues[Helpers.NormalizePath(oldFilePath)];
+            _dialogues.Remove(Helpers.NormalizePath(oldFilePath));
+            _dialogues.Add(Helpers.NormalizePath(newFilePath), dialogue);
+
+            this.DialogueChanged?.Invoke(this, new GameFileChangedEventArgs(oldFile, file));
+
+            return file;
+        }
+
+        public void RemoveDialogue(string filePath)
+        {
+            if (!_dialogueFiles.ContainsKey(Helpers.NormalizePath(filePath)))
+                return;
+
+            if (_dialogues.ContainsKey(Helpers.NormalizePath(filePath)))
+                _dialogues.Remove(Helpers.NormalizePath(filePath));
+
+            this.DialogueDeleted?.Invoke(this, new FileEventArgs(_dialogueFiles[Helpers.NormalizePath(filePath)]));
+
+            File.Delete(filePath);
+
+            _dialogueFiles.Remove(Helpers.NormalizePath(filePath));
         }
 
         public FileInfo AddItem(string filePath)
@@ -356,7 +436,7 @@ namespace Lunar.Editor
         {
             var oldFile = _npcFiles[Helpers.NormalizePath(oldFilePath)];
             _npcFiles.Remove(Helpers.NormalizePath(oldFilePath));
-        
+
             var file = new FileInfo(newFilePath);
             _npcFiles.Add(Helpers.NormalizePath(newFilePath), new FileInfo(newFilePath));
 
@@ -411,65 +491,31 @@ namespace Lunar.Editor
             Directory.Delete(directoryPath);
         }
 
-      
+        private Dictionary<string, FileInfo> LoadContentFiles(DirectoryInfo directory, string extension)
+        {
+            Dictionary<string, FileInfo> files = new Dictionary<string, FileInfo>();
+
+            if (!directory.Exists)
+            {
+                Directory.CreateDirectory(directory.FullName);
+            }
+
+            foreach (var file in directory.GetFiles("*" + extension, SearchOption.AllDirectories))
+            {
+                files.Add(Helpers.NormalizePath(file.FullName), file);
+            }
+
+            return files;
+        }
+
         private void LoadContents(DirectoryInfo projectDirectory)
         {
-
-            var mapDirectory = new DirectoryInfo(projectDirectory.FullName + "/Maps/");
-
-            if (!mapDirectory.Exists)
-            {
-                Directory.CreateDirectory(mapDirectory.FullName);
-            }
-
-            // Load all of the map files
-            foreach (var file in mapDirectory.GetFiles("*" + EngineConstants.MAP_FILE_EXT, SearchOption.AllDirectories))
-            {
-                _mapFiles.Add(Helpers.NormalizePath(file.FullName), file);
-            }
-
-            var itemDirectory = new DirectoryInfo(projectDirectory.FullName + "/Items/");
-
-            if (!itemDirectory.Exists)
-            {
-                Directory.CreateDirectory(itemDirectory.FullName);
-            }
-
-            // Load all of the item files
-            foreach (var file in itemDirectory.GetFiles("*" + EngineConstants.ITEM_FILE_EXT, SearchOption.AllDirectories))
-            {
-                _itemFiles.Add(Helpers.NormalizePath(file.FullName), file);
-                this.LoadItem(file.FullName);
-            }
-
-            var npcDirectory = new DirectoryInfo(projectDirectory.FullName + "/Npcs/");
-
-            if (!npcDirectory.Exists)
-            {
-                Directory.CreateDirectory(npcDirectory.FullName);
-            }
-
-            // Load all of the item files
-            foreach (var file in npcDirectory.GetFiles("*" + EngineConstants.NPC_FILE_EXT, SearchOption.AllDirectories))
-            {
-                _npcFiles.Add(Helpers.NormalizePath(file.FullName), file);
-                this.LoadNPC(file.FullName);
-            }
-
-
-            var scriptDirectory = new DirectoryInfo(projectDirectory.FullName + "/Scripts/");
-
-            if (!scriptDirectory.Exists)
-            {
-                Directory.CreateDirectory(scriptDirectory.FullName);
-            }
-
-            // Load all of the item files
-            foreach (var file in scriptDirectory.GetFiles("*" + EngineConstants.SCRIPT_FILE_EXT, SearchOption.AllDirectories))
-            {
-                _scriptFiles.Add(Helpers.NormalizePath(file.FullName), file);
-                this.LoadScript(file.FullName);
-            }
+            _mapFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Maps/"), EngineConstants.MAP_FILE_EXT);
+            _itemFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Items/"), EngineConstants.ITEM_FILE_EXT);
+            _npcFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Npcs/"), EngineConstants.NPC_FILE_EXT);
+            _scriptFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Scripts/"), EngineConstants.SCRIPT_FILE_EXT);
+            _animationFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Animations/"), EngineConstants.ANIM_FILE_EXT);
+            _dialogueFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Dialogues/"), EngineConstants.DIALOGUE_FILE_EXT);
         }
 
         public void Save()
@@ -484,21 +530,39 @@ namespace Lunar.Editor
         }
 
         public event EventHandler<FileEventArgs> ItemDeleted;
+
         public event EventHandler<FileEventArgs> NPCDeleted;
+
         public event EventHandler<FileEventArgs> AnimationDeleted;
+
         public event EventHandler<FileEventArgs> MapDeleted;
+
         public event EventHandler<FileEventArgs> ScriptDeleted;
 
         public event EventHandler<GameFileChangedEventArgs> NPCChanged;
+
         public event EventHandler<GameFileChangedEventArgs> AnimationChanged;
+
         public event EventHandler<GameFileChangedEventArgs> ItemChanged;
+
         public event EventHandler<GameFileChangedEventArgs> MapChanged;
+
         public event EventHandler<GameFileChangedEventArgs> ScriptChanged;
 
+        public event EventHandler<GameFileChangedEventArgs> DialogueChanged;
+
         public event EventHandler<FileEventArgs> ItemAdded;
+
         public event EventHandler<FileEventArgs> NPCAdded;
+
         public event EventHandler<FileEventArgs> AnimationAdded;
+
         public event EventHandler<FileEventArgs> MapAdded;
+
         public event EventHandler<FileEventArgs> ScriptAdded;
+
+        public event EventHandler<FileEventArgs> DialogueAdded;
+
+        public event EventHandler<FileEventArgs> DialogueDeleted;
     }
 }

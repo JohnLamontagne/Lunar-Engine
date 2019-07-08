@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.IO;
 using System.Linq;
@@ -75,7 +76,6 @@ namespace Lunar.Core.Utilities.Logic
             return x * x * (3 - 2 * x);
         }
 
-
         public static bool IsWithin<T>(this T value, T minimum, T maximum) where T : IComparable<T>
         {
             if (value.CompareTo(minimum) < 0)
@@ -91,8 +91,8 @@ namespace Lunar.Core.Utilities.Logic
             int minRows = Math.Min(rows, original.GetLength(0));
             int minCols = Math.Min(cols, original.GetLength(1));
             for (int i = 0; i < minRows; i++)
-            for (int j = 0; j < minCols; j++)
-                newArray[i, j] = original[i, j];
+                for (int j = 0; j < minCols; j++)
+                    newArray[i, j] = original[i, j];
             return newArray;
         }
 
@@ -149,6 +149,29 @@ namespace Lunar.Core.Utilities.Logic
         public static Vector WorldToMapCoords(Vector worldCoords)
         {
             return worldCoords / EngineConstants.TILE_SIZE;
+        }
+
+        public static string Truncate(this string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+        }
+
+        public static string GetNextAvailableFilename(string fullFileName)
+        {
+            if (!File.Exists(fullFileName)) return fullFileName;
+
+            string alternateFilename;
+            int fileNameIndex = 1;
+            do
+            {
+                fileNameIndex += 1;
+                string plainName = Path.GetFileNameWithoutExtension(fullFileName);
+                string extension = Path.GetExtension(fullFileName);
+                alternateFilename = string.Format("{0}{1}{2}", plainName, fileNameIndex, extension);
+            } while (File.Exists(alternateFilename));
+
+            return alternateFilename;
         }
     }
 }

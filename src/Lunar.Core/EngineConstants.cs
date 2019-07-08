@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 
 namespace Lunar.Core
@@ -32,6 +33,8 @@ namespace Lunar.Core
         public const string NPC_FILE_EXT = ".ndat";
 
         public const string ACC_FILE_EXT = ".acc";
+
+        public const string DIALOGUE_FILE_EXT = ".dxml";
 
         public const int TILE_SIZE = 32;
     }

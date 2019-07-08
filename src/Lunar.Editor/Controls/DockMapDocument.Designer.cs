@@ -52,6 +52,7 @@
             this.mapToolStrip.AutoSize = false;
             this.mapToolStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.mapToolStrip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.mapToolStrip.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.mapToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fillBucketButton,
             this.brushButton,
@@ -66,8 +67,8 @@
             this.buttonSave});
             this.mapToolStrip.Location = new System.Drawing.Point(0, 0);
             this.mapToolStrip.Name = "mapToolStrip";
-            this.mapToolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.mapToolStrip.Size = new System.Drawing.Size(895, 28);
+            this.mapToolStrip.Padding = new System.Windows.Forms.Padding(9, 0, 2, 0);
+            this.mapToolStrip.Size = new System.Drawing.Size(1641, 52);
             this.mapToolStrip.TabIndex = 16;
             this.mapToolStrip.Text = "darkToolStrip2";
             this.mapToolStrip.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mapToolStrip_KeyDown);
@@ -81,7 +82,7 @@
             this.fillBucketButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.fillBucketButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.fillBucketButton.Name = "fillBucketButton";
-            this.fillBucketButton.Size = new System.Drawing.Size(23, 25);
+            this.fillBucketButton.Size = new System.Drawing.Size(40, 46);
             this.fillBucketButton.Text = "toolStripButton1";
             this.fillBucketButton.ToolTipText = "Bucket Fill";
             this.fillBucketButton.Click += new System.EventHandler(this.fillBucketButton_Click);
@@ -93,7 +94,7 @@
             this.brushButton.Image = global::Lunar.Editor.Icons.Brush;
             this.brushButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.brushButton.Name = "brushButton";
-            this.brushButton.Size = new System.Drawing.Size(23, 25);
+            this.brushButton.Size = new System.Drawing.Size(40, 46);
             this.brushButton.Text = "toolStripButton2";
             this.brushButton.ToolTipText = "Tile Brush";
             this.brushButton.Click += new System.EventHandler(this.brushButton_Click);
@@ -105,7 +106,7 @@
             this.buttonAttribute.Image = global::Lunar.Editor.Icons.Stamp;
             this.buttonAttribute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAttribute.Name = "buttonAttribute";
-            this.buttonAttribute.Size = new System.Drawing.Size(23, 25);
+            this.buttonAttribute.Size = new System.Drawing.Size(40, 46);
             this.buttonAttribute.Text = "toolStripButton1";
             this.buttonAttribute.ToolTipText = "Place Attribute";
             this.buttonAttribute.Click += new System.EventHandler(this.buttonAttribute_Click);
@@ -117,7 +118,7 @@
             this.eraserButton.Image = global::Lunar.Editor.Icons.Eraser;
             this.eraserButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.eraserButton.Name = "eraserButton";
-            this.eraserButton.Size = new System.Drawing.Size(23, 25);
+            this.eraserButton.Size = new System.Drawing.Size(40, 46);
             this.eraserButton.Text = "eraserButton";
             this.eraserButton.ToolTipText = "Eraser";
             this.eraserButton.Click += new System.EventHandler(this.eraserButton_Click);
@@ -129,7 +130,7 @@
             this.buttonSelectTileButton.Image = global::Lunar.Editor.Icons.Select;
             this.buttonSelectTileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonSelectTileButton.Name = "buttonSelectTileButton";
-            this.buttonSelectTileButton.Size = new System.Drawing.Size(23, 25);
+            this.buttonSelectTileButton.Size = new System.Drawing.Size(40, 46);
             this.buttonSelectTileButton.Text = "toolStripButton1";
             this.buttonSelectTileButton.ToolTipText = "Select";
             this.buttonSelectTileButton.Click += new System.EventHandler(this.selectButton_Click);
@@ -139,7 +140,7 @@
             this.toolStripSeparator1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 52);
             // 
             // toolSelectObjectButton
             // 
@@ -148,7 +149,7 @@
             this.toolSelectObjectButton.Image = ((System.Drawing.Image)(resources.GetObject("toolSelectObjectButton.Image")));
             this.toolSelectObjectButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolSelectObjectButton.Name = "toolSelectObjectButton";
-            this.toolSelectObjectButton.Size = new System.Drawing.Size(23, 25);
+            this.toolSelectObjectButton.Size = new System.Drawing.Size(40, 46);
             this.toolSelectObjectButton.Text = "toolStripButton1";
             this.toolSelectObjectButton.ToolTipText = "Map Object Select";
             this.toolSelectObjectButton.Click += new System.EventHandler(this.toolSelectObjectButton_Click);
@@ -160,7 +161,7 @@
             this.buttonMapObject.Image = global::Lunar.Editor.Icons.RefactoringLog_12810;
             this.buttonMapObject.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonMapObject.Name = "buttonMapObject";
-            this.buttonMapObject.Size = new System.Drawing.Size(23, 25);
+            this.buttonMapObject.Size = new System.Drawing.Size(40, 46);
             this.buttonMapObject.Text = "toolStripButton1";
             this.buttonMapObject.ToolTipText = "New Map Object";
             this.buttonMapObject.Click += new System.EventHandler(this.buttonMapObject_Click);
@@ -172,7 +173,7 @@
             this.cmbQuickLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbQuickLayer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.cmbQuickLayer.Name = "cmbQuickLayer";
-            this.cmbQuickLayer.Size = new System.Drawing.Size(121, 28);
+            this.cmbQuickLayer.Size = new System.Drawing.Size(219, 52);
             this.cmbQuickLayer.SelectedIndexChanged += new System.EventHandler(this.cmbQuickLayer_SelectedIndexChanged);
             // 
             // toolStripSeparator2
@@ -180,7 +181,7 @@
             this.toolStripSeparator2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 28);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 52);
             // 
             // buttonSave
             // 
@@ -189,7 +190,7 @@
             this.buttonSave.Image = global::Lunar.Editor.Icons.document_16xLG;
             this.buttonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(23, 25);
+            this.buttonSave.Size = new System.Drawing.Size(40, 46);
             this.buttonSave.Text = "toolStripButton1";
             this.buttonSave.ToolTipText = "Save";
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
@@ -197,9 +198,10 @@
             // scrollY
             // 
             this.scrollY.Dock = System.Windows.Forms.DockStyle.Right;
-            this.scrollY.Location = new System.Drawing.Point(873, 28);
+            this.scrollY.Location = new System.Drawing.Point(1601, 52);
+            this.scrollY.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.scrollY.Name = "scrollY";
-            this.scrollY.Size = new System.Drawing.Size(22, 756);
+            this.scrollY.Size = new System.Drawing.Size(40, 1395);
             this.scrollY.TabIndex = 17;
             this.scrollY.Text = "darkScrollBar1";
             this.scrollY.ValueChanged += new System.EventHandler<DarkUI.Controls.ScrollValueEventArgs>(this.scrollY_ValueChanged);
@@ -208,10 +210,11 @@
             // scrollX
             // 
             this.scrollX.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.scrollX.Location = new System.Drawing.Point(0, 761);
+            this.scrollX.Location = new System.Drawing.Point(0, 1405);
+            this.scrollX.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.scrollX.Name = "scrollX";
             this.scrollX.ScrollOrientation = DarkUI.Controls.DarkScrollOrientation.Horizontal;
-            this.scrollX.Size = new System.Drawing.Size(873, 23);
+            this.scrollX.Size = new System.Drawing.Size(1601, 42);
             this.scrollX.TabIndex = 18;
             this.scrollX.Text = "darkScrollBar2";
             this.scrollX.ValueChanged += new System.EventHandler<DarkUI.Controls.ScrollValueEventArgs>(this.scrollX_ValueChanged);
@@ -221,12 +224,13 @@
             // 
             this.mapView.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.mapView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapView.Location = new System.Drawing.Point(0, 28);
+            this.mapView.Location = new System.Drawing.Point(0, 52);
+            this.mapView.Margin = new System.Windows.Forms.Padding(11, 11, 11, 11);
             this.mapView.Name = "mapView";
             this.mapView.OnDraw = null;
             this.mapView.OnInitalize = null;
             this.mapView.OnUpdate = null;
-            this.mapView.Size = new System.Drawing.Size(873, 733);
+            this.mapView.Size = new System.Drawing.Size(1601, 1353);
             this.mapView.SuspendOnFormInactive = false;
             this.mapView.TabIndex = 14;
             this.mapView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mapView_KeyDown);
@@ -237,14 +241,15 @@
             // 
             // DockMapDocument
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.mapView);
             this.Controls.Add(this.scrollX);
             this.Controls.Add(this.scrollY);
             this.Controls.Add(this.mapToolStrip);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "DockMapDocument";
-            this.Size = new System.Drawing.Size(895, 784);
+            this.Size = new System.Drawing.Size(1641, 1447);
             this.Load += new System.EventHandler(this.DockMapDocument_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DockMapDocument_KeyDown);
             this.mapToolStrip.ResumeLayout(false);

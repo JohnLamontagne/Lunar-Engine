@@ -2,6 +2,9 @@
 using Lunar.Core.Utilities;
 using Microsoft.Scripting.Hosting;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lunar.Server.Utilities.Scripting
 {
@@ -43,6 +46,13 @@ namespace Lunar.Server.Utilities.Scripting
                 Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex);
                 return default;
             }
+        }
+
+        public List<KeyValuePair<string, T>> GetVariables<T>()
+        {
+            return (_scope.GetItems().Where(pair => pair.Value is T)
+                .Cast<KeyValuePair<string, T>>()
+                .ToList());
         }
 
         public void SetVariable<T>(string varName, T value)

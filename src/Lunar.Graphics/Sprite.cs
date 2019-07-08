@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -34,7 +35,7 @@ namespace Lunar.Graphics
 
         public Rectangle SourceRectangle
         {
-            get =>_srcRectangle;
+            get => _srcRectangle;
             set => _srcRectangle = value;
         }
 
@@ -86,6 +87,5 @@ namespace Lunar.Graphics
             this.Scale = 1f;
             this.LayerDepth = 0f;
         }
-
     }
 }
