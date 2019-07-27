@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System.Collections.Generic;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
@@ -134,19 +135,14 @@ namespace Lunar.Client.World.Actors
 
             if (!args.Message.ReadBoolean())
             {
-               
-
                 Console.WriteLine("Our final pos: " + this.Position.ToString());
 
                 Console.WriteLine("Avg Update: " + new Vector((float)_avgMoveSpeedX, (float)_avgMoveSpeedY).ToString());
-
-                
 
                 var newPos = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
                 Console.WriteLine("Server final pos: " + newPos.ToString());
 
                 _serverPos = newPos;
-                
 
                 _avgMoveSpeedX = 0;
                 _avgMoveSpeedY = 0;
@@ -158,7 +154,7 @@ namespace Lunar.Client.World.Actors
 
             int pathCount = args.Message.ReadInt32();
 
-            for(int i = 0; i < pathCount; i++)
+            for (int i = 0; i < pathCount; i++)
             {
                 _targetPath.Enqueue(new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat()));
             }
@@ -202,7 +198,6 @@ namespace Lunar.Client.World.Actors
                         this.Position = new Vector2(targetDest.X, this.Position.Y);
 
                         _targetPath.Dequeue();
-
                     }
                 }
                 else if (targetDest.Y < this.Position.Y)
@@ -214,7 +209,6 @@ namespace Lunar.Client.World.Actors
                         this.Position = new Vector2(this.Position.X, targetDest.Y);
 
                         _targetPath.Dequeue();
-
                     }
                 }
                 else if (targetDest.Y > this.Position.Y)
@@ -226,7 +220,6 @@ namespace Lunar.Client.World.Actors
                         this.Position = new Vector2(this.Position.X, targetDest.Y);
 
                         _targetPath.Dequeue();
-
                     }
                 }
             }
@@ -289,8 +282,6 @@ namespace Lunar.Client.World.Actors
             {
                 this.Position = _targetPath.Peek();
             }
-
-            
         }
 
         public void Unpack(NetBuffer buffer, ContentManager contentManager)
@@ -301,16 +292,15 @@ namespace Lunar.Client.World.Actors
             var sprite = new Sprite(
                 contentManager.LoadTexture2D(Constants.FILEPATH_DATA + texturePath));
             this.Speed = buffer.ReadFloat();
-            
-           
+
             this.Health = buffer.ReadInt32();
             this.MaximumHealth = buffer.ReadInt32();
-            this.Level = buffer.ReadInt32();        
+            this.Level = buffer.ReadInt32();
             Vector2 position = new Vector2(buffer.ReadFloat(), buffer.ReadFloat());
             _frameSize = new Vector2(buffer.ReadFloat(), buffer.ReadFloat());
             _collisionBounds = new Rectangle(buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32());
 
-            this.SpriteSheet = new SpriteSheet(sprite, (int)(sprite.Texture.Width / _frameSize.X), (int)(sprite.Texture.Height / _frameSize.Y), (int)_frameSize.X, (int)_frameSize.Y);
+            this.SpriteSheet = new SpriteSheet(sprite, (int)_frameSize.X, (int)_frameSize.Y);
 
             this.Position = position;
 
@@ -319,8 +309,7 @@ namespace Lunar.Client.World.Actors
 
             this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);
             this.SpriteSheet.HorizontalFrameIndex = 1;
-            this.SpriteSheet.VerticalFrameIndex = (int) this.Direction;
-
+            this.SpriteSheet.VerticalFrameIndex = (int)this.Direction;
         }
     }
 }

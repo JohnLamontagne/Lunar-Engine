@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Core.Content.Graphics
@@ -38,7 +39,11 @@ namespace Lunar.Core.Content.Graphics
             }
         }
 
-        public Color Color { get { return _color; } set { _color = value; } }
+        public Color Color
+        {
+            get { return _color; }
+            set { _color = value; }
+        }
 
         public float LayerDepth { get; set; }
 

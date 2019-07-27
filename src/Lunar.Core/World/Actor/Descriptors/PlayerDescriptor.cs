@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.IO;
 using Lunar.Core.Content.Graphics;
@@ -66,7 +67,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             set => _experience = value;
         }
 
-        public Stats Stats { get;  set; }
+        public Stats Stats { get; set; }
 
         public Stats StatBoosts { get; private set; }
 
@@ -87,6 +88,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             get => _role;
             set => _role = value;
         }
+
         public Rect CollisionBounds { get; set; }
 
         public PlayerDescriptor(string username, string password)
@@ -103,7 +105,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             {
                 Name = name,
                 Password = password,
-                SpriteSheet = new SpriteSheet(new SpriteInfo("chara1.png"), 3, 4, 52, 72),
+                SpriteSheet = new SpriteSheet(new SpriteInfo("soldier.png"), 64, 64),
                 Level = 1,
                 Experience = 0,
                 Speed = .1f,

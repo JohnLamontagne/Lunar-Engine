@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.IO;
 using Lunar.Core;
@@ -25,10 +26,8 @@ namespace Lunar.Server.Utilities.Data.FileSystem
 {
     public class PlayerFSDataLoader : FSDataManager<PlayerDescriptor>
     {
-
         public override PlayerDescriptor Load(IDataManagerArguments arguments)
         {
-
             string filePath = this.RootPath + (arguments as PlayerDataArguments).Username + EngineConstants.ACC_FILE_EXT;
 
             string name = "";
@@ -47,15 +46,13 @@ namespace Lunar.Server.Utilities.Data.FileSystem
             Role role;
             try
             {
-
                 using (var fileStream = new FileStream(filePath, FileMode.Open))
                 {
                     using (var binaryReader = new BinaryReader(fileStream))
                     {
                         name = binaryReader.ReadString();
                         password = binaryReader.ReadString();
-                        sprite = new SpriteSheet(new SpriteInfo(binaryReader.ReadString()), binaryReader.ReadInt32(),
-                            binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
+                        sprite = new SpriteSheet(new SpriteInfo(binaryReader.ReadString()), binaryReader.ReadInt32(), binaryReader.ReadInt32());
                         speed = binaryReader.ReadSingle();
                         maximumHealth = binaryReader.ReadInt32();
                         health = binaryReader.ReadInt32();
@@ -99,7 +96,7 @@ namespace Lunar.Server.Utilities.Data.FileSystem
 
         public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
         {
-            PlayerDescriptor playerDescriptor = ((PlayerDescriptor) descriptor);
+            PlayerDescriptor playerDescriptor = ((PlayerDescriptor)descriptor);
 
             using (var fileStream = new FileStream(this.RootPath + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT, FileMode.OpenOrCreate))
             {
@@ -108,8 +105,6 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                     binaryWriter.Write(playerDescriptor.Name);
                     binaryWriter.Write(playerDescriptor.Password);
                     binaryWriter.Write(playerDescriptor.SpriteSheet.Sprite.TextureName);
-                    binaryWriter.Write(playerDescriptor.SpriteSheet.HorizontalFrames);
-                    binaryWriter.Write(playerDescriptor.SpriteSheet.VerticalFrames);
                     binaryWriter.Write(playerDescriptor.SpriteSheet.FrameWidth);
                     binaryWriter.Write(playerDescriptor.SpriteSheet.FrameHeight);
                     binaryWriter.Write(playerDescriptor.Speed);

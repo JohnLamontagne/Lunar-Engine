@@ -410,13 +410,11 @@ namespace Lunar.Client.World.Actors
             var sprite = new Sprite(
                 contentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Characters/" + buffer.ReadString()));
 
-            int horizontalFrames = buffer.ReadInt32();
-            int verticalFrames = buffer.ReadInt32();
             int frameWidth = buffer.ReadInt32();
             int frameHeight = buffer.ReadInt32();
 
             this.SpriteSheet =
-                new SpriteSheet(sprite, horizontalFrames, verticalFrames, frameWidth, frameHeight)
+                new SpriteSheet(sprite, frameWidth, frameHeight)
                 {
                     Position = this.Position,
                     HorizontalFrameIndex = 1,

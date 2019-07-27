@@ -10,14 +10,15 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 namespace Lunar.Core.World
 {
     public enum Direction
     {
-        Up = 3,
-        Down = 0,
+        Up = 0,
+        Down = 2,
         Left = 1,
-        Right = 2
+        Right = 3
     }
 
     public static class DirectionExtensions

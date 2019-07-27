@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core.Content.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,6 +36,10 @@ namespace Lunar.Graphics
         }
 
         public Vector2 FrameSize => new Vector2(_frameWidth, _frameHeight);
+
+        public override int HorizontalFrames => this.Sprite.Texture.Width / this.FrameWidth;
+
+        public override int VerticalFrames => this.Sprite.Texture.Height / this.FrameHeight;
 
         public int HorizontalFrameIndex
         {
@@ -62,8 +67,8 @@ namespace Lunar.Graphics
             }
         }
 
-        public SpriteSheet(Sprite sprite, int horizontalFrames, int verticalFrames, int frameWidth, int frameHeight)
-        :base(new SpriteInfo(sprite.Texture.Name), horizontalFrames, verticalFrames, frameWidth, frameHeight)
+        public SpriteSheet(Sprite sprite, int frameWidth, int frameHeight)
+        : base(new SpriteInfo(sprite.Texture.Name), frameWidth, frameHeight)
         {
             _sprite = sprite;
 

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
 
 namespace Lunar.Core.Content.Graphics
@@ -18,19 +19,17 @@ namespace Lunar.Core.Content.Graphics
     {
         public SpriteInfo Sprite { get; set; }
 
-        public int HorizontalFrames { get; set; }
-
-        public int VerticalFrames { get; set; }
-
         public int FrameWidth { get; set; }
 
         public int FrameHeight { get; set; }
 
-        public SpriteSheet(SpriteInfo sprite, int horizontalFrames, int verticalFrames, int frameWidth, int frameHeight)
+        public virtual int HorizontalFrames => this.Sprite.Transform.Rect.Width / this.FrameWidth;
+
+        public virtual int VerticalFrames => this.Sprite.Transform.Rect.Height / this.FrameHeight;
+
+        public SpriteSheet(SpriteInfo sprite, int frameWidth, int frameHeight)
         {
             this.Sprite = sprite;
-            this.HorizontalFrames = horizontalFrames;
-            this.VerticalFrames = verticalFrames;
             this.FrameWidth = frameWidth;
             this.FrameHeight = frameHeight;
         }
@@ -39,8 +38,6 @@ namespace Lunar.Core.Content.Graphics
         {
             var netBuffer = new NetBuffer();
             netBuffer.Write(this.Sprite.TextureName);
-            netBuffer.Write(this.HorizontalFrames);
-            netBuffer.Write(this.VerticalFrames);
             netBuffer.Write(this.FrameWidth);
             netBuffer.Write(this.FrameHeight);
             return netBuffer;
