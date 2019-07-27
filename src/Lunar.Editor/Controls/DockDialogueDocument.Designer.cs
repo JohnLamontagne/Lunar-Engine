@@ -33,6 +33,9 @@
             this.buttonSave = new System.Windows.Forms.ToolStripButton();
             this.branchPanel = new DarkUI.Controls.DarkSectionPanel();
             this.darkSectionPanel2 = new DarkUI.Controls.DarkSectionPanel();
+            this.darkToolStrip2 = new DarkUI.Controls.DarkToolStrip();
+            this.btnAddResponse = new System.Windows.Forms.ToolStripButton();
+            this.btnRemoveResponse = new System.Windows.Forms.ToolStripButton();
             this.lstResponses = new DarkUI.Controls.DarkListView();
             this.responsePanel = new DarkUI.Controls.DarkSectionPanel();
             this.cmbDisplayCond = new DarkUI.Controls.DarkComboBox();
@@ -44,20 +47,17 @@
             this.darkLabel1 = new DarkUI.Controls.DarkLabel();
             this.txtBranchText = new DarkUI.Controls.DarkTextBox();
             this.darkSectionPanel1 = new DarkUI.Controls.DarkSectionPanel();
-            this.lstBranches = new DarkUI.Controls.DarkListView();
             this.darkToolStrip1 = new DarkUI.Controls.DarkToolStrip();
             this.buttonAddBranch = new System.Windows.Forms.ToolStripButton();
             this.buttonRemoveBranch = new System.Windows.Forms.ToolStripButton();
-            this.darkToolStrip2 = new DarkUI.Controls.DarkToolStrip();
-            this.btnAddResponse = new System.Windows.Forms.ToolStripButton();
-            this.btnRemoveResponse = new System.Windows.Forms.ToolStripButton();
+            this.lstBranches = new DarkUI.Controls.DarkListView();
             this.darkToolStrip3.SuspendLayout();
             this.branchPanel.SuspendLayout();
             this.darkSectionPanel2.SuspendLayout();
+            this.darkToolStrip2.SuspendLayout();
             this.responsePanel.SuspendLayout();
             this.darkSectionPanel1.SuspendLayout();
             this.darkToolStrip1.SuspendLayout();
-            this.darkToolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // darkToolStrip3
@@ -85,6 +85,7 @@
             this.buttonSave.Size = new System.Drawing.Size(40, 22);
             this.buttonSave.Text = "toolStripButton1";
             this.buttonSave.ToolTipText = "Save";
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // branchPanel
             // 
@@ -107,6 +108,49 @@
             this.darkSectionPanel2.SectionHeader = "Responses";
             this.darkSectionPanel2.Size = new System.Drawing.Size(200, 482);
             this.darkSectionPanel2.TabIndex = 25;
+            // 
+            // darkToolStrip2
+            // 
+            this.darkToolStrip2.AutoSize = false;
+            this.darkToolStrip2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.darkToolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.darkToolStrip2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkToolStrip2.ImageScalingSize = new System.Drawing.Size(28, 28);
+            this.darkToolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnAddResponse,
+            this.btnRemoveResponse});
+            this.darkToolStrip2.Location = new System.Drawing.Point(1, 435);
+            this.darkToolStrip2.Name = "darkToolStrip2";
+            this.darkToolStrip2.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
+            this.darkToolStrip2.Size = new System.Drawing.Size(198, 46);
+            this.darkToolStrip2.TabIndex = 25;
+            this.darkToolStrip2.Text = "darkToolStrip2";
+            // 
+            // btnAddResponse
+            // 
+            this.btnAddResponse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnAddResponse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.btnAddResponse.Image = ((System.Drawing.Image)(resources.GetObject("btnAddResponse.Image")));
+            this.btnAddResponse.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.btnAddResponse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddResponse.Name = "btnAddResponse";
+            this.btnAddResponse.Size = new System.Drawing.Size(40, 40);
+            this.btnAddResponse.Text = "toolStripButton1";
+            this.btnAddResponse.ToolTipText = "Add Response";
+            this.btnAddResponse.Click += new System.EventHandler(this.BtnAddResponse_Click);
+            // 
+            // btnRemoveResponse
+            // 
+            this.btnRemoveResponse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnRemoveResponse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.btnRemoveResponse.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveResponse.Image")));
+            this.btnRemoveResponse.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.btnRemoveResponse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRemoveResponse.Name = "btnRemoveResponse";
+            this.btnRemoveResponse.Size = new System.Drawing.Size(40, 40);
+            this.btnRemoveResponse.Text = "toolStripButton2";
+            this.btnRemoveResponse.ToolTipText = "Remove Response";
+            this.btnRemoveResponse.Click += new System.EventHandler(this.BtnRemoveResponse_Click);
             // 
             // lstResponses
             // 
@@ -154,6 +198,7 @@
             this.cmbDisplayCond.TabIndex = 9;
             this.cmbDisplayCond.Text = null;
             this.cmbDisplayCond.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDisplayCond.SelectedIndexChanged += new System.EventHandler(this.CmbDisplayCond_SelectedIndexChanged);
             // 
             // darkLabel3
             // 
@@ -186,6 +231,7 @@
             this.cmbNextBranch.TabIndex = 7;
             this.cmbNextBranch.Text = null;
             this.cmbNextBranch.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbNextBranch.SelectedValueChanged += new System.EventHandler(this.CmbNextBranch_SelectedValueChanged);
             // 
             // darkLabel2
             // 
@@ -209,6 +255,7 @@
             this.txtResponseText.Size = new System.Drawing.Size(581, 147);
             this.txtResponseText.TabIndex = 5;
             this.txtResponseText.Text = "Enter response text here...";
+            this.txtResponseText.TextChanged += new System.EventHandler(this.TxtResponseText_TextChanged);
             // 
             // cmbResponseFunction
             // 
@@ -231,6 +278,7 @@
             this.cmbResponseFunction.TabIndex = 4;
             this.cmbResponseFunction.Text = null;
             this.cmbResponseFunction.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbResponseFunction.SelectedIndexChanged += new System.EventHandler(this.CmbResponseFunction_SelectedIndexChanged);
             // 
             // darkLabel1
             // 
@@ -254,6 +302,7 @@
             this.txtBranchText.Size = new System.Drawing.Size(822, 199);
             this.txtBranchText.TabIndex = 0;
             this.txtBranchText.Text = "Enter branch dialogue text here...";
+            this.txtBranchText.TextChanged += new System.EventHandler(this.TxtBranchText_TextChanged);
             // 
             // darkSectionPanel1
             // 
@@ -264,15 +313,6 @@
             this.darkSectionPanel1.SectionHeader = "Branches";
             this.darkSectionPanel1.Size = new System.Drawing.Size(364, 761);
             this.darkSectionPanel1.TabIndex = 28;
-            // 
-            // lstBranches
-            // 
-            this.lstBranches.Location = new System.Drawing.Point(6, 43);
-            this.lstBranches.Name = "lstBranches";
-            this.lstBranches.Size = new System.Drawing.Size(354, 652);
-            this.lstBranches.TabIndex = 26;
-            this.lstBranches.Text = "darkListView1";
-            this.lstBranches.SelectedIndicesChanged += new System.EventHandler(this.LstBranches_SelectedIndicesChanged);
             // 
             // darkToolStrip1
             // 
@@ -301,7 +341,7 @@
             this.buttonAddBranch.Name = "buttonAddBranch";
             this.buttonAddBranch.Size = new System.Drawing.Size(40, 48);
             this.buttonAddBranch.Text = "toolStripButton1";
-            this.buttonAddBranch.ToolTipText = "Add Layer";
+            this.buttonAddBranch.ToolTipText = "Add Branch";
             this.buttonAddBranch.Click += new System.EventHandler(this.ButtonAddBranch_Click);
             // 
             // buttonRemoveBranch
@@ -314,49 +354,17 @@
             this.buttonRemoveBranch.Name = "buttonRemoveBranch";
             this.buttonRemoveBranch.Size = new System.Drawing.Size(40, 48);
             this.buttonRemoveBranch.Text = "toolStripButton2";
-            this.buttonRemoveBranch.ToolTipText = "Remove Layer";
+            this.buttonRemoveBranch.ToolTipText = "Remove Branch";
+            this.buttonRemoveBranch.Click += new System.EventHandler(this.ButtonRemoveBranch_Click);
             // 
-            // darkToolStrip2
+            // lstBranches
             // 
-            this.darkToolStrip2.AutoSize = false;
-            this.darkToolStrip2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.darkToolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.darkToolStrip2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkToolStrip2.ImageScalingSize = new System.Drawing.Size(28, 28);
-            this.darkToolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnAddResponse,
-            this.btnRemoveResponse});
-            this.darkToolStrip2.Location = new System.Drawing.Point(1, 435);
-            this.darkToolStrip2.Name = "darkToolStrip2";
-            this.darkToolStrip2.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.darkToolStrip2.Size = new System.Drawing.Size(198, 46);
-            this.darkToolStrip2.TabIndex = 25;
-            this.darkToolStrip2.Text = "darkToolStrip2";
-            // 
-            // btnAddResponse
-            // 
-            this.btnAddResponse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnAddResponse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnAddResponse.Image = ((System.Drawing.Image)(resources.GetObject("btnAddResponse.Image")));
-            this.btnAddResponse.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.btnAddResponse.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAddResponse.Name = "btnAddResponse";
-            this.btnAddResponse.Size = new System.Drawing.Size(40, 40);
-            this.btnAddResponse.Text = "toolStripButton1";
-            this.btnAddResponse.ToolTipText = "Add Layer";
-            this.btnAddResponse.Click += new System.EventHandler(this.BtnAddResponse_Click);
-            // 
-            // btnRemoveResponse
-            // 
-            this.btnRemoveResponse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnRemoveResponse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnRemoveResponse.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveResponse.Image")));
-            this.btnRemoveResponse.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.btnRemoveResponse.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRemoveResponse.Name = "btnRemoveResponse";
-            this.btnRemoveResponse.Size = new System.Drawing.Size(40, 40);
-            this.btnRemoveResponse.Text = "toolStripButton2";
-            this.btnRemoveResponse.ToolTipText = "Remove Layer";
+            this.lstBranches.Location = new System.Drawing.Point(6, 43);
+            this.lstBranches.Name = "lstBranches";
+            this.lstBranches.Size = new System.Drawing.Size(354, 652);
+            this.lstBranches.TabIndex = 26;
+            this.lstBranches.Text = "darkListView1";
+            this.lstBranches.SelectedIndicesChanged += new System.EventHandler(this.LstBranches_SelectedIndicesChanged);
             // 
             // DockDialogueDocument
             // 
@@ -372,13 +380,13 @@
             this.branchPanel.ResumeLayout(false);
             this.branchPanel.PerformLayout();
             this.darkSectionPanel2.ResumeLayout(false);
+            this.darkToolStrip2.ResumeLayout(false);
+            this.darkToolStrip2.PerformLayout();
             this.responsePanel.ResumeLayout(false);
             this.responsePanel.PerformLayout();
             this.darkSectionPanel1.ResumeLayout(false);
             this.darkToolStrip1.ResumeLayout(false);
             this.darkToolStrip1.PerformLayout();
-            this.darkToolStrip2.ResumeLayout(false);
-            this.darkToolStrip2.PerformLayout();
             this.ResumeLayout(false);
 
         }

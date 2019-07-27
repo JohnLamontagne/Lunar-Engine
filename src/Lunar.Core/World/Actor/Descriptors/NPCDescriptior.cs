@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System.Collections.Generic;
 using System.IO;
 using Lunar.Core.Utilities;
@@ -35,7 +36,7 @@ namespace Lunar.Core.World.Actor.Descriptors
         public string Name { get; set; }
 
         public string TexturePath { get; set; }
-    
+
         public int Level { get; set; }
 
         public Vector Position { get; set; }
@@ -53,8 +54,12 @@ namespace Lunar.Core.World.Actor.Descriptors
         public Vector MaxRoam { get; set; }
 
         public Vector FrameSize { get; set; }
-    
+
         public int AttackRange { get; set; }
+
+        public string Dialogue { get; set; }
+
+        public string DialogueBranch { get; set; }
 
         public List<string> Scripts => _scripts;
 
@@ -100,6 +105,9 @@ namespace Lunar.Core.World.Actor.Descriptors
                         binaryWriter.Write(script);
 
                     binaryWriter.Write(this.UniqueID);
+
+                    binaryWriter.Write(this.Dialogue);
+                    binaryWriter.Write(this.DialogueBranch);
                 }
             }
         }
@@ -132,6 +140,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                 Actor.Stats stats;
                 List<string> scripts = new List<string>();
                 string uniqueID = "";
+                string dialogue = "";
+                string dialogueBranch = "";
 
                 using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
                 {
@@ -158,7 +168,6 @@ namespace Lunar.Core.World.Actor.Descriptors
                         frameSize = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                         attackRange = binaryReader.ReadInt32();
 
-
                         int scriptCount = binaryReader.ReadInt32();
                         for (int i = 0; i < scriptCount; i++)
                         {
@@ -166,6 +175,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                         }
 
                         uniqueID = binaryReader.ReadString();
+                        dialogue = binaryReader.ReadString();
+                        dialogueBranch = binaryReader.ReadString();
                     }
                 }
 
@@ -182,7 +193,9 @@ namespace Lunar.Core.World.Actor.Descriptors
                     FrameSize = frameSize,
                     AttackRange = attackRange,
                     StatBoosts = new Stats(),
-                    UniqueID = uniqueID
+                    UniqueID = uniqueID,
+                    Dialogue = dialogue,
+                    DialogueBranch = dialogueBranch
                 };
                 desc.Scripts.AddRange(scripts);
 
@@ -193,7 +206,6 @@ namespace Lunar.Core.World.Actor.Descriptors
                 Engine.Services.Get<Logger>().LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception);
                 return null;
             }
-            
         }
 
         public override string ToString()

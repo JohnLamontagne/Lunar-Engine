@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Dialogue name="bla">
-	<Script>test.py</Script>
-	<Branch name="BranchA">
-		<Text>Hello there, {Adventurer}</Text>
-		<Response>No time to talk</Response>
-		<Response function="somePyFunc">Fuck you!!!</Response>
-		<Response next="BranchB">Who are you?</Response>
-	</Branch>
-	<Branch name="BranchB">
-		<Text>I am some random NPC.</Text>
-		<Response>Ok bye</Response>
-	</Branch>
+  <Script>World/Dialogues/.scripts/dialogueTest.py</Script>
+  <Branch name="BranchA">
+    <Text>Hello there, {Adventurer}</Text>
+    <Response function="testDialogueHandler" next="BranchA">No time to talk</Response>
+    <Response next="BranchB">Fuck you!!!</Response>
+    <Response next="BranchA">Who are you?</Response>
+    <Response>Enter your response text here...</Response>
+  </Branch>
+  <Branch name="BranchB">
+    <Text>I am some random NPC. LOL</Text>
+    <Response>Ok byeasdfasdfasdf</Response>
+  </Branch>
 </Dialogue>

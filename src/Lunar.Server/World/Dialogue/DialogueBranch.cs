@@ -3,7 +3,6 @@ using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Server.Net;
-using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
 using System;
 using System.Collections.Generic;
@@ -13,14 +12,11 @@ namespace Lunar.Server.World.Dialogue
 {
     public class DialogueBranch
     {
-        private string _uniqueID;
-        private Script _script;
-
         private Dictionary<string, DialogueResponse> _responses;
 
         public event EventHandler Ended;
 
-        public string Text { get; }
+        public string Text { get; set; }
 
         public string Name { get; }
 
@@ -39,17 +35,22 @@ namespace Lunar.Server.World.Dialogue
 
         public void AddResponse(DialogueResponse response)
         {
-            _responses.Add(response.Text, response);
+            _responses.Add(response.UniqueID.ToString(), response);
+        }
+
+        public void RemoveResponse(DialogueResponse response)
+        {
+            _responses.Remove(response.UniqueID.ToString());
         }
 
         private void Handle_DialogueResponse(PacketReceivedEventArgs args)
         {
-            string responseName = args.Message.ReadString();
+            string responseID = args.Message.ReadString();
             var player = args.Connection.Player;
 
-            if (_responses.ContainsKey(responseName))
+            if (_responses.ContainsKey(responseID))
             {
-                var response = _responses[responseName];
+                var response = _responses[responseID];
 
                 if (string.IsNullOrEmpty(response.Next) && string.IsNullOrEmpty(response.Function))
                 {
@@ -58,11 +59,11 @@ namespace Lunar.Server.World.Dialogue
 
                 if (response.IsScripted)
                 {
-                    _script.Invoke(response.Function, new DialogueArgs(this.Dialogue, player));
+                    this.Dialogue.Script?.Invoke(response.Function, new DialogueArgs(this.Dialogue, player));
                 }
                 else
                 {
-                    this.Dialogue.Play(response.Next);
+                    this.Dialogue.Play(response.Next, player);
                 }
             }
             else
@@ -74,7 +75,7 @@ namespace Lunar.Server.World.Dialogue
         public void Begin(Player player)
         {
             var packet = new Packet(PacketType.DIALOGUE, ChannelType.UNASSIGNED);
-            packet.Message.Write(_uniqueID);
+            packet.Message.Write(this.Name);
             packet.Message.Write(this.Text);
 
             List<string> displayableResponses = new List<string>();
@@ -119,7 +120,7 @@ namespace Lunar.Server.World.Dialogue
         public void End(Player player)
         {
             var packet = new Packet(PacketType.DIALOGUE_END, ChannelType.UNASSIGNED);
-            packet.Message.Write(_uniqueID);
+            packet.Message.Write(this.Name);
             player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
             player.NetworkComponent.Connection.RemovePacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
 

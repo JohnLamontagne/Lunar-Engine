@@ -11,6 +11,8 @@ using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using ScintillaNET;
 using DarkUI.Docking;
+using System.Linq;
+using Lunar.Server.World.Dialogue;
 
 namespace Lunar.Editor.Controls
 {
@@ -24,6 +26,8 @@ namespace Lunar.Editor.Controls
 
         private NPCDescriptor _npc;
 
+        private Dialogue _selectedDialogue;
+
         public DockNPCEditor(Project project, string text, Image icon, FileInfo file)
             : base(file)
         {
@@ -35,7 +39,6 @@ namespace Lunar.Editor.Controls
 
             _regularDockText = text;
             _unsavedDockText = text + "*";
-
 
             DockText = text;
             Icon = icon;
@@ -73,8 +76,51 @@ namespace Lunar.Editor.Controls
             this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
             this.cmbEquipSlot.SelectedItem = EquipmentSlots.MainArm;
 
-            this.UpdateCustomVariablesView();
+            this.cmbDialogue.Items.Add("None");
+            foreach (var dialogue in _project.DialogueFiles)
+            {
+                var comboItem = new DarkComboItem(Path.GetFileNameWithoutExtension(dialogue.Name))
+                {
+                    Tag = dialogue
+                };
 
+                this.cmbDialogue.Items.Add(comboItem);
+            }
+
+            if (!string.IsNullOrEmpty(_npc.Dialogue) && this.cmbDialogue.Items.Contains(_npc.Dialogue))
+            {
+                this.cmbDialogue.SelectedItem = Path.GetFileNameWithoutExtension(_npc.Dialogue);
+
+                _selectedDialogue = _project.LoadDialogue((((DarkComboItem)this.cmbDialogue.SelectedItem).Tag as FileInfo).FullName);
+
+                _npc.Dialogue = _selectedDialogue.Name;
+
+                this.cmbDialogueBranch.Items.Add("None");
+                foreach (var branch in _selectedDialogue.Branches)
+                {
+                    this.cmbDialogueBranch.Items.Add(branch.Name);
+                }
+
+                if (this.cmbDialogueBranch.Items.Contains(_npc.DialogueBranch))
+                {
+                    this.cmbDialogueBranch.SelectedItem = _npc.DialogueBranch;
+                }
+                else
+                {
+                    this.cmbDialogueBranch.SelectedItem = "None";
+                }
+
+                this.cmbDialogueBranch.Enabled = true;
+
+                this.cmbDialogueBranch.Enabled = true;
+            }
+            else
+            {
+                this.cmbDialogue.SelectedItem = "None";
+                this.cmbDialogueBranch.Enabled = false;
+            }
+
+            this.UpdateCustomVariablesView();
 
             if (File.Exists(_project.ClientRootDirectory + "/" + _npc.TexturePath))
             {
@@ -87,18 +133,12 @@ namespace Lunar.Editor.Controls
                 this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
                 this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
             }
+            else if (!string.IsNullOrEmpty(_npc.TexturePath))
+            {
+                DarkMessageBox.ShowError($"Cannot load sprite sheet image {_npc.TexturePath}, the file does not exist!", "Error!", DarkDialogButton.Ok);
+            }
 
             _unsaved = true;
-        }
-
-        private void HandleLoadScript()
-        {
-
-        }
-
-        private void HandleCreateNewScript()
-        {
-            
         }
 
         private void UpdateCustomVariablesView()
@@ -106,7 +146,6 @@ namespace Lunar.Editor.Controls
             int prevIndex = 0;
             if (this.lstVariables.SelectedIndices.Count > 0)
                 prevIndex = this.lstVariables.SelectedIndices[0];
-
 
             this.lstVariables.Items.Clear();
             foreach (var val in _npc.CustomVariables.Keys)
@@ -120,7 +159,6 @@ namespace Lunar.Editor.Controls
                 this.lstVariables.SelectItem(prevIndex);
         }
 
-
         public override void Close()
         {
             if (_unsaved)
@@ -129,7 +167,7 @@ namespace Lunar.Editor.Controls
                 if (result == DialogResult.No)
                     return;
             }
-         
+
             base.Close();
         }
 
@@ -160,13 +198,10 @@ namespace Lunar.Editor.Controls
             this.MarkUnsaved();
         }
 
-
         private void buttonSave_Click(object sender, System.EventArgs e)
         {
             this.Save();
         }
-
-       
 
         private void picTexture_Click(object sender, EventArgs e)
         {
@@ -182,7 +217,7 @@ namespace Lunar.Editor.Controls
                 {
                     this.MarkUnsaved();
 
-                    string path = dialog.FileName; 
+                    string path = dialog.FileName;
 
                     _npc.TexturePath = path;
                 }
@@ -196,7 +231,6 @@ namespace Lunar.Editor.Controls
                 this.Save();
                 e.SuppressKeyPress = true;
             }
-
         }
 
         private void DockItemEditor_KeyDown(object sender, KeyEventArgs e)
@@ -215,8 +249,6 @@ namespace Lunar.Editor.Controls
             this.MarkUnsaved();
         }
 
-       
-
         private void cmbEquipmentSlot_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.lstItems.Items.Clear();
@@ -226,7 +258,7 @@ namespace Lunar.Editor.Controls
             // Update the item list with all items that are equippable to that slot
             foreach (var item in _project.Items.Values)
             {
-                if (item.SlotType == (EquipmentSlots) this.cmbEquipSlot.SelectedItem)
+                if (item.SlotType == (EquipmentSlots)this.cmbEquipSlot.SelectedItem)
                 {
                     var itemEntry = new DarkListItem(item.Name)
                     {
@@ -332,11 +364,17 @@ namespace Lunar.Editor.Controls
         private void picSpriteSheet_Paint(object sender, PaintEventArgs e)
         {
             const string notLoadedMessage = "Load Spritesheet Image";
+            const string brokenImageMessage = "Unable to resolve image!";
 
             if (string.IsNullOrEmpty(_npc?.TexturePath))
             {
                 e.Graphics.DrawString(notLoadedMessage, DefaultFont, Brushes.White, new Point((int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(notLoadedMessage, DefaultFont).Width / 2f),
                     (int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(notLoadedMessage, DefaultFont).Height / 2f)));
+            }
+            else if (this.picSpriteSheet.Image == null)
+            {
+                e.Graphics.DrawString(brokenImageMessage, DefaultFont, Brushes.White, new Point((int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(brokenImageMessage, DefaultFont).Width / 2f),
+                    (int)(this.picSpriteSheet.Width / 2f - e.Graphics.MeasureString(brokenImageMessage, DefaultFont).Height / 2f)));
             }
             else
             {
@@ -357,29 +395,26 @@ namespace Lunar.Editor.Controls
 
         private void picCollisionPreview_Paint(object sender, PaintEventArgs e)
         {
-            if (string.IsNullOrEmpty(_npc?.TexturePath))
+            if (string.IsNullOrEmpty(_npc?.TexturePath) || this.picSpriteSheet.Image == null)
                 return;
 
             float factor_x = this.picSpriteSheet.Image.Width / (float)this.picSpriteSheet.Width;
             float factor_y = this.picSpriteSheet.Image.Height / (float)this.picSpriteSheet.Height;
 
-
-            for (int x = 0; x < this.picSpriteSheet.Image.Width; x += (int) _npc.FrameSize.X)
+            for (int x = 0; x < this.picSpriteSheet.Image.Width; x += (int)_npc.FrameSize.X)
             {
-                for (int y = 0; y < this.picSpriteSheet.Image.Height; y += (int) _npc.FrameSize.Y)
+                for (int y = 0; y < this.picSpriteSheet.Image.Height; y += (int)_npc.FrameSize.Y)
                 {
                     Color color = Color.FromArgb(122, Color.Red);
-                    e.Graphics.FillRectangle(new SolidBrush(color), new Rectangle((int)((x + _npc.CollisionBounds.Left) / factor_x), 
+                    e.Graphics.FillRectangle(new SolidBrush(color), new Rectangle((int)((x + _npc.CollisionBounds.Left) / factor_x),
                         (int)((y + _npc.CollisionBounds.Top) / factor_y), (int)(_npc.CollisionBounds.Width / factor_x), (int)(_npc.CollisionBounds.Height / factor_y)));
                 }
             }
-
-           
         }
 
         private void picSpriteSheet_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(_npc.TexturePath))
+            if (!string.IsNullOrEmpty(_npc.TexturePath) && this.picSpriteSheet.Image != null)
                 return;
 
             using (OpenFileDialog dialog = new OpenFileDialog())
@@ -396,7 +431,7 @@ namespace Lunar.Editor.Controls
                     string path = dialog.FileName;
 
                     _npc.TexturePath = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
-                    
+
                     this.picSpriteSheet.Load(path);
                     _npc.FrameSize = new Vector(this.picSpriteSheet.Image.Width, this.picSpriteSheet.Image.Height);
                     this.picSpriteSheet.Refresh();
@@ -455,8 +490,6 @@ namespace Lunar.Editor.Controls
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
-
-            
         }
 
         private void lstItems_SelectedIndicesChanged(object sender, EventArgs e)
@@ -529,7 +562,6 @@ namespace Lunar.Editor.Controls
 
         private void ButtonRemoveVariable_Click(object sender, EventArgs e)
         {
-            
         }
 
         private void LstVariables_SelectedIndicesChanged(object sender, EventArgs e)
@@ -567,16 +599,44 @@ namespace Lunar.Editor.Controls
                         this.txtVarName.Text = varName;
                     }
                 }
-                
             }
         }
 
         private void PicCollisionPreview_Click(object sender, EventArgs e)
         {
-
         }
 
-        
+        private void CmbDialogue_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.cmbDialogue.SelectedItem.ToString() == "None")
+                return;
+
+            _selectedDialogue = _project.LoadDialogue((((DarkComboItem)this.cmbDialogue.SelectedItem).Tag as FileInfo).FullName);
+
+            _npc.Dialogue = _selectedDialogue.Name;
+
+            this.cmbDialogueBranch.Items.Add("None");
+            foreach (var branch in _selectedDialogue.Branches)
+            {
+                this.cmbDialogueBranch.Items.Add(branch.Name);
+            }
+
+            if (_npc.DialogueBranch != null && this.cmbDialogueBranch.Items.Contains(_npc.DialogueBranch))
+            {
+                this.cmbDialogueBranch.SelectedItem = _npc.DialogueBranch;
+            }
+            else
+            {
+                this.cmbDialogueBranch.SelectedItem = "None";
+            }
+
+            this.cmbDialogueBranch.Enabled = true;
+        }
+
+        private void CmbDialogueBranch_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _npc.DialogueBranch = this.cmbDialogueBranch.SelectedItem.ToString();
+        }
     }
 
     public class ScriptComboMenuOption

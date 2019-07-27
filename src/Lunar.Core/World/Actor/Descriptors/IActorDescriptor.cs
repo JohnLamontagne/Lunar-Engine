@@ -15,7 +15,7 @@ using Lunar.Core.Utilities.Data.Management;
 
 namespace Lunar.Core.World.Actor.Descriptors
 {
-    public interface IActorDescriptor : IDataDescriptor
+    public interface IActorDescriptor : IContentDescriptor
     {
         string Name { get; }
 

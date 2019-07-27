@@ -10,10 +10,10 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 namespace Lunar.Core.Utilities.Data.Management
 {
-    public interface IDataDescriptor
+    public interface IContentDescriptor
     {
-
     }
 }

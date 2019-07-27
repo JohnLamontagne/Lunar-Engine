@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Docking;
+using DarkUI.Forms;
 using Lunar.Core;
 using Lunar.Core.Utilities.Logic;
 using Newtonsoft.Json;
@@ -16,8 +17,6 @@ namespace Lunar.Editor.Controls
     public partial class DockProject : DarkToolWindow
     {
         private Project _project;
-
-        private JObject _scriptMap;
 
         #region Constructor Region
 
@@ -69,20 +68,6 @@ namespace Lunar.Editor.Controls
                 ExpandedIcon = Icons.folder_open
             };
 
-            if (File.Exists(_project.ServerRootDirectory + "/internal/.scriptmap"))
-            {
-                string text = File.ReadAllText(_project.ServerRootDirectory + "/internal/.scriptmap");
-
-                if (!string.IsNullOrEmpty(text))
-                    _scriptMap = JObject.Parse(text);
-                else
-                    _scriptMap = new JObject();
-            }
-            else
-            {
-                _scriptMap = new JObject();
-            }
-
             node.Nodes.Add(this.InitalizeProjectTree());
 
             treeProject.Nodes.Add(node);
@@ -124,7 +109,7 @@ namespace Lunar.Editor.Controls
                 if (!npc.Scripts.Contains(scriptName))
                 {
                     nodesToDelete.Add(childNode);
-                    _scriptMap.Remove(npcFile.Name);
+                    _project.ScriptMap.Remove(npcFile.Name);
                 }
             }
 
@@ -135,7 +120,7 @@ namespace Lunar.Editor.Controls
 
             _project.UnloadNPC(npcFile.FullName);
 
-            this.SaveScriptMap();
+            _project.SaveScriptMap();
         }
 
         private DarkTreeNode GetNodeAt(Point point)
@@ -188,6 +173,10 @@ namespace Lunar.Editor.Controls
             {
                 this.npcExplorerMenu.Show(this.treeProject, e.Location);
             }
+            else if (selectedNode.Tag?.ToString().Contains(EngineConstants.DIALOGUE_FILE_EXT) == true)
+            {
+                this.dialogueContextMenu.Show(this.treeProject, e.Location);
+            }
             else
             {
                 this.projectExplorerMenu.Show(this.treeProject, e.Location);
@@ -209,51 +198,6 @@ namespace Lunar.Editor.Controls
             }
         }
 
-        private void SaveScriptMap()
-        {
-            StringBuilder sb = new StringBuilder();
-            StringWriter sw = new StringWriter(sb);
-
-            using (JsonWriter writer = new JsonTextWriter(sw))
-            {
-                _scriptMap.WriteTo(writer);
-            }
-            sw.Close();
-            File.WriteAllText(_project.ServerRootDirectory + "/internal/" + ".scriptmap", sb.ToString());
-        }
-
-        private FileInfo AddScriptToGameContent(FileInfo contentFile, string scriptName)
-        {
-            string directory = contentFile.DirectoryName + "./scripts/";
-
-            // Make sure the .scripts directory exists.
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            string filePath = directory + scriptName + ".py";
-
-            if (!_scriptMap.ContainsKey(contentFile.Name))
-            {
-                _scriptMap.Add(contentFile.Name, JToken.FromObject(new List<string>()));
-            }
-
-            _scriptMap.Value<JArray>(contentFile.Name).Add(filePath);
-
-            this.SaveScriptMap();
-
-            FileInfo scriptFile = _project.AddScript(Helpers.GetNextAvailableFilename(filePath));
-
-            var fileNode = new DarkTreeNode(scriptFile.Name)
-            {
-                Tag = scriptFile,
-                Icon = Icons.document_16xLG,
-            };
-
-            this.treeProject.SelectedNodes[0].Nodes.Add(fileNode);
-
-            return scriptFile;
-        }
-
         private void AggressiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (this.treeProject.SelectedNodes.Count <= 0)
@@ -263,7 +207,15 @@ namespace Lunar.Editor.Controls
 
             if (createScriptDialog.ShowDialog() == DialogResult.OK)
             {
-                var scriptFile = this.AddScriptToGameContent(this.treeProject.SelectedNodes[0].Tag as FileInfo, createScriptDialog.ScriptName);
+                var scriptFile = _project.AddScriptToGameContent(this.treeProject.SelectedNodes[0].Tag as FileInfo, createScriptDialog.ScriptName);
+
+                var fileNode = new DarkTreeNode(scriptFile.Name)
+                {
+                    Tag = scriptFile,
+                    Icon = Icons.document_16xLG,
+                };
+
+                this.treeProject.SelectedNodes[0].Nodes.Add(fileNode);
 
                 var writer = scriptFile.AppendText();
                 writer.Write(Properties.Resources.AggressiveNPCBehavior);
@@ -289,7 +241,15 @@ namespace Lunar.Editor.Controls
 
             if (createScriptDialog.ShowDialog() == DialogResult.OK)
             {
-                var scriptFile = this.AddScriptToGameContent(this.treeProject.SelectedNodes[0].Tag as FileInfo, createScriptDialog.ScriptName);
+                var scriptFile = _project.AddScriptToGameContent(this.treeProject.SelectedNodes[0].Tag as FileInfo, createScriptDialog.ScriptName);
+
+                var fileNode = new DarkTreeNode(scriptFile.Name)
+                {
+                    Tag = scriptFile,
+                    Icon = Icons.document_16xLG,
+                };
+
+                this.treeProject.SelectedNodes[0].Nodes.Add(fileNode);
 
                 // We have to load up the NPC and attach the script to it.
                 var npcFile = (this.treeProject.SelectedNodes[0].Tag as FileInfo);
@@ -459,6 +419,20 @@ namespace Lunar.Editor.Controls
                     Icon = Icons.document_16xLG,
                 };
                 dialoguePathNode.Nodes.Add(fileNode);
+
+                if (_project.ScriptMap.ContainsKey(file.Name))
+                {
+                    foreach (var scriptPath in _project.ScriptMap[file.Name].ToObject<string[]>())
+                    {
+                        var scriptFile = new FileInfo(scriptPath);
+                        var scriptNode = new DarkTreeNode(scriptFile.Name)
+                        {
+                            Tag = scriptFile,
+                            Icon = Icons.document_16xLG
+                        };
+                        fileNode.Nodes.Add(scriptNode);
+                    }
+                }
             }
 
             var addNode = new DarkTreeNode("Add Dialogue")
@@ -554,9 +528,9 @@ namespace Lunar.Editor.Controls
                 };
                 npcPathNode.Nodes.Add(fileNode);
 
-                if (_scriptMap.ContainsKey(npcFile.Name))
+                if (_project.ScriptMap.ContainsKey(npcFile.Name))
                 {
-                    foreach (var scriptPath in _scriptMap[npcFile.Name].ToObject<string[]>())
+                    foreach (var scriptPath in _project.ScriptMap[npcFile.Name].ToObject<string[]>())
                     {
                         var scriptFile = new FileInfo(scriptPath);
                         var scriptNode = new DarkTreeNode(scriptFile.Name)
@@ -570,7 +544,7 @@ namespace Lunar.Editor.Controls
             }
 
             // Save any changes that might have occurred due to faulty script references (i.e., the NPC doesn't actually have a script in the map attached to it).
-            this.SaveScriptMap();
+            _project.SaveScriptMap();
 
             var addNode = new DarkTreeNode("Add NPC")
             {
@@ -632,31 +606,69 @@ namespace Lunar.Editor.Controls
         {
             var nodeToDelete = this.treeProject.SelectedNodes[0];
 
-            if (_scriptMap.ContainsKey((nodeToDelete.ParentNode?.Tag as FileInfo).Name))
+            if (_project.ScriptMap.ContainsKey((nodeToDelete.ParentNode?.Tag as FileInfo).Name))
             {
                 string scriptToRemove = Helpers.MakeRelative(args.File.FullName, _project.ServerRootDirectory.FullName + "/");
 
-                var npc = _project.NPCs[Helpers.NormalizePath((nodeToDelete.ParentNode?.Tag as FileInfo).FullName)];
+                string extension = Path.GetExtension(scriptToRemove);
 
-                // If the NPC isn't loaded currently, we need to temporarly load it to detatch the script.
-                if (npc == null)
+                switch (extension)
                 {
-                    npc = _project.LoadNPC((nodeToDelete.ParentNode?.Tag as FileInfo).FullName);
-                    npc.Scripts.Remove(scriptToRemove);
-                    _project.UnloadNPC((nodeToDelete.ParentNode?.Tag as FileInfo).FullName);
-                }
-                else
-                {
-                    npc.Scripts.Remove(scriptToRemove);
-                }
+                    case EngineConstants.DIALOGUE_FILE_EXT:
+                        this.RemoveDialogueScript(Helpers.NormalizePath((nodeToDelete.ParentNode?.Tag as FileInfo).FullName), scriptToRemove);
+                        break;
 
-                _scriptMap.Remove((nodeToDelete.ParentNode?.Tag as FileInfo).Name);
-                this.SaveScriptMap();
+                    case EngineConstants.NPC_FILE_EXT:
+                        this.RemoveNPCScript(Helpers.NormalizePath((nodeToDelete.ParentNode?.Tag as FileInfo).FullName), scriptToRemove);
+                        break;
+                }
             }
 
             this.FileRemoved?.Invoke(this, new FileEventArgs(args.File));
 
             nodeToDelete?.ParentNode.Nodes.Remove(nodeToDelete);
+        }
+
+        private void RemoveDialogueScript(string dialoguePath, string scriptPath)
+        {
+            var dialogue = _project.Dialogues[dialoguePath];
+
+            // If the NPC isn't loaded currently, we need to temporarly load it to detatch the script.
+            if (dialogue == null)
+            {
+                dialogue = _project.LoadDialogue(dialoguePath);
+                dialogue.ScriptPath = string.Empty;
+                dialogue.Script = null;
+                _project.UnloadNPC(dialoguePath);
+            }
+            else
+            {
+                dialogue.ScriptPath = string.Empty;
+                dialogue.Script = null;
+            }
+
+            _project.ScriptMap.Remove(scriptPath);
+            _project.SaveScriptMap();
+        }
+
+        private void RemoveNPCScript(string npcPath, string scriptPath)
+        {
+            var npc = _project.NPCs[npcPath];
+
+            // If the NPC isn't loaded currently, we need to temporarly load it to detatch the script.
+            if (npc == null)
+            {
+                npc = _project.LoadNPC(npcPath);
+                npc.Scripts.Remove(scriptPath);
+                _project.UnloadNPC(npcPath);
+            }
+            else
+            {
+                npc.Scripts.Remove(scriptPath);
+            }
+
+            _project.ScriptMap.Remove(npcPath);
+            _project.SaveScriptMap();
         }
 
         private void OnFileAdded(FileInfo file, string contentType)
@@ -879,6 +891,53 @@ namespace Lunar.Editor.Controls
             if (this.treeProject.SelectedNodes[0].Tag is FileInfo info)
             {
                 _project.RemoveNPC(info.FullName);
+            }
+        }
+
+        private void ToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            if (this.treeProject.SelectedNodes.Count <= 0)
+                return;
+
+            var createScriptDialog = new CreateScriptDialog();
+
+            if (createScriptDialog.ShowDialog() == DialogResult.OK)
+            {
+                var scriptFile = _project.AddScriptToGameContent(this.treeProject.SelectedNodes[0].Tag as FileInfo, createScriptDialog.ScriptName);
+
+                var fileNode = new DarkTreeNode(scriptFile.Name)
+                {
+                    Tag = scriptFile,
+                    Icon = Icons.document_16xLG,
+                };
+
+                this.treeProject.SelectedNodes[0].Nodes.Add(fileNode);
+
+                // We have to load up the Dialogue and attach the script to it.
+                var dialogueFile = (this.treeProject.SelectedNodes[0].Tag as FileInfo);
+                var dialogue = _project.LoadDialogue(dialogueFile.FullName);
+
+                if (File.Exists(dialogue.ScriptPath))
+                {
+                    var response = DarkMessageBox.ShowWarning("Creating a new script will replace existing script file.", "Warning!", DarkDialogButton.OkCancel);
+
+                    if (response != DialogResult.OK)
+                    {
+                        return;
+                    }
+                }
+
+                // If there was a previous script in the scriptmap, remove it
+                if (_project.ScriptMap.ContainsKey(dialogue.Name))
+                {
+                    _project.ScriptMap[dialogue.Name].ToObject<JArray>().Remove(dialogue.ScriptPath);
+                }
+
+                dialogue.ScriptPath = Helpers.MakeRelative(scriptFile.FullName, _project.ServerRootDirectory.FullName + "/");
+                this.FileSelected.Invoke(this, new FileEventArgs(dialogueFile));
+
+                // We do this at the very end to ensure our script document is focused, because attaching a script to a piece of content will inherently load and open it as a document even if it wasn't prior.
+                this.FileCreated?.Invoke(this, new FileEventArgs(scriptFile));
             }
         }
     }

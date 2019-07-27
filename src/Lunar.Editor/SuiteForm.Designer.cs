@@ -82,7 +82,7 @@ namespace Lunar.Editor
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
             this.mnuMain.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
-            this.mnuMain.Size = new System.Drawing.Size(1238, 38);
+            this.mnuMain.Size = new System.Drawing.Size(1238, 42);
             this.mnuMain.TabIndex = 0;
             this.mnuMain.Text = "darkMenuStrip1";
             // 
@@ -97,7 +97,7 @@ namespace Lunar.Editor
             this.mnuClose});
             this.mnuFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(62, 34);
+            this.mnuFile.Size = new System.Drawing.Size(62, 38);
             this.mnuFile.Text = "&File";
             // 
             // toolStripMenuItem1
@@ -169,7 +169,7 @@ namespace Lunar.Editor
             this.mnuDialog});
             this.mnuView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuView.Name = "mnuView";
-            this.mnuView.Size = new System.Drawing.Size(75, 34);
+            this.mnuView.Size = new System.Drawing.Size(75, 38);
             this.mnuView.Text = "&View";
             // 
             // mnuDialog
@@ -190,7 +190,7 @@ namespace Lunar.Editor
             this.checkedWithIconToolStripMenuItem});
             this.mnuTools.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuTools.Name = "mnuTools";
-            this.mnuTools.Size = new System.Drawing.Size(78, 34);
+            this.mnuTools.Size = new System.Drawing.Size(78, 38);
             this.mnuTools.Text = "&Tools";
             // 
             // checkableToolStripMenuItem
@@ -246,7 +246,7 @@ namespace Lunar.Editor
             this.mnuHistory});
             this.mnuWindow.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuWindow.Name = "mnuWindow";
-            this.mnuWindow.Size = new System.Drawing.Size(107, 34);
+            this.mnuWindow.Size = new System.Drawing.Size(107, 38);
             this.mnuWindow.Text = "&Window";
             // 
             // mnuProject
@@ -295,7 +295,7 @@ namespace Lunar.Editor
             this.mnuAbout});
             this.mnuHelp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.mnuHelp.Name = "mnuHelp";
-            this.mnuHelp.Size = new System.Drawing.Size(74, 34);
+            this.mnuHelp.Size = new System.Drawing.Size(74, 38);
             this.mnuHelp.Text = "&Help";
             // 
             // mnuAbout
@@ -354,15 +354,15 @@ namespace Lunar.Editor
             this.DockPanel.AutoSize = true;
             this.DockPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DockPanel.Location = new System.Drawing.Point(0, 40);
+            this.DockPanel.Location = new System.Drawing.Point(0, 44);
             this.DockPanel.Name = "DockPanel";
-            this.DockPanel.Size = new System.Drawing.Size(1238, 735);
+            this.DockPanel.Size = new System.Drawing.Size(1238, 731);
             this.DockPanel.TabIndex = 3;
             // 
             // darkSeparator1
             // 
             this.darkSeparator1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.darkSeparator1.Location = new System.Drawing.Point(0, 38);
+            this.darkSeparator1.Location = new System.Drawing.Point(0, 42);
             this.darkSeparator1.Name = "darkSeparator1";
             this.darkSeparator1.Size = new System.Drawing.Size(1238, 2);
             this.darkSeparator1.TabIndex = 4;

@@ -154,6 +154,7 @@
     <Compile Include="Controls\CreateProjectDialog.Designer.cs">
       <DependentUpon>CreateProjectDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DarkComboItem.cs" />
     <Compile Include="Controls\DockAnimationEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

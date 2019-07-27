@@ -93,6 +93,7 @@ namespace Lunar.Editor
             _dockTilesetTools.DockGroup.SetVisibleContent(_dockTilesetTools);
 
             _dockTilesetTools.DockGroup.Hide();
+            _dockTilesetTools.DockRegion.Hide();
 
             // Check window menu items which are contained in the dock panel
             BuildWindowMenu();
@@ -101,7 +102,10 @@ namespace Lunar.Editor
         private void DockPanelOnContentRemoved(object sender, DockContentEventArgs e)
         {
             if (e.Content is DockMapDocument)
+            {
                 _dockTilesetTools.DockGroup.Hide();
+                _dockTilesetTools.DockRegion.Hide();
+            }
         }
 
         private void DockProjectOnFileChanged(object sender, GameFileChangedEventArgs e)
@@ -256,11 +260,26 @@ namespace Lunar.Editor
             }
 
             mapDoc.Enter += MapDoc_Enter;
+            mapDoc.VisibleChanged += MapDoc_VisibleChanged;
             mapDoc.Closed += MapDoc_Closed;
             mapDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(mapDoc);
             this.DockPanel.AddContent(mapDoc);
+        }
+
+        private void MapDoc_VisibleChanged(object sender, EventArgs e)
+        {
+            if ((sender as DockMapDocument).Visible)
+            {
+                _dockTilesetTools.DockGroup?.Show();
+                _dockTilesetTools.DockRegion?.Show();
+            }
+            else
+            {
+                _dockTilesetTools.DockGroup?.Hide();
+                _dockTilesetTools.DockRegion?.Hide();
+            }
         }
 
         private void MapDoc_Closed(object sender, EventArgs e)
@@ -269,6 +288,7 @@ namespace Lunar.Editor
             _project.UnloadMap(mapFile.FullName);
 
             _dockTilesetTools.DockGroup.Hide();
+            _dockTilesetTools.DockRegion.Hide();
 
             _dockProject.RefreshMapScripts(mapFile);
         }
@@ -291,6 +311,7 @@ namespace Lunar.Editor
             npcDoc.Closed += NpcDoc_Closed;
 
             _editorDocuments.Add(npcDoc);
+            npcDoc.Size = new Size(npcDoc.Width, npcDoc.Height);
             this.DockPanel.AddContent(npcDoc);
 
             npcDoc.Initalize();
@@ -307,6 +328,7 @@ namespace Lunar.Editor
         private void MapDoc_Enter(object sender, EventArgs e)
         {
             _dockTilesetTools.DockGroup?.Show();
+            _dockTilesetTools.DockRegion.Show();
 
             _dockProperties.SetSubject(((DockMapDocument)sender).Map);
             _dockTilesetTools.SetMapSubject(((DockMapDocument)sender).Map);

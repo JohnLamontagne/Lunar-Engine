@@ -28,16 +28,16 @@ namespace Lunar.Server.World.Dialogue
                 List<XElement> responses = new List<XElement>();
                 foreach (var response in branch.Responses)
                 {
-                    XElement rElement = new XElement("Response");
+                    XElement rElement = new XElement("Response", response.Text);
 
                     if (!string.IsNullOrEmpty(response.Function))
-                        rElement.SetAttributeValue("Function", response.Function);
+                        rElement.SetAttributeValue("function", response.Function);
 
                     if (!string.IsNullOrEmpty(response.Next))
-                        rElement.SetAttributeValue("Next", response.Next);
+                        rElement.SetAttributeValue("next", response.Next);
 
                     if (!string.IsNullOrEmpty(response.Condition))
-                        rElement.SetAttributeValue("Condition", response.Condition);
+                        rElement.SetAttributeValue("condition", response.Condition);
 
                     responses.Add(rElement);
                 }
@@ -65,14 +65,14 @@ namespace Lunar.Server.World.Dialogue
             var dialogueNode = doc.Element("Dialogue");
             string dialogueName = dialogueNode.Attribute("name").Value.ToString();
 
-            Dialogue dialogue = new Dialogue(dialogueName);
+            Dialogue dialogue = new Dialogue(Path.GetFileNameWithoutExtension(filePath));
 
             string scriptPath = dialogueNode.Element("Script")?.Value;
+            dialogue.ScriptPath = scriptPath;
 
-            if (File.Exists(scriptPath))
+            if (File.Exists(Constants.FILEPATH_DATA + "/" + scriptPath))
             {
-                dialogue.Script = Engine.Services.Get<ScriptManager>().CreateScript(scriptPath);
-                dialogue.ScriptPath = scriptPath;
+                dialogue.Script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + "/" + scriptPath);
             }
 
             var branchNodes = dialogueNode.Elements("Branch");

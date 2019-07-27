@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using Lunar.Core.Utilities.Data;
@@ -17,7 +18,7 @@ using Lunar.Core.Utilities.Data.Management;
 
 namespace Lunar.Core.World.Structure
 {
-    public class MapDescriptor : IDataDescriptor
+    public class MapDescriptor : IContentDescriptor
     {
         private Vector _dimensions;
         private readonly Dictionary<string, LayerDescriptor> _layers;
@@ -42,7 +43,6 @@ namespace Lunar.Core.World.Structure
                 this.DimensionsChanged?.Invoke(this, new EventArgs());
             }
         }
-
 
         public Rect Bounds { get; set; }
 

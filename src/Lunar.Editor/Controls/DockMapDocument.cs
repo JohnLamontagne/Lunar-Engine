@@ -60,10 +60,9 @@ namespace Lunar.Editor.Controls
 
         public DockMapDocument()
         {
-
         }
 
-        public DockMapDocument(string text, Image icon, FileInfo file, Project project, 
+        public DockMapDocument(string text, Image icon, FileInfo file, Project project,
             DockTilesetTools dockTilesetTools, DockLayers dockLayers, DockMapObjectProperties dockMapObject, DockMapAttributes dockMapAttributes)
             : base(file)
         {
@@ -96,7 +95,7 @@ namespace Lunar.Editor.Controls
 
             this.mapView.Resize += MapView_Resize;
 
-            _tileAttributeSprites = new Dictionary<Tuple<string, Vector2>, Sprite>();        
+            _tileAttributeSprites = new Dictionary<Tuple<string, Vector2>, Sprite>();
         }
 
         private void UpdateQuickLayerSelection()
@@ -106,7 +105,6 @@ namespace Lunar.Editor.Controls
                 this.cmbQuickLayer.Items.Clear();
                 return;
             }
-                
 
             this.cmbQuickLayer.Items.Clear();
 
@@ -125,10 +123,9 @@ namespace Lunar.Editor.Controls
 
         private void DockMapAttributesOnSelectingTile(object sender, EventArgs eventArgs)
         {
-            _tileAttributeDialog = (WarpAttributeDialog) sender;
+            _tileAttributeDialog = (WarpAttributeDialog)sender;
             _prevPlacementMode = _placementMode;
             _placementMode = PlacementMode.Picking_Tile;
-
 
             if (_tileAttributeDialog.MapSubject == _map)
             {
@@ -136,7 +133,7 @@ namespace Lunar.Editor.Controls
             }
             else
             {
-                _tileAttributeDialog.Submitted+= TileAttributeDialogOnSubmitted_Inactive;
+                _tileAttributeDialog.Submitted += TileAttributeDialogOnSubmitted_Inactive;
             }
         }
 
@@ -197,7 +194,6 @@ namespace Lunar.Editor.Controls
             this.MarkUnsaved();
         }
 
-
         private void _tilesetTools_Tileset_Loaded(object sender, DockTilesetTools.TilesetLoadedEventArgs e)
         {
             if (_dockTilesetTools.Map == _map)
@@ -256,19 +252,21 @@ namespace Lunar.Editor.Controls
                                 case TileAttributes.Blocked:
                                     attributeSprite.Color = new Color(Color.Red, 100);
                                     break;
+
                                 case TileAttributes.PlayerSpawn:
                                     attributeSprite.Color = new Color(Color.Blue, 100);
                                     break;
+
                                 case TileAttributes.Warp:
                                     attributeSprite.Color = new Color(Color.Purple, 100);
                                     break;
+
                                 case TileAttributes.NPCSpawn:
                                     attributeSprite.Color = new Color(Color.DarkGreen, 100);
                                     break;
                             }
 
                             _tileAttributeSprites.Add(new Tuple<string, Vector2>(layer.Descriptor.Name, new Vector2(x, y)), attributeSprite);
-                            
                         }
                     }
                 }
@@ -303,7 +301,7 @@ namespace Lunar.Editor.Controls
                     ((int)(_mapMousePos.Y + _camera.Position.Y) / EngineConstants.TILE_SIZE) * EngineConstants.TILE_SIZE);
 
                 if (_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
-                    view.SpriteBatch.Draw(currentTileset, placeTilePos, _dockTilesetTools.SelectRectangle, 
+                    view.SpriteBatch.Draw(currentTileset, placeTilePos, _dockTilesetTools.SelectRectangle,
                         new Color(Color.White, 150), 0f, Vector2.Zero, 1f, SpriteEffects.None, _map.Layers[_dockLayers.SelectedLayer].Descriptor.ZIndex + .01f);
             }
             else if (_placementMode == PlacementMode.Select || _placementMode == PlacementMode.MapObject_Select)
@@ -340,14 +338,13 @@ namespace Lunar.Editor.Controls
             _project.SaveMap(_file.FullName, _map);
         }
 
-
         private void DockMapDocument_KeyDown(object sender, KeyEventArgs e)
         {
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control && e.KeyCode == Keys.S)
             {
                 this.Save();
                 e.SuppressKeyPress = true;
-            } 
+            }
             else if (e.KeyCode == Keys.Delete)
             {
                 if (_placementMode == PlacementMode.MapObject_Select && _selectedMapObject != null)
@@ -362,7 +359,7 @@ namespace Lunar.Editor.Controls
             _camera = new Camera(new Rectangle(0, 0, this.mapView.Width, this.mapView.Height));
 
             _mapTextureLoader = new TextureLoader(this.mapView.GraphicsDevice);
-            
+
             this.LoadMapDocument();
         }
 
@@ -405,13 +402,12 @@ namespace Lunar.Editor.Controls
                         _selectedMapObjectOffset = new Vector2(e.X - _selectedMapObject.Position.X, e.Y - _selectedMapObject.Position.Y);
                     }
                 }
-               
             }
         }
-        
+
         private void mapView_MouseMove(object sender, MouseEventArgs e)
         {
-            _mapMousePos = new Vector2(e.Location.X , e.Location.Y);
+            _mapMousePos = new Vector2(e.Location.X, e.Location.Y);
 
             if (_mapDragging)
             {
@@ -430,24 +426,24 @@ namespace Lunar.Editor.Controls
                 }
                 else if (_placementMode == PlacementMode.Erase)
                 {
-                    this.RemoveTile((e.X + (int) _camera.Position.X) / EngineConstants.TILE_SIZE,
-                        (e.Y + (int) _camera.Position.Y) / EngineConstants.TILE_SIZE);
+                    this.RemoveTile((e.X + (int)_camera.Position.X) / EngineConstants.TILE_SIZE,
+                        (e.Y + (int)_camera.Position.Y) / EngineConstants.TILE_SIZE);
                 }
                 else if (_placementMode == PlacementMode.Select)
                 {
-                    int left = (int) _selectPosition.X;
-                    int top = (int) _selectPosition.Y;
-                    int width = Math.Abs((int) ((e.X + _camera.Position.X) - _selectPosition.X));
-                    int height = Math.Abs((int) ((e.Y + _camera.Position.Y) - _selectPosition.Y));
+                    int left = (int)_selectPosition.X;
+                    int top = (int)_selectPosition.Y;
+                    int width = Math.Abs((int)((e.X + _camera.Position.X) - _selectPosition.X));
+                    int height = Math.Abs((int)((e.Y + _camera.Position.Y) - _selectPosition.Y));
 
                     if ((e.X + _camera.Position.X) < _selectPosition.X)
                     {
-                        left = (int) (e.X + _camera.Position.X);
+                        left = (int)(e.X + _camera.Position.X);
                     }
 
                     if ((e.Y + _camera.Position.Y) < _selectPosition.Y)
                     {
-                        top = (int) (e.Y + _camera.Position.Y);
+                        top = (int)(e.Y + _camera.Position.Y);
                     }
 
                     _selectRectangle = new Rectangle(left, top, width, height);
@@ -507,13 +503,13 @@ namespace Lunar.Editor.Controls
             else if (_placementMode == PlacementMode.MapObject)
             {
                 this.PlaceMapObject((e.X + (int)_camera.Position.X) / EngineConstants.TILE_SIZE, (e.Y + (int)_camera.Position.Y) / EngineConstants.TILE_SIZE);
-            } 
+            }
             else if (_placementMode == PlacementMode.Place_Attribute)
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    this.PlaceTileAttribute((e.X + (int) _camera.Position.X) / EngineConstants.TILE_SIZE,
-                        (e.Y + (int) _camera.Position.Y) / EngineConstants.TILE_SIZE, _dockMapAttributes.Attribute);
+                    this.PlaceTileAttribute((e.X + (int)_camera.Position.X) / EngineConstants.TILE_SIZE,
+                        (e.Y + (int)_camera.Position.Y) / EngineConstants.TILE_SIZE, _dockMapAttributes.Attribute);
                 }
                 else
                 {
@@ -523,8 +519,8 @@ namespace Lunar.Editor.Controls
             }
             else if (_placementMode == PlacementMode.Picking_Tile)
             {
-                _tileAttributeDialog.WarpX = (int)(e.X +  _camera.Position.X);
-                _tileAttributeDialog.WarpY = (int) (e.Y + _camera.Position.Y);
+                _tileAttributeDialog.WarpX = (int)(e.X + _camera.Position.X);
+                _tileAttributeDialog.WarpY = (int)(e.Y + _camera.Position.Y);
                 _tileAttributeDialog.WarpMapID = _map.Name;
                 _tileAttributeDialog.WarpLayerName = _dockLayers.SelectedLayer;
                 _tileAttributeDialog.Show();
@@ -533,17 +529,15 @@ namespace Lunar.Editor.Controls
             }
         }
 
-
         private void mapView_MouseUp(object sender, MouseEventArgs e)
         {
             if (_placementMode == PlacementMode.Select)
             {
-                int mouseX = (int) (e.X + _camera.Position.X);
+                int mouseX = (int)(e.X + _camera.Position.X);
                 int mouseY = (int)(e.Y + _camera.Position.Y);
-       
+
                 int left = (int)_selectPosition.X;
                 int top = (int)_selectPosition.Y;
-
 
                 int width = 0;
                 if (mouseX < _selectPosition.X)
@@ -573,7 +567,7 @@ namespace Lunar.Editor.Controls
 
                 _selectRectangle = new Rectangle(left, top, width, height);
             }
-                
+
             _mapDragging = false;
         }
 
@@ -627,21 +621,25 @@ namespace Lunar.Editor.Controls
                     Position = new Vector2(mapX * EngineConstants.TILE_SIZE, mapY * EngineConstants.TILE_SIZE),
                     LayerDepth = layer.Descriptor.ZIndex + .02f // place it slightly above the layer's tile
                 };
-                
+
                 switch (attribute)
                 {
                     case TileAttributes.Blocked:
                         attributeSprite.Color = new Color(Color.Red, 100);
                         break;
+
                     case TileAttributes.PlayerSpawn:
                         attributeSprite.Color = new Color(Color.Blue, 100);
                         break;
+
                     case TileAttributes.Warp:
                         attributeSprite.Color = new Color(Color.Purple, 100);
                         break;
+
                     case TileAttributes.NPCSpawn:
                         attributeSprite.Color = new Color(Color.DarkGreen, 100);
                         break;
+
                     default:
                         attributeSprite.Color = Color.Transparent;
                         break;
@@ -667,7 +665,7 @@ namespace Lunar.Editor.Controls
             Icons.NullObject.Save(memStream, ImageFormat.Png);
 
             var texture = _mapTextureLoader.LoadFromFileStream(memStream);
-                
+
             var mapObject = new MapObject(new Vector2(mapX * EngineConstants.TILE_SIZE, mapY * EngineConstants.TILE_SIZE), _map.Layers[_dockLayers.SelectedLayer])
             {
                 Sprite = new Sprite(texture)
@@ -718,7 +716,7 @@ namespace Lunar.Editor.Controls
 
             int tSetX = _dockTilesetTools.SelectRectangle.X;
             int tSetY = _dockTilesetTools.SelectRectangle.Y;
-            
+
             for (int x = mapX; x < mapX + placeTilesWidth; x++)
             {
                 for (int y = mapY; y < mapY + placeTilesHeight; y++)
@@ -733,7 +731,7 @@ namespace Lunar.Editor.Controls
                         };
 
                         layer.SetTile(x, y, tile);
-                        
+
                         // Increment the tileset y value so that we're pulling the correct tile when placing
                         tSetY += EngineConstants.TILE_SIZE;
                     }
@@ -763,8 +761,6 @@ namespace Lunar.Editor.Controls
             spriteBatch.Draw(_pointTexture, null, new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth), null, null, 0f, null, color, SpriteEffects.None, 1f);
             spriteBatch.Draw(_pointTexture, null, new Rectangle(rectangle.X, rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth), null, null, 0f, null, color, SpriteEffects.None, 1f);
         }
-
-
 
         private void fillBucketButton_Click(object sender, EventArgs e)
         {
@@ -861,8 +857,8 @@ namespace Lunar.Editor.Controls
         {
             if (e.KeyCode == Keys.Delete && _placementMode == PlacementMode.Select)
             {
-                int startX = (int) _selectPosition.X / EngineConstants.TILE_SIZE;
-                int startY = (int) _selectPosition.Y / EngineConstants.TILE_SIZE;
+                int startX = (int)_selectPosition.X / EngineConstants.TILE_SIZE;
+                int startY = (int)_selectPosition.Y / EngineConstants.TILE_SIZE;
                 int width = _selectRectangle.Width / EngineConstants.TILE_SIZE;
                 int height = _selectRectangle.Height / EngineConstants.TILE_SIZE;
 

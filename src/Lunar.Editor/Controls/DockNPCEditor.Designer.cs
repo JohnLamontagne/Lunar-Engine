@@ -32,6 +32,8 @@
             this.darkToolStrip1 = new DarkUI.Controls.DarkToolStrip();
             this.buttonSave = new System.Windows.Forms.ToolStripButton();
             this.darkSectionPanel1 = new DarkUI.Controls.DarkSectionPanel();
+            this.darkLabel20 = new DarkUI.Controls.DarkLabel();
+            this.txtAggressiveRange = new DarkUI.Controls.DarkTextBox();
             this.txtAttackRange = new DarkUI.Controls.DarkTextBox();
             this.darkLabel17 = new DarkUI.Controls.DarkLabel();
             this.txtMaxRoam = new DarkUI.Controls.DarkTextBox();
@@ -84,8 +86,11 @@
             this.buttonAddVariable = new System.Windows.Forms.ToolStripButton();
             this.buttonRemoveVariable = new System.Windows.Forms.ToolStripButton();
             this.lstVariables = new DarkUI.Controls.DarkListView();
-            this.txtAggressiveRange = new DarkUI.Controls.DarkTextBox();
-            this.darkLabel20 = new DarkUI.Controls.DarkLabel();
+            this.darkSectionPanel8 = new DarkUI.Controls.DarkSectionPanel();
+            this.cmbDialogueBranch = new DarkUI.Controls.DarkComboBox();
+            this.darkLabel22 = new DarkUI.Controls.DarkLabel();
+            this.cmbDialogue = new DarkUI.Controls.DarkComboBox();
+            this.darkLabel21 = new DarkUI.Controls.DarkLabel();
             this.darkToolStrip1.SuspendLayout();
             this.darkSectionPanel1.SuspendLayout();
             this.darkSectionPanel2.SuspendLayout();
@@ -97,6 +102,7 @@
             this.darkSectionPanel3.SuspendLayout();
             this.darkSectionPanel7.SuspendLayout();
             this.darkToolStrip2.SuspendLayout();
+            this.darkSectionPanel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // darkToolStrip1
@@ -104,12 +110,13 @@
             this.darkToolStrip1.AutoSize = false;
             this.darkToolStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.darkToolStrip1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkToolStrip1.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.darkToolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonSave});
             this.darkToolStrip1.Location = new System.Drawing.Point(0, 0);
             this.darkToolStrip1.Name = "darkToolStrip1";
             this.darkToolStrip1.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.darkToolStrip1.Size = new System.Drawing.Size(872, 28);
+            this.darkToolStrip1.Size = new System.Drawing.Size(1136, 28);
             this.darkToolStrip1.TabIndex = 1;
             this.darkToolStrip1.Text = "darkToolStrip1";
             // 
@@ -120,7 +127,7 @@
             this.buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("buttonSave.Image")));
             this.buttonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(23, 25);
+            this.buttonSave.Size = new System.Drawing.Size(32, 25);
             this.buttonSave.Text = "toolStripButton1";
             this.buttonSave.ToolTipText = "Save";
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
@@ -141,6 +148,27 @@
             this.darkSectionPanel1.SectionHeader = "Core Properties";
             this.darkSectionPanel1.Size = new System.Drawing.Size(409, 377);
             this.darkSectionPanel1.TabIndex = 2;
+            // 
+            // darkLabel20
+            // 
+            this.darkLabel20.AutoSize = true;
+            this.darkLabel20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel20.Location = new System.Drawing.Point(4, 127);
+            this.darkLabel20.Name = "darkLabel20";
+            this.darkLabel20.Size = new System.Drawing.Size(103, 15);
+            this.darkLabel20.TabIndex = 22;
+            this.darkLabel20.Text = "Aggressive Range:";
+            // 
+            // txtAggressiveRange
+            // 
+            this.txtAggressiveRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtAggressiveRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtAggressiveRange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtAggressiveRange.Location = new System.Drawing.Point(113, 125);
+            this.txtAggressiveRange.Name = "txtAggressiveRange";
+            this.txtAggressiveRange.Size = new System.Drawing.Size(51, 23);
+            this.txtAggressiveRange.TabIndex = 21;
+            this.txtAggressiveRange.TextChanged += new System.EventHandler(this.TxtAggressiveRange_TextChanged);
             // 
             // txtAttackRange
             // 
@@ -180,7 +208,7 @@
             this.darkLabel15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.darkLabel15.Location = new System.Drawing.Point(38, 69);
             this.darkLabel15.Name = "darkLabel15";
-            this.darkLabel15.Size = new System.Drawing.Size(66, 15);
+            this.darkLabel15.Size = new System.Drawing.Size(67, 15);
             this.darkLabel15.TabIndex = 17;
             this.darkLabel15.Text = "Max Roam:";
             // 
@@ -306,7 +334,7 @@
             this.darkLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.darkLabel6.Location = new System.Drawing.Point(11, 104);
             this.darkLabel6.Name = "darkLabel6";
-            this.darkLabel6.Size = new System.Drawing.Size(56, 15);
+            this.darkLabel6.Size = new System.Drawing.Size(57, 15);
             this.darkLabel6.TabIndex = 12;
             this.darkLabel6.Text = "Dexterity:";
             // 
@@ -582,7 +610,7 @@
             this.darkLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.darkLabel9.Location = new System.Drawing.Point(33, 45);
             this.darkLabel9.Name = "darkLabel9";
-            this.darkLabel9.Size = new System.Drawing.Size(30, 15);
+            this.darkLabel9.Size = new System.Drawing.Size(29, 15);
             this.darkLabel9.TabIndex = 4;
             this.darkLabel9.Text = "Top:";
             // 
@@ -670,7 +698,7 @@
             this.darkLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.darkLabel2.Location = new System.Drawing.Point(14, 78);
             this.darkLabel2.Name = "darkLabel2";
-            this.darkLabel2.Size = new System.Drawing.Size(79, 15);
+            this.darkLabel2.Size = new System.Drawing.Size(78, 15);
             this.darkLabel2.TabIndex = 11;
             this.darkLabel2.Text = "Variable Type:";
             // 
@@ -680,6 +708,7 @@
             this.darkToolStrip2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.darkToolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.darkToolStrip2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkToolStrip2.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.darkToolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonAddVariable,
             this.buttonRemoveVariable});
@@ -698,7 +727,7 @@
             this.buttonAddVariable.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
             this.buttonAddVariable.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAddVariable.Name = "buttonAddVariable";
-            this.buttonAddVariable.Size = new System.Drawing.Size(23, 25);
+            this.buttonAddVariable.Size = new System.Drawing.Size(32, 25);
             this.buttonAddVariable.Text = "toolStripButton1";
             this.buttonAddVariable.ToolTipText = "Add Layer";
             this.buttonAddVariable.Click += new System.EventHandler(this.ButtonAddVariable_Click);
@@ -711,7 +740,7 @@
             this.buttonRemoveVariable.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
             this.buttonRemoveVariable.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonRemoveVariable.Name = "buttonRemoveVariable";
-            this.buttonRemoveVariable.Size = new System.Drawing.Size(23, 25);
+            this.buttonRemoveVariable.Size = new System.Drawing.Size(32, 25);
             this.buttonRemoveVariable.Text = "toolStripButton2";
             this.buttonRemoveVariable.ToolTipText = "Remove Layer";
             this.buttonRemoveVariable.Click += new System.EventHandler(this.ButtonRemoveVariable_Click);
@@ -725,31 +754,87 @@
             this.lstVariables.Text = "darkListView1";
             this.lstVariables.SelectedIndicesChanged += new System.EventHandler(this.LstVariables_SelectedIndicesChanged);
             // 
-            // txtAggressiveRange
+            // darkSectionPanel8
             // 
-            this.txtAggressiveRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtAggressiveRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAggressiveRange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtAggressiveRange.Location = new System.Drawing.Point(113, 125);
-            this.txtAggressiveRange.Name = "txtAggressiveRange";
-            this.txtAggressiveRange.Size = new System.Drawing.Size(51, 23);
-            this.txtAggressiveRange.TabIndex = 21;
-            this.txtAggressiveRange.TextChanged += new System.EventHandler(this.TxtAggressiveRange_TextChanged);
+            this.darkSectionPanel8.Controls.Add(this.cmbDialogueBranch);
+            this.darkSectionPanel8.Controls.Add(this.darkLabel22);
+            this.darkSectionPanel8.Controls.Add(this.cmbDialogue);
+            this.darkSectionPanel8.Controls.Add(this.darkLabel21);
+            this.darkSectionPanel8.Location = new System.Drawing.Point(855, 33);
+            this.darkSectionPanel8.Name = "darkSectionPanel8";
+            this.darkSectionPanel8.SectionHeader = "Interaction Properties";
+            this.darkSectionPanel8.Size = new System.Drawing.Size(278, 734);
+            this.darkSectionPanel8.TabIndex = 19;
             // 
-            // darkLabel20
+            // cmbDialogueBranch
             // 
-            this.darkLabel20.AutoSize = true;
-            this.darkLabel20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel20.Location = new System.Drawing.Point(4, 127);
-            this.darkLabel20.Name = "darkLabel20";
-            this.darkLabel20.Size = new System.Drawing.Size(103, 15);
-            this.darkLabel20.TabIndex = 22;
-            this.darkLabel20.Text = "Aggressive Range:";
+            this.cmbDialogueBranch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDialogueBranch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDialogueBranch.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDialogueBranch.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDialogueBranch.ButtonIcon = ((System.Drawing.Bitmap)(resources.GetObject("cmbDialogueBranch.ButtonIcon")));
+            this.cmbDialogueBranch.DrawDropdownHoverOutline = false;
+            this.cmbDialogueBranch.DrawFocusRectangle = false;
+            this.cmbDialogueBranch.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmbDialogueBranch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDialogueBranch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDialogueBranch.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDialogueBranch.FormattingEnabled = true;
+            this.cmbDialogueBranch.Location = new System.Drawing.Point(132, 96);
+            this.cmbDialogueBranch.Name = "cmbDialogueBranch";
+            this.cmbDialogueBranch.Size = new System.Drawing.Size(112, 24);
+            this.cmbDialogueBranch.TabIndex = 3;
+            this.cmbDialogueBranch.Text = null;
+            this.cmbDialogueBranch.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDialogueBranch.SelectedIndexChanged += new System.EventHandler(this.CmbDialogueBranch_SelectedIndexChanged);
+            // 
+            // darkLabel22
+            // 
+            this.darkLabel22.AutoSize = true;
+            this.darkLabel22.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel22.Location = new System.Drawing.Point(79, 99);
+            this.darkLabel22.Name = "darkLabel22";
+            this.darkLabel22.Size = new System.Drawing.Size(47, 15);
+            this.darkLabel22.TabIndex = 2;
+            this.darkLabel22.Text = "Branch:";
+            // 
+            // cmbDialogue
+            // 
+            this.cmbDialogue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDialogue.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDialogue.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDialogue.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDialogue.ButtonIcon = ((System.Drawing.Bitmap)(resources.GetObject("cmbDialogue.ButtonIcon")));
+            this.cmbDialogue.DrawDropdownHoverOutline = false;
+            this.cmbDialogue.DrawFocusRectangle = false;
+            this.cmbDialogue.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmbDialogue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDialogue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDialogue.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDialogue.FormattingEnabled = true;
+            this.cmbDialogue.Location = new System.Drawing.Point(79, 64);
+            this.cmbDialogue.Name = "cmbDialogue";
+            this.cmbDialogue.Size = new System.Drawing.Size(165, 24);
+            this.cmbDialogue.TabIndex = 1;
+            this.cmbDialogue.Text = null;
+            this.cmbDialogue.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDialogue.SelectedIndexChanged += new System.EventHandler(this.CmbDialogue_SelectedIndexChanged);
+            // 
+            // darkLabel21
+            // 
+            this.darkLabel21.AutoSize = true;
+            this.darkLabel21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel21.Location = new System.Drawing.Point(16, 69);
+            this.darkLabel21.Name = "darkLabel21";
+            this.darkLabel21.Size = new System.Drawing.Size(57, 15);
+            this.darkLabel21.TabIndex = 0;
+            this.darkLabel21.Text = "Dialogue:";
             // 
             // DockNPCEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.darkSectionPanel8);
             this.Controls.Add(this.darkSectionPanel3);
             this.Controls.Add(this.darkSectionPanel6);
             this.Controls.Add(this.darkSectionPanel5);
@@ -757,8 +842,9 @@
             this.Controls.Add(this.darkSectionPanel1);
             this.Controls.Add(this.darkToolStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "DockNPCEditor";
-            this.Size = new System.Drawing.Size(872, 783);
+            this.Size = new System.Drawing.Size(1136, 783);
             this.Load += new System.EventHandler(this.DockItemEditor_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DockItemEditor_KeyDown);
             this.darkToolStrip1.ResumeLayout(false);
@@ -780,6 +866,8 @@
             this.darkSectionPanel7.PerformLayout();
             this.darkToolStrip2.ResumeLayout(false);
             this.darkToolStrip2.PerformLayout();
+            this.darkSectionPanel8.ResumeLayout(false);
+            this.darkSectionPanel8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -842,5 +930,10 @@
         private DarkUI.Controls.DarkLabel darkLabel19;
         private DarkUI.Controls.DarkLabel darkLabel20;
         private DarkUI.Controls.DarkTextBox txtAggressiveRange;
+        private DarkUI.Controls.DarkSectionPanel darkSectionPanel8;
+        private DarkUI.Controls.DarkComboBox cmbDialogue;
+        private DarkUI.Controls.DarkLabel darkLabel21;
+        private DarkUI.Controls.DarkComboBox cmbDialogueBranch;
+        private DarkUI.Controls.DarkLabel darkLabel22;
     }
 }

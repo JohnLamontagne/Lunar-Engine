@@ -16,6 +16,10 @@ using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Server.World.Dialogue;
+using Newtonsoft.Json.Linq;
+using System.Text;
+using Newtonsoft.Json;
+using DarkUI.Controls;
 
 namespace Lunar.Editor
 {
@@ -23,6 +27,7 @@ namespace Lunar.Editor
     {
         private DialogueFactory _dialogueFactory;
         private IDataManager<MapDescriptor> _mapDataManager;
+        private JObject _scriptMap;
 
         private readonly DirectoryInfo _serverRootDirectory;
         private readonly DirectoryInfo _serverWorldDirectory;
@@ -49,10 +54,14 @@ namespace Lunar.Editor
         private readonly Dictionary<string, AnimationDescriptor> _animations;
         private readonly Dictionary<string, Dialogue> _dialogues;
 
+        public JObject ScriptMap { get => _scriptMap; }
+
         public Dictionary<string, Map> Maps => _maps;
         public Dictionary<string, ItemDescriptor> Items => _items;
         public Dictionary<string, NPCDescriptor> NPCs => _npcs;
         public Dictionary<string, AnimationDescriptor> Animations => _animations;
+
+        public Dictionary<string, Dialogue> Dialogues => _dialogues;
 
         public IEnumerable<FileInfo> MapFiles => _mapFiles.Values;
         public IEnumerable<FileInfo> ItemFiles => _itemFiles.Values;
@@ -93,7 +102,34 @@ namespace Lunar.Editor
 
             _mapDataManager = new FSDataFactory().Create<MapFSDataManager>(new FSDataFactoryArguments(_serverWorldDirectory + "/Maps/"));
 
+            if (File.Exists(this.ServerRootDirectory + "/internal/.scriptmap"))
+            {
+                string text = File.ReadAllText(this.ServerRootDirectory + "/internal/.scriptmap");
+
+                if (!string.IsNullOrEmpty(text))
+                    _scriptMap = JObject.Parse(text);
+                else
+                    _scriptMap = new JObject();
+            }
+            else
+            {
+                _scriptMap = new JObject();
+            }
+
             this.LoadContents(this.ServerWorldDirectory);
+        }
+
+        public void SaveScriptMap()
+        {
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                this.ScriptMap.WriteTo(writer);
+            }
+            sw.Close();
+            File.WriteAllText(this.ServerRootDirectory + "/internal/" + ".scriptmap", sb.ToString());
         }
 
         public static Project Load(string projectPath)
@@ -130,11 +166,48 @@ namespace Lunar.Editor
             return scriptFile;
         }
 
+        public FileInfo AddScriptToGameContent(FileInfo contentFile, string scriptName)
+        {
+            string directory = contentFile.DirectoryName + "/.scripts/";
+
+            // Make sure the .scripts directory exists.
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            string filePath = directory + scriptName + ".py";
+
+            if (!this.ScriptMap.ContainsKey(contentFile.Name))
+            {
+                _scriptMap.Add(contentFile.Name, JToken.FromObject(new List<string>()));
+            }
+
+            _scriptMap.Value<JArray>(contentFile.Name).Add(Helpers.MakeRelative(filePath, this.ServerRootDirectory.FullName + "/"));
+
+            this.SaveScriptMap();
+
+            FileInfo scriptFile = this.AddScript(Helpers.GetNextAvailableFilename(filePath));
+
+            this.ScriptAdded?.Invoke(this, new FileEventArgs(scriptFile));
+
+            return scriptFile;
+        }
+
         public void RemoveScript(string filePath)
         {
             File.Delete(filePath);
             this.ScriptDeleted?.Invoke(this, new FileEventArgs(_scriptFiles[Helpers.NormalizePath(filePath)]));
             _scriptFiles.Remove(Helpers.NormalizePath(filePath));
+
+            List<JToken> refsToRemove = new List<JToken>();
+            foreach (var content in this.ScriptMap.Values())
+                foreach (var script in content.Values())
+                    if (script.ToString() == Helpers.MakeRelative(filePath, this.ServerRootDirectory.FullName + "/"))
+                        refsToRemove.Add(script);
+
+            foreach (var refToRemove in refsToRemove)
+                refToRemove.Remove();
+
+            this.SaveScriptMap();
         }
 
         public void SaveScript(string filePath, string contents)
@@ -144,7 +217,9 @@ namespace Lunar.Editor
 
         public FileInfo LoadScript(string filePath)
         {
-            return new FileInfo(filePath);
+            FileInfo file = new FileInfo(Helpers.NormalizePath(filePath));
+            _scriptFiles.Add(Helpers.NormalizePath(filePath), file);
+            return file;
         }
 
         public FileInfo AddMap(string filePath)
@@ -228,6 +303,11 @@ namespace Lunar.Editor
             this.DialogueAdded?.Invoke(this, new FileEventArgs(dialogueFile));
 
             return dialogueFile;
+        }
+
+        public void SaveDialogue(string filePath, Dialogue dialogue)
+        {
+            _dialogueFactory.Save(dialogue, filePath);
         }
 
         public Dialogue LoadDialogue(string filePath)
@@ -516,6 +596,21 @@ namespace Lunar.Editor
             _scriptFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Scripts/"), EngineConstants.SCRIPT_FILE_EXT);
             _animationFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Animations/"), EngineConstants.ANIM_FILE_EXT);
             _dialogueFiles = this.LoadContentFiles(new DirectoryInfo(projectDirectory.FullName + "/Dialogues/"), EngineConstants.DIALOGUE_FILE_EXT);
+
+            // Load content scripts
+            foreach (var entry in _scriptMap)
+            {
+                string contentPath = entry.Key;
+
+                foreach (var scriptPath in entry.Value.ToObject<string[]>())
+                {
+                    if (File.Exists(scriptPath))
+                    {
+                        var file = new FileInfo(scriptPath);
+                        _scriptFiles.Add(Helpers.NormalizePath(file.FullName), file);
+                    }
+                }
+            }
         }
 
         public void Save()

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +27,7 @@ namespace Lunar.Server.Utilities.Scripting
         private Dictionary<string, Script> _scripts;
         private ScriptEngine _scriptEngine;
 
-        public ScriptManager()
+        public ScriptManager(string scriptsDir, string pythonLibsDir)
         {
             _scripts = new Dictionary<string, Script>();
 
@@ -37,8 +38,13 @@ namespace Lunar.Server.Utilities.Scripting
 
             _scriptEngine = runtime.GetEngine("py");
             var paths = _scriptEngine.GetSearchPaths();
-            paths.Add(Constants.FILEPATH_SCRIPTS);
-            paths.Add(Settings.IronPythonLibsDirectory);
+
+            if (!string.IsNullOrEmpty(scriptsDir))
+                paths.Add(scriptsDir);
+
+            if (!string.IsNullOrEmpty(pythonLibsDir))
+                paths.Add(pythonLibsDir);
+
             _scriptEngine.SetSearchPaths(paths);
         }
 

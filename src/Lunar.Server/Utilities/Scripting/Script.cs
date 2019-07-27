@@ -2,8 +2,9 @@
 using Lunar.Core.Utilities;
 using Microsoft.Scripting.Hosting;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Lunar.Server.Utilities.Scripting
@@ -13,6 +14,25 @@ namespace Lunar.Server.Utilities.Scripting
         private ScriptEngine _scriptEngine;
         private ScriptSource _compiledScript;
         private ScriptScope _scope;
+        private FileSystemWatcher _fsWatcher;
+        private Stopwatch _fileWatchStopWatch;
+        private long _lastFileWatchChange;
+        private bool _liveSource;
+
+        public bool LiveSource
+        {
+            get => _liveSource;
+            set
+            {
+                if (_fsWatcher == null)
+                    _fsWatcher = new FileSystemWatcher();
+
+                _fsWatcher.EnableRaisingEvents = value;
+                _liveSource = value;
+            }
+        }
+
+        public event EventHandler<EventArgs> ScriptChanged;
 
         public Script(ScriptEngine scriptEngine, ScriptSource compiledScript)
         {
@@ -24,6 +44,8 @@ namespace Lunar.Server.Utilities.Scripting
                 _scope.SetVariable("gameTimeManager", new GameTimerManager());
                 _compiledScript.Execute(_scope);
                 Console.WriteLine($"Successfully loaded script {compiledScript.Path}");
+
+                this.LiveSource = false;
             }
             catch (Microsoft.Scripting.SyntaxErrorException ex)
             {
@@ -33,6 +55,46 @@ namespace Lunar.Server.Utilities.Scripting
             {
                 Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
+        }
+
+        private void CreateFileWatcher()
+        {
+            // Create a new FileSystemWatcher and set its properties.
+            _fsWatcher = new FileSystemWatcher();
+            _fsWatcher.Path = Path.GetDirectoryName(_compiledScript.Path);
+            _fsWatcher.Filter = Path.GetFileName(_compiledScript.Path);
+
+            // Add event handlers.
+            _fsWatcher.Changed += Watcher_Changed;
+
+            // Begin watching.
+            _fsWatcher.EnableRaisingEvents = true;
+
+            _fileWatchStopWatch.Start();
+        }
+
+        private void Watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            // Make sure we don't reload the script multiple times from multiple filechanged events being fired (happens due to way filewatcher works)
+            DateTime lastWriteTime = File.GetLastWriteTime(_compiledScript.Path);
+
+            if (_fileWatchStopWatch.ElapsedMilliseconds > _lastFileWatchChange + 1000)
+            {
+                this.ScriptChanged?.Invoke(this, new EventArgs());
+                _lastFileWatchChange = _fileWatchStopWatch.ElapsedMilliseconds;
+
+                this.Reload(e.FullPath);
+            }
+        }
+
+        public void Reload(string scriptPath)
+        {
+            _compiledScript = _compiledScript.Engine.CreateScriptSourceFromFile(scriptPath);
+            _compiledScript.Execute(_scope);
+
+            Console.WriteLine($"Script {_compiledScript.Path} reloaded!");
+
+            this.ScriptChanged?.Invoke(this, new EventArgs());
         }
 
         public T GetVariable<T>(string varName)
@@ -50,9 +112,10 @@ namespace Lunar.Server.Utilities.Scripting
 
         public List<KeyValuePair<string, T>> GetVariables<T>()
         {
-            return (_scope.GetItems().Where(pair => pair.Value is T)
-                .Cast<KeyValuePair<string, T>>()
-                .ToList());
+            return new List<KeyValuePair<string, T>>(
+                from i in _scope.GetItems()
+                .Where(pair => pair.Value is T)
+                select new KeyValuePair<string, T>(i.Key, i.Value));
         }
 
         public void SetVariable<T>(string varName, T value)

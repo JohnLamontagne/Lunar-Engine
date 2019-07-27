@@ -36,15 +36,18 @@ namespace Lunar.Editor.Controls
                 if (result == DialogResult.No)
                     return;
             }
-         
+
             base.Close();
         }
 
         private void DockLUADocument_Load(object sender, System.EventArgs e)
         {
-
             this.DockText = _regularDockText;
             _unsaved = false;
+
+            // Load the script contents
+            string text = File.ReadAllText(this.ContentFile.FullName);
+            this.txtEditor.Text = text;
         }
 
         private void InitalizeStyling()
@@ -57,8 +60,6 @@ namespace Lunar.Editor.Controls
 
             this.txtEditor.Margins[0].Width = 16;
             //this.txtEditor.Margins[0].Type = MarginType.BackColor;
-
-            
 
             this.txtEditor.Styles[Style.Default].Font = "Consolas";
             this.txtEditor.Styles[Style.Default].Size = 12;
@@ -75,11 +76,11 @@ namespace Lunar.Editor.Controls
             this.txtEditor.Styles[Style.Python.CommentBlock].ForeColor = Color.FromArgb(181, 189, 104);
             this.txtEditor.Styles[Style.Python.CommentBlock].Italic = true;
 
-            this.txtEditor.Styles[Style.Python.String].ForeColor = Color.FromArgb(222, 147, 95); 
+            this.txtEditor.Styles[Style.Python.String].ForeColor = Color.FromArgb(222, 147, 95);
 
-            this.txtEditor.Styles[Style.Python.Operator].ForeColor = Color.FromArgb(240, 198, 116); 
+            this.txtEditor.Styles[Style.Python.Operator].ForeColor = Color.FromArgb(240, 198, 116);
 
-            this.txtEditor.Styles[Style.Python.ClassName].ForeColor= Color.FromArgb(222, 147, 95); 
+            this.txtEditor.Styles[Style.Python.ClassName].ForeColor = Color.FromArgb(222, 147, 95);
 
             this.txtEditor.Styles[Style.Python.Number].ForeColor = Color.FromArgb(138, 190, 183);
 
@@ -139,7 +140,6 @@ namespace Lunar.Editor.Controls
                 this.Save();
                 e.SuppressKeyPress = true;
             }
-
         }
 
         private void buttonSave_Click(object sender, System.EventArgs e)

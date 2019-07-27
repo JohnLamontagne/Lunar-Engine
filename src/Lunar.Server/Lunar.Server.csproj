@@ -146,7 +146,7 @@
     <Compile Include="World\Dialogue\DialogueBranch.cs" />
     <Compile Include="World\Dialogue\DialogueFactory.cs" />
     <Compile Include="World\Dialogue\DialogueManager.cs" />
-    <Compile Include="World\Dialogue\DialogueResponseArgs.cs" />
+    <Compile Include="World\Dialogue\DialogueArgs.cs" />
     <Compile Include="World\ItemArgs.cs" />
     <Compile Include="World\ItemInteractionArgs.cs" />
     <Compile Include="World\Structure\CollisionDescriptor.cs" />

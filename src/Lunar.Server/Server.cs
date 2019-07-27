@@ -71,7 +71,7 @@ namespace Lunar.Server
             Console.WriteLine("Checking file integrity...");
             this.CheckFileIntegrity();
 
-            Engine.Services.Register(new ScriptManager());
+            Engine.Services.Register(new ScriptManager(Constants.FILEPATH_SCRIPTS, Settings.IronPythonLibsDirectory));
 
             _netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
             Packet.Initalize(_netHandler);

@@ -12,22 +12,34 @@
 */
 
 using System.Collections.Generic;
-using System;
-using Lunar.Server.World.Actors;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Core.Utilities;
 using System.Linq;
 using Lunar.Core;
+using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.World.Dialogue
 {
     public class Dialogue
     {
         private Dictionary<string, DialogueBranch> _branches;
+        private string _scriptPath;
 
         public string Name { get; }
 
-        public string ScriptPath { get; set; }
+        public string ScriptPath
+        {
+            get => _scriptPath;
+            set
+            {
+                _scriptPath = value;
+
+                if (this.Script != null)
+                {
+                    this.Script.Reload(Constants.FILEPATH_DATA + "/" + _scriptPath);
+                }
+            }
+        }
 
         public Script Script { get; set; }
 
@@ -38,13 +50,6 @@ namespace Lunar.Server.World.Dialogue
             this.Name = name;
 
             _branches = new Dictionary<string, DialogueBranch>();
-        }
-
-        /// <summary>
-        /// Plays the default branch for this dialogue.
-        /// </summary>
-        public void Start()
-        {
         }
 
         public void AddBranch(DialogueBranch branch)
@@ -66,6 +71,11 @@ namespace Lunar.Server.World.Dialogue
             _branches.Add(branch.Name, branch);
         }
 
+        public void RemoveBranch(DialogueBranch branch)
+        {
+            _branches.Remove(branch.Name);
+        }
+
         public bool BranchExists(string name)
         {
             return _branches.ContainsKey(name);
@@ -75,22 +85,12 @@ namespace Lunar.Server.World.Dialogue
         /// Plays the specified branch of the dialogue.
         /// </summary>
         /// <param name="branchName"></param>
-        public void Play(string branchName)
+        public void Play(string branchName, Player player)
         {
             if (!_branches.ContainsKey(branchName))
                 Engine.Services.Get<Logger>().LogEvent($"Invalid dialogue branch {branchName}.", LogTypes.ERROR);
-        }
-    }
 
-    public class DialogueArgs : ServerArgs
-    {
-        public Dialogue Dialogue { get; }
-        public Player Listener { get; }
-
-        public DialogueArgs(Dialogue dialogue, Player listener)
-        {
-            this.Dialogue = dialogue;
-            this.Listener = listener;
+            _branches[branchName].Begin(player);
         }
     }
 }

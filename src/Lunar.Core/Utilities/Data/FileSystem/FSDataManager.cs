@@ -2,7 +2,7 @@
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public abstract class FSDataManager<T> : IDataManager<T> where T : IDataDescriptor
+    public abstract class FSDataManager<T> : IDataManager<T> where T : IContentDescriptor
     {
         public string RootPath { get; set; }
 
@@ -10,6 +10,6 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
         public abstract T Load(IDataManagerArguments arguments);
 
-        public abstract void Save(IDataDescriptor descriptor, IDataManagerArguments arguments);
+        public abstract void Save(IContentDescriptor descriptor, IDataManagerArguments arguments);
     }
 }

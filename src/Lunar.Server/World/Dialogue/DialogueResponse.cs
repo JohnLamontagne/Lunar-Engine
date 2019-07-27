@@ -1,7 +1,11 @@
-﻿namespace Lunar.Server.World.Dialogue
+﻿using System;
+
+namespace Lunar.Server.World.Dialogue
 {
     public class DialogueResponse
     {
+        public Guid UniqueID { get; }
+
         public string Text { get; set; }
 
         public string Next { get; set; }
@@ -14,6 +18,7 @@
 
         public DialogueResponse()
         {
+            this.UniqueID = Guid.NewGuid();
         }
     }
 }

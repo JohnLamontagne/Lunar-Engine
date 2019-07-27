@@ -157,7 +157,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             return map;
         }
 
-        public override void Save(IDataDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
         {
             MapDescriptor mapDesc = (MapDescriptor)descriptor;
 

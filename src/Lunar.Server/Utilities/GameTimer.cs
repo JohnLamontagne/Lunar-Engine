@@ -10,8 +10,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
-using System.Linq.Expressions;
 
 namespace Lunar.Server.Utilities
 {
@@ -55,46 +55,42 @@ namespace Lunar.Server.Utilities
             _reset = true;
         }
 
-        public bool ResetWhen(Func<bool> expression, bool futureEval = false)
+        public bool ResetWhen(Func<bool> expression)
+        {
+            _resetWhen = expression;
+            return this.ResetIf(expression);
+        }
+
+        public bool ResetIf(Func<bool> expression)
         {
             if (expression())
             {
                 this.Reset();
                 return true;
             }
-            else if (futureEval)
-            {
-                _resetWhen = expression;
-            }
 
             return false;
         }
 
-        public bool ResetWhen(Func<bool> expression, int duration, bool futureEval = false)
+        public bool ResetWhen(Func<bool> expression, int duration)
         {
-            if (expression())
-            {
-                this.Reset(duration);
-                return true;
-            }
-            else if (futureEval)
-            {
-                _duration = duration;
-                _resetWhen = expression;
-            }
-
-            return false;
+            _resetWhen = expression;
+            _duration = duration;
+            return this.ResetIf(expression);
         }
 
         internal void Update(GameTime gameTime)
         {
             if (_reset)
             {
-                _endTime = gameTime.TotalGameTime.TotalMilliseconds + _duration;
-                _reset = false;
-                _finished = false;
+                if (_resetWhen == null || !_resetWhen())
+                {
+                    _endTime = gameTime.TotalGameTime.TotalMilliseconds + _duration;
+                    _reset = false;
+                    _finished = false;
+                }
             }
-            else if (gameTime.TotalGameTime.TotalMilliseconds > _endTime)
+            else if (gameTime.TotalGameTime.TotalMilliseconds > _endTime && !_finished)
             {
                 _finished = true;
                 this.TimerFinished?.Invoke(this, new EventArgs());

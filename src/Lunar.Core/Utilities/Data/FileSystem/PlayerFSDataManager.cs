@@ -97,7 +97,7 @@ namespace Lunar.Server.Utilities.Data.FileSystem
             }
         }
 
-        public override void Save(IDataDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
         {
             PlayerDescriptor playerDescriptor = ((PlayerDescriptor) descriptor);
 
