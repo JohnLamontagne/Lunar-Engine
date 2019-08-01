@@ -29,6 +29,7 @@ using Lunar.Server.World.Structure;
 using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.BehaviorDefinition;
 using Lunar.Core;
+using Lunar.Server.World.Conversation;
 
 namespace Lunar.Server.World.Actors
 {
@@ -59,7 +60,7 @@ namespace Lunar.Server.World.Actors
 
         public IActor<IActorDescriptor> Target { get; set; }
 
-        public bool Attackable => true;
+        public bool Attackable { get; set; }
 
         public bool Alive => this.Descriptor.Stats.Health > 0;
 
@@ -73,12 +74,22 @@ namespace Lunar.Server.World.Actors
 
         public CollisionBody CollisionBody { get; }
 
+        public Dialogue Dialogue { get; }
+
+        public string DialogueBranch { get; }
+
         public NPC(NPCDefinition definition, Map map)
         {
             if (definition == null)
             {
                 Engine.Services.Get<Logger>().LogEvent($"Null npc spawned on map {map.Descriptor.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Descriptor.Name}!"));
                 definition = new NPCDefinition(NPCDescriptor.Create("null"));
+            }
+
+            if (!string.IsNullOrEmpty(definition.Dialogue))
+            {
+                this.Dialogue = Engine.Services.Get<DialogueManager>().Get(definition.Dialogue);
+                this.DialogueBranch = definition.DialogueBranch;
             }
 
             this.GameTimers = new GameTimerManager();

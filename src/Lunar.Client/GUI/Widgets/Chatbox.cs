@@ -10,11 +10,11 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
-using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -38,9 +38,7 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
-
         public int MaxEntries { get; set; }
-
 
         public Chatbox(Texture2D backSprite, SpriteFont font, int maxEntries)
             : base(backSprite)
@@ -90,6 +88,5 @@ namespace Lunar.Client.GUI.Widgets
                 this.RemoveWidget(key);
             }
         }
-
     }
 }

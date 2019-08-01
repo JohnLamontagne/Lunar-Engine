@@ -10,15 +10,17 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
 using System;
 using System.Collections.Generic;
 using Lunar.Core.Net;
 using Lunar.Server.Utilities;
+using Lunar.Core.Utilities;
 
 namespace Lunar.Server.Net
 {
-    public class NetHandler
+    public class NetHandler : IService
     {
         private readonly NetServer _netServer;
         private readonly Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _packetHandlers;
@@ -41,7 +43,12 @@ namespace Lunar.Server.Net
             config.DisableMessageType(NetIncomingMessageType.DiscoveryResponse);
             config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
             config.AcceptIncomingConnections = true;
+
+#if DEBUG
+            config.ConnectionTimeout = 60;
+#else
             config.ConnectionTimeout = 5;
+#endif
 
             config.EnableUPnP = false;
 
@@ -61,9 +68,9 @@ namespace Lunar.Server.Net
 
                         if (_packetHandlers.ContainsKey(packetType))
                         {
-                            foreach (var handler in _packetHandlers[packetType])
+                            for (int i = 0; i < _packetHandlers[packetType].Count; i++)
                             {
-                                handler.Invoke(new PacketReceivedEventArgs(message, _connections[message.SenderConnection.RemoteUniqueIdentifier]));
+                                _packetHandlers[packetType][i].Invoke(new PacketReceivedEventArgs(message, _connections[message.SenderConnection.RemoteUniqueIdentifier]));
                                 // Reset the read position.
                                 message.Position = 0;
                                 message.ReadInt16();
@@ -96,7 +103,6 @@ namespace Lunar.Server.Net
                     case NetIncomingMessageType.DebugMessage:
                         Console.WriteLine(message.ReadString());
                         break;
-
                 }
 
                 _netServer.Recycle(message);
@@ -124,6 +130,10 @@ namespace Lunar.Server.Net
         public void Start()
         {
             _netServer.Start();
+        }
+
+        public void Initalize()
+        {
         }
     }
 }

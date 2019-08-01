@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.IO;
 using System.Linq;
@@ -74,15 +75,12 @@ namespace Lunar.Client
                 Settings.Port = int.Parse(generalSettings.Elements("Port").FirstOrDefault().Value);
                 Settings.IP = generalSettings.Elements("IP").FirstOrDefault().Value;
 
-
                 var displaySettings = doc.Elements("Config").Elements("Display");
                 Settings.ResolutionX = int.Parse(displaySettings.Elements("Resolution_X").FirstOrDefault().Value);
                 Settings.ResolutionY = int.Parse(displaySettings.Elements("Resolution_Y").FirstOrDefault().Value);
 
                 var advancedSettings = doc.Elements("Config").Elements("Advanced");
                 Settings.DisplayNetworkMessages = bool.Parse(advancedSettings.Elements("DisplayNetworkMessages").FirstOrDefault().Value);
-
-
             }
             catch (IndexOutOfRangeException ex)
             {
@@ -100,7 +98,6 @@ namespace Lunar.Client
                     Environment.Exit(0);
                 }
             }
-
         }
     }
 }

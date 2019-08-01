@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 
-namespace Lunar.Server.World.Dialogue
+namespace Lunar.Server.World.Conversation
 {
     public class DialogueManager : IService
     {
@@ -22,6 +22,12 @@ namespace Lunar.Server.World.Dialogue
         public void Initalize()
         {
             this.LoadDialogues();
+        }
+
+        public Dialogue Get(string dialogueName)
+        {
+            _dialogues.TryGetValue(dialogueName, out Dialogue dialogue);
+            return dialogue;
         }
 
         private void LoadDialogues()

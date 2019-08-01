@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System.Collections.Generic;
 using System.Linq;
 using Lidgren.Network;
@@ -21,6 +22,7 @@ using Lunar.Client.Utilities.Services;
 using Lunar.Client.World.Actors;
 using Lunar.Core.Net;
 using Lunar.Graphics;
+using Lunar.Core;
 
 namespace Lunar.Client.World
 {
@@ -55,20 +57,19 @@ namespace Lunar.Client.World
             _mapItems = new Dictionary<Vector2, List<MapItem>>();
             _mapObjects = new List<MapObject>();
 
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_SPAWN, this.Handle_MapItemSpawn);
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_DESPAWN, this.Handle_MapItemDeSpawn);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_SPAWN, this.Handle_MapItemSpawn);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_DESPAWN, this.Handle_MapItemDeSpawn);
         }
 
         private void Handle_MapItemDeSpawn(PacketReceivedEventArgs args)
         {
-           
         }
 
         private void Handle_MapItemSpawn(PacketReceivedEventArgs args)
         {
             MapItem mapItem = new MapItem();
             string layerName = args.Message.ReadString();
-            
+
             mapItem.Unpack(args.Message, this.GetLayer(layerName));
 
             if (!_mapItems.ContainsKey(mapItem.Position))
@@ -88,7 +89,6 @@ namespace Lunar.Client.World
             foreach (var mapObject in _mapObjects)
                 mapObject.Update(gameTime);
         }
-
 
         public bool CheckCollision(IActor entity)
         {
@@ -130,8 +130,6 @@ namespace Lunar.Client.World
                     mapItemPos[i].Draw(spriteBatch);
                 }
             }
-
-            
         }
 
         public Layer GetLayer(string name)
@@ -141,18 +139,17 @@ namespace Lunar.Client.World
 
         public void Unpack(NetBuffer netBuffer)
         {
-
-            Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Clear();
+            Engine.Services.Get<LightManagerService>().Component.Lights.Clear();
 
             this.Dark = netBuffer.ReadBoolean();
 
             if (this.Dark)
             {
-                Client.ServiceLocator.Get<LightManagerService>().Component.AmbientColor = new Color(100, 100, 100, 20);
+                Engine.Services.Get<LightManagerService>().Component.AmbientColor = new Color(100, 100, 100, 20);
             }
             else
             {
-                Client.ServiceLocator.Get<LightManagerService>().Component.AmbientColor = Color.White;
+                Engine.Services.Get<LightManagerService>().Component.AmbientColor = Color.White;
             }
 
             int layerCount = netBuffer.ReadInt32();
@@ -203,12 +200,12 @@ namespace Lunar.Client.World
         {
             _entities.Add(uniqueID, actor);
 
-            Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Add(actor.Light);
+            Engine.Services.Get<LightManagerService>().Component.Lights.Add(actor.Light);
         }
 
         public void RemoveEntity(long uniqueID)
         {
-            Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Remove(_entities[uniqueID].Light);
+            Engine.Services.Get<LightManagerService>().Component.Lights.Remove(_entities[uniqueID].Light);
 
             _entities.Remove(uniqueID);
         }

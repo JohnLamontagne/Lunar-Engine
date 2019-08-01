@@ -10,7 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
+using Lunar.Core;
 using Lunar.Core.Net;
 
 namespace Lunar.Client.Net
@@ -23,7 +25,7 @@ namespace Lunar.Client.Net
 
         public Packet(PacketType packetType)
         {
-            _message = Client.ServiceLocator.Get<NetHandler>().ConstructMessage();
+            _message = Engine.Services.Get<NetHandler>().ConstructMessage();
             _message.Write((short)packetType);
         }
     }

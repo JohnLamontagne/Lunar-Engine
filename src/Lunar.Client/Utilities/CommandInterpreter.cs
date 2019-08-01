@@ -10,12 +10,14 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using Lidgren.Network;
+using Lunar.Client.Net;
+using Lunar.Core;
+using Lunar.Core.Net;
+using QuakeConsole;
 using System;
 using System.Linq;
-using Lidgren.Network;
-using QuakeConsole;
-using Lunar.Client.Net;
-using Lunar.Core.Net;
 
 namespace Lunar.Client.Utilities
 {
@@ -31,7 +33,7 @@ namespace Lunar.Client.Utilities
         {
             _manualInterpreter = new ManualInterpreter();
 
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.AVAILABLE_COMMANDS, this.Handle_AvailableCommands);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.AVAILABLE_COMMANDS, this.Handle_AvailableCommands);
         }
 
         private void Handle_AvailableCommands(PacketReceivedEventArgs args)
@@ -44,7 +46,6 @@ namespace Lunar.Client.Utilities
 
                 _manualInterpreter.RegisterCommand(commandName, (delegate (string[] strings) { }));
             }
-          
         }
 
         public void Autocomplete(IConsoleInput input, bool forward)
@@ -57,7 +58,7 @@ namespace Lunar.Client.Utilities
             _manualInterpreter.Execute(output, input);
 
             if (Client.ServiceLocator.Get<NetHandler>().Connected)
-            { 
+            {
                 string[] instructions = input.Split(InstructionSeparator, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var instruction in instructions)
@@ -75,7 +76,7 @@ namespace Lunar.Client.Utilities
                     foreach (var arg in commandArgs)
                         packet.Message.Write(arg);
 
-                    Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
                 }
             }
         }

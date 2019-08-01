@@ -91,6 +91,8 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Rect CollisionBounds { get; set; }
 
+        public Vector Reach { get; set; }
+
         public PlayerDescriptor(string username, string password)
         {
             _name = username;
@@ -119,7 +121,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                     Defense = 10,
                 },
                 StatBoosts = new Stats(),
-                Role = Role.Default
+                Role = Role.Default,
+                Reach = new Vector(32, 32)
             };
 
             return descriptor;

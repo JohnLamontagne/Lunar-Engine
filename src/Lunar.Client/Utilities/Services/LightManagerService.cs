@@ -10,8 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using Penumbra;
+
 using Lunar.Core.Utilities;
+using Penumbra;
 
 namespace Lunar.Client.Utilities.Services
 {
@@ -28,7 +29,6 @@ namespace Lunar.Client.Utilities.Services
 
         public void Initalize()
         {
-            
         }
     }
 }

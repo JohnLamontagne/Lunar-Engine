@@ -10,9 +10,10 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Lunar.Client.Utilities.Input
 {
@@ -73,8 +74,6 @@ namespace Lunar.Client.Utilities.Input
         public static void Initialize(GameWindow window)
         {
             window.TextInput += Window_TextInput;
-           
-            
         }
 
         private static void Window_TextInput(object sender, TextInputEventArgs e)

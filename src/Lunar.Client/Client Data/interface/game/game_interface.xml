@@ -30,5 +30,12 @@
 					<import file="interface/game/targetContainer.xml" />
 				</Widgets>
 			</container>
+			
+			<container name="dialogueWindow">
+				<visible>false</visible>
+				<texture>gfx/Interface/windowback.png</texture>
+				<size><y>200</y></size>
+				<draggable>true</draggable>
+			</container>
 	</Widgets>
 </GUI>

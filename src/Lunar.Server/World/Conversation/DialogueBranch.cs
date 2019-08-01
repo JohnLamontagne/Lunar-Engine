@@ -8,13 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lunar.Server.World.Dialogue
+namespace Lunar.Server.World.Conversation
 {
     public class DialogueBranch
     {
         private Dictionary<string, DialogueResponse> _responses;
-
-        public event EventHandler Ended;
 
         public string Text { get; set; }
 
@@ -43,11 +41,8 @@ namespace Lunar.Server.World.Dialogue
             _responses.Remove(response.UniqueID.ToString());
         }
 
-        private void Handle_DialogueResponse(PacketReceivedEventArgs args)
+        public void OnResponse(string responseID, Player player)
         {
-            string responseID = args.Message.ReadString();
-            var player = args.Connection.Player;
-
             if (_responses.ContainsKey(responseID))
             {
                 var response = _responses[responseID];
@@ -55,6 +50,7 @@ namespace Lunar.Server.World.Dialogue
                 if (string.IsNullOrEmpty(response.Next) && string.IsNullOrEmpty(response.Function))
                 {
                     this.End(player);
+                    return;
                 }
 
                 if (response.IsScripted)
@@ -66,10 +62,11 @@ namespace Lunar.Server.World.Dialogue
                     this.Dialogue.Play(response.Next, player);
                 }
             }
-            else
-            {
-                this.End(player);
-            }
+        }
+
+        private void End(Player player)
+        {
+            this.Dialogue.End(player);
         }
 
         public void Begin(Player player)
@@ -78,7 +75,7 @@ namespace Lunar.Server.World.Dialogue
             packet.Message.Write(this.Name);
             packet.Message.Write(this.Text);
 
-            List<string> displayableResponses = new List<string>();
+            List<DialogueResponse> displayableResponses = new List<DialogueResponse>();
             // Determine which responses can be displayed by any existing conditions.
             foreach (var response in _responses.Values)
             {
@@ -92,12 +89,12 @@ namespace Lunar.Server.World.Dialogue
                     }
                     else if (displayable.Value)
                     {
-                        displayableResponses.Add(response.Text);
+                        displayableResponses.Add(response);
                     }
                 }
                 else
                 {
-                    displayableResponses.Add(response.Text);
+                    displayableResponses.Add(response);
                 }
             }
 
@@ -106,25 +103,18 @@ namespace Lunar.Server.World.Dialogue
             if (displayableResponses.Count <= 0)
             {
                 packet.Message.Write("...");
+                packet.Message.Write("");
             }
             else
             {
                 foreach (var response in displayableResponses)
-                    packet.Message.Write(response);
+                {
+                    packet.Message.Write(response.Text);
+                    packet.Message.Write(response.UniqueID.ToString());
+                }
             }
 
             player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
-            player.NetworkComponent.Connection.AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
-        }
-
-        public void End(Player player)
-        {
-            var packet = new Packet(PacketType.DIALOGUE_END, ChannelType.UNASSIGNED);
-            packet.Message.Write(this.Name);
-            player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
-            player.NetworkComponent.Connection.RemovePacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
-
-            this.Ended?.Invoke(this, new EventArgs());
         }
     }
 }

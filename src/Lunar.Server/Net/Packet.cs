@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
 using System;
 using Lunar.Core.Net;
@@ -53,6 +54,9 @@ namespace Lunar.Server.Net
         /// </summary>
         public void Reset()
         {
+            if (_message.Data == null)
+                return;
+
             var saved = new byte[_message.LengthBytes];
             Buffer.BlockCopy(_message.Data, 0, saved, 0, _message.LengthBytes);
 

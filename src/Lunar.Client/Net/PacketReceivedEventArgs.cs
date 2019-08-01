@@ -10,20 +10,23 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
+
 using Lidgren.Network;
+using System;
 
 namespace Lunar.Client.Net
 {
     public class PacketReceivedEventArgs : EventArgs
     {
-        private readonly NetIncomingMessage _message;
+        private readonly NetBuffer _message;
 
-        public NetIncomingMessage Message { get { return _message; } }
+        public NetBuffer Message => _message;
 
         public PacketReceivedEventArgs(NetIncomingMessage message)
         {
-            _message = message;
+            _message = new NetBuffer();
+            _message.Write(message.Data, 2, message.LengthBytes - 2);
+            _message.WritePadBits();
         }
     }
 }

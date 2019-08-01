@@ -10,10 +10,11 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -140,12 +141,14 @@ namespace Lunar.Client.GUI.Widgets
         public event EventHandler Mouse_Hover;
 
         public event EventHandler Activated;
+
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public StatusBar(Texture2D sprite, Texture2D fillSprite, Rectangle fillBounds, SpriteFont font)
         {
             _fillBounds = fillBounds;
-            _label = new Label(font) {
+            _label = new Label(font)
+            {
                 Position = new Vector2(this.Position.X, this.Position.Y),
                 ZOrder = this.ZOrder + 1
             };
@@ -193,11 +196,8 @@ namespace Lunar.Client.GUI.Widgets
         {
         }
 
- 
-
         public void OnRightMouseDown(MouseState mouseState)
         {
         }
-
     }
 }

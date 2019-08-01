@@ -10,10 +10,11 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -38,7 +39,7 @@ namespace Lunar.Client.GUI.Widgets
         void Update(GameTime gameTime);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="widgetCount">Number of widgets in the passing GUIManager instance</param>

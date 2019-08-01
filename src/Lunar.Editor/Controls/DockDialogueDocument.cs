@@ -8,7 +8,7 @@ using DarkUI.Forms;
 using IronPython.Runtime;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Server.Utilities.Scripting;
-using Lunar.Server.World.Dialogue;
+using Lunar.Server.World.Conversation;
 
 namespace Lunar.Editor.Controls
 {

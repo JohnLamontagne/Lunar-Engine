@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.World.Actors;
@@ -55,6 +56,20 @@ namespace Lunar.Server.World.Structure
         public bool Collides(IActor<IActorDescriptor> actor)
         {
             return (this.CollisionArea.Intersects(actor.CollisionBody.CollisionArea));
+        }
+
+        public bool Collides(CollisionBody collisionBody, Vector reach)
+        {
+            Rect reachArea = new Rect(this.CollisionArea.Left, this.CollisionArea.Top, this.CollisionArea.Width + reach.X, this.CollisionArea.Height + reach.Y);
+
+            return (reachArea.Intersects(collisionBody.CollisionArea));
+        }
+
+        public bool Collides(IActor<IActorDescriptor> actor, Vector reach)
+        {
+            Rect reachArea = new Rect(this.CollisionArea.Left, this.CollisionArea.Top, this.CollisionArea.Width + reach.X, this.CollisionArea.Height + reach.Y);
+
+            return (reachArea.Intersects(actor.CollisionBody.CollisionArea));
         }
 
         public bool Collides(Rect area)

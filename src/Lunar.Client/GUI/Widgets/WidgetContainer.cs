@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
-using System.Linq;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Linq;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -29,10 +30,11 @@ namespace Lunar.Client.GUI.Widgets
         private Vector2 _size;
         private bool _active;
         private string _id;
+        private Vector2 _origin;
 
-        public bool Visible { get; set; }
+        public virtual bool Visible { get; set; }
 
-        public bool Active
+        public virtual bool Active
         {
             get => _active;
             set
@@ -44,11 +46,11 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
-        public bool Draggable { get; set; }
+        public virtual bool Draggable { get; set; }
 
-        public bool Selectable { get; set; }
+        public virtual bool Selectable { get; set; }
 
-        public string Name
+        public virtual string Name
         {
             get { return _id; }
             set
@@ -62,13 +64,22 @@ namespace Lunar.Client.GUI.Widgets
             }
         }
 
-        public object Tag { get; set; }
+        public virtual object Tag { get; set; }
 
-        public int ZOrder { get; set; }
+        public virtual int ZOrder { get; set; }
 
-        public Vector2 Origin { get; set; }
+        public virtual Vector2 Origin
+        {
+            get => _origin;
+            set
+            {
+                _origin = value;
+                this.UpdateArea();
+            }
+        }
 
-        public Vector2 Position {
+        public virtual Vector2 Position
+        {
             get => _position;
             set
             {
@@ -82,42 +93,43 @@ namespace Lunar.Client.GUI.Widgets
                 }
 
                 _position = value;
-                _area = new Rectangle((int)this.Position.X, (int)this.Position.Y, _area.Width, _area.Height);
+                this.UpdateArea();
             }
         }
 
-        public Texture2D BackSprite
+        public virtual Texture2D BackSprite
         {
             get => _backSprite;
             set
             {
                 _backSprite = value;
-                this.Area = new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)this.Size.X, (int)this.Size.Y);
+                this.UpdateArea();
             }
         }
 
-        public Rectangle Area
+        public virtual Rectangle Area
         {
             get => _area;
             set => _area = value;
         }
 
-
-        public Vector2 Size
+        public virtual Vector2 Size
         {
             get => _size;
             set
             {
                 _size = value;
 
-                this.Area = new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)this.Size.X, (int)this.Size.Y);
+                this.UpdateArea();
             }
         }
 
         public event EventHandler<WidgetClickedEventArgs> Clicked;
 
         public event EventHandler Mouse_Hover;
+
         public event EventHandler Activated;
+
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public WidgetContainer(Texture2D backSprite)
@@ -127,7 +139,7 @@ namespace Lunar.Client.GUI.Widgets
             this.Size = new Vector2(_backSprite.Width, _backSprite.Height);
             this.Selectable = true;
 
-            this.Area = new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)this.Size.X, (int)this.Size.Y);
+            this.UpdateArea();
             this.Visible = true;
             this.Origin = Vector2.Zero;
         }
@@ -137,15 +149,19 @@ namespace Lunar.Client.GUI.Widgets
             this.Size = size;
             this.Selectable = true;
 
-            this.Area = new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)this.Size.X, (int)this.Size.Y);
+            this.UpdateArea();
             this.Visible = true;
             this.Origin = Vector2.Zero;
+        }
+
+        private void UpdateArea()
+        {
+            _area = new Rectangle((int)(this.Position.X - this.Origin.X), (int)(this.Position.Y - this.Origin.Y), (int)this.Size.X, (int)this.Size.Y);
         }
 
         public void OnMouseHover(MouseState mouseState)
         {
         }
-
 
         public void OnLeftMouseDown(MouseState mouseState)
         {
@@ -160,7 +176,7 @@ namespace Lunar.Client.GUI.Widgets
             {
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
-                    if (this.Draggable && !_dragStarted  && this.Active)
+                    if (this.Draggable && !_dragStarted && this.Active)
                     {
                         // Get the starting mouse position.
                         _relativeDragX = (int)this.Position.X - Mouse.GetState().Position.X;
@@ -200,7 +216,6 @@ namespace Lunar.Client.GUI.Widgets
 
         public void OnRightMouseDown(MouseState mouseState)
         {
-            
         }
 
         public void Draw(SpriteBatch spriteBatch, int widgetCount)

@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using Lunar.Graphics;
+using Lunar.Graphics.Effects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
-using Lunar.Graphics;
-using Lunar.Graphics.Effects;
 
 namespace Lunar.Client.World.Actors
 {

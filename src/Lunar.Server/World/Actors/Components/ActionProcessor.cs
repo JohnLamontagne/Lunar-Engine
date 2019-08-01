@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System.Collections.Generic;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
@@ -34,8 +35,11 @@ namespace Lunar.Server.World.Actors.Components
 
         public void Update(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime.TotalMilliseconds <= _nextActionTime)
+            if (gameTime.TotalGameTime.TotalMilliseconds >= _nextActionTime)
             {
+                if (_actionQueue.Count <= 0)
+                    return;
+
                 var action = _actionQueue.Dequeue();
 
                 action.Execute(this.Actor);

@@ -15,7 +15,7 @@ using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 using Lunar.Core.Utilities.Logic;
-using Lunar.Server.World.Dialogue;
+using Lunar.Server.World.Conversation;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using Newtonsoft.Json;

@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 
 namespace Lunar.Server.World.Actors.Actions.Player
 {
-    class PlayerInteractAction : IAction<Actors.Player>
+    internal class PlayerInteractAction : IAction<Actors.Player>
     {
         public void Execute(Actors.Player player)
         {
@@ -23,12 +24,27 @@ namespace Lunar.Server.World.Actors.Actions.Player
                 mapObject.OnInteract(player);
             }
 
+            var target = player.Target != null ? player.Target : player.FindTarget();
+
             // Try to attack the target
-            if (player.Target != null)
+            if (target != null)
             {
-                if (player.Target.Attackable)
+                if (target.Attackable)
                 {
-                    player.Target.OnAttacked(player, (int)(player.Descriptor.Stats.Strength * new Random().NextDouble()));
+                    target.OnAttacked(player, (int)(player.Descriptor.Stats.Strength * new Random().NextDouble()));
+                }
+                else
+                {
+                    // Is it an NPC that has dialogue?
+                    var npc = target as NPC;
+
+                    if (npc != null && npc.Dialogue != null)
+                    {
+                        if (npc.Dialogue.BranchExists(npc.DialogueBranch))
+                        {
+                            npc.Dialogue.Start(npc.DialogueBranch, player);
+                        }
+                    }
                 }
             }
         }

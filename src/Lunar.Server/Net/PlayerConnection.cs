@@ -59,7 +59,10 @@ namespace Lunar.Server.Net
 
             _handlers[packetType].Add(handler);
             _netHandler.AddPacketHandler(packetType, mHandler);
-            _handlerFilters.Add(handler, mHandler);
+            if (_handlerFilters.ContainsKey(handler))
+                _handlerFilters[handler] = mHandler;
+            else
+                _handlerFilters.Add(handler, mHandler);
         }
 
         public void RemovePacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)

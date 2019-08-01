@@ -11,19 +11,20 @@
 	limitations under the License.
 */
 
+using Lunar.Client.GUI.Widgets;
+using Lunar.Client.Utilities;
+using Lunar.Client.Utilities.Services;
+using Lunar.Core;
+using Lunar.Core.Utilities.Data;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Lunar.Client.GUI.Widgets;
-using Lunar.Client.Utilities.Services;
 using System.Xml.Linq;
-using Microsoft.Xna.Framework.Content;
-using Lunar.Client.Utilities;
-using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Client.GUI
 {
@@ -53,7 +54,7 @@ namespace Lunar.Client.GUI
             _widgets = new Dictionary<string, IWidget>();
             _orderedWidgets = new FlexibleStack<IWidget>();
 
-            var graphicsDevice = Client.ServiceLocator.Get<GraphicsDeviceService>().GraphicsDevice;
+            var graphicsDevice = Engine.Services.Get<GraphicsDeviceService>().GraphicsDevice;
 
             var pp = graphicsDevice.PresentationParameters;
             _renderTarget = new RenderTarget2D(graphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
@@ -73,7 +74,7 @@ namespace Lunar.Client.GUI
             {
                 // Only one widget may be active at a time, so disable the
                 // previously active one if one existed.
-                if (this.ActiveWidget != null)
+                if (this.ActiveWidget != null && widget != this.ActiveWidget)
                 {
                     Console.WriteLine("Widget {0} no longer active!", this.ActiveWidget.Name);
                     this.ActiveWidget.Active = false;
@@ -103,9 +104,9 @@ namespace Lunar.Client.GUI
 
         public T GetWidget<T>(string id) where T : IWidget
         {
-            IWidget value = _widgets[id];
+            _widgets.TryGetValue(id, out IWidget value);
 
-            if (value.GetType() == typeof(T))
+            if (value != null && value.GetType() == typeof(T))
             {
                 return (T)value;
             }
@@ -187,6 +188,7 @@ namespace Lunar.Client.GUI
                         if (this.ActiveWidget == widget)
                         {
                             widget.Active = false;
+                            Console.WriteLine("Widget {0} no longer active!", widget.Name);
                         }
                     }
                 }
@@ -223,7 +225,7 @@ namespace Lunar.Client.GUI
         {
             spriteBatch.End();
 
-            Client.ServiceLocator.Get<GraphicsDeviceService>().GraphicsDevice.SetRenderTarget(null);
+            Engine.Services.Get<GraphicsDeviceService>().GraphicsDevice.SetRenderTarget(null);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
@@ -482,6 +484,21 @@ namespace Lunar.Client.GUI
 
             Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
+            float sizeX = texture.Width;
+            float sizeY = texture.Height;
+
+            if (containerElement.Element("size")?.Element("x") != null)
+            {
+                float.TryParse(containerElement.Element("size")?.Element("x")?.Value.ToString(), out sizeX);
+            }
+
+            if (containerElement.Element("size")?.Element("y") != null)
+            {
+                float.TryParse(containerElement.Element("size")?.Element("y")?.Value.ToString(), out sizeY);
+            }
+
+            Vector2 size = new Vector2(sizeX, sizeY);
+
             int.TryParse(containerElement.Element("zorder")?.Value.ToString(), out int zOrder);
 
             bool.TryParse(containerElement.Element("draggable")?.Value, out bool draggable);
@@ -497,7 +514,8 @@ namespace Lunar.Client.GUI
                 Origin = origin,
                 ZOrder = zOrder,
                 Draggable = draggable,
-                Visible = visible
+                Visible = visible,
+                Size = size
             };
 
             // load its children if it has them

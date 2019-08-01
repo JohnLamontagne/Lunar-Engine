@@ -11,12 +11,12 @@
 	limitations under the License.
 */
 
-using System;
+using Lunar.Client.Utilities.Input;
+using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Lunar.Client.Utilities.Input;
-using Lunar.Graphics;
+using System;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -56,12 +56,15 @@ namespace Lunar.Client.GUI.Widgets
             get => _active;
             set
             {
-                _active = value;
-
-                if (_active)
+                if (value && !this.Active)
                 {
+                    _active = value;
                     this.Activated?.Invoke(this, new EventArgs());
                     _activatedInputCooldown = true;
+                }
+                else
+                {
+                    _active = value;
                 }
             }
         }

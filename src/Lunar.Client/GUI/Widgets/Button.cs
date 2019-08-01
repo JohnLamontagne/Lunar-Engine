@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -227,6 +228,7 @@ namespace Lunar.Client.GUI.Widgets
         public event EventHandler Mouse_Hover;
 
         public event EventHandler Activated;
+
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         #endregion Event Handlers

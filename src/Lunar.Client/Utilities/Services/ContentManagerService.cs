@@ -10,12 +10,13 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using Microsoft.Xna.Framework.Content;
+
 using Lunar.Core.Utilities;
+using Microsoft.Xna.Framework.Content;
 
 namespace Lunar.Client.Utilities.Services
 {
-    class ContentManagerService : IService
+    internal class ContentManagerService : IService
     {
         private ContentManager _contemtManager;
 

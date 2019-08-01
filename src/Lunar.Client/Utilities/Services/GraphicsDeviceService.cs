@@ -10,9 +10,10 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
-using Microsoft.Xna.Framework.Graphics;
+
 using Lunar.Core.Utilities;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Lunar.Client.Utilities.Services
 {

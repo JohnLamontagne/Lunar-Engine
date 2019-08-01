@@ -12,7 +12,7 @@ using Lunar.Core.World.Actor.Descriptors;
 using ScintillaNET;
 using DarkUI.Docking;
 using System.Linq;
-using Lunar.Server.World.Dialogue;
+using Lunar.Server.World.Conversation;
 
 namespace Lunar.Editor.Controls
 {
@@ -70,8 +70,9 @@ namespace Lunar.Editor.Controls
             this.txtColHeight.Text = _npc.CollisionBounds.Height.ToString();
             this.txtMaxRoam.Text = _npc.MaxRoam.X.ToString();
             this.txtSpeed.Text = _npc.Speed.ToString();
-            this.txtAttackRange.Text = _npc.AttackRange.ToString();
             this.txtAggressiveRange.Text = _npc.AggresiveRange.ToString();
+            this.txtReachX.Text = _npc.Reach.X.ToString();
+            this.txtReachY.Text = _npc.Reach.Y.ToString();
 
             this.cmbEquipSlot.DataSource = Enum.GetValues(typeof(EquipmentSlots));
             this.cmbEquipSlot.SelectedItem = EquipmentSlots.MainArm;
@@ -509,16 +510,7 @@ namespace Lunar.Editor.Controls
         {
             this.MarkUnsaved();
 
-            int.TryParse(this.txtAttackRange.Text, out int newAttackRange);
-
-            _npc.AttackRange = newAttackRange;
-        }
-
-        private void TxtAggressiveRange_TextChanged(object sender, EventArgs e)
-        {
-            this.MarkUnsaved();
-
-            int.TryParse(this.txtAggressiveRange.Text, out int newAggressiveRange);
+            int.TryParse(this.txtReachX.Text, out int newAggressiveRange);
 
             _npc.AggresiveRange = newAggressiveRange;
         }
@@ -636,6 +628,24 @@ namespace Lunar.Editor.Controls
         private void CmbDialogueBranch_SelectedIndexChanged(object sender, EventArgs e)
         {
             _npc.DialogueBranch = this.cmbDialogueBranch.SelectedItem.ToString();
+        }
+
+        private void TxtReachX_TextChanged(object sender, EventArgs e)
+        {
+            this.MarkUnsaved();
+
+            int.TryParse(this.txtReachX.Text, out int reachX);
+
+            _npc.Reach = new Vector(reachX, _npc.Reach.Y);
+        }
+
+        private void TxtReachY_TextChanged(object sender, EventArgs e)
+        {
+            this.MarkUnsaved();
+
+            int.TryParse(this.txtReachY.Text, out int reachY);
+
+            _npc.Reach = new Vector(_npc.Reach.X, reachY);
         }
     }
 

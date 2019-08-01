@@ -27,7 +27,7 @@ using Lunar.Server.Utilities.Commands;
 using Lunar.Server.Utilities.Events;
 using Lunar.Server.Utilities.Plugin;
 using System.Diagnostics;
-using Lunar.Server.World.Dialogue;
+using Lunar.Server.World.Conversation;
 
 namespace Lunar.Server
 {
@@ -41,8 +41,6 @@ namespace Lunar.Server
 
         private Thread _netThread;
         private Thread _worldThread;
-
-        private NetHandler _netHandler;
 
         public Server()
         {
@@ -73,8 +71,10 @@ namespace Lunar.Server
 
             Engine.Services.Register(new ScriptManager(Constants.FILEPATH_SCRIPTS, Settings.IronPythonLibsDirectory));
 
-            _netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
-            Packet.Initalize(_netHandler);
+            var netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
+            Engine.Services.Register(netHandler);
+            netHandler.Initalize();
+            Packet.Initalize(netHandler);
 
             // Register the data loader factories
             Engine.Services.Register(new FSDataFactory());
@@ -92,7 +92,7 @@ namespace Lunar.Server
             Engine.Services.Register(mapManager);
             mapManager.Initalize();
 
-            var worldManager = new WorldManager(_netHandler);
+            var worldManager = new WorldManager(netHandler);
             Engine.Services.Register(worldManager);
             worldManager.Initalize();
 
@@ -112,7 +112,7 @@ namespace Lunar.Server
             pluginManager.Initalize();
             Engine.Services.Register(pluginManager);
 
-            CommandHandler commandHandler = new CommandHandler(_netHandler);
+            CommandHandler commandHandler = new CommandHandler(netHandler);
             Engine.Services.Register(commandHandler);
             commandHandler.Initalize();
 
@@ -123,7 +123,7 @@ namespace Lunar.Server
 
         public void Start()
         {
-            _netHandler.Start();
+            Engine.Services.Get<NetHandler>().Start();
 
             _webCommunicator.Run();
 
@@ -135,7 +135,7 @@ namespace Lunar.Server
             _netThread = new Thread(() =>
             {
                 var gametime = new GameTime();
-                var serverWorldHeartbeat = new ServerHeartbeat(_netHandler.Update);
+                var serverWorldHeartbeat = new ServerHeartbeat(Engine.Services.Get<NetHandler>().Update);
 
                 while (!Server.ShutDown)
                 {

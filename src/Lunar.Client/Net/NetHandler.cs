@@ -10,12 +10,14 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+
 using Lidgren.Network;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Lunar.Client.Net
 {
@@ -23,6 +25,18 @@ namespace Lunar.Client.Net
     {
         private readonly NetClient _client;
         private readonly Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _packetHandlers;
+
+        private Thread _incomingMessageThread;
+        private bool _stop;
+
+        private PacketType? _waitingForPacketType;
+
+        /// <summary>
+        /// Used to buffer packets for processing.
+        /// </summary>
+        private readonly Queue<Tuple<PacketType, PacketReceivedEventArgs>> _packetQueue;
+
+        private readonly Queue<Tuple<PacketType, PacketReceivedEventArgs>> _waitingPacketQueue;
 
         /// <summary>
         /// Used in the event of the connection not yet being established or connection lost.
@@ -34,30 +48,130 @@ namespace Lunar.Client.Net
 
         public bool Connected => _client.ConnectionStatus == NetConnectionStatus.Connected;
 
+        /// <summary>
+        /// When enabled, packets will be collected and stored but not executed until false again.
+        /// </summary>
+        private bool _collectAndWaitFor;
+
+        private PacketType? _collectAndWaitPacket;
+        private Func<bool> _collectAndWaitFunc;
+
         public NetHandler()
         {
             _packetHandlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
             _packetCache = new List<Tuple<NetOutgoingMessage, NetDeliveryMethod, ChannelType>>();
+            _packetQueue = new Queue<Tuple<PacketType, PacketReceivedEventArgs>>();
+            _waitingPacketQueue = new Queue<Tuple<PacketType, PacketReceivedEventArgs>>();
 
             NetPeerConfiguration config = new NetPeerConfiguration(Settings.GameName);
             config.EnableMessageType(NetIncomingMessageType.Data);
             config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
             _client = new NetClient(config);
             _client.Start();
+
+            this._collectAndWaitFor = false;
+            _waitingForPacketType = null;
+        }
+
+        /// <summary>
+        /// Signals the NetHandler to collect packets and hold them until the specified one packet arrives, at which point
+        /// it will process the collected packets in order.
+        /// </summary>
+        /// <param name="packetType"></param>
+        public void CollectAndWaitFor(PacketType packetType)
+        {
+            _collectAndWaitFor = true;
+            _waitingForPacketType = packetType;
+        }
+
+        /// <summary>
+        /// Collects packets of the specified type and waits until the specified result() evalutes to true, at which
+        /// point it will process the filtered packets in order.
+        /// </summary>
+        /// <param name="packetType"></param>
+        public void CollectAndWait(PacketType packetType, Func<bool> when)
+        {
+            _collectAndWaitPacket = packetType;
+            _collectAndWaitFunc = when;
         }
 
         public void Connect()
         {
             _client.Connect(Debugger.IsAttached ? "localhost" : Settings.IP, Settings.Port);
+            this.Start();
+        }
 
+        private void Start()
+        {
+            _stop = false;
+
+            if (_incomingMessageThread != null)
+                return;
+
+            _incomingMessageThread = new Thread(() =>
+            {
+                while (!_stop)
+                {
+                    this.Update();
+                }
+
+                _incomingMessageThread = null;
+            });
+
+            _incomingMessageThread.Start();
         }
 
         public void Disconnect()
         {
             _client.Disconnect("cleanLogout");
+            _stop = true;
+            _incomingMessageThread = null;
         }
 
-        public void Update()
+        public void ProcessPacketQueue()
+        {
+            if (_packetQueue.Count <= 0)
+                return;
+
+            if (_collectAndWaitFor)
+            {
+                if (_collectAndWaitPacket != null && _collectAndWaitFunc())
+                {
+                    foreach (var packet in _waitingPacketQueue.ToArray())
+                    {
+                        _packetQueue.Enqueue(packet);
+                    }
+                    _collectAndWaitPacket = null;
+                    _collectAndWaitFor = false;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            do
+            {
+                var packet = _packetQueue.Dequeue();
+                PacketType packetType = packet.Item1;
+                PacketReceivedEventArgs args = packet.Item2;
+
+                if (_packetHandlers.ContainsKey(packetType))
+                {
+                    foreach (var handler in _packetHandlers[packetType])
+                    {
+                        if (Settings.DisplayNetworkMessages)
+                            Console.WriteLine("Handling packet {0} by {1}", packetType.ToString(), handler.Method.ToString());
+
+                        handler.Invoke(args);
+                    }
+                }
+
+                this.EventOccured?.Invoke(this, new SubjectEventArgs("packetRec" + packetType.ToString(), new object[] { args.Message }));
+            } while (_packetQueue.Count > 0);
+        }
+
+        private void Update()
         {
             NetIncomingMessage message;
             while ((message = _client.ReadMessage()) != null)
@@ -67,21 +181,22 @@ namespace Lunar.Client.Net
                     case NetIncomingMessageType.Data:
                         // Get the packet type.
                         PacketType packetType = (PacketType)message.ReadInt16();
-                        var resetTo = message.Position;
 
-                        if (_packetHandlers.ContainsKey(packetType))
+                        if (_collectAndWaitFor && _waitingForPacketType == packetType)
                         {
-                            foreach (var handler in _packetHandlers[packetType])
-                            {
-                                if (Settings.DisplayNetworkMessages)
-                                    Console.WriteLine("Handling packet {0} by {1}", packetType.ToString(), handler.Method.ToString());
-
-                                handler.Invoke(new PacketReceivedEventArgs(message));
-                                message.Position = sizeof(short) * 8;
-                            }
+                            // The packet meets the criteria and we can break out of waiting.
+                            _collectAndWaitFor = false;
+                            _waitingForPacketType = null;
                         }
 
-                        this.EventOccured?.Invoke(this, new SubjectEventArgs("packetRec" + packetType.ToString(), new object[] { message }));
+                        if (_collectAndWaitPacket == packetType)
+                        {
+                            _waitingPacketQueue.Enqueue(new Tuple<PacketType, PacketReceivedEventArgs>(packetType, new PacketReceivedEventArgs(message)));
+                        }
+                        else
+                        {
+                            _packetQueue.Enqueue(new Tuple<PacketType, PacketReceivedEventArgs>(packetType, new PacketReceivedEventArgs(message)));
+                        }
 
                         break;
 
@@ -103,6 +218,7 @@ namespace Lunar.Client.Net
                         {
                             case NetConnectionStatus.Disconnected:
                                 this.Disconnected?.Invoke(this, new EventArgs());
+                                _stop = true;
                                 break;
                         }
 

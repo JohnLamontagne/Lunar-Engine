@@ -137,17 +137,17 @@
     <Compile Include="World\Actors\Components\PlayerNetworkComponent.cs" />
     <Compile Include="World\AnimationManager.cs" />
     <Compile Include="World\BehaviorDefinition\ItemBehaviorDefinition.cs" />
-    <Compile Include="World\Dialogue\Dialogue.cs" />
+    <Compile Include="World\Conversation\Dialogue.cs" />
     <Compile Include="World\Actors\IActor.cs" />
     <Compile Include="World\BehaviorDefinition\ActorBehaviorDefinition.cs" />
     <Compile Include="World\Actors\NPC.cs" />
     <Compile Include="World\Actors\NPCManager.cs" />
     <Compile Include="World\Actors\Player.cs" />
     <Compile Include="World\Actors\PlayerManager.cs" />
-    <Compile Include="World\Dialogue\DialogueBranch.cs" />
-    <Compile Include="World\Dialogue\DialogueFactory.cs" />
-    <Compile Include="World\Dialogue\DialogueManager.cs" />
-    <Compile Include="World\Dialogue\DialogueArgs.cs" />
+    <Compile Include="World\Conversation\DialogueBranch.cs" />
+    <Compile Include="World\Conversation\DialogueFactory.cs" />
+    <Compile Include="World\Conversation\DialogueManager.cs" />
+    <Compile Include="World\Conversation\DialogueArgs.cs" />
     <Compile Include="World\ItemArgs.cs" />
     <Compile Include="World\ItemInteractionArgs.cs" />
     <Compile Include="World\Structure\CollisionDescriptor.cs" />
@@ -215,7 +215,7 @@
     <Content Include="Server Data\World\Scripts\npc_common.py" />
     <Content Include="Server Data\World\Scripts\player.py" />
     <Content Include="Server Data\World\Scripts\test.py" />
-    <Compile Include="World\Dialogue\DialogueResponse.cs" />
+    <Compile Include="World\Conversation\DialogueResponse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

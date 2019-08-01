@@ -1,10 +1,6 @@
 ﻿using Lunar.Server.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lunar.Server
 {
@@ -31,13 +27,13 @@ namespace Lunar.Server
             _currentTicks = 0;
             _previousTicks = 0;
             _accumulatedElapsedTime = TimeSpan.Zero;
-            _targetElapsedTime =  TimeSpan.FromTicks(83334);
+            _targetElapsedTime = TimeSpan.FromTicks(83334);
             _maxElapsedTime = TimeSpan.FromMilliseconds(500);
         }
 
         public void Update(GameTime gameTime)
         {
-RESTART:
+        RESTART:
             _currentTicks = _serverTimer.Elapsed.Ticks;
             _accumulatedElapsedTime += TimeSpan.FromTicks(_currentTicks - _previousTicks);
             _previousTicks = _currentTicks;

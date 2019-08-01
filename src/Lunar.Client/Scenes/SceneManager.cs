@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System.Collections.Generic;
-using System.Linq;
+
+using Lunar.Core.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Lunar.Core.Utilities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lunar.Client.Scenes
 {
@@ -49,7 +50,6 @@ namespace Lunar.Client.Scenes
 
         public T GetScene<T>(string screenName) where T : Scene
         {
-
             if (_scenes.TryGetValue(screenName, out Scene value))
             {
                 if (value.GetType() == typeof(T))

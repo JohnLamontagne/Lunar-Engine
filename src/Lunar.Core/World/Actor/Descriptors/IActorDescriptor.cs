@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Data.Management;
 
@@ -30,5 +31,7 @@ namespace Lunar.Core.World.Actor.Descriptors
         Vector Position { get; set; }
 
         Rect CollisionBounds { get; set; }
+
+        Vector Reach { get; set; }
     }
 }

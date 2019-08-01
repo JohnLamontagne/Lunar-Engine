@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
-using System.Text;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Text;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -116,6 +117,7 @@ namespace Lunar.Client.GUI.Widgets
         public event EventHandler Mouse_Left;
 
         public event EventHandler Activated;
+
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public Label(SpriteFont font)
@@ -147,7 +149,6 @@ namespace Lunar.Client.GUI.Widgets
         {
         }
 
-
         public void Update(GameTime gameTime)
         {
             if (!this.Contains(Mouse.GetState().Position))
@@ -161,14 +162,12 @@ namespace Lunar.Client.GUI.Widgets
             }
             else if (_previousState != WidgetStates.Pressed)
                 _previousState = WidgetStates.Hover;
-
         }
 
         public void Draw(SpriteBatch spriteBatch, int widgetCount)
         {
             if (this.Visible)
                 spriteBatch.DrawString(this.Font, this.Text, this.Position, this.Color, 0f, Vector2.Zero, 1f, SpriteEffects.None, (float)this.ZOrder / widgetCount);
-
         }
 
         public bool Contains(Point point)
@@ -218,6 +217,5 @@ namespace Lunar.Client.GUI.Widgets
 
             this.Text = sb.ToString();
         }
-
     }
 }

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Client.World.Actors;
 using Microsoft.Xna.Framework;
 using System;
@@ -72,8 +73,6 @@ namespace Lunar.Client.Utilities
             this.Speed = 0.2f;
             //this.Rotate(30);
         }
-
-
 
         public void Rotate(float amount)
         {

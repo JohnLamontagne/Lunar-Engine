@@ -55,7 +55,7 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Vector FrameSize { get; set; }
 
-        public int AttackRange { get; set; }
+        public Vector Reach { get; set; }
 
         public string Dialogue { get; set; }
 
@@ -98,7 +98,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                     binaryWriter.Write(this.MaxRoam.Y);
                     binaryWriter.Write(this.FrameSize.X);
                     binaryWriter.Write(this.FrameSize.Y);
-                    binaryWriter.Write(this.AttackRange);
+                    binaryWriter.Write(this.Reach.X);
+                    binaryWriter.Write(this.Reach.Y);
 
                     binaryWriter.Write(this.Scripts.Count);
                     foreach (var script in this.Scripts)
@@ -118,7 +119,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             {
                 Name = "",
                 AggresiveRange = 0,
-                AttackRange = 0,
+                Reach = new Vector(0, 0),
                 TexturePath = "",
                 UniqueID = uniqueID
             };
@@ -136,7 +137,7 @@ namespace Lunar.Core.World.Actor.Descriptors
                 string texturePath = "";
                 Vector maxRoam = new Vector();
                 Vector frameSize = new Vector();
-                int attackRange = 0;
+                Vector reach = new Vector();
                 Actor.Stats stats;
                 List<string> scripts = new List<string>();
                 string uniqueID = "";
@@ -166,7 +167,7 @@ namespace Lunar.Core.World.Actor.Descriptors
                         texturePath = binaryReader.ReadString();
                         maxRoam = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                         frameSize = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                        attackRange = binaryReader.ReadInt32();
+                        reach = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
 
                         int scriptCount = binaryReader.ReadInt32();
                         for (int i = 0; i < scriptCount; i++)
@@ -191,7 +192,7 @@ namespace Lunar.Core.World.Actor.Descriptors
                     TexturePath = texturePath,
                     MaxRoam = maxRoam,
                     FrameSize = frameSize,
-                    AttackRange = attackRange,
+                    Reach = reach,
                     StatBoosts = new Stats(),
                     UniqueID = uniqueID,
                     Dialogue = dialogue,

@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System.IO;
 using Lidgren.Network;
 using Lunar.Client.Utilities;
@@ -18,6 +19,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
 using Lunar.Client.Utilities.Services;
 using Lunar.Graphics;
+using Lunar.Core;
 
 namespace Lunar.Client.World
 {
@@ -83,8 +85,7 @@ namespace Lunar.Client.World
                     LayerDepth = zIndex
                 };
 
-            var mapObject = new MapObject(sprite, animated) {FrameTime = frameTime};
-
+            var mapObject = new MapObject(sprite, animated) { FrameTime = frameTime };
 
             // is it a light source?
             if (netBuffer.ReadBoolean() == true)
@@ -100,7 +101,7 @@ namespace Lunar.Client.World
                     Intensity = .7f,
                 };
 
-                Client.ServiceLocator.Get<LightManagerService>().Component.Lights.Add(pointLight);
+                Engine.Services.Get<LightManagerService>().Component.Lights.Add(pointLight);
 
                 mapObject.Light = pointLight;
             }

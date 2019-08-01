@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lunar.Server.World.Dialogue
+namespace Lunar.Server.World.Conversation
 {
     public class DialogueResponse
     {

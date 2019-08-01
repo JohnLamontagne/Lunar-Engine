@@ -11,21 +11,21 @@
 	limitations under the License.
 */
 
-using System.Collections.Generic;
 using Lidgren.Network;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Penumbra;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
 using Lunar.Core;
 using Lunar.Core.Net;
+using Lunar.Core.Utilities.Data;
 using Lunar.Core.World;
 using Lunar.Graphics;
 using Lunar.Graphics.Effects;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Penumbra;
 using System;
-using Lunar.Core.Utilities.Data;
+using System.Collections.Generic;
 
 namespace Lunar.Client.World.Actors
 {
@@ -121,7 +121,7 @@ namespace Lunar.Client.World.Actors
 
             this.Light = new PointLight();
 
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.NPC_MOVING, this.Handle_NPCMoving);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.NPC_MOVING, this.Handle_NPCMoving);
 
             _targetPath = new Queue<Vector2>();
         }
@@ -159,7 +159,7 @@ namespace Lunar.Client.World.Actors
                 _targetPath.Enqueue(new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat()));
             }
 
-            Client.ServiceLocator.Get<WorldManager>().Map.Path = new List<Vector2>(_targetPath.ToArray());
+            Engine.Services.Get<WorldManager>().Map.Path = new List<Vector2>(_targetPath.ToArray());
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -305,7 +305,7 @@ namespace Lunar.Client.World.Actors
             this.Position = position;
 
             var layerName = buffer.ReadString();
-            _layer = Client.ServiceLocator.Get<WorldManager>().Map.GetLayer(layerName);
+            _layer = Engine.Services.Get<WorldManager>().Map.GetLayer(layerName);
 
             this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);
             this.SpriteSheet.HorizontalFrameIndex = 1;

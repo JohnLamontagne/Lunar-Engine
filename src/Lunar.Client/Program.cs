@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 
 namespace Lunar.Client
@@ -24,7 +25,7 @@ namespace Lunar.Client
         /// </summary>
         [STAThread]
         private static void Main()
-       {
+        {
             using (var game = new Client())
                 game.Run();
         }

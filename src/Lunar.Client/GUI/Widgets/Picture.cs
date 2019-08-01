@@ -10,10 +10,11 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Lunar.Client.GUI.Widgets
 {
@@ -32,6 +33,7 @@ namespace Lunar.Client.GUI.Widgets
         public event EventHandler Mouse_Hover;
 
         public event EventHandler Activated;
+
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
         public bool Visible { get; set; }
@@ -158,7 +160,6 @@ namespace Lunar.Client.GUI.Widgets
             _previousState = WidgetStates.Pressed;
             _previousPressedButton = MouseButtons.Left;
         }
-
 
         public void OnRightMouseDown(MouseState mouseState)
         {

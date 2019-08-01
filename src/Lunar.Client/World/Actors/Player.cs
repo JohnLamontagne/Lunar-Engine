@@ -55,6 +55,7 @@ namespace Lunar.Client.World.Actors
         private readonly bool _mainPlayer;
         private Layer _layer;
         private Rectangle _collisionBounds;
+        private KeyboardState _prevKeyboardState;
 
         private PointLight _light;
 
@@ -167,8 +168,8 @@ namespace Lunar.Client.World.Actors
 
         private void InitalizePacketHandlers()
         {
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_STATS, this.Handle_PlayerStats);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_STATS, this.Handle_PlayerStats);
         }
 
         private void Handle_PlayerStats(PacketReceivedEventArgs args)
@@ -250,11 +251,10 @@ namespace Lunar.Client.World.Actors
 
         private void CheckInput(GameTime gameTime)
         {
+            KeyboardState keyboardState = Keyboard.GetState();
             // Don't spam the server with movement requests
             if (!_requestMoving && !this.InChat)
             {
-                KeyboardState keyboardState = Keyboard.GetState();
-
                 if (keyboardState.IsKeyDown(Keys.A))
                 {
                     if (_direction != Direction.Left || this.State != ActorStates.Moving)
@@ -264,7 +264,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet(PacketType.PLAYER_MOVING);
                             packet.Message.Write((byte)Direction.Left);
                             packet.Message.Write(true);
-                            Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
 
                             _requestMoving = true;
                         }
@@ -279,7 +279,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet(PacketType.PLAYER_MOVING);
                             packet.Message.Write((byte)Direction.Right);
                             packet.Message.Write(true);
-                            Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
 
                             _requestMoving = true;
                         }
@@ -294,7 +294,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet(PacketType.PLAYER_MOVING);
                             packet.Message.Write((byte)Direction.Up);
                             packet.Message.Write(true);
-                            Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
 
                             _requestMoving = true;
                         }
@@ -309,7 +309,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet(PacketType.PLAYER_MOVING);
                             packet.Message.Write((byte)Direction.Down);
                             packet.Message.Write(true);
-                            Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
 
                             _requestMoving = true;
                         }
@@ -322,18 +322,20 @@ namespace Lunar.Client.World.Actors
                         var packet = new Packet(PacketType.PLAYER_MOVING);
                         packet.Message.Write((byte)_direction);
                         packet.Message.Write(false);
-                        Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                        Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
 
                         _requestMoving = true;
                     }
                 }
-
-                if (keyboardState.IsKeyDown(Keys.LeftControl))
-                {
-                    var packet = new Packet(PacketType.PLAYER_INTERACT);
-                    Client.ServiceLocator.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
-                }
             }
+
+            if (keyboardState.IsKeyDown(Keys.LeftControl) && _prevKeyboardState.IsKeyUp(Keys.LeftControl))
+            {
+                var packet = new Packet(PacketType.PLAYER_INTERACT);
+                Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            }
+
+            _prevKeyboardState = keyboardState;
         }
 
         public void Update(GameTime gameTime)
@@ -424,7 +426,7 @@ namespace Lunar.Client.World.Actors
             _collisionBounds = new Rectangle(buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32());
 
             var layerName = buffer.ReadString();
-            this.Layer = Client.ServiceLocator.Get<WorldManager>().Map.GetLayer(layerName);
+            this.Layer = Engine.Services.Get<WorldManager>().Map.GetLayer(layerName);
 
             _requestMoving = false;
 

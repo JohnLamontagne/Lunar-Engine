@@ -30,6 +30,7 @@ using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities.Commands;
 using Lunar.Server.World.Actors.Components;
 using Lunar.Server.World.Actors.PacketHandlers;
+using Lunar.Server.World.Conversation;
 
 namespace Lunar.Server.World.Actors
 {
@@ -96,6 +97,11 @@ namespace Lunar.Server.World.Actors
                 return (this.Alive && !this.InLoadingScreen);
             }
         }
+
+        /// <summary>
+        /// Currently engaged dialogue. Setting to null flags that the player is currently not engaged in any dialogue.
+        /// </summary>
+        public Dialogue EngagedDialogue { get; set; }
 
         public ActorStates State { get; set; }
 
@@ -331,6 +337,29 @@ namespace Lunar.Server.World.Actors
                     this.ProcessMovement(gameTime);
                 }
             }
+        }
+
+        public IActor<IActorDescriptor> FindTarget()
+        {
+            return this.FindTarget<IActor<IActorDescriptor>>();
+        }
+
+        public T FindTarget<T>() where T : IActor<IActorDescriptor>
+        {
+            foreach (var actor in _map.GetActors<T>())
+            {
+                if (actor.Equals(this))
+                {
+                    continue;
+                }
+
+                if (actor.CollisionBody.Collides(this.CollisionBody, this.Descriptor.Reach))
+                {
+                    return actor;
+                }
+            }
+
+            return default(T);
         }
 
         public NetBuffer Pack()

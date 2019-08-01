@@ -44,6 +44,8 @@ namespace Lunar.Server.Utilities.Data.FileSystem
             Vector position;
             string mapID;
             Role role;
+            Vector reach;
+
             try
             {
                 using (var fileStream = new FileStream(filePath, FileMode.Open))
@@ -64,6 +66,7 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                         position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                         mapID = binaryReader.ReadString();
                         role = new Role(binaryReader.ReadString(), binaryReader.ReadInt32());
+                        reach = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
                     }
                 }
 
@@ -83,7 +86,8 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                         Dexterity = dexterity,
                         Defense = defense,
                     },
-                    Role = role
+                    Role = role,
+                    Reach = reach
                 };
 
                 return playerDescriptor;
@@ -120,6 +124,8 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                     binaryWriter.Write(playerDescriptor.MapID);
                     binaryWriter.Write(playerDescriptor.Role.Name);
                     binaryWriter.Write(playerDescriptor.Role.Level);
+                    binaryWriter.Write(playerDescriptor.Reach.X);
+                    binaryWriter.Write(playerDescriptor.Reach.Y);
                 }
             }
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 
-namespace Lunar.Server.World.Dialogue
+namespace Lunar.Server.World.Conversation
 {
     public class DialogueFactory
     {

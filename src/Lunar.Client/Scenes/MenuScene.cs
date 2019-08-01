@@ -11,16 +11,17 @@
 	limitations under the License.
 */
 
-using System;
 using Lidgren.Network;
+using Lunar.Client.GUI.Widgets;
+using Lunar.Client.Net;
+using Lunar.Client.Utilities;
+using Lunar.Core;
+using Lunar.Core.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
-using Lunar.Client.GUI.Widgets;
-using Lunar.Client.Net;
-using Lunar.Client.Utilities;
-using Lunar.Core.Net;
+using System;
 using GameTime = Microsoft.Xna.Framework.GameTime;
 using Label = Lunar.Client.GUI.Widgets.Label;
 
@@ -30,15 +31,18 @@ namespace Lunar.Client.Scenes
     {
         private GameWindow _gameWindow;
 
+        private bool _authenticating;
+
         public MenuScene(ContentManager contentManager, GameWindow gameWindow)
             : base(contentManager, gameWindow)
         {
             _gameWindow = gameWindow;
+            _authenticating = false;
 
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_AuthenticationSuccess);
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_SUCCESS, this.Handle_AuthenticationSuccess);
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_FAIL, this.Handle_AuthenticationFailure);
-            Client.ServiceLocator.Get<NetHandler>().AddPacketHandler(PacketType.REGISTRATION_FAIL, this.Handle_AuthenticationFailure);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_AuthenticationSuccess);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_SUCCESS, this.Handle_AuthenticationSuccess);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_FAIL, this.Handle_AuthenticationFailure);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.REGISTRATION_FAIL, this.Handle_AuthenticationFailure);
         }
 
         protected override void OnEnter()
@@ -61,15 +65,18 @@ namespace Lunar.Client.Scenes
 
         private void Handle_AuthenticationSuccess(PacketReceivedEventArgs args)
         {
+            _authenticating = false;
+
             if (!this.Active)
                 return;
 
-            Client.ServiceLocator.Get<SceneManager>().GetScene<GameScene>("gameScene").InitalizeInterface();
-            Client.ServiceLocator.Get<SceneManager>().SetActiveScene("loadingScene");
+            Engine.Services.Get<SceneManager>().SetActiveScene("loadingScene");
         }
 
         private void Handle_AuthenticationFailure(PacketReceivedEventArgs args)
         {
+            _authenticating = false;
+
             if (!this.Active)
                 return;
 
@@ -134,28 +141,50 @@ namespace Lunar.Client.Scenes
 
         private void registerButton_ButtonClicked(object sender, EventArgs e)
         {
-            NetHandler netHandler = Client.ServiceLocator.Get<NetHandler>();
+            if (_authenticating)
+                return;
 
-            var registerMenuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
+            NetHandler netHandler = Engine.Services.Get<NetHandler>();
 
-            if (!string.IsNullOrEmpty(registerMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text) &&
-                !string.IsNullOrEmpty(registerMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text))
+            var menuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
+
+            bool failure = false;
+
+            if (string.IsNullOrEmpty(menuContainer.GetWidget<Textbox>("userLoginTextbox").Text))
             {
-                if (!netHandler.Connected)
-                {
-                    netHandler.Connect();
+                var textboxUserSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/userInputError.png");
+                menuContainer.GetWidget<Textbox>("userLoginTextbox").Sprite = textboxUserSprite;
 
-                    var packet = new Packet(PacketType.REGISTER);
-                    packet.Message.Write(registerMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
-                    packet.Message.Write(registerMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
-                    netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
-                }
+                failure = true;
+            }
+
+            if (string.IsNullOrEmpty(menuContainer.GetWidget<Textbox>("userPasswordTextbox").Text))
+            {
+                var textboxPassSprite = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/passInputError.png");
+                menuContainer.GetWidget<Textbox>("userPasswordTextbox").Sprite = textboxPassSprite;
+
+                failure = true;
+            }
+
+            if (!netHandler.Connected && !failure)
+            {
+                _authenticating = true;
+
+                netHandler.Connect();
+
+                var packet = new Packet(PacketType.REGISTER);
+                packet.Message.Write(menuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
+                packet.Message.Write(menuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
+                netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
             }
         }
 
         private void loginButton_ButtonClicked(object sender, EventArgs e)
         {
-            NetHandler netHandler = Client.ServiceLocator.Get<NetHandler>();
+            if (_authenticating)
+                return;
+
+            NetHandler netHandler = Engine.Services.Get<NetHandler>();
 
             var loginMenuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
 
@@ -179,6 +208,8 @@ namespace Lunar.Client.Scenes
 
             if (!failure && !netHandler.Connected)
             {
+                _authenticating = true;
+
                 netHandler.Connect();
 
                 var packet = new Packet(PacketType.LOGIN);

@@ -10,10 +10,11 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using QuakeConsole;
 using System;
 using System.IO;
 using System.Text;
-using QuakeConsole;
 
 namespace Lunar.Client.Utilities
 {
@@ -27,7 +28,6 @@ namespace Lunar.Client.Utilities
         {
             _consoleComponent = consoleComponent;
         }
-
 
         public override void Write(string value)
         {

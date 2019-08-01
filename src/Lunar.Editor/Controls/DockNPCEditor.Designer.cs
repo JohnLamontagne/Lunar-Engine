@@ -32,9 +32,11 @@
             this.darkToolStrip1 = new DarkUI.Controls.DarkToolStrip();
             this.buttonSave = new System.Windows.Forms.ToolStripButton();
             this.darkSectionPanel1 = new DarkUI.Controls.DarkSectionPanel();
+            this.darkLabel23 = new DarkUI.Controls.DarkLabel();
+            this.txtReachY = new DarkUI.Controls.DarkTextBox();
             this.darkLabel20 = new DarkUI.Controls.DarkLabel();
+            this.txtReachX = new DarkUI.Controls.DarkTextBox();
             this.txtAggressiveRange = new DarkUI.Controls.DarkTextBox();
-            this.txtAttackRange = new DarkUI.Controls.DarkTextBox();
             this.darkLabel17 = new DarkUI.Controls.DarkLabel();
             this.txtMaxRoam = new DarkUI.Controls.DarkTextBox();
             this.darkLabel15 = new DarkUI.Controls.DarkLabel();
@@ -134,9 +136,11 @@
             // 
             // darkSectionPanel1
             // 
+            this.darkSectionPanel1.Controls.Add(this.darkLabel23);
+            this.darkSectionPanel1.Controls.Add(this.txtReachY);
             this.darkSectionPanel1.Controls.Add(this.darkLabel20);
+            this.darkSectionPanel1.Controls.Add(this.txtReachX);
             this.darkSectionPanel1.Controls.Add(this.txtAggressiveRange);
-            this.darkSectionPanel1.Controls.Add(this.txtAttackRange);
             this.darkSectionPanel1.Controls.Add(this.darkLabel17);
             this.darkSectionPanel1.Controls.Add(this.txtMaxRoam);
             this.darkSectionPanel1.Controls.Add(this.darkLabel15);
@@ -149,47 +153,68 @@
             this.darkSectionPanel1.Size = new System.Drawing.Size(409, 377);
             this.darkSectionPanel1.TabIndex = 2;
             // 
+            // darkLabel23
+            // 
+            this.darkLabel23.AutoSize = true;
+            this.darkLabel23.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.darkLabel23.Location = new System.Drawing.Point(167, 134);
+            this.darkLabel23.Name = "darkLabel23";
+            this.darkLabel23.Size = new System.Drawing.Size(10, 15);
+            this.darkLabel23.TabIndex = 24;
+            this.darkLabel23.Text = ",";
+            // 
+            // txtReachY
+            // 
+            this.txtReachY.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtReachY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtReachY.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtReachY.Location = new System.Drawing.Point(178, 126);
+            this.txtReachY.Name = "txtReachY";
+            this.txtReachY.Size = new System.Drawing.Size(51, 23);
+            this.txtReachY.TabIndex = 23;
+            this.txtReachY.TextChanged += new System.EventHandler(this.TxtReachY_TextChanged);
+            // 
             // darkLabel20
             // 
             this.darkLabel20.AutoSize = true;
             this.darkLabel20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel20.Location = new System.Drawing.Point(4, 127);
+            this.darkLabel20.Location = new System.Drawing.Point(38, 127);
             this.darkLabel20.Name = "darkLabel20";
-            this.darkLabel20.Size = new System.Drawing.Size(103, 15);
+            this.darkLabel20.Size = new System.Drawing.Size(65, 15);
             this.darkLabel20.TabIndex = 22;
-            this.darkLabel20.Text = "Aggressive Range:";
+            this.darkLabel20.Text = "Reach X, Y:";
+            // 
+            // txtReachX
+            // 
+            this.txtReachX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtReachX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtReachX.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtReachX.Location = new System.Drawing.Point(113, 125);
+            this.txtReachX.Name = "txtReachX";
+            this.txtReachX.Size = new System.Drawing.Size(51, 23);
+            this.txtReachX.TabIndex = 21;
+            this.txtReachX.TextChanged += new System.EventHandler(this.TxtReachX_TextChanged);
             // 
             // txtAggressiveRange
             // 
             this.txtAggressiveRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtAggressiveRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAggressiveRange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtAggressiveRange.Location = new System.Drawing.Point(113, 125);
+            this.txtAggressiveRange.Location = new System.Drawing.Point(113, 96);
             this.txtAggressiveRange.Name = "txtAggressiveRange";
             this.txtAggressiveRange.Size = new System.Drawing.Size(51, 23);
-            this.txtAggressiveRange.TabIndex = 21;
-            this.txtAggressiveRange.TextChanged += new System.EventHandler(this.TxtAggressiveRange_TextChanged);
-            // 
-            // txtAttackRange
-            // 
-            this.txtAttackRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtAttackRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAttackRange.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtAttackRange.Location = new System.Drawing.Point(113, 96);
-            this.txtAttackRange.Name = "txtAttackRange";
-            this.txtAttackRange.Size = new System.Drawing.Size(51, 23);
-            this.txtAttackRange.TabIndex = 20;
-            this.txtAttackRange.TextChanged += new System.EventHandler(this.TxtAttackRange_TextChanged);
+            this.txtAggressiveRange.TabIndex = 20;
+            this.txtAggressiveRange.TextChanged += new System.EventHandler(this.TxtAttackRange_TextChanged);
             // 
             // darkLabel17
             // 
             this.darkLabel17.AutoSize = true;
             this.darkLabel17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.darkLabel17.Location = new System.Drawing.Point(24, 98);
+            this.darkLabel17.Location = new System.Drawing.Point(2, 98);
             this.darkLabel17.Name = "darkLabel17";
-            this.darkLabel17.Size = new System.Drawing.Size(80, 15);
+            this.darkLabel17.Size = new System.Drawing.Size(103, 15);
             this.darkLabel17.TabIndex = 19;
-            this.darkLabel17.Text = "Attack Range:";
+            this.darkLabel17.Text = "Aggressive Range:";
             // 
             // txtMaxRoam
             // 
@@ -912,7 +937,7 @@
         private DarkUI.Controls.DarkTextBox txtMaxRoam;
         private DarkUI.Controls.DarkLabel darkLabel16;
         private DarkUI.Controls.DarkTextBox txtSpeed;
-        private DarkUI.Controls.DarkTextBox txtAttackRange;
+        private DarkUI.Controls.DarkTextBox txtAggressiveRange;
         private DarkUI.Controls.DarkLabel darkLabel17;
         private DarkUI.Controls.DarkLabel darkLabel15;
         private DarkUI.Controls.DarkButton btnClearSpritesheet;
@@ -929,11 +954,13 @@
         private DarkUI.Controls.DarkTextBox txtVarName;
         private DarkUI.Controls.DarkLabel darkLabel19;
         private DarkUI.Controls.DarkLabel darkLabel20;
-        private DarkUI.Controls.DarkTextBox txtAggressiveRange;
+        private DarkUI.Controls.DarkTextBox txtReachX;
         private DarkUI.Controls.DarkSectionPanel darkSectionPanel8;
         private DarkUI.Controls.DarkComboBox cmbDialogue;
         private DarkUI.Controls.DarkLabel darkLabel21;
         private DarkUI.Controls.DarkComboBox cmbDialogueBranch;
         private DarkUI.Controls.DarkLabel darkLabel22;
+        private DarkUI.Controls.DarkLabel darkLabel23;
+        private DarkUI.Controls.DarkTextBox txtReachY;
     }
 }

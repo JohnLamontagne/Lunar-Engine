@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Lunar.Client.Utilities
 {
@@ -45,14 +46,14 @@ namespace Lunar.Client.Utilities
                         FileStream fS = File.Open(path, FileMode.Open);
 
                         _textures.Add(path, Texture2D.FromStream(
-                            ((IGraphicsDeviceService) cM.ServiceProvider.GetService(typeof(IGraphicsDeviceService)))
+                            ((IGraphicsDeviceService)cM.ServiceProvider.GetService(typeof(IGraphicsDeviceService)))
                             .GraphicsDevice, fS));
 
                         fS.Close();
                     }
                     else
                     {
-                        Console.WriteLine("Could not load texture {0}: does not exist.", path); 
+                        Console.WriteLine("Could not load texture {0}: does not exist.", path);
 
                         return new Texture2D(((IGraphicsDeviceService)cM.ServiceProvider.GetService(typeof(IGraphicsDeviceService)))
                             .GraphicsDevice, 1, 1);

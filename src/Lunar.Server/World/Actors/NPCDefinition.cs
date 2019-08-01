@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities.Scripting;
@@ -38,9 +39,8 @@ namespace Lunar.Server.World.Actors
             this.Position = descriptor.Position;
             this.FrameSize = descriptor.FrameSize;
 
-
             this.AggresiveRange = descriptor.AggresiveRange;
-            this.AttackRange = descriptor.AttackRange;
+            this.Reach = descriptor.Reach;
             this.Speed = descriptor.Speed;
             this.TexturePath = descriptor.TexturePath;
             this.Stats.Defense = descriptor.Stats.Defense;
@@ -50,8 +50,9 @@ namespace Lunar.Server.World.Actors
             this.Stats.Strength = descriptor.Stats.Strength;
             this.Stats.Intelligence = descriptor.Stats.Intelligence;
             this.CollisionBounds = descriptor.CollisionBounds;
+            this.Dialogue = descriptor.Dialogue;
+            this.DialogueBranch = descriptor.DialogueBranch;
 
-            
             this.InitalizeScripts(descriptor.Scripts);
             this.InitalizeDefaultBehavior();
         }
@@ -72,8 +73,6 @@ namespace Lunar.Server.World.Actors
 
         private void InitalizeDefaultBehavior()
         {
-
-  
         }
     }
 }

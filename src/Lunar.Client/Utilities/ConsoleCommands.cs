@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using QuakeConsole;
 
 namespace Lunar.Client.Utilities
@@ -18,7 +19,6 @@ namespace Lunar.Client.Utilities
     {
         public static void Help(string[] args, ManualInterpreter interpreter)
         {
-
         }
     }
 }
