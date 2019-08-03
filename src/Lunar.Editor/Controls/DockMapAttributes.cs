@@ -2,6 +2,7 @@
 using DarkUI.Controls;
 using DarkUI.Docking;
 using Lunar.Core.World.Structure;
+using Lunar.Core.World.Structure.TileAttribute;
 using Lunar.Editor.World;
 
 namespace Lunar.Editor.Controls
@@ -12,6 +13,7 @@ namespace Lunar.Editor.Controls
         public AttributeData AttributeData { get; private set; }
         private WarpAttributeDialog _tileAttributeDialog;
         private NPCSpawnDialog _npcSpawnAttributeDialog;
+        private StartDialogueDialog _startDialogueAttributeDialog;
 
         public Map MapSubject { get; private set; }
 
@@ -40,7 +42,7 @@ namespace Lunar.Editor.Controls
                 return;
 
             this.Attribute = TileAttributes.None;
-            this.AttributeData = new AttributeData(); 
+            this.AttributeData = new AttributeData();
         }
 
         private void btnBlocked_CheckedChanged(object sender, System.EventArgs e)
@@ -87,6 +89,23 @@ namespace Lunar.Editor.Controls
             _npcSpawnAttributeDialog.Show(this.ParentForm);
         }
 
+        private void RadioDialogueInit_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!((DarkRadioButton)sender).Checked)
+                return;
+
+            this.Attribute = TileAttributes.StartDialogue;
+
+            _startDialogueAttributeDialog = new StartDialogueDialog(this.ParentForm, this.Project);
+            _startDialogueAttributeDialog.Submitted += _startDialogueAttributeDialog_Submitted; ;
+            _startDialogueAttributeDialog.Show(this.ParentForm);
+        }
+
+        private void _startDialogueAttributeDialog_Submitted(object sender, EventArgs e)
+        {
+            this.AttributeData = new StartDialogueAttributeData(_startDialogueAttributeDialog.Dialogue, _startDialogueAttributeDialog.Branch);
+        }
+
         private void NpcSpawnAttributeDialogOnSubmitted(object sender, EventArgs e)
         {
             this.AttributeData = new NPCSpawnAttributeData(_npcSpawnAttributeDialog.NPC, _npcSpawnAttributeDialog.RespawnTime, _npcSpawnAttributeDialog.MaxSpawns);
@@ -99,12 +118,9 @@ namespace Lunar.Editor.Controls
 
         public event EventHandler<EventArgs> SelectingTile;
 
-
         private void NPCSpawnDialog_Submitted(object sender, EventArgs e)
         {
             this.AttributeData = new WarpAttributeData(_tileAttributeDialog.WarpX, _tileAttributeDialog.WarpY, _tileAttributeDialog.WarpMapID, _tileAttributeDialog.WarpLayerName);
         }
-
-       
     }
 }

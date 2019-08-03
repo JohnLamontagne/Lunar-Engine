@@ -10,14 +10,26 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-namespace Lunar.Core.World.Structure
+
+using System;
+using Lunar.Core.World.Actor.Descriptors;
+
+namespace Lunar.Core.World.Structure.TileAttribute
 {
-    public enum TileAttributes
+    [Serializable]
+    public class NPCSpawnAttributeData : AttributeData
     {
-        None,
-        Blocked,
-        PlayerSpawn,
-        Warp,
-        NPCSpawn
+        public string NPCID { get; set; }
+
+        public int RespawnTime { get; set; }
+
+        public int MaxSpawns { get; set; }
+
+        public NPCSpawnAttributeData(string npcID, int respawnTime, int maxSpawns)
+        {
+            this.NPCID = npcID;
+            this.RespawnTime = respawnTime;
+            this.MaxSpawns = maxSpawns;
+        }
     }
 }

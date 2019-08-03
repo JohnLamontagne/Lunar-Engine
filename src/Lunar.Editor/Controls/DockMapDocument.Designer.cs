@@ -199,7 +199,7 @@
             // 
             this.scrollY.Dock = System.Windows.Forms.DockStyle.Right;
             this.scrollY.Location = new System.Drawing.Point(1601, 52);
-            this.scrollY.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.scrollY.Margin = new System.Windows.Forms.Padding(6);
             this.scrollY.Name = "scrollY";
             this.scrollY.Size = new System.Drawing.Size(40, 1395);
             this.scrollY.TabIndex = 17;
@@ -211,7 +211,7 @@
             // 
             this.scrollX.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.scrollX.Location = new System.Drawing.Point(0, 1405);
-            this.scrollX.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.scrollX.Margin = new System.Windows.Forms.Padding(6);
             this.scrollX.Name = "scrollX";
             this.scrollX.ScrollOrientation = DarkUI.Controls.DarkScrollOrientation.Horizontal;
             this.scrollX.Size = new System.Drawing.Size(1601, 42);
@@ -225,7 +225,7 @@
             this.mapView.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.mapView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapView.Location = new System.Drawing.Point(0, 52);
-            this.mapView.Margin = new System.Windows.Forms.Padding(11, 11, 11, 11);
+            this.mapView.Margin = new System.Windows.Forms.Padding(11);
             this.mapView.Name = "mapView";
             this.mapView.OnDraw = null;
             this.mapView.OnInitalize = null;
@@ -247,7 +247,7 @@
             this.Controls.Add(this.scrollX);
             this.Controls.Add(this.scrollY);
             this.Controls.Add(this.mapToolStrip);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "DockMapDocument";
             this.Size = new System.Drawing.Size(1641, 1447);
             this.Load += new System.EventHandler(this.DockMapDocument_Load);

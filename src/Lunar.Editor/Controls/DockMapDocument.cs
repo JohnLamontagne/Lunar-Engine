@@ -18,6 +18,7 @@ using Keys = System.Windows.Forms.Keys;
 using Lunar.Core.World.Structure;
 using Lunar.Graphics;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Lunar.Core.World.Structure.TileAttribute;
 
 namespace Lunar.Editor.Controls
 {
@@ -638,6 +639,10 @@ namespace Lunar.Editor.Controls
 
                     case TileAttributes.NPCSpawn:
                         attributeSprite.Color = new Color(Color.DarkGreen, 100);
+                        break;
+
+                    case TileAttributes.StartDialogue:
+                        attributeSprite.Color = new Color(Color.CornflowerBlue, 100);
                         break;
 
                     default:

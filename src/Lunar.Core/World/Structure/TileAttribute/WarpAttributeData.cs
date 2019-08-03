@@ -10,25 +10,28 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
-using Lunar.Core.World.Actor.Descriptors;
 
-namespace Lunar.Core.World.Structure
+using System;
+
+namespace Lunar.Core.World.Structure.TileAttribute
 {
     [Serializable]
-    public class NPCSpawnAttributeData : AttributeData
+    public class WarpAttributeData : AttributeData
     {
-        public string NPCID { get; set; }
+        public int X { get; set; }
 
-        public int RespawnTime { get; set; }
+        public int Y { get; set; }
 
-        public int MaxSpawns { get; set; }
+        public string WarpMap { get; set; }
 
-        public NPCSpawnAttributeData(string npcID, int respawnTime, int maxSpawns)
+        public string LayerName { get; set; }
+
+        public WarpAttributeData(int x, int y, string warpMap, string layerName)
         {
-            this.NPCID = npcID;
-            this.RespawnTime = respawnTime;
-            this.MaxSpawns = maxSpawns;
+            this.X = x;
+            this.Y = y;
+            this.WarpMap = warpMap;
+            this.LayerName = layerName;
         }
     }
 }

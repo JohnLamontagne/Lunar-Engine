@@ -10,27 +10,16 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using System;
 
-namespace Lunar.Core.World.Structure
+namespace Lunar.Core.World.Structure.TileAttribute
 {
-    [Serializable]
-    public class WarpAttributeData : AttributeData
+    public enum TileAttributes
     {
-        public int X { get; set; }
-
-        public int Y { get; set; }
-
-        public string WarpMap { get; set; }
-
-        public string LayerName { get; set; }
-
-        public WarpAttributeData(int x, int y, string warpMap, string layerName)
-        {
-            this.X = x;
-            this.Y = y;
-            this.WarpMap = warpMap;
-            this.LayerName = layerName;
-        }
+        None,
+        Blocked,
+        PlayerSpawn,
+        Warp,
+        NPCSpawn,
+        StartDialogue
     }
 }

@@ -239,6 +239,12 @@
     <Compile Include="Controls\DockMapObjectProperties.Designer.cs">
       <DependentUpon>DockMapObjectProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StartDialogueDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\StartDialogueDialog.Designer.cs">
+      <DependentUpon>StartDialogueDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SavableDocument.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -342,6 +348,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockProject.resx">
       <DependentUpon>DockProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\StartDialogueDialog.resx">
+      <DependentUpon>StartDialogueDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\NPCSpawnDialog.resx">
       <DependentUpon>NPCSpawnDialog.cs</DependentUpon>

@@ -96,15 +96,16 @@
     <Compile Include="World\EquipmentSlots.cs" />
     <Compile Include="World\ItemDescriptor.cs" />
     <Compile Include="World\ItemTypes.cs" />
-    <Compile Include="World\Structure\AttributeData.cs" />
+    <Compile Include="World\Structure\TileAttribute\AttributeData.cs" />
     <Compile Include="World\Structure\LayerDescriptor.cs" />
     <Compile Include="World\Structure\LightInformation.cs" />
     <Compile Include="World\Structure\MapDescriptor.cs" />
     <Compile Include="World\Structure\MapObjectDescriptor.cs" />
-    <Compile Include="World\Structure\NPCSpawnAttributeData.cs" />
+    <Compile Include="World\Structure\TileAttribute\NPCSpawnAttributeData.cs" />
+    <Compile Include="World\Structure\TileAttribute\StartDialogueAttributeData.cs" />
     <Compile Include="World\Structure\TileDescriptor.cs" />
-    <Compile Include="World\Structure\TileAttributes.cs" />
-    <Compile Include="World\Structure\WarpAttributeData.cs" />
+    <Compile Include="World\Structure\TileAttribute\TileAttributes.cs" />
+    <Compile Include="World\Structure\TileAttribute\WarpAttributeData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Lunar.Core.licenseheader" />

@@ -10,11 +10,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Lunar.Core.World.Structure
+namespace Lunar.Core.World.Structure.TileAttribute
 {
     [Serializable]
     public class AttributeData
@@ -31,7 +32,7 @@ namespace Lunar.Core.World.Structure
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryFormatter binaryFormatter = new BinaryFormatter();
-            return (AttributeData) binaryFormatter.Deserialize(memoryStream);
+            return (AttributeData)binaryFormatter.Deserialize(memoryStream);
         }
     }
 }

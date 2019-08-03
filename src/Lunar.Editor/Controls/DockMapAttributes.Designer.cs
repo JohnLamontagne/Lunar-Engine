@@ -33,14 +33,16 @@
             this.btnNone = new DarkUI.Controls.DarkRadioButton();
             this.btnWarp = new DarkUI.Controls.DarkRadioButton();
             this.btnNPCSpawn = new DarkUI.Controls.DarkRadioButton();
+            this.radioDialogueInit = new DarkUI.Controls.DarkRadioButton();
             this.SuspendLayout();
             // 
             // btnBlocked
             // 
             this.btnBlocked.AutoSize = true;
-            this.btnBlocked.Location = new System.Drawing.Point(59, 69);
+            this.btnBlocked.Location = new System.Drawing.Point(108, 127);
+            this.btnBlocked.Margin = new System.Windows.Forms.Padding(6);
             this.btnBlocked.Name = "btnBlocked";
-            this.btnBlocked.Size = new System.Drawing.Size(64, 17);
+            this.btnBlocked.Size = new System.Drawing.Size(107, 29);
             this.btnBlocked.TabIndex = 0;
             this.btnBlocked.Text = "Blocked";
             this.btnBlocked.CheckedChanged += new System.EventHandler(this.btnBlocked_CheckedChanged);
@@ -48,9 +50,10 @@
             // btnPlayerSpawn
             // 
             this.btnPlayerSpawn.AutoSize = true;
-            this.btnPlayerSpawn.Location = new System.Drawing.Point(59, 116);
+            this.btnPlayerSpawn.Location = new System.Drawing.Point(108, 214);
+            this.btnPlayerSpawn.Margin = new System.Windows.Forms.Padding(6);
             this.btnPlayerSpawn.Name = "btnPlayerSpawn";
-            this.btnPlayerSpawn.Size = new System.Drawing.Size(90, 17);
+            this.btnPlayerSpawn.Size = new System.Drawing.Size(158, 29);
             this.btnPlayerSpawn.TabIndex = 1;
             this.btnPlayerSpawn.Text = "Player Spawn";
             this.btnPlayerSpawn.CheckedChanged += new System.EventHandler(this.btnPlayerSpawn_CheckedChanged);
@@ -59,9 +62,10 @@
             // 
             this.btnNone.AutoSize = true;
             this.btnNone.Checked = true;
-            this.btnNone.Location = new System.Drawing.Point(59, 46);
+            this.btnNone.Location = new System.Drawing.Point(108, 85);
+            this.btnNone.Margin = new System.Windows.Forms.Padding(6);
             this.btnNone.Name = "btnNone";
-            this.btnNone.Size = new System.Drawing.Size(51, 17);
+            this.btnNone.Size = new System.Drawing.Size(84, 29);
             this.btnNone.TabIndex = 2;
             this.btnNone.TabStop = true;
             this.btnNone.Text = "None";
@@ -70,9 +74,10 @@
             // btnWarp
             // 
             this.btnWarp.AutoSize = true;
-            this.btnWarp.Location = new System.Drawing.Point(59, 93);
+            this.btnWarp.Location = new System.Drawing.Point(108, 172);
+            this.btnWarp.Margin = new System.Windows.Forms.Padding(6);
             this.btnWarp.Name = "btnWarp";
-            this.btnWarp.Size = new System.Drawing.Size(51, 17);
+            this.btnWarp.Size = new System.Drawing.Size(85, 29);
             this.btnWarp.TabIndex = 3;
             this.btnWarp.Text = "Warp";
             this.btnWarp.CheckedChanged += new System.EventHandler(this.btnWarp_CheckedChanged);
@@ -80,25 +85,39 @@
             // btnNPCSpawn
             // 
             this.btnNPCSpawn.AutoSize = true;
-            this.btnNPCSpawn.Location = new System.Drawing.Point(59, 139);
+            this.btnNPCSpawn.Location = new System.Drawing.Point(108, 257);
+            this.btnNPCSpawn.Margin = new System.Windows.Forms.Padding(6);
             this.btnNPCSpawn.Name = "btnNPCSpawn";
-            this.btnNPCSpawn.Size = new System.Drawing.Size(83, 17);
+            this.btnNPCSpawn.Size = new System.Drawing.Size(145, 29);
             this.btnNPCSpawn.TabIndex = 4;
             this.btnNPCSpawn.Text = "NPC Spawn";
             this.btnNPCSpawn.CheckedChanged += new System.EventHandler(this.btnNPCSpawn_CheckedChanged);
             // 
+            // radioDialogueInit
+            // 
+            this.radioDialogueInit.AutoSize = true;
+            this.radioDialogueInit.Location = new System.Drawing.Point(108, 298);
+            this.radioDialogueInit.Margin = new System.Windows.Forms.Padding(6);
+            this.radioDialogueInit.Name = "radioDialogueInit";
+            this.radioDialogueInit.Size = new System.Drawing.Size(160, 29);
+            this.radioDialogueInit.TabIndex = 5;
+            this.radioDialogueInit.Text = "Start Dialogue";
+            this.radioDialogueInit.CheckedChanged += new System.EventHandler(this.RadioDialogueInit_CheckedChanged);
+            // 
             // DockMapAttributes
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.radioDialogueInit);
             this.Controls.Add(this.btnNPCSpawn);
             this.Controls.Add(this.btnWarp);
             this.Controls.Add(this.btnNone);
             this.Controls.Add(this.btnPlayerSpawn);
             this.Controls.Add(this.btnBlocked);
             this.DockText = "Attributes";
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "DockMapAttributes";
-            this.Size = new System.Drawing.Size(213, 192);
+            this.Size = new System.Drawing.Size(391, 354);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -111,5 +130,6 @@
         private DarkUI.Controls.DarkRadioButton btnNone;
         private DarkUI.Controls.DarkRadioButton btnWarp;
         private DarkUI.Controls.DarkRadioButton btnNPCSpawn;
+        private DarkUI.Controls.DarkRadioButton radioDialogueInit;
     }
 }

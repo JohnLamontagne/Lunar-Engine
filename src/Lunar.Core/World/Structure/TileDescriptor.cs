@@ -10,8 +10,10 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.World.Structure.TileAttribute;
 
 namespace Lunar.Core.World.Structure
 {
@@ -35,7 +37,7 @@ namespace Lunar.Core.World.Structure
 
         public TileAttributes Attribute { get; set; }
 
-        public AttributeData AttributeData { get;  set; }
+        public AttributeData AttributeData { get; set; }
 
         public SpriteInfo SpriteInfo { get; set; }
 
@@ -57,6 +59,5 @@ namespace Lunar.Core.World.Structure
         {
             this.Position = position;
         }
-
     }
 }

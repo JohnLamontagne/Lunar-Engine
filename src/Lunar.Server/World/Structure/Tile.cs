@@ -22,6 +22,7 @@ using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Structure;
+using Lunar.Core.World.Structure.TileAttribute;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Actors;
 
