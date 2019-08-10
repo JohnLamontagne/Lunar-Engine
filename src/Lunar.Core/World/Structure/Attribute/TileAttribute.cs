@@ -11,16 +11,31 @@
 	limitations under the License.
 */
 
+using Lunar.Core.Content.Graphics;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Lunar.Core.World.Structure.TileAttribute
+namespace Lunar.Core.World.Structure.Attribute
 {
     [Serializable]
-    public class AttributeData
+    public abstract class TileAttribute
     {
-        public byte[] Serialize()
+        [NonSerialized]
+        private ITileAttributeActionHandler _actionHandler;
+
+        /// <summary>
+        /// Handles incoming actions from the tile in which the attribute lives.
+        /// Setting to null indicates no processing needed.
+        /// </summary>
+        public ITileAttributeActionHandler ActionHandler { get => _actionHandler; set => _actionHandler = value; }
+
+        /// <summary>
+        /// Used for marking on map when attribute overlay is enabled.
+        /// </summary>
+        public abstract Color Color { get; }
+
+        public virtual byte[] Serialize()
         {
             MemoryStream memoryStream = new MemoryStream();
             BinaryFormatter bf = new BinaryFormatter();
@@ -28,11 +43,11 @@ namespace Lunar.Core.World.Structure.TileAttribute
             return memoryStream.ToArray();
         }
 
-        public static AttributeData Deserialize(byte[] data)
+        public static TileAttribute Deserialize(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryFormatter binaryFormatter = new BinaryFormatter();
-            return (AttributeData)binaryFormatter.Deserialize(memoryStream);
+            return (TileAttribute)binaryFormatter.Deserialize(memoryStream);
         }
     }
 }

@@ -155,7 +155,7 @@ namespace Lunar.Client.World
                 _player.State = ActorStates.Idle;
 
             var name = args.Message.ReadString();
-            var dimensions = args.Message.ReadVector2();
+            var dimensions = args.Message.ReadVector();
 
             _map?.Unload(); // unload the previous map if it existed.
 

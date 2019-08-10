@@ -13,11 +13,10 @@
 
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
-using Lunar.Core.World.Structure.TileAttribute;
 
 namespace Lunar.Core.World.Structure
 {
-    public class TileDescriptor
+    public class BaseTile<T> : IBaseTile<T> where T : SpriteInfo
     {
         public Vector Position { get; set; }
 
@@ -35,26 +34,24 @@ namespace Lunar.Core.World.Structure
 
         public bool Blocked { get; set; }
 
-        public TileAttributes Attribute { get; set; }
+        public Attribute.TileAttribute Attribute { get; set; }
 
-        public AttributeData AttributeData { get; set; }
+        public virtual T Sprite { get; set; }
 
-        public SpriteInfo SpriteInfo { get; set; }
-
-        private TileDescriptor()
+        protected BaseTile()
         {
-            this.AttributeData = new AttributeData();
+            this.Attribute = null;
         }
 
-        public TileDescriptor(SpriteInfo sprite)
+        public BaseTile(T sprite)
             : this()
         {
-            this.SpriteInfo = sprite;
+            this.Sprite = sprite;
 
             this.Animated = false;
         }
 
-        public TileDescriptor(Vector position)
+        public BaseTile(Vector position)
             : this()
         {
             this.Position = position;

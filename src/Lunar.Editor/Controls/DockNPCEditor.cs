@@ -64,8 +64,8 @@ namespace Lunar.Editor.Controls
             this.txtDex.Text = _npc.Stats.Dexterity.ToString();
             this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
             this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
-            this.txtColLeft.Text = _npc.CollisionBounds.Left.ToString();
-            this.txtColTop.Text = _npc.CollisionBounds.Top.ToString();
+            this.txtColLeft.Text = _npc.CollisionBounds.X.ToString();
+            this.txtColTop.Text = _npc.CollisionBounds.Y.ToString();
             this.txtColWidth.Text = _npc.CollisionBounds.Width.ToString();
             this.txtColHeight.Text = _npc.CollisionBounds.Height.ToString();
             this.txtMaxRoam.Text = _npc.MaxRoam.X.ToString();
@@ -279,7 +279,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtColTop.Text, out int newTop);
 
-            _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, newTop, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
+            _npc.CollisionBounds = new Core.Utilities.Data.Rect(_npc.CollisionBounds.X, newTop, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
 
             this.picCollisionPreview.Invalidate();
         }
@@ -290,7 +290,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtColHeight.Text, out int newHeight);
 
-            _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, _npc.CollisionBounds.Top, _npc.CollisionBounds.Width, newHeight);
+            _npc.CollisionBounds = new Core.Utilities.Data.Rect(_npc.CollisionBounds.X, _npc.CollisionBounds.Y, _npc.CollisionBounds.Width, newHeight);
 
             this.picCollisionPreview.Invalidate();
         }
@@ -301,7 +301,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtColLeft.Text, out int newLeft);
 
-            _npc.CollisionBounds = new Rect(newLeft, _npc.CollisionBounds.Top, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
+            _npc.CollisionBounds = new Core.Utilities.Data.Rect(newLeft, _npc.CollisionBounds.Y, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
 
             this.picCollisionPreview.Invalidate();
         }
@@ -312,7 +312,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtColWidth.Text, out int newWidth);
 
-            _npc.CollisionBounds = new Rect(_npc.CollisionBounds.Left, _npc.CollisionBounds.Top, newWidth, _npc.CollisionBounds.Height);
+            _npc.CollisionBounds = new Core.Utilities.Data.Rect(_npc.CollisionBounds.X, _npc.CollisionBounds.Y, newWidth, _npc.CollisionBounds.Height);
 
             this.picCollisionPreview.Invalidate();
         }
@@ -407,8 +407,8 @@ namespace Lunar.Editor.Controls
                 for (int y = 0; y < this.picSpriteSheet.Image.Height; y += (int)_npc.FrameSize.Y)
                 {
                     Color color = Color.FromArgb(122, Color.Red);
-                    e.Graphics.FillRectangle(new SolidBrush(color), new Rectangle((int)((x + _npc.CollisionBounds.Left) / factor_x),
-                        (int)((y + _npc.CollisionBounds.Top) / factor_y), (int)(_npc.CollisionBounds.Width / factor_x), (int)(_npc.CollisionBounds.Height / factor_y)));
+                    e.Graphics.FillRectangle(new SolidBrush(color), new System.Drawing.Rectangle((int)((x + _npc.CollisionBounds.X) / factor_x),
+                        (int)((y + _npc.CollisionBounds.Y) / factor_y), (int)(_npc.CollisionBounds.Width / factor_x), (int)(_npc.CollisionBounds.Height / factor_y)));
                 }
             }
         }

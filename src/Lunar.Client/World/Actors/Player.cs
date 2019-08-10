@@ -120,7 +120,7 @@ namespace Lunar.Client.World.Actors
             set
             {
                 _layer = value;
-                this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);   // We add .01f to ensure the player is always drawn slightly above the layer on which they exist.
+                this.SpriteSheet.Sprite.Transform.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);   // We add .01f to ensure the player is always drawn slightly above the layer on which they exist.
             }
         }
 
@@ -382,7 +382,7 @@ namespace Lunar.Client.World.Actors
 
             _camera?.Update(gameTime);
 
-            _light.Position = new Vector2(this.Position.X + (this.SpriteSheet.Sprite.SourceRectangle.Width / 2f) - _light.Radius / 2f, this.Position.Y + (this.SpriteSheet.Sprite.SourceRectangle.Height / 2f) - _light.Radius / 2f);
+            _light.Position = new Vector2(this.Position.X + (this.SpriteSheet.Sprite.Transform.Rect.Width / 2f) - _light.Radius / 2f, this.Position.Y + (this.SpriteSheet.Sprite.Transform.Rect.Height / 2f) - _light.Radius / 2f);
 
             this.Emitter?.Update(gameTime);
         }

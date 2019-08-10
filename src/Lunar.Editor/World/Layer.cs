@@ -8,16 +8,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World.Structure;
 using Lunar.Editor.Utilities;
+using Lunar.Core.Content.Graphics;
+using Lunar.Core.Utilities;
 
 namespace Lunar.Editor.World
 {
-    public class Layer
+    public class Layer : BaseLayer<Tile>
     {
-        private LayerDescriptor _descriptor;
-        private Tile[,] _tiles;
         private List<MapObject> _mapObjects;
-
-        public LayerDescriptor Descriptor => _descriptor;
 
         public bool Visible { get; set; }
 
@@ -29,34 +27,36 @@ namespace Lunar.Editor.World
         public Layer(Vector2 dimensions, string name, int layerIndex)
         {
             _mapObjects = new List<MapObject>();
-            _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
+            this.Tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
 
-            _descriptor = new LayerDescriptor(dimensions, name, layerIndex);
-            _descriptor.DescriptorChanged += _descriptor_DescriptorChanged;
+            this.Name = name;
+            this.LayerIndex = layerIndex;
 
             this.Visible = true;
         }
 
-        private void _descriptor_DescriptorChanged(object sender, EventArgs e)
+        public Layer(BaseLayer<BaseTile<SpriteInfo>> layerDescriptor)
         {
-            foreach (var tile in _tiles)
-            {
-                if (tile != null && tile.Sprite != null)
-                    tile.Sprite.LayerDepth = _descriptor.ZIndex;
-            }
-        }
+            this.Name = layerDescriptor.Name;
 
-        public Layer(LayerDescriptor layerDescriptor)
-        {
-            _descriptor = layerDescriptor;
-            _descriptor.DescriptorChanged += _descriptor_DescriptorChanged;
+            this.Tiles = new Tile[layerDescriptor.Tiles.GetLength(0), layerDescriptor.Tiles.GetLength(1)];
+            for (int x = 0; x < layerDescriptor.Tiles.GetLength(0); x++)
+            {
+                for (int y = 0; y < layerDescriptor.Tiles.GetLength(1); y++)
+                {
+                    if (layerDescriptor.Tiles[x, y] != null)
+                        this.Tiles[x, y] = new Tile(layerDescriptor.Tiles[x, y]);
+                }
+            }
+
+            this.LayerIndex = layerDescriptor.LayerIndex;
+
             _mapObjects = new List<MapObject>();
-            _tiles = new Tile[layerDescriptor.Tiles.GetLength(0), layerDescriptor.Tiles.GetLength(1)];
         }
 
         public void Resize(Vector2 dimensions)
         {
-            _tiles = Helpers.ResizeArray<Tile>(_tiles, (int)dimensions.X, (int)dimensions.Y);
+            this.Tiles = Helpers.ResizeArray<Tile>(this.Tiles, (int)dimensions.X, (int)dimensions.Y);
         }
 
         public MapObject TryGetMapObject(Vector2 position)
@@ -66,13 +66,13 @@ namespace Lunar.Editor.World
 
         public void Update(GameTime gameTime)
         {
-            for (int x = 0; x < _tiles.GetLength(0); x++)
+            for (int x = 0; x < this.Tiles.GetLength(0); x++)
             {
-                for (int y = 0; y < _tiles.GetLength(1); y++)
+                for (int y = 0; y < this.Tiles.GetLength(1); y++)
                 {
-                    if (_tiles[x, y] != null)
+                    if (this.Tiles[x, y] != null)
                     {
-                        _tiles[x, y].Update(gameTime);
+                        this.Tiles[x, y].Update(gameTime);
                     }
                 }
             }
@@ -95,10 +95,10 @@ namespace Lunar.Editor.World
             {
                 for (int y = top; y < (top + height); y++)
                 {
-                    if (x < _tiles.GetLength(0) && y < _tiles.GetLength(1))
+                    if (x < this.Tiles.GetLength(0) && y < this.Tiles.GetLength(1))
                     {
-                        if (_tiles[x, y] != null)
-                            _tiles[x, y].Draw(spriteBatch);
+                        if (this.Tiles[x, y] != null)
+                            this.Tiles[x, y].Draw(spriteBatch);
                     }
                 }
             }
@@ -109,21 +109,23 @@ namespace Lunar.Editor.World
 
         public Tile GetTile(int x, int y)
         {
-            if (x >= _tiles.GetLength(0) || x < 0 || y >= _tiles.GetLength(1) || y < 0)
-                throw new Exception("Fatal error: attempted to access an invalid tile!");
+            if (x >= this.Tiles.GetLength(0) || x < 0 || y >= this.Tiles.GetLength(1) || y < 0)
+            {
+                Engine.Services.Get<Logger>().LogEvent("Fatal error: attempted to access an invalid tile!", LogTypes.ERROR);
+                return null;
+            }
 
-            return _tiles[x, y];
+            return this.Tiles[x, y];
         }
 
         public void SetTile(int x, int y, Tile tile)
         {
-            if (x >= _tiles.GetLength(0) || x < 0 || y >= _tiles.GetLength(1) || y < 0)
-                throw new Exception("Fatal error: attempted to access an invalid tile!");
+            if (x >= this.Tiles.GetLength(0) || x < 0 || y >= this.Tiles.GetLength(1) || y < 0)
+            {
+                Engine.Services.Get<Logger>().LogEvent("Fatal error: attempted to access an invalid tile!", LogTypes.ERROR);
+            }
 
-            _tiles[x, y] = tile;
-            _descriptor.Tiles[x, y] = tile.Descriptor;
+            this.Tiles[x, y] = tile;
         }
-
-     
     }
 }

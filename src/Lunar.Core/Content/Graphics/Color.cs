@@ -10,6 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using XNAColor = Microsoft.Xna.Framework.Color;
+
 namespace Lunar.Core.Content.Graphics
 {
     public struct Color
@@ -49,6 +52,14 @@ namespace Lunar.Core.Content.Graphics
             {
                 return _a;
             }
+        }
+
+        public Color(Color color, byte a)
+        {
+            _r = color.R;
+            _g = color.G;
+            _b = color.B;
+            _a = a;
         }
 
         public Color(byte r, byte g, byte b, byte a)
@@ -92,5 +103,15 @@ namespace Lunar.Core.Content.Graphics
         public static Color Blue => new Color(0, 0, 255);
 
         public static Color Black => new Color(0, 0, 0);
+
+        public static implicit operator Color(XNAColor color)
+        {
+            return new Color(color.R, color.G, color.B, color.A);
+        }
+
+        public static implicit operator XNAColor(Color color)
+        {
+            return new XNAColor(color.R, color.G, color.B, color.A);
+        }
     }
 }

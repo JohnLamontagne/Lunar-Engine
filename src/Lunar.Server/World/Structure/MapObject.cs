@@ -118,7 +118,7 @@ namespace Lunar.Server.World.Structure
             netBuffer.Write(this.Sprite.Transform.Color);
             netBuffer.Write(this.Position);
             netBuffer.Write(this.Animated);
-            netBuffer.Write(this.Layer.Descriptor.LayerIndex);
+            netBuffer.Write(this.Layer.LayerIndex);
             netBuffer.Write(this.FrameTime);
 
             // Is it a light?

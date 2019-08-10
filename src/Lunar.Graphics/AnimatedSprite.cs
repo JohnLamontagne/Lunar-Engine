@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,32 +18,31 @@ namespace Lunar.Graphics
 {
     public class AnimatedSprite : Sprite
     {
-
         public AnimatedSprite(Texture2D texture) : base(texture)
         {
         }
 
         public void Next()
         {
-            int left = this.SourceRectangle.Left;
-            int top = this.SourceRectangle.Top;
-            if (this.SourceRectangle.Left + this.SourceRectangle.Width > this.Texture.Width - this.SourceRectangle.Width)
+            int left = this.Transform.Rect.X;
+            int top = this.Transform.Rect.Y;
+            if (this.Transform.Rect.X + this.Transform.Rect.Width > this.Texture.Width - this.Transform.Rect.Width)
             {
-                if (this.SourceRectangle.Top + this.SourceRectangle.Height > this.Texture.Height - this.SourceRectangle.Height)
+                if (this.Transform.Rect.Y + this.Transform.Rect.Height > this.Texture.Height - this.Transform.Rect.Height)
                 {
                     left = 0;
                     top = 0;
                 }
                 else
                 {
-                    top = this.SourceRectangle.Top + this.SourceRectangle.Height;
+                    top = this.Transform.Rect.Y + this.Transform.Rect.Height;
                     left = 0;
                 }
             }
             else
-                left = this.SourceRectangle.Left + this.SourceRectangle.Width;
+                left = this.Transform.Rect.X + this.Transform.Rect.Width;
 
-            this.SourceRectangle = new Rectangle(left, top, this.SourceRectangle.Width, this.SourceRectangle.Height);
+            this.Transform.Rect = this.Transform.Rect.MoveTo(left, top);
         }
     }
 }

@@ -18,7 +18,8 @@ using Keys = System.Windows.Forms.Keys;
 using Lunar.Core.World.Structure;
 using Lunar.Graphics;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
-using Lunar.Core.World.Structure.TileAttribute;
+using Lunar.Core.World.Structure.Attribute;
+using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Editor.Controls
 {
@@ -101,7 +102,7 @@ namespace Lunar.Editor.Controls
 
         private void UpdateQuickLayerSelection()
         {
-            if (_map.Layers.Values.Count <= 0)
+            if (_map.Layers.Count <= 0)
             {
                 this.cmbQuickLayer.Items.Clear();
                 return;
@@ -111,7 +112,7 @@ namespace Lunar.Editor.Controls
 
             foreach (var layer in _map.Layers)
             {
-                this.cmbQuickLayer.Items.Add(layer.Key);
+                this.cmbQuickLayer.Items.Add(layer.Name);
             }
 
             this.cmbQuickLayer.SelectedItem = this.cmbQuickLayer.Items[0];
@@ -176,11 +177,11 @@ namespace Lunar.Editor.Controls
 
             if (_dockTilesetTools.Map == _map)
             {
-                foreach (var layer in _map.Layers.Values)
+                foreach (var layer in _map.Layers)
                 {
-                    for (int x = 0; x < _map.Descriptor.Dimensions.X; x++)
+                    for (int x = 0; x < _map.Dimensions.X; x++)
                     {
-                        for (int y = 0; y < _map.Descriptor.Dimensions.Y; y++)
+                        for (int y = 0; y < _map.Dimensions.Y; y++)
                         {
                             if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Sprite.Texture == _map.GetTileset(tilesetPath))
                             {
@@ -213,8 +214,8 @@ namespace Lunar.Editor.Controls
             _map = _project.LoadMap(_file.FullName, _mapTextureLoader);
             _map.Map_Resized += _map_Map_Resized;
 
-            this.scrollX.Maximum = Math.Max(((int)_map.Descriptor.Dimensions.X * EngineConstants.TILE_SIZE) - this.mapView.Width, 0);
-            this.scrollY.Maximum = Math.Max(((int)_map.Descriptor.Dimensions.Y * EngineConstants.TILE_SIZE) - this.mapView.Height, 0);
+            this.scrollX.Maximum = Math.Max(((int)_map.Dimensions.X * EngineConstants.TILE_SIZE) - this.mapView.Width, 0);
+            this.scrollY.Maximum = Math.Max(((int)_map.Dimensions.Y * EngineConstants.TILE_SIZE) - this.mapView.Height, 0);
 
             this.mapView.OnDraw = OnMapDraw;
             this.mapView.OnUpdate = OnMapUpdate;
@@ -223,9 +224,9 @@ namespace Lunar.Editor.Controls
 
             this.UpdateQuickLayerSelection();
 
-            foreach (var layer in _map.Layers.Values.OrderBy(l => l.Descriptor.ZIndex))
+            foreach (var layer in _map.Layers.OrderBy(l => l.ZIndex))
             {
-                _dockLayers.AddLayer(layer.Descriptor.Name);
+                _dockLayers.AddLayer(layer.Name);
             }
 
             MemoryStream memStream = new MemoryStream();
@@ -234,40 +235,24 @@ namespace Lunar.Editor.Controls
             var texture = _mapTextureLoader.LoadFromFileStream(memStream);
 
             // Grab all the needed attribute information for the map display
-            foreach (var layer in _map.Layers.Values)
+            foreach (var layer in _map.Layers)
             {
-                for (int x = 0; x < _map.Descriptor.Dimensions.X; x++)
+                for (int x = 0; x < _map.Dimensions.X; x++)
                 {
-                    for (int y = 0; y < _map.Descriptor.Dimensions.Y; y++)
+                    for (int y = 0; y < _map.Dimensions.Y; y++)
                     {
-                        if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Descriptor.Attribute != TileAttributes.None)
+                        if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Attribute != null)
                         {
-                            var attributeSprite = new Sprite(texture)
-                            {
-                                Position = new Vector2(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE),
-                                LayerDepth = layer.Descriptor.ZIndex + .02f // place it slightly above the layer's tile
-                            };
+                            var attributeSprite = new Sprite(texture);
 
-                            switch (layer.GetTile(x, y).Descriptor.Attribute)
-                            {
-                                case TileAttributes.Blocked:
-                                    attributeSprite.Color = new Color(Color.Red, 100);
-                                    break;
+                            attributeSprite.Transform.Position = new Vector2(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE);
+                            attributeSprite.Transform.LayerDepth = layer.ZIndex + .02f; // place it slightly above the layer's tile
 
-                                case TileAttributes.PlayerSpawn:
-                                    attributeSprite.Color = new Color(Color.Blue, 100);
-                                    break;
+                            var attribute = layer.GetTile(x, y).Attribute;
 
-                                case TileAttributes.Warp:
-                                    attributeSprite.Color = new Color(Color.Purple, 100);
-                                    break;
+                            attributeSprite.Transform.Color = new Color(attribute.Color.R, attribute.Color.G, attribute.Color.B, attribute.Color.A);
 
-                                case TileAttributes.NPCSpawn:
-                                    attributeSprite.Color = new Color(Color.DarkGreen, 100);
-                                    break;
-                            }
-
-                            _tileAttributeSprites.Add(new Tuple<string, Vector2>(layer.Descriptor.Name, new Vector2(x, y)), attributeSprite);
+                            _tileAttributeSprites.Add(new Tuple<string, Vector2>(layer.Name, new Vector2(x, y)), attributeSprite);
                         }
                     }
                 }
@@ -276,8 +261,8 @@ namespace Lunar.Editor.Controls
 
         private void _map_Map_Resized(object sender, EventArgs e)
         {
-            this.scrollX.Maximum = Math.Max(((int)_map.Descriptor.Dimensions.X * EngineConstants.TILE_SIZE) - this.mapView.Width, 0);
-            this.scrollY.Maximum = Math.Max(((int)_map.Descriptor.Dimensions.Y * EngineConstants.TILE_SIZE) - this.mapView.Height, 0);
+            this.scrollX.Maximum = Math.Max(((int)_map.Dimensions.X * EngineConstants.TILE_SIZE) - this.mapView.Width, 0);
+            this.scrollY.Maximum = Math.Max(((int)_map.Dimensions.Y * EngineConstants.TILE_SIZE) - this.mapView.Height, 0);
         }
 
         private void OnMapUpdate(View view)
@@ -301,9 +286,9 @@ namespace Lunar.Editor.Controls
                 Vector2 placeTilePos = new Vector2(((int)(_mapMousePos.X + _camera.Position.X) / EngineConstants.TILE_SIZE) * EngineConstants.TILE_SIZE,
                     ((int)(_mapMousePos.Y + _camera.Position.Y) / EngineConstants.TILE_SIZE) * EngineConstants.TILE_SIZE);
 
-                if (_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
+                if (_map.LayerExists(_dockLayers.SelectedLayer))
                     view.SpriteBatch.Draw(currentTileset, placeTilePos, _dockTilesetTools.SelectRectangle,
-                        new Color(Color.White, 150), 0f, Vector2.Zero, 1f, SpriteEffects.None, _map.Layers[_dockLayers.SelectedLayer].Descriptor.ZIndex + .01f);
+                        new Color(Color.White, 150), 0f, Vector2.Zero, 1f, SpriteEffects.None, _map.GetLayer(_dockLayers.SelectedLayer).ZIndex + .01f);
             }
             else if (_placementMode == PlacementMode.Select || _placementMode == PlacementMode.MapObject_Select)
             {
@@ -312,12 +297,12 @@ namespace Lunar.Editor.Controls
 
             if (_selectedMapObject != null)
                 _selectRectangle = new Rectangle((int)_selectedMapObject.Position.X - 1, (int)_selectedMapObject.Position.Y - 1,
-                    _selectedMapObject.Sprite.SourceRectangle.Width + 1, _selectedMapObject.Sprite.SourceRectangle.Height + 1);
+                    _selectedMapObject.Sprite.Transform.Rect.Width + 1, _selectedMapObject.Sprite.Transform.Rect.Height + 1);
 
             if (_placementMode == PlacementMode.Place_Attribute)
             {
                 foreach (var attributeKeyPair in _tileAttributeSprites)
-                    if (this.Map.Layers[attributeKeyPair.Key.Item1].Visible)
+                    if (this.Map.GetLayer(attributeKeyPair.Key.Item1).Visible)
                         view.SpriteBatch.Draw(attributeKeyPair.Value);
             }
         }
@@ -393,9 +378,9 @@ namespace Lunar.Editor.Controls
             }
             else if (_placementMode == PlacementMode.MapObject_Select)
             {
-                if (_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
+                if (_map.LayerExists(_dockLayers.SelectedLayer))
                 {
-                    _selectedMapObject = _map.Layers[_dockLayers.SelectedLayer].TryGetMapObject(new Vector2(e.X, e.Y));
+                    _selectedMapObject = _map.GetLayer(_dockLayers.SelectedLayer).TryGetMapObject(new Vector2(e.X, e.Y));
 
                     if (_selectedMapObject != null)
                     {
@@ -493,9 +478,9 @@ namespace Lunar.Editor.Controls
             }
             else if (_placementMode == PlacementMode.Fill)
             {
-                for (int x = 0; x < _map.Descriptor.Dimensions.X; x++)
+                for (int x = 0; x < _map.Dimensions.X; x++)
                 {
-                    for (int y = 0; y < _map.Descriptor.Dimensions.Y; y++)
+                    for (int y = 0; y < _map.Dimensions.Y; y++)
                     {
                         this.PlaceTile(x, y);
                     }
@@ -575,33 +560,33 @@ namespace Lunar.Editor.Controls
         private void RemoveMapAttribute(int mapX, int mapY)
         {
             // Make sure the layer exists
-            if (!_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
+            if (!_map.LayerExists(_dockLayers.SelectedLayer))
                 return;
 
-            var layer = _map.Layers[_dockLayers.SelectedLayer];
+            var layer = _map.GetLayer(_dockLayers.SelectedLayer);
 
-            if (mapX >= 0 && mapY >= 0 && mapX < _map.Descriptor.Dimensions.X && mapY < _map.Descriptor.Dimensions.Y)
+            if (mapX >= 0 && mapY >= 0 && mapX < _map.Dimensions.X && mapY < _map.Dimensions.Y)
             {
                 if (layer.GetTile(mapX, mapY) == null)
                     return;
 
-                layer.GetTile(mapX, mapY).Descriptor.Attribute = TileAttributes.None;
+                layer.GetTile(mapX, mapY).Attribute = null;
 
-                _tileAttributeSprites.Remove(new Tuple<string, Vector2>(layer.Descriptor.Name, new Vector2(mapX, mapY)));
+                _tileAttributeSprites.Remove(new Tuple<string, Vector2>(layer.Name, new Vector2(mapX, mapY)));
 
                 this.MarkUnsaved();
             }
         }
 
-        private void PlaceTileAttribute(int mapX, int mapY, TileAttributes attribute)
+        private void PlaceTileAttribute(int mapX, int mapY, TileAttribute attribute)
         {
             // Make sure the layer exists
-            if (!_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
+            if (!_map.LayerExists(_dockLayers.SelectedLayer))
                 return;
 
-            var layer = _map.Layers[_dockLayers.SelectedLayer];
+            var layer = _map.GetLayer(_dockLayers.SelectedLayer);
 
-            if (mapX >= 0 && mapY >= 0 && mapX < _map.Descriptor.Dimensions.X && mapY < _map.Descriptor.Dimensions.Y)
+            if (mapX >= 0 && mapY >= 0 && mapX < _map.Dimensions.X && mapY < _map.Dimensions.Y)
             {
                 if (layer.GetTile(mapX, mapY) == null)
                 {
@@ -609,48 +594,24 @@ namespace Lunar.Editor.Controls
                     layer.SetTile(mapX, mapY, tile);
                 }
 
-                layer.GetTile(mapX, mapY).Descriptor.Attribute = attribute;
-                layer.GetTile(mapX, mapY).Descriptor.AttributeData = _dockMapAttributes.AttributeData;
+                layer.GetTile(mapX, mapY).Attribute = attribute;
 
                 MemoryStream memStream = new MemoryStream();
                 Icons.NullObject.Save(memStream, ImageFormat.Png);
 
                 var texture = _mapTextureLoader.LoadFromFileStream(memStream);
 
-                var attributeSprite = new Sprite(texture)
-                {
-                    Position = new Vector2(mapX * EngineConstants.TILE_SIZE, mapY * EngineConstants.TILE_SIZE),
-                    LayerDepth = layer.Descriptor.ZIndex + .02f // place it slightly above the layer's tile
-                };
+                var attributeSprite = new Sprite(texture);
 
-                switch (attribute)
-                {
-                    case TileAttributes.Blocked:
-                        attributeSprite.Color = new Color(Color.Red, 100);
-                        break;
+                attributeSprite.Transform.Position = new Vector2(mapX * EngineConstants.TILE_SIZE, mapY * EngineConstants.TILE_SIZE);
+                attributeSprite.Transform.LayerDepth = layer.ZIndex + .02f; // place it slightly above the layer's tile
 
-                    case TileAttributes.PlayerSpawn:
-                        attributeSprite.Color = new Color(Color.Blue, 100);
-                        break;
+                if (attribute == null)
+                    attributeSprite.Transform.Color = Color.Transparent;
+                else
+                    attributeSprite.Transform.Color = attribute.Color;
 
-                    case TileAttributes.Warp:
-                        attributeSprite.Color = new Color(Color.Purple, 100);
-                        break;
-
-                    case TileAttributes.NPCSpawn:
-                        attributeSprite.Color = new Color(Color.DarkGreen, 100);
-                        break;
-
-                    case TileAttributes.StartDialogue:
-                        attributeSprite.Color = new Color(Color.CornflowerBlue, 100);
-                        break;
-
-                    default:
-                        attributeSprite.Color = Color.Transparent;
-                        break;
-                }
-
-                var locationKey = new Tuple<string, Vector2>(layer.Descriptor.Name, new Vector2(mapX, mapY));
+                var locationKey = new Tuple<string, Vector2>(layer.Name, new Vector2(mapX, mapY));
 
                 if (!_tileAttributeSprites.ContainsKey(locationKey))
                     _tileAttributeSprites.Add(locationKey, attributeSprite);
@@ -663,7 +624,7 @@ namespace Lunar.Editor.Controls
 
         private void PlaceMapObject(int mapX, int mapY)
         {
-            if (!_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
+            if (!_map.LayerExists(_dockLayers.SelectedLayer))
                 return;
 
             MemoryStream memStream = new MemoryStream();
@@ -671,17 +632,17 @@ namespace Lunar.Editor.Controls
 
             var texture = _mapTextureLoader.LoadFromFileStream(memStream);
 
-            var mapObject = new MapObject(new Vector2(mapX * EngineConstants.TILE_SIZE, mapY * EngineConstants.TILE_SIZE), _map.Layers[_dockLayers.SelectedLayer])
+            var mapObject = new MapObject(new Vector2(mapX * EngineConstants.TILE_SIZE, mapY * EngineConstants.TILE_SIZE), _map.GetLayer(_dockLayers.SelectedLayer))
             {
                 Sprite = new Sprite(texture)
-                {
-                    LayerDepth = _map.Layers[_dockLayers.SelectedLayer].Descriptor.ZIndex + .01f, // Display the map objects slightly above the layer
-                }
             };
+
+            // Display the map objects slightly above the layer
+            mapObject.Sprite.Transform.LayerDepth = _map.GetLayer(_dockLayers.SelectedLayer).ZIndex + .01f;
 
             mapObject.Sprite.Texture.Tag = "null";
 
-            _map.Layers[_dockLayers.SelectedLayer].MapObjects.Add(mapObject);
+            _map.GetLayer(_dockLayers.SelectedLayer).MapObjects.Add(mapObject);
 
             _dockMapObject.SetSubject(new MapObjectPropertiesHelper(mapObject, _mapTextureLoader, _project));
 
@@ -690,12 +651,12 @@ namespace Lunar.Editor.Controls
 
         private void RemoveTile(int mapX, int mapY)
         {
-            if (!_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
+            if (!_map.LayerExists(_dockLayers.SelectedLayer))
                 return;
 
-            if (mapX >= 0 && mapY >= 0 && mapX < _map.Descriptor.Dimensions.X && mapY < _map.Descriptor.Dimensions.Y)
+            if (_map.WithinBounds(mapX, mapY))
             {
-                _map.Layers[_dockLayers.SelectedLayer].SetTile(mapX, mapY, new Tile());
+                _map.GetLayer(_dockLayers.SelectedLayer).SetTile(mapX, mapY, new Tile());
 
                 this.MarkUnsaved();
             }
@@ -714,10 +675,10 @@ namespace Lunar.Editor.Controls
             int placeTilesHeight = (int)Math.Round(_dockTilesetTools.SelectRectangle.Height / (float)EngineConstants.TILE_SIZE);
 
             // Make sure the layer exists
-            if (!_map.Layers.ContainsKey(_dockLayers.SelectedLayer))
+            if (!_map.LayerExists(_dockLayers.SelectedLayer))
                 return;
 
-            var layer = _map.Layers[_dockLayers.SelectedLayer];
+            var layer = _map.GetLayer(_dockLayers.SelectedLayer);
 
             int tSetX = _dockTilesetTools.SelectRectangle.X;
             int tSetY = _dockTilesetTools.SelectRectangle.Y;
@@ -726,13 +687,13 @@ namespace Lunar.Editor.Controls
             {
                 for (int y = mapY; y < mapY + placeTilesHeight; y++)
                 {
-                    if (x >= 0 && y >= 0 && x < _map.Descriptor.Dimensions.X && y < _map.Descriptor.Dimensions.Y)
+                    if (_map.WithinBounds(mapX, mapY))
                     {
                         // Create a new tile at the specified x & y
                         Tile tile = new Tile(tilesetTexture2D, new Rectangle(tSetX, tSetY, EngineConstants.TILE_SIZE, EngineConstants.TILE_SIZE),
                             new Vector2(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE))
                         {
-                            ZIndex = layer.Descriptor.ZIndex
+                            ZIndex = layer.ZIndex
                         };
 
                         layer.SetTile(x, y, tile);
@@ -878,7 +839,7 @@ namespace Lunar.Editor.Controls
             else if ((Control.ModifierKeys & Keys.Control) == Keys.Control && e.KeyCode == Keys.A && _placementMode == PlacementMode.Select)
             {
                 _selectPosition = Vector2.Zero;
-                _selectRectangle = new Rectangle(0, 0, (int)_map.Descriptor.Dimensions.X * EngineConstants.TILE_SIZE, (int)_map.Descriptor.Dimensions.Y * EngineConstants.TILE_SIZE);
+                _selectRectangle = new Rectangle(0, 0, (int)_map.Dimensions.X * EngineConstants.TILE_SIZE, (int)_map.Dimensions.Y * EngineConstants.TILE_SIZE);
             }
 
             this.OnKeyDown(e);

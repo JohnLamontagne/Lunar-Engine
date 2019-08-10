@@ -10,7 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Microsoft.Xna.Framework;
+using XNARectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Lunar.Core.Utilities.Data
 {
@@ -19,29 +21,29 @@ namespace Lunar.Core.Utilities.Data
     /// </summary>
     public struct Rect
     {
-        private Rectangle _rectangle;
+        private XNARectangle _rectangle;
 
-        public int Left => _rectangle.Left;
+        public int X => _rectangle.Left;
 
-        public int Top => _rectangle.Top;
+        public int Y => _rectangle.Top;
 
         public int Width => _rectangle.Width;
 
         public int Height => _rectangle.Height;
 
         public Rect(int left, int top, int width, int height)
-        { 
-            _rectangle = new Rectangle(left, top, width, height);
+        {
+            _rectangle = new XNARectangle(left, top, width, height);
         }
 
         public Rect(float left, float top, float width, float height)
         {
-            _rectangle = new Rectangle((int)left, (int)top, (int)width, (int)height);
+            _rectangle = new XNARectangle((int)left, (int)top, (int)width, (int)height);
         }
 
         public override string ToString()
         {
-            return $"[{this.Left}, {this.Top}, {this.Width}, {this.Height}]";
+            return $"[{this.X}, {this.Y}, {this.Width}, {this.Height}]";
         }
 
         public bool Contains(Vector point)
@@ -51,12 +53,27 @@ namespace Lunar.Core.Utilities.Data
 
         public bool Intersects(Rect rect)
         {
-            return _rectangle.Intersects(new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height));
+            return _rectangle.Intersects(rect);
         }
 
         public Rect Move(float dX, float dY)
         {
-            return new Rect(this.Left + dX, this.Top + dY, this.Width, this.Height);
+            return new Rect(this.X + dX, this.Y + dY, this.Width, this.Height);
+        }
+
+        public Rect MoveTo(float x, float y)
+        {
+            return new Rect(x, y, this.Width, this.Height);
+        }
+
+        public static implicit operator Rect(XNARectangle rect)
+        {
+            return new Rect(rect.X, rect.Y, rect.Width, rect.Height);
+        }
+
+        public static implicit operator XNARectangle(Rect rect)
+        {
+            return new XNARectangle(rect.X, rect.Y, rect.Width, rect.Height);
         }
     }
 }

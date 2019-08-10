@@ -109,7 +109,7 @@ namespace Lunar.Client.World.Actors
                 _direction = value;
 
                 if (this.SpriteSheet != null)
-                    this.SpriteSheet.Sprite.SourceRectangle = new Rectangle(this.SpriteSheet.Sprite.SourceRectangle.Left, (int)_direction * (int)_frameSize.Y, (int)_frameSize.X, (int)_frameSize.Y);
+                    this.SpriteSheet.Sprite.Transform.Rect = new Rectangle(this.SpriteSheet.Sprite.Transform.Rect.X, (int)_direction * (int)_frameSize.Y, (int)_frameSize.X, (int)_frameSize.Y);
             }
         }
 
@@ -307,7 +307,7 @@ namespace Lunar.Client.World.Actors
             var layerName = buffer.ReadString();
             _layer = Engine.Services.Get<WorldManager>().Map.GetLayer(layerName);
 
-            this.SpriteSheet.Sprite.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);
+            this.SpriteSheet.Sprite.Transform.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);
             this.SpriteSheet.HorizontalFrameIndex = 1;
             this.SpriteSheet.VerticalFrameIndex = (int)this.Direction;
         }

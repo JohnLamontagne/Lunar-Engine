@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
 using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
@@ -25,14 +26,14 @@ namespace Lunar.Client.World
         private CollisionDescriptor _collisionDescriptor;
         private string _name;
         private Sprite _sprite;
-        
+
         public int Amount { get; set; }
 
         public string Name => _name;
 
         public Sprite Sprite => _sprite;
 
-        public Vector2 Position => _sprite.Position;
+        public Vector2 Position => _sprite.Transform.Position;
 
         public MapItem()
         {
@@ -45,12 +46,10 @@ namespace Lunar.Client.World
 
             var textureName = netBuffer.ReadString();
             _sprite = new Sprite(Client.ServiceLocator.Get<ContentManagerService>()
-                .ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName))
-            {
-                Position = position,
-                LayerDepth = layer.ZIndex + .001f, // the .001f makes it so that the item spawns above the map layer, but just below actors
-            };
+                .ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName));
 
+            _sprite.Transform.Position = position;
+            _sprite.Transform.LayerDepth = layer.ZIndex + .001f; // the .001f makes it so that the item spawns above the map layer, but just below actors
         }
 
         public void Draw(SpriteBatch spriteBatch)

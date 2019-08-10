@@ -39,7 +39,6 @@ namespace Lunar.Editor.Controls
         }
 
         public string[] Layers => this.lstLayers.Items.Cast<string>().Select(l => l.ToString()).ToArray();
-                                  
 
         public DockLayers()
         {
@@ -47,8 +46,8 @@ namespace Lunar.Editor.Controls
 
             this.lstLayers.ItemCheck += (sender, args) =>
             {
-                if (_map != null && _map.Layers.ContainsKey(this.lstLayers.Items[args.Index].ToString()))
-                    _map.Layers[this.lstLayers.Items[args.Index].ToString()].Visible = args.NewValue == CheckState.Checked;
+                if (_map != null && _map.LayerExists(this.lstLayers.Items[args.Index].ToString()))
+                    _map.GetLayer(this.lstLayers.Items[args.Index].ToString()).Visible = args.NewValue == CheckState.Checked;
             };
         }
 
@@ -61,9 +60,9 @@ namespace Lunar.Editor.Controls
 
             this.lstLayers.Items.Clear();
 
-            foreach (var layer in _map.Layers.Values)
+            foreach (var layer in _map.Layers)
             {
-                this.lstLayers.Items.Add(layer.Descriptor.Name, true);
+                this.lstLayers.Items.Add(layer.Name, true);
             }
 
             this.lstLayers.SelectedItem = this.lstLayers.Items[0];
@@ -72,7 +71,7 @@ namespace Lunar.Editor.Controls
 
         public void AddLayer(string layerName)
         {
-            if (_map.Layers.ContainsKey(layerName))
+            if (_map.LayerExists(layerName))
             {
                 return;
             }
@@ -82,21 +81,21 @@ namespace Lunar.Editor.Controls
             this.lstLayers.SelectedItem = this.lstLayers.Items[this.lstLayers.Items.Count - 1];
             this.lstLayers.SetItemChecked(this.lstLayers.Items.Count - 1, true);
 
-            _map.Layers.Add(layerName, new Layer(_map.Descriptor.Dimensions, layerName, _map.Layers.Count + 1));
+            _map.AddLayer(layerName, new Layer(_map.Dimensions, layerName, _map.Layers.Count + 1));
 
             this.LayersUpdated?.Invoke(this, new EventArgs());
         }
 
         public void RemoveLayer(string layerName)
         {
-            if (!_map.Layers.ContainsKey(layerName))
+            if (!_map.LayerExists(layerName))
             {
                 return;
             }
 
             this.lstLayers.Items.Remove(layerName);
 
-            _map.Layers.Remove(layerName);
+            _map.RemoveLayer(layerName);
 
             this.LayersUpdated?.Invoke(this, new EventArgs());
         }
@@ -143,11 +142,10 @@ namespace Lunar.Editor.Controls
             this.lstLayers.Items.Insert(index, data);
             this.lstLayers.SetItemChecked(index, checkState);
 
-
             int lIndex = 0;
             foreach (var layerName in this.Layers)
             {
-                _map.Layers[layerName].Descriptor.LayerIndex = lIndex++;
+                _map.GetLayer(layerName).LayerIndex = lIndex++;
             }
         }
 

@@ -13,6 +13,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 
@@ -88,8 +89,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                     binaryWriter.Write(this.Stats.Health);
                     binaryWriter.Write(this.Stats.Intelligence);
                     binaryWriter.Write(this.Stats.MaximumHealth);
-                    binaryWriter.Write(this.CollisionBounds.Left);
-                    binaryWriter.Write(this.CollisionBounds.Top);
+                    binaryWriter.Write(this.CollisionBounds.X);
+                    binaryWriter.Write(this.CollisionBounds.Y);
                     binaryWriter.Write(this.CollisionBounds.Width);
                     binaryWriter.Write(this.CollisionBounds.Height);
                     binaryWriter.Write(this.AggresiveRange);
@@ -212,6 +213,11 @@ namespace Lunar.Core.World.Actor.Descriptors
         public override string ToString()
         {
             return this.Name;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

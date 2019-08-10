@@ -7,65 +7,56 @@ using Lunar.Graphics;
 
 namespace Lunar.Editor.World
 {
-    public class Tile
+    public class Tile : BaseTile<Sprite>
     {
-        private TileDescriptor _descriptor;
-
-        public TileDescriptor Descriptor => _descriptor;
-
         private long _nextAnimationTime;
         private Sprite _sprite;
 
         public float ZIndex
         {
-            get => this.Sprite.LayerDepth;
+            get => this.Sprite.Transform.LayerDepth;
             set
             {
-                this.Sprite.LayerDepth = value;
-                _descriptor.SpriteInfo.Transform.LayerDepth = value;
+                this.Sprite.Transform.LayerDepth = value;
             }
         }
 
-        public Sprite Sprite
+        public override Sprite Sprite
         {
             get { return _sprite; }
             set
             {
                 _sprite = value;
+                _sprite.TextureName = this.Sprite.Texture.Tag.ToString();
 
-                _descriptor.SpriteInfo = new SpriteInfo(this.Sprite.Texture.Tag.ToString());
-                _descriptor.Position = new Vector(this.Sprite.Position.X, this.Sprite.Position.Y);
-                _descriptor.SpriteInfo.Transform = new Transform()
-                {
-                    Rect = new Rect(this.Sprite.SourceRectangle.Left, this.Sprite.SourceRectangle.Top, this.Sprite.SourceRectangle.Width, this.Sprite.SourceRectangle.Height),
-                    Color = new Core.Content.Graphics.Color(this.Sprite.Color.R, this.Sprite.Color.G, this.Sprite.Color.B, this.Sprite.Color.A),
-                    LayerDepth = this.Sprite.LayerDepth,
-                    Position = this.Sprite.Position
-                };
+                this.Position = new Vector(this.Sprite.Transform.Position.X, this.Sprite.Transform.Position.Y);
             }
         }
 
-        public Tile(TileDescriptor descriptor)
+        public Tile(BaseTile<SpriteInfo> descriptor)
         {
-            _descriptor = descriptor;
+            this.Animated = descriptor.Animated;
+            this.Attribute = descriptor.Attribute;
+            this.Blocked = descriptor.Blocked;
+            this.FrameCount = descriptor.FrameCount;
+            this.LightColor = descriptor.LightColor;
+            this.LightRadius = descriptor.LightRadius;
+            this.LightSource = descriptor.LightSource;
+            this.Position = descriptor.Position;
+            this.Teleporter = descriptor.Teleporter;
         }
 
-        public Tile(Texture2D texture, Rectangle sourceRectangle, Vector2 position)
+        public Tile(Texture2D texture, Microsoft.Xna.Framework.Rectangle sourceRectangle, Vector2 position)
             : this()
         {
-            this.Sprite = new Sprite(texture)
-            {
-                SourceRectangle = sourceRectangle,
-                Position = position,
-            };
-
+            this.Sprite = new Sprite(texture);
+            this.Sprite.Transform.Rect = sourceRectangle;
+            this.Sprite.Transform.Position = position;
         }
 
         public Tile()
         {
-            _descriptor = new TileDescriptor(null);
         }
-
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -75,13 +66,10 @@ namespace Lunar.Editor.World
 
         public void Update(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime.TotalMilliseconds >= _nextAnimationTime && this.Descriptor.Animated)
+            if (gameTime.TotalGameTime.TotalMilliseconds >= _nextAnimationTime && this.Animated)
             {
-
                 _nextAnimationTime = (long)gameTime.TotalGameTime.TotalMilliseconds + 300;
             }
         }
-
-       
     }
 }

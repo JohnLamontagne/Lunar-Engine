@@ -8,78 +8,55 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Editor.Utilities;
 using Lunar.Graphics;
+using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Editor.World
 {
-    public class Map
+    public class Map : BaseMap<Layer>
     {
-        private MapDescriptor _descriptor;
-
-        private Dictionary<string, Layer> _layers;
-
         private Dictionary<string, Texture2D> _tilesets;
-
-        public string Name
-        {
-            get { return this.Descriptor.Name; }
-
-            set { this.Descriptor.Name = value; }
-        }
-
-        [Browsable(false)]
-        public MapDescriptor Descriptor => _descriptor;
 
         [Browsable(false)]
         public IEnumerable<Texture2D> Tilesets => _tilesets.Values;
 
-        [Browsable(false)]
-        public Dictionary<string, Layer> Layers => _layers;
+        public int Height { get => (int)this.Dimensions.Y; set => this.Dimensions = new Core.Utilities.Data.Vector(this.Dimensions.X, value); }
 
-
-
-        [Browsable(false)]
-        public Rectangle Bounds { get; private set; }
-
-        public int Height { get => (int)this.Descriptor.Dimensions.Y; set => this.Descriptor.Dimensions = new Core.Utilities.Data.Vector(this.Descriptor.Dimensions.X, value); }
-
-        public int Width { get => (int)this.Descriptor.Dimensions.X; set => this.Descriptor.Dimensions = new Core.Utilities.Data.Vector(value, this.Descriptor.Dimensions.Y); }
-
-        public bool Dark { get; set; }
+        public int Width { get => (int)this.Dimensions.X; set => this.Dimensions = new Core.Utilities.Data.Vector(value, this.Dimensions.Y); }
 
         public Map(Vector2 dimensions, string name)
         {
-            _descriptor = new MapDescriptor(dimensions, name);
+            this.Name = name;
+            this.Dimensions = dimensions;
 
-            _layers = new Dictionary<string, Layer>();
             _tilesets = new Dictionary<string, Texture2D>();
 
-           
-            this.AddLayer("Ground", new Layer(this.Descriptor.Dimensions, "Ground", 0));
-            this.AddLayer("Mask1", new Layer(this.Descriptor.Dimensions, "Mask1", 1));
-            this.AddLayer("Mask2", new Layer(this.Descriptor.Dimensions, "Mask2", 2));
-            this.AddLayer("Fringe", new Layer(this.Descriptor.Dimensions, "Fringe", 3));
+            this.AddLayer("Ground", new Layer(this.Dimensions, "Ground", 0));
+            this.AddLayer("Mask1", new Layer(this.Dimensions, "Mask1", 1));
+            this.AddLayer("Mask2", new Layer(this.Dimensions, "Mask2", 2));
+            this.AddLayer("Fringe", new Layer(this.Dimensions, "Fringe", 3));
         }
 
-        public Map(MapDescriptor descriptor, TextureLoader textureLoader)
-            : this()
+        public Map(BaseMap<BaseLayer<BaseTile<SpriteInfo>>> descriptor, TextureLoader textureLoader, Project project)
+            : base(descriptor.TilesetPaths)
         {
-            _descriptor = descriptor;
-            _descriptor.DimensionsChanged += (sender, args) =>
+            _tilesets = new Dictionary<string, Texture2D>();
+
+            this.DimensionsChanged += (sender, args) =>
             {
-                if (_layers != null)
+                if (this.Layers != null)
                 {
-                    foreach (var layer in _layers.Values)
-                        layer.Resize(this.Descriptor.Dimensions);
+                    foreach (var layer in this.Layers)
+                        layer.Resize(this.Dimensions);
                 }
 
                 this.Map_Resized?.Invoke(this, new EventArgs());
             };
+
+            this.Initalize(project, textureLoader, descriptor);
         }
-       
 
         private Map()
         {
-            _layers = new Dictionary<string, Layer>();
             _tilesets = new Dictionary<string, Texture2D>();
         }
 
@@ -88,8 +65,8 @@ namespace Lunar.Editor.World
             if (!_tilesets.ContainsKey(Path.GetFileName(texture.Tag.ToString())))
                 _tilesets.Add(Path.GetFileName(texture.Tag.ToString()), texture);
 
-            if (!this.Descriptor.TilesetPaths.Contains(texture.Tag.ToString()))
-                this.Descriptor.TilesetPaths.Add(texture.Tag.ToString());
+            if (!this.TilesetPaths.Contains(texture.Tag.ToString()))
+                this.TilesetPaths.Add(texture.Tag.ToString());
         }
 
         public bool TilesetExists(string tilesetPath)
@@ -100,7 +77,7 @@ namespace Lunar.Editor.World
         public void RemoveTileset(string tilesetPath)
         {
             _tilesets.Remove(tilesetPath);
-            this.Descriptor.TilesetPaths.Remove(tilesetPath);
+            this.TilesetPaths.Remove(tilesetPath);
         }
 
         public Texture2D GetTileset(string tilesetPath)
@@ -108,38 +85,28 @@ namespace Lunar.Editor.World
             return _tilesets[tilesetPath];
         }
 
-        public void AddLayer(string layerName, Layer layer)
-        {
-            _layers.Add(layerName, layer);
-
-            _descriptor.Layers.Add(layerName, _layers[layerName].Descriptor);
-        }
-
-        public void RemoveLayer(string layerName)
-        {
-            _layers.Remove(layerName);
-            _descriptor.Layers.Remove(layerName);
-        }
-
-
-        
         public void Update(GameTime gameTime)
         {
-            foreach (var layer in _layers.Values)
+            foreach (var layer in this.Layers)
                 layer.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch, Camera camera)
         {
-            foreach (var layer in _layers.Values)
+            foreach (var layer in this.Layers)
             {
                 layer.Draw(spriteBatch, camera);
             }
         }
 
-        public void Initalize(Project project, TextureLoader textureLoader)
+        private void Initalize(Project project, TextureLoader textureLoader, BaseMap<BaseLayer<BaseTile<SpriteInfo>>> descriptor)
         {
-            foreach (var tilesetPath in this.Descriptor.TilesetPaths)
+            this.Name = descriptor.Name;
+            this.Bounds = descriptor.Bounds;
+            this.Dark = descriptor.Dark;
+            this.Dimensions = descriptor.Dimensions;
+
+            foreach (var tilesetPath in descriptor.TilesetPaths)
             {
                 if (File.Exists(project.ClientRootDirectory + "/" + tilesetPath))
                 {
@@ -155,7 +122,7 @@ namespace Lunar.Editor.World
                 }
             }
 
-            foreach (var layerDesc in this.Descriptor.Layers.Values)
+            foreach (var layerDesc in descriptor.Layers)
             {
                 var layer = new Layer(layerDesc);
 
@@ -169,14 +136,12 @@ namespace Lunar.Editor.World
                         {
                             Tile tile = new Tile(tileDesc);
 
-                            if (tileDesc.SpriteInfo != null && _tilesets.ContainsKey(Path.GetFileName(tileDesc.SpriteInfo.TextureName)))
+                            if (tileDesc.Sprite != null && _tilesets.ContainsKey(Path.GetFileName(tileDesc.Sprite.TextureName)))
                             {
-                                tile.Sprite = new Sprite(_tilesets[Path.GetFileName(tileDesc.SpriteInfo.TextureName)])
-                                {
-                                    LayerDepth = tileDesc.SpriteInfo.Transform.LayerDepth,
-                                    SourceRectangle = new Rectangle(tileDesc.SpriteInfo.Transform.Rect.Left, tileDesc.SpriteInfo.Transform.Rect.Top, tileDesc.SpriteInfo.Transform.Rect.Width, tileDesc.SpriteInfo.Transform.Rect.Height),
-                                    Position = new Vector2(tileDesc.Position.X, tileDesc.Position.Y)
-                                };
+                                tile.Sprite = new Sprite(_tilesets[Path.GetFileName(tileDesc.Sprite.TextureName)]);
+                                tile.Sprite.Transform.LayerDepth = tileDesc.Sprite.Transform.LayerDepth;
+                                tile.Sprite.Transform.Rect = tileDesc.Sprite.Transform.Rect;
+                                tile.Sprite.Transform.Position = tileDesc.Position;
                             }
                             layer.SetTile(x, y, tile);
                         }
@@ -184,11 +149,10 @@ namespace Lunar.Editor.World
                         {
                             layer.SetTile(x, y, new Tile());
                         }
-                        
                     }
                 }
-                
-                this.Layers.Add(layer.Descriptor.Name, layer);
+
+                this.AddLayer(layer.Name, layer);
             }
         }
 

@@ -10,8 +10,8 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
-using Microsoft.Xna.Framework;
 using Lunar.Core.Utilities.Data;
 using Color = Lunar.Core.Content.Graphics.Color;
 
@@ -29,10 +29,10 @@ namespace Lunar.Core.Net
             return netBuffer;
         }
 
-        public static NetBuffer Write(this NetBuffer netBuffer, Rect intRect)
+        public static NetBuffer Write(this NetBuffer netBuffer, Utilities.Data.Rect intRect)
         {
-            netBuffer.Write(intRect.Left);
-            netBuffer.Write(intRect.Top);
+            netBuffer.Write(intRect.X);
+            netBuffer.Write(intRect.Y);
             netBuffer.Write(intRect.Width);
             netBuffer.Write(intRect.Height);
 
@@ -52,7 +52,7 @@ namespace Lunar.Core.Net
             return new Color(netBuffer.ReadByte(), netBuffer.ReadByte(), netBuffer.ReadByte(), netBuffer.ReadByte());
         }
 
-        public static Rect ReadIntRect(this NetBuffer netBuffer)
+        public static Rect ReadRect(this NetBuffer netBuffer)
         {
             return new Rect(netBuffer.ReadInt32(), netBuffer.ReadInt32(), netBuffer.ReadInt32(), netBuffer.ReadInt32());
         }
@@ -60,11 +60,6 @@ namespace Lunar.Core.Net
         public static Vector ReadVector(this NetBuffer netBuffer)
         {
             return new Vector(netBuffer.ReadFloat(), netBuffer.ReadFloat());
-        }
-
-        public static Vector2 ReadVector2(this NetBuffer netBuffer)
-        {
-            return new Vector2(netBuffer.ReadFloat(), netBuffer.ReadFloat());
         }
     }
 }

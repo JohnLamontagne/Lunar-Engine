@@ -28,7 +28,7 @@ namespace Lunar.Server.World.Structure
             {
                 if (_actor?.Descriptor?.CollisionBounds != null)
                 {
-                    return new Rect(_actor.Descriptor.Position.X + _actor.Descriptor.CollisionBounds.Left, _actor.Descriptor.Position.Y + _actor.Descriptor.CollisionBounds.Top,
+                    return new Rect(_actor.Descriptor.Position.X + _actor.Descriptor.CollisionBounds.X, _actor.Descriptor.Position.Y + _actor.Descriptor.CollisionBounds.Y,
                         _actor.Descriptor.CollisionBounds.Width, _actor.Descriptor.CollisionBounds.Height);
                 }
                 else
@@ -60,14 +60,14 @@ namespace Lunar.Server.World.Structure
 
         public bool Collides(CollisionBody collisionBody, Vector reach)
         {
-            Rect reachArea = new Rect(this.CollisionArea.Left, this.CollisionArea.Top, this.CollisionArea.Width + reach.X, this.CollisionArea.Height + reach.Y);
+            Rect reachArea = new Rect(this.CollisionArea.X, this.CollisionArea.Y, this.CollisionArea.Width + reach.X, this.CollisionArea.Height + reach.Y);
 
             return (reachArea.Intersects(collisionBody.CollisionArea));
         }
 
         public bool Collides(IActor<IActorDescriptor> actor, Vector reach)
         {
-            Rect reachArea = new Rect(this.CollisionArea.Left, this.CollisionArea.Top, this.CollisionArea.Width + reach.X, this.CollisionArea.Height + reach.Y);
+            Rect reachArea = new Rect(this.CollisionArea.X, this.CollisionArea.Y, this.CollisionArea.Width + reach.X, this.CollisionArea.Height + reach.Y);
 
             return (reachArea.Intersects(actor.CollisionBody.CollisionArea));
         }

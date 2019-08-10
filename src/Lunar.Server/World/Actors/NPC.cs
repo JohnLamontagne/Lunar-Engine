@@ -82,7 +82,7 @@ namespace Lunar.Server.World.Actors
         {
             if (definition == null)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Null npc spawned on map {map.Descriptor.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Descriptor.Name}!"));
+                Engine.Services.Get<Logger>().LogEvent($"Null npc spawned on map {map.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Name}!"));
                 definition = new NPCDefinition(NPCDescriptor.Create("null"));
             }
 
@@ -207,10 +207,10 @@ namespace Lunar.Server.World.Actors
         /// <returns></returns>
         public bool WithinRangeOf(IActor<IActorDescriptor> actor, int range)
         {
-            Rect collisionBoundsRight = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top,
+            Rect collisionBoundsRight = new Rect(this.CollisionBody.CollisionArea.X, this.CollisionBody.CollisionArea.Y,
                 this.CollisionBody.CollisionArea.Width + range, this.CollisionBody.CollisionArea.Height + range);
 
-            Rect collisionBoundsLeft = new Rect(this.CollisionBody.CollisionArea.Left - range, this.CollisionBody.CollisionArea.Top - range,
+            Rect collisionBoundsLeft = new Rect(this.CollisionBody.CollisionArea.X - range, this.CollisionBody.CollisionArea.Y - range,
                 this.CollisionBody.CollisionArea.Width, this.CollisionBody.CollisionArea.Height);
 
             return (actor.CollisionBody.Collides(collisionBoundsRight) || actor.CollisionBody.Collides(collisionBoundsLeft));
@@ -301,19 +301,19 @@ namespace Lunar.Server.World.Actors
             switch (this.Direction)
             {
                 case Direction.Right:
-                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left + delta, this.CollisionBody.CollisionArea.Top, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.X + delta, this.CollisionBody.CollisionArea.Y, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
 
                 case Direction.Left:
-                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left - delta, this.CollisionBody.CollisionArea.Top, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.X - delta, this.CollisionBody.CollisionArea.Y, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
 
                 case Direction.Up:
-                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top - delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.X, this.CollisionBody.CollisionArea.Y - delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
 
                 case Direction.Down:
-                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.Left, this.CollisionBody.CollisionArea.Top + delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
+                    destCollisionArea = new Rect(this.CollisionBody.CollisionArea.X, this.CollisionBody.CollisionArea.Y + delta, this.Descriptor.CollisionBounds.Width, this.Descriptor.CollisionBounds.Height);
                     break;
             }
 
@@ -450,7 +450,7 @@ namespace Lunar.Server.World.Actors
             netBuffer.Write(this.Descriptor.Position.Y);
             netBuffer.Write(this.Descriptor.FrameSize);
             netBuffer.Write(this.Descriptor.CollisionBounds);
-            netBuffer.Write(this.Layer.Descriptor.Name);
+            netBuffer.Write(this.Layer.Name);
 
             return netBuffer;
         }

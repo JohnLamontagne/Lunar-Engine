@@ -86,14 +86,14 @@ namespace Lunar.Client.World
                 mapObject.Draw(spriteBatch);
         }
 
-        public bool CheckCollision(Vector2 position, Rect collisionBounds)
+        public bool CheckCollision(Vector2 position, Core.Utilities.Data.Rect collisionBounds)
         {
             return this.CheckCollision(new Vector2(position.X, position.Y), collisionBounds);
         }
 
-        public bool CheckCollision(Vector2 position, Rectangle collisionBounds)
+        public bool CheckCollision(Vector2 position, Microsoft.Xna.Framework.Rectangle collisionBounds)
         {
-            Rectangle collisionArea = new Rectangle((int)(position.X + collisionBounds.Left), (int)(position.Y + collisionBounds.Top),
+            Microsoft.Xna.Framework.Rectangle collisionArea = new Microsoft.Xna.Framework.Rectangle((int)(position.X + collisionBounds.Left), (int)(position.Y + collisionBounds.Top),
                collisionBounds.Width, collisionBounds.Height);
 
             if (collisionArea.Left < 0 || collisionArea.Top < 0 ||
@@ -180,7 +180,7 @@ namespace Lunar.Client.World
             {
                 var position = new Vector2(netBuffer.ReadInt32(), netBuffer.ReadInt32());
 
-                var collisionArea = new Rectangle(netBuffer.ReadInt32(), netBuffer.ReadInt32(), netBuffer.ReadInt32(), netBuffer.ReadInt32());
+                var collisionArea = new Microsoft.Xna.Framework.Rectangle(netBuffer.ReadInt32(), netBuffer.ReadInt32(), netBuffer.ReadInt32(), netBuffer.ReadInt32());
 
                 var collisionDescriptor = new CollisionDescriptor(collisionArea);
 

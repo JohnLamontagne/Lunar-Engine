@@ -11,64 +11,62 @@
 	limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using Lidgren.Network;
-using Lunar.Core;
+using Lunar.Core.Content.Graphics;
 using Lunar.Core.Net;
-using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Structure;
-using Lunar.Core.World.Structure.TileAttribute;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Actors;
+using Lunar.Server.World.Structure.Attribute;
 
 namespace Lunar.Server.World.Structure
 {
-    public class Tile
+    public class Tile : BaseTile<SpriteInfo>
     {
-        private TileDescriptor _descriptor;
-        private NPCHeartbeatListener _heartbeatListener;
-        private double _nextNPCSpawnTime;
         private Rect _collisionArea;
 
-        public TileDescriptor Descriptor => _descriptor;
+        public Layer Layer { get; }
 
-        public Tile(TileDescriptor descriptor)
+        protected Tile(BaseTile<SpriteInfo> tileData)
         {
-            _descriptor = descriptor;
+            this.Animated = tileData.Animated;
+            this.Attribute = tileData.Attribute;
+            this.Blocked = tileData.Blocked;
+            this.FrameCount = tileData.FrameCount;
+            this.LightColor = tileData.LightColor;
+            this.LightRadius = tileData.LightRadius;
+            this.LightSource = tileData.LightSource;
+            this.Position = tileData.Position;
+            this.Sprite = tileData.Sprite;
+            this.Teleporter = tileData.Teleporter;
+        }
 
-            if (descriptor.SpriteInfo != null)
-                _collisionArea = new Rect(descriptor.SpriteInfo.Transform.Position.X, descriptor.SpriteInfo.Transform.Position.Y, Settings.TileSize, Settings.TileSize);
+        public Tile(Layer layer, BaseTile<SpriteInfo> tileData)
+            : this(tileData)
+        {
+            this.Layer = layer;
+
+            if (this.Attribute != null)
+                this.Attribute.ActionHandler = TileAttributeActionHandlerFactory.Create(this.Attribute);
+
+            if (this.Sprite != null)
+                _collisionArea = new Rect(this.Sprite.Transform.Position.X, this.Sprite.Transform.Position.Y, Settings.TileSize, Settings.TileSize);
             else
-                _collisionArea = new Rect(descriptor.Position.X, descriptor.Position.Y, Settings.TileSize, Settings.TileSize);
+                _collisionArea = new Rect(this.Position.X, this.Position.Y, Settings.TileSize, Settings.TileSize);
 
-            _heartbeatListener = new NPCHeartbeatListener();
+            this.Attribute?.ActionHandler?.OnInitalize(new TileAttributeArgs(this.Attribute, this));
         }
 
         public Tile(Vector position)
         {
-            _descriptor = new TileDescriptor(position);
             _collisionArea = new Rect(position.X, position.Y, Settings.TileSize, Settings.TileSize);
-            _heartbeatListener = new NPCHeartbeatListener();
         }
 
         public void Update(GameTime gameTime)
         {
-            if (this.Descriptor.Attribute == TileAttributes.NPCSpawn)
-            {
-                var attributeData = ((NPCSpawnAttributeData)this.Descriptor.AttributeData);
-
-                if (_nextNPCSpawnTime <= gameTime.TotalGameTime.TotalMilliseconds && _heartbeatListener.NPCs.Count < attributeData.MaxSpawns)
-                {
-                    this.NPCSpawnerEvent?.Invoke(this, new NPCSpawnerEventArgs(attributeData.NPCID, attributeData.MaxSpawns, this.Descriptor.Position, _heartbeatListener));
-
-                    _nextNPCSpawnTime = gameTime.TotalGameTime.TotalMilliseconds + ((NPCSpawnAttributeData)this.Descriptor.AttributeData).RespawnTime * 1000;
-                }
-            }
+            this.Attribute?.ActionHandler?.OnUpdate(new TileAttributeUpdateArgs(this.Attribute, gameTime, this));
         }
 
         public bool CheckCollision(Rect collisionArea)
@@ -78,40 +76,12 @@ namespace Lunar.Server.World.Structure
 
         public void OnPlayerEntered(Player player)
         {
-            switch (this.Descriptor.Attribute)
-            {
-                case TileAttributes.Warp:
-                    WarpAttributeData attributeData = (WarpAttributeData)this.Descriptor.AttributeData;
-                    if (player.MapID != attributeData.WarpMap)
-                    {
-                        var map = Engine.Services.Get<WorldManager>().GetMap(attributeData.WarpMap);
-
-                        if (map != null)
-                        {
-                            player.JoinMap(map);
-
-                            var newLayer = map.Layers.FirstOrDefault(l => l.Descriptor.Name == attributeData.LayerName);
-
-                            if (newLayer != null)
-                            {
-                                player.Layer = newLayer;
-                            }
-                        }
-                        else
-                        {
-                            Engine.Services.Get<Logger>().LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR,
-                                new Exception($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!"));
-
-                            return;
-                        }
-                    }
-                    player.WarpTo(new Vector(attributeData.X, attributeData.Y));
-                    break;
-            }
+            this.Attribute?.ActionHandler?.OnPlayerEntered(new TileAttributePlayerArgs(this.Attribute, this, player));
         }
 
         public void OnPlayerLeft(Player player)
         {
+            this.Attribute?.ActionHandler?.OnPlayerLeft(new TileAttributePlayerArgs(this.Attribute, this, player));
         }
 
         public NetBuffer PackData()
@@ -119,21 +89,21 @@ namespace Lunar.Server.World.Structure
             var netBuffer = new NetBuffer();
 
             // Tell the client whether it's a blank tile
-            netBuffer.Write(this.Descriptor.SpriteInfo == null);
+            netBuffer.Write(this.Sprite == null);
 
             // Is this a blank tile (determined based on the existence of a Sprite)
-            if (this.Descriptor.SpriteInfo != null)
+            if (this.Sprite != null)
             {
-                netBuffer.Write(this.Descriptor.LightSource);
-                netBuffer.Write(this.Descriptor.LightRadius);
-                netBuffer.Write(this.Descriptor.LightColor);
-                netBuffer.Write(this.Descriptor.Teleporter);
-                netBuffer.Write(this.Descriptor.SpriteInfo.TextureName);
-                netBuffer.Write(this.Descriptor.SpriteInfo.Transform.Color);
-                netBuffer.Write(this.Descriptor.SpriteInfo.Transform.Rect);
-                netBuffer.Write(this.Descriptor.SpriteInfo.Transform.Position);
-                netBuffer.Write(this.Descriptor.Animated);
-                netBuffer.Write(this.Descriptor.FrameCount);
+                netBuffer.Write(this.LightSource);
+                netBuffer.Write(this.LightRadius);
+                netBuffer.Write(this.LightColor);
+                netBuffer.Write(this.Teleporter);
+                netBuffer.Write(this.Sprite.TextureName);
+                netBuffer.Write(this.Sprite.Transform.Color);
+                netBuffer.Write(this.Sprite.Transform.Rect);
+                netBuffer.Write(this.Sprite.Transform.Position);
+                netBuffer.Write(this.Animated);
+                netBuffer.Write(this.FrameCount);
             }
 
             return netBuffer;
@@ -141,52 +111,6 @@ namespace Lunar.Server.World.Structure
 
         public void Load(BinaryReader bR, Vector tilePosition)
         {
-        }
-
-        public event EventHandler<NPCSpawnerEventArgs> NPCSpawnerEvent;
-
-        /// <summary>
-        /// Keeps track of the npcs which have been spawned as a result of this tile.
-        /// </summary>
-        public class NPCHeartbeatListener
-        {
-            public ObservableCollection<NPC> NPCs { get; }
-
-            public NPCHeartbeatListener()
-            {
-                this.NPCs = new ObservableCollection<NPC>();
-
-                this.NPCs.CollectionChanged += (sender, args) =>
-                {
-                    foreach (NPC npc in args.NewItems)
-                    {
-                        npc.Died += (o, eventArgs) =>
-                        {
-                            this.NPCs.Remove(npc);
-                        };
-                    }
-                };
-            }
-        }
-
-        public class NPCSpawnerEventArgs : EventArgs
-        {
-            public string NPCID { get; }
-
-            public int Count { get; }
-
-            public Vector Position { get; }
-
-            public NPCHeartbeatListener HeartbeatListener { get; }
-
-            public NPCSpawnerEventArgs(string npcID, int count, Vector position, NPCHeartbeatListener heartBeatListener)
-            {
-                this.NPCID = npcID;
-                this.Count = count;
-                this.Position = position;
-
-                this.HeartbeatListener = heartBeatListener;
-            }
         }
     }
 }

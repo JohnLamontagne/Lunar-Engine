@@ -64,7 +64,7 @@ namespace Lunar.Server.World.Actors
 
         public Map Map => _map;
 
-        public string MapID => _map != null ? _map.Descriptor.Name : _descriptor.MapID;
+        public string MapID => _map != null ? _map.Name : _descriptor.MapID;
 
         public long UniqueID => _connection.UniqueIdentifier;
 
@@ -385,7 +385,7 @@ namespace Lunar.Server.World.Actors
             buffer.Write(this.Descriptor.Position);
             buffer.Write(this.Descriptor.SpriteSheet.Pack());
             buffer.Write(this.Descriptor.CollisionBounds);
-            buffer.Write(this.Layer.Descriptor.Name);
+            buffer.Write(this.Layer.Name);
 
             return buffer;
         }

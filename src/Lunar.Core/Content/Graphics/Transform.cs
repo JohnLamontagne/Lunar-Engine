@@ -45,6 +45,10 @@ namespace Lunar.Core.Content.Graphics
             set { _color = value; }
         }
 
+        public float Rotation { get; set; }
+
+        public float Scale { get; set; }
+
         public float LayerDepth { get; set; }
 
         public Transform(Vector size)

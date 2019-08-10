@@ -64,14 +64,8 @@
     <Reference Include="IronPython.Wpf, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\libs\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.2.3.2\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.2.3.2\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    <Reference Include="Lidgren.Network, Version=2012.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lidgren.Network.1.0.2\lib\net451\Lidgren.Network.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamic, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Dynamic.dll</HintPath>
@@ -150,6 +144,9 @@
     <Compile Include="World\Conversation\DialogueArgs.cs" />
     <Compile Include="World\ItemArgs.cs" />
     <Compile Include="World\ItemInteractionArgs.cs" />
+    <Compile Include="World\Structure\Attribute\DialogueAttributeActionHandler.cs" />
+    <Compile Include="World\Structure\Attribute\TileAttributeActionHandler.cs" />
+    <Compile Include="World\Structure\Attribute\TileAttributeArgs.cs" />
     <Compile Include="World\Structure\CollisionDescriptor.cs" />
     <Compile Include="World\Structure\LightInformation.cs" />
     <Compile Include="World\Structure\MapItem.cs" />
@@ -161,7 +158,13 @@
     <Compile Include="World\Structure\Map.cs" />
     <Compile Include="World\Structure\MapManager.cs" />
     <Compile Include="World\Structure\MapObjectBehaviorDefinition.cs" />
+    <Compile Include="World\Actors\NPCHeartbeatListener.cs" />
     <Compile Include="World\Structure\Tile.cs" />
+    <Compile Include="World\Structure\Attribute\NPCSpawnAttributeActionHandler.cs" />
+    <Compile Include="World\Structure\Attribute\TileAttributeActionHandlerFactory.cs" />
+    <Compile Include="World\Structure\Attribute\TileAttributePlayerArgs.cs" />
+    <Compile Include="World\Structure\Attribute\TileAttributeUpdateArgs.cs" />
+    <Compile Include="World\Structure\Attribute\WarpTileAttributeActionHandler.cs" />
     <Compile Include="World\Structure\TorchMapObject.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>

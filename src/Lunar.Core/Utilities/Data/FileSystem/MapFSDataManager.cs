@@ -10,25 +10,25 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Structure;
+using Lunar.Core.World.Structure.Attribute;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class MapFSDataManager : FSDataManager<MapDescriptor>
+    public class MapFSDataManager : FSDataManager<BaseMap<BaseLayer<BaseTile<SpriteInfo>>>>
     {
         public MapFSDataManager()
         {
-            
         }
 
-        public override MapDescriptor Load(IDataManagerArguments arguments)
+        public override BaseMap<BaseLayer<BaseTile<SpriteInfo>>> Load(IDataManagerArguments arguments)
         {
-            MapDescriptor map = null;
+            BaseMap<BaseLayer<BaseTile<SpriteInfo>>> map = null;
 
             var mapArguments = (arguments as MapFSDataManagerArguments);
 
@@ -49,12 +49,11 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     string name = bR.ReadString();
                     var dimensions = new Vector(bR.ReadInt32(), bR.ReadInt32());
 
-                    map = new MapDescriptor(dimensions, name)
+                    map = new BaseMap<BaseLayer<BaseTile<SpriteInfo>>>(dimensions, name)
                     {
                         Dark = bR.ReadBoolean()
                     };
                     map.TilesetPaths.AddRange(tilesetPaths);
-
 
                     map.Bounds = new Rect(0, 0, (int)map.Dimensions.X, (int)map.Dimensions.Y);
 
@@ -64,7 +63,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                         string layerName = bR.ReadString();
                         int lIndex = bR.ReadInt32();
 
-                        var layer = new LayerDescriptor(map.Dimensions, layerName, lIndex);
+                        var layer = new BaseLayer<BaseTile<SpriteInfo>>(map.Dimensions, layerName, lIndex);
 
                         for (int x = 0; x < layer.Tiles.GetLength(0); x++)
                         {
@@ -72,16 +71,14 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                             {
                                 if (bR.ReadBoolean())
                                 {
+                                    layer.Tiles[x, y] = new BaseTile<SpriteInfo>(new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE));
 
-                                    layer.Tiles[x, y] = new TileDescriptor(new Vector(x * EngineConstants.TILE_SIZE,
-                                        y * EngineConstants.TILE_SIZE))
+                                    if (bR.ReadBoolean()) // Is there a valid attribute saved for this tile?
                                     {
-                                        Attribute = (TileAttributes)bR.ReadByte()
-                                    };
-
-                                    int attributeDataLength = bR.ReadInt32();
-                                    byte[] attributeData = bR.ReadBytes(attributeDataLength);
-                                    layer.Tiles[x, y].AttributeData = AttributeData.Deserialize(attributeData);
+                                        int attributeDataLength = bR.ReadInt32();
+                                        byte[] attributeData = bR.ReadBytes(attributeDataLength);
+                                        layer.Tiles[x, y].Attribute = TileAttribute.Deserialize(attributeData);
+                                    }
 
                                     if (bR.ReadBoolean())
                                     {
@@ -91,7 +88,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                                         string spriteName = bR.ReadString();
                                         float zIndex = bR.ReadSingle(); // We can throw this away
 
-                                        layer.Tiles[x, y].SpriteInfo = new SpriteInfo(spriteName)
+                                        layer.Tiles[x, y].Sprite = new SpriteInfo(spriteName)
                                         {
                                             Transform =
                                             {
@@ -149,7 +146,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
                         //}
 
-                        map.Layers.Add(layerName, layer);
+                        map.AddLayer(layerName, layer);
                     }
                 }
             }
@@ -159,7 +156,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
         public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
         {
-            MapDescriptor mapDesc = (MapDescriptor)descriptor;
+            var mapDesc = (IBaseMap<IBaseLayer<IBaseTile<SpriteInfo>>>)descriptor;
 
             string filePath = this.RootPath + (arguments as MapFSDataManagerArguments).Name + EngineConstants.MAP_FILE_EXT;
 
@@ -183,7 +180,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
                     bW.Write(mapDesc.Layers.Count);
 
-                    foreach (var layer in mapDesc.Layers.Values)
+                    foreach (var layer in mapDesc.Layers)
                     {
                         bW.Write(layer.Name);
                         bW.Write(layer.LayerIndex);
@@ -196,34 +193,38 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                                 {
                                     bW.Write(true);
 
-                                    bW.Write((byte)layer.Tiles[x, y].Attribute);
+                                    if (layer.Tiles[x, y].Attribute == null)
+                                        bW.Write(false);
+                                    else
+                                    {
+                                        bW.Write(true);
 
-                                    var attributeData = layer.Tiles[x, y].AttributeData.Serialize();
+                                        var attributeData = layer.Tiles[x, y].Attribute.Serialize();
 
-                                    bW.Write(attributeData.Length);
-                                    bW.Write(attributeData);
+                                        bW.Write(attributeData.Length);
+                                        bW.Write(attributeData);
+                                    }
 
-                                    if (layer.Tiles[x, y].SpriteInfo != null)
+                                    if (layer.Tiles[x, y].Sprite != null)
                                     {
                                         bW.Write(true);
 
                                         bW.Write(layer.Tiles[x, y].Animated);
                                         bW.Write(layer.Tiles[x, y].LightSource);
 
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.TextureName);
+                                        bW.Write(layer.Tiles[x, y].Sprite.TextureName);
 
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.LayerDepth);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.LayerDepth);
 
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.R);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.G);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.B);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.A);
 
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Color.R);
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Color.G);
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Color.B);
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Color.A);
-
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Rect.Left);
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Rect.Top);
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Rect.Width);
-                                        bW.Write(layer.Tiles[x, y].SpriteInfo.Transform.Rect.Height);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.X);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.Y);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.Width);
+                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.Height);
 
                                         bW.Write(layer.Tiles[x, y].FrameCount);
                                     }
@@ -238,11 +239,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                                 }
                             }
                         }
-
-                        
                     }
-
-                    
                 }
             }
         }

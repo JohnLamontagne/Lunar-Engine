@@ -75,15 +75,13 @@ namespace Lunar.Client.World
             float zIndex = netBuffer.ReadSingle();
             var frameTime = netBuffer.ReadInt32();
 
-            var sprite =
-                new AnimatedSprite(Client.ServiceLocator.Get<ContentManagerService>().ContentManager.LoadTexture2D(
-                    Constants.FILEPATH_DATA + textureName))
-                {
-                    SourceRectangle = sourceRectangle,
-                    Color = color,
-                    Position = position,
-                    LayerDepth = zIndex
-                };
+            var sprite = new AnimatedSprite(Client.ServiceLocator.Get<ContentManagerService>().ContentManager
+                .LoadTexture2D(Constants.FILEPATH_DATA + textureName));
+
+            sprite.Transform.Rect = sourceRectangle;
+            sprite.Transform.Color = color;
+            sprite.Transform.Position = position;
+            sprite.Transform.LayerDepth = zIndex;
 
             var mapObject = new MapObject(sprite, animated) { FrameTime = frameTime };
 

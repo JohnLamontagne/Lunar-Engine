@@ -26,10 +26,9 @@ namespace Lunar.Editor.World
             get => _spriteFilePath;
             set
             {
-
                 _mapObject.Sprite = new Sprite(_textureLoader.LoadFromFile(value))
                 {
-                    Texture = {Tag = Helpers.MakeRelative(value, _project.ClientRootDirectory.FullName + "/")}
+                    Texture = { Tag = Helpers.MakeRelative(value, _project.ClientRootDirectory.FullName + "/") }
                 };
 
                 _spriteFilePath = _mapObject.Sprite.Texture.Tag.ToString();
@@ -39,33 +38,33 @@ namespace Lunar.Editor.World
         [Category("Texture Source")]
         public int Left
         {
-            get => _mapObject.Sprite.SourceRectangle.Left;
-            set => _mapObject.Sprite.SourceRectangle = new Rectangle(value, _mapObject.Sprite.SourceRectangle.Top,
-                _mapObject.Sprite.SourceRectangle.Width, _mapObject.Sprite.SourceRectangle.Height);
+            get => _mapObject.Sprite.Transform.Rect.X;
+            set => _mapObject.Sprite.Transform.Rect = new Rectangle(value, _mapObject.Sprite.Transform.Rect.Y,
+                _mapObject.Sprite.Transform.Rect.Width, _mapObject.Sprite.Transform.Rect.Height);
         }
 
         [Category("Texture Source")]
         public int Top
         {
-            get => _mapObject.Sprite.SourceRectangle.Top;
-            set => _mapObject.Sprite.SourceRectangle = new Rectangle(_mapObject.Sprite.SourceRectangle.Left, value,
-                _mapObject.Sprite.SourceRectangle.Width, _mapObject.Sprite.SourceRectangle.Height);
+            get => _mapObject.Sprite.Transform.Rect.Y;
+            set => _mapObject.Sprite.Transform.Rect = new Rectangle(_mapObject.Sprite.Transform.Rect.X, value,
+                _mapObject.Sprite.Transform.Rect.Width, _mapObject.Sprite.Transform.Rect.Height);
         }
 
         [Category("Texture Source")]
         public int Width
         {
-            get => _mapObject.Sprite.SourceRectangle.Width;
-            set => _mapObject.Sprite.SourceRectangle = new Rectangle(_mapObject.Sprite.SourceRectangle.Left, _mapObject.Sprite.SourceRectangle.Top,
-                value, _mapObject.Sprite.SourceRectangle.Height);
+            get => _mapObject.Sprite.Transform.Rect.Width;
+            set => _mapObject.Sprite.Transform.Rect = new Rectangle(_mapObject.Sprite.Transform.Rect.X, _mapObject.Sprite.Transform.Rect.Y,
+                value, _mapObject.Sprite.Transform.Rect.Height);
         }
 
         [Category("Texture Source")]
         public int Height
         {
-            get => _mapObject.Sprite.SourceRectangle.Height;
-            set => _mapObject.Sprite.SourceRectangle = new Rectangle(_mapObject.Sprite.SourceRectangle.Left, _mapObject.Sprite.SourceRectangle.Top,
-                _mapObject.Sprite.SourceRectangle.Width, value);
+            get => _mapObject.Sprite.Transform.Rect.Height;
+            set => _mapObject.Sprite.Transform.Rect = new Rectangle(_mapObject.Sprite.Transform.Rect.X, _mapObject.Sprite.Transform.Rect.Y,
+                _mapObject.Sprite.Transform.Rect.Width, value);
         }
 
         [Category("General")]
@@ -85,7 +84,6 @@ namespace Lunar.Editor.World
             set => _mapObject.LuaScriptPath = Helpers.MakeRelative(value, _project.ServerWorldDirectory.FullName + "/");
         }
 
-
         [Category("Animation")]
         [DisplayName("Animated")]
         public bool Animated
@@ -94,11 +92,9 @@ namespace Lunar.Editor.World
             set
             {
                 _mapObject.Animated = value;
-                Rectangle srcRectangle = _mapObject.Sprite.SourceRectangle;
-                _mapObject.Sprite = new AnimatedSprite(_mapObject.Sprite.Texture)
-                {
-                    SourceRectangle = srcRectangle
-                };
+                Rectangle srcRectangle = _mapObject.Sprite.Transform.Rect;
+                _mapObject.Sprite = new AnimatedSprite(_mapObject.Sprite.Texture);
+                _mapObject.Sprite.Transform.Rect = srcRectangle;
             }
         }
 
@@ -172,6 +168,5 @@ namespace Lunar.Editor.World
             _textureLoader = textureLoader;
             _project = project;
         }
-
     }
 }

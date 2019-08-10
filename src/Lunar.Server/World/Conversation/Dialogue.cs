@@ -57,7 +57,7 @@ namespace Lunar.Server.World.Conversation
 
             _branches = new Dictionary<string, DialogueBranch>();
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
+            Engine.Services?.Get<NetHandler>().AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
         }
 
         private void Handle_DialogueResponse(PacketReceivedEventArgs args)

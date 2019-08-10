@@ -44,7 +44,7 @@ namespace Lunar.Server.World.Actors.Components
         {
             var packet = new Packet(PacketType.POSITION_UPDATE, ChannelType.UNASSIGNED);
             packet.Message.Write(_player.UniqueID);
-            packet.Message.Write(_player.Layer.Descriptor.Name);
+            packet.Message.Write(_player.Layer.Name);
             packet.Message.Write(_player.Descriptor.Position);
             _player.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }

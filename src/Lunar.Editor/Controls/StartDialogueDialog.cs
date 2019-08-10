@@ -37,7 +37,7 @@ namespace Lunar.Editor.Controls
 
                 this.cmbDialogue.Items.Add(item);
             }
-            this.cmbBranch.SelectedIndex = 0;
+            this.cmbDialogue.SelectedIndex = 0;
         }
 
         private void BtnOk_Click(object sender, EventArgs e)
@@ -52,7 +52,7 @@ namespace Lunar.Editor.Controls
 
         private void cmbDialogue_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.cmbDialogue.SelectedIndex <= this.cmbDialogue.Items.Count)
+            if (this.cmbDialogue.SelectedIndex >= this.cmbDialogue.Items.Count)
                 return;
 
             var dialogueName = this.cmbDialogue.SelectedItem.ToString();
@@ -75,7 +75,7 @@ namespace Lunar.Editor.Controls
 
         private void CmbBranch_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.cmbBranch.SelectedIndex <= this.cmbBranch.Items.Count)
+            if (this.cmbBranch.SelectedIndex >= this.cmbBranch.Items.Count)
                 return;
 
             this.Branch = this.cmbBranch.SelectedItem.ToString();

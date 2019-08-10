@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
@@ -24,90 +25,57 @@ using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 using Lunar.Core.Utilities;
+using Lunar.Core.World.Structure.Attribute;
+using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Server.World.Structure
 {
-    public class Map
+    public class Map : BaseMap<Layer>
     {
-        private MapDescriptor _mapDescriptor;
-
-        public MapDescriptor Descriptor => _mapDescriptor;
-
-        private readonly Dictionary<string, Layer> _layers;
         private readonly Dictionary<Layer, Pathfinder> _pathFinders;
         private WorldDictionary<long, IActor<IActorDescriptor>> _actors;
         private WorldDictionary<IActor<IActorDescriptor>, List<MapObject>> _actorCollidingObjects;
 
         private List<Tuple<Vector, Layer>> _playerSpawnAreas;
         private List<MapItem> _mapItems;
-        private List<string> _tilesetPaths;
-
-        public IEnumerable<Layer> Layers => _layers.Values;
 
         public List<Player> Players => this.GetActors<Player>().ToList();
 
-        public Map(MapDescriptor descriptor)
+        public Map(BaseMap<BaseLayer<BaseTile<SpriteInfo>>> descriptor)
         {
-            _mapDescriptor = descriptor;
-
-            _layers = new Dictionary<string, Layer>();
             _actors = new WorldDictionary<long, IActor<IActorDescriptor>>();
             _actorCollidingObjects = new WorldDictionary<IActor<IActorDescriptor>, List<MapObject>>();
             _playerSpawnAreas = new List<Tuple<Vector, Layer>>();
             _pathFinders = new Dictionary<Layer, Pathfinder>();
             _mapItems = new List<MapItem>();
 
-            this.Initalize();
-        }
+            this.Name = descriptor.Name;
+            this.Bounds = descriptor.Bounds;
+            this.Dimensions = descriptor.Dimensions;
+            this.Dark = descriptor.Dark;
+            this.TilesetPaths = descriptor.TilesetPaths;
 
-        private void Initalize()
-        {
-            foreach (var layerDesc in this.Descriptor.Layers.Values)
+            foreach (var layerDesc in descriptor.Layers)
             {
-                Layer layer = new Layer(layerDesc);
+                Layer layer = new Layer(this, layerDesc);
 
-                layer.NPCSpawnerEvent += (sender, args) =>
-                {
-                    var npcDesc = Engine.Services.Get<NPCManager>().GetNPC(args.NPCID);
-
-                    if (npcDesc == null)
-                    {
-                        Engine.Services.Get<Logger>().LogEvent($"Error spawning NPC: {args.NPCID} does not exist!", LogTypes.ERROR, new Exception($"Error spawning NPC: {args.NPCID} does not exist!"));
-                        return;
-                    }
-
-                    NPC npc = new NPC(npcDesc, this)
-                    {
-                        Layer = (Layer)sender
-                    };
-                    npc.WarpTo(args.Position);
-
-                    // This allows the tile spawner to keep track of npcs that exist, and respawn if neccessary (i.e., they die).
-                    args.HeartbeatListener.NPCs.Add(npc);
-                };
-
-                _layers.Add(layerDesc.Name, layer);
+                this.AddLayer(layerDesc.Name, layer);
             }
 
             // Look for spawnpoints
             foreach (var layer in this.Layers)
             {
-                for (int x = 0; x < this.Descriptor.Dimensions.X; x++)
+                for (int x = 0; x < descriptor.Dimensions.X; x++)
                 {
-                    for (int y = 0; y < this.Descriptor.Dimensions.Y; y++)
+                    for (int y = 0; y < descriptor.Dimensions.Y; y++)
                     {
-                        if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Descriptor.Attribute == TileAttributes.PlayerSpawn)
+                        if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Attribute is PlayerSpawnTileAttribute)
                         {
                             this.AddPlayerStartArea(new Vector(x * Settings.TileSize, y * Settings.TileSize), layer);
                         }
                     }
                 }
             }
-        }
-
-        public void AddLayer(string name, Layer layer)
-        {
-            _layers.Add(name, layer);
         }
 
         public IEnumerable<MapItem> GetMapItems()
@@ -140,7 +108,7 @@ namespace Lunar.Server.World.Structure
         {
             var packet = new Packet(PacketType.MAP_ITEM_SPAWN, ChannelType.UNASSIGNED);
             packet.Message.Write(mapItem.Position);
-            packet.Message.Write(mapItem.Layer.Descriptor.Name);
+            packet.Message.Write(mapItem.Layer.Name);
             packet.Message.Write(mapItem.Item.PackData());
             this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
         }
@@ -162,8 +130,6 @@ namespace Lunar.Server.World.Structure
             {
                 Engine.Services.Get<Logger>().LogEvent($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}", LogTypes.ERROR, new Exception($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}"));
             }
-
-          
         }
 
         public void AddPlayerStartArea(Vector playerStartArea, Layer layer)
@@ -172,14 +138,13 @@ namespace Lunar.Server.World.Structure
         }
 
         public void ConstructPathfinder()
-        {   
+        {
             _pathFinders.Clear();
 
             foreach (var layer in this.Layers)
             {
                 _pathFinders.Add(layer, new Pathfinder(this, layer));
             }
-
         }
 
         public Pathfinder GetPathfinder(Layer layer)
@@ -197,7 +162,7 @@ namespace Lunar.Server.World.Structure
             foreach (var actor in _actors)
             {
                 actor.Update(gameTime);
-                
+
                 if (_actorCollidingObjects.ContainsKey(actor))
                 {
                     for (int x = _actorCollidingObjects[actor].Count - 1; x >= 0; x--)
@@ -209,15 +174,7 @@ namespace Lunar.Server.World.Structure
                         }
                     }
                 }
-
-
             }
-
-        }
-
-        public Layer GetLayer(string name)
-        {
-            return _layers[name];
         }
 
         public bool ActorInMap<T>(T actor) where T : IActor<IActorDescriptor>
@@ -248,9 +205,7 @@ namespace Lunar.Server.World.Structure
 
         public void SendAnimation()
         {
-
         }
-
 
         public void OnPlayerQuit(Player player)
         {
@@ -291,7 +246,7 @@ namespace Lunar.Server.World.Structure
             {
                 var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
                 npcDataPacket.Message.Write(npc.Pack());
-                
+
                 player.NetworkComponent.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
             }
 
@@ -299,16 +254,14 @@ namespace Lunar.Server.World.Structure
             if (_playerSpawnAreas.Count > 0)
             {
                 Random random = new Random();
-                int spawnIndex = (int) (random.NextDouble() * _playerSpawnAreas.Count);
+                int spawnIndex = (int)(random.NextDouble() * _playerSpawnAreas.Count);
                 player.Layer = _playerSpawnAreas[spawnIndex].Item2;
-                player.WarpTo((Vector) _playerSpawnAreas[spawnIndex].Item1);
+                player.WarpTo((Vector)_playerSpawnAreas[spawnIndex].Item1);
             }
             else
             {
                 player.Layer = this.Layers.ElementAt(0);
             }
-
-
         }
 
         public virtual void RemoveActor(long actorID)
@@ -316,7 +269,7 @@ namespace Lunar.Server.World.Structure
             if (!_actors.ContainsKey(actorID))
             {
                 Engine.Services.Get<Logger>().LogEvent($"Actor {actorID} does not exist in map!", LogTypes.ERROR, new Exception($"Actor {actorID} does not exist in map!"));
-                return;;
+                return; ;
             }
 
             _actorCollidingObjects.Remove(_actors[actorID]);
@@ -344,11 +297,11 @@ namespace Lunar.Server.World.Structure
         {
             var netBuffer = new NetBuffer();
 
-            netBuffer.Write(this.Descriptor.Name);
-            netBuffer.Write(this.Descriptor.Dimensions);
-            netBuffer.Write(this.Descriptor.Dark);
+            netBuffer.Write(this.Name);
+            netBuffer.Write(this.Dimensions);
+            netBuffer.Write(this.Dark);
 
-            netBuffer.Write(_layers.Count);
+            netBuffer.Write(this.Layers.Count);
             foreach (var layer in this.Layers)
             {
                 netBuffer.Write(layer.PackData());
@@ -359,7 +312,6 @@ namespace Lunar.Server.World.Structure
 
         public void Unload()
         {
-            
         }
     }
 }

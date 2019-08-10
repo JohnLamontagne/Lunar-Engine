@@ -20,11 +20,11 @@ namespace Lunar.Editor.World
             set
             {
                 _sprite = value;
-                _sprite.Position = this.Position;
-                _sprite.LayerDepth = this.Layer.Descriptor.ZIndex;
+                _sprite.Transform.Position = this.Position;
+                _sprite.Transform.LayerDepth = this.Layer.ZIndex;
                 _collisionRect = new Rectangle((int)_position.X, (int)_position.Y,
-                    this.Sprite.SourceRectangle.Width, this.Sprite.SourceRectangle.Height);
-            } 
+                    this.Sprite.Transform.Rect.Width, this.Sprite.Transform.Rect.Height);
+            }
         }
 
         public string LuaScriptPath { get; set; }
@@ -38,10 +38,10 @@ namespace Lunar.Editor.World
 
                 if (this.Sprite != null)
                 {
-                    this.Sprite.Position = value;
+                    this.Sprite.Transform.Position = value;
                     _collisionRect = new Rectangle((int)_position.X, (int)_position.Y,
-                        this.Sprite.SourceRectangle.Width, this.Sprite.SourceRectangle.Height);
-                } 
+                        this.Sprite.Transform.Rect.Width, this.Sprite.Transform.Rect.Height);
+                }
             }
         }
 
@@ -102,10 +102,10 @@ namespace Lunar.Editor.World
             {
                 bW.Write(true);
                 bW.Write(this.Sprite.Texture.Tag.ToString());
-                bW.Write(this.Sprite.SourceRectangle.X);
-                bW.Write(this.Sprite.SourceRectangle.Y);
-                bW.Write(this.Sprite.SourceRectangle.Width);
-                bW.Write(this.Sprite.SourceRectangle.Height);
+                bW.Write(this.Sprite.Transform.Rect.X);
+                bW.Write(this.Sprite.Transform.Rect.Y);
+                bW.Write(this.Sprite.Transform.Rect.Width);
+                bW.Write(this.Sprite.Transform.Rect.Height);
             }
 
             bW.Write(this.Animated);
@@ -148,24 +148,16 @@ namespace Lunar.Editor.World
 
             if (mapObject.Animated)
             {
-                mapObject.Sprite = new AnimatedSprite(texture)
-                {
-                    Position = position,
-                    LayerDepth = layer.Descriptor.ZIndex,
-                    SourceRectangle = textureRect
-                };
-
+                mapObject.Sprite = new AnimatedSprite(texture);
             }
             else
             {
-                mapObject.Sprite = new Sprite(texture)
-                {
-                    Position = position,
-                    LayerDepth = layer.Descriptor.ZIndex,
-                    SourceRectangle = textureRect
-                };
+                mapObject.Sprite = new Sprite(texture);
             }
 
+            mapObject.Sprite.Transform.Position = position;
+            mapObject.Sprite.Transform.LayerDepth = layer.ZIndex;
+            mapObject.Sprite.Transform.Rect = textureRect;
 
             mapObject.FrameTime = bR.ReadInt32();
             mapObject.LuaScriptPath = bR.ReadString();

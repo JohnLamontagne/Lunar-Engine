@@ -13,6 +13,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.Serialization;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
@@ -126,6 +127,11 @@ namespace Lunar.Core.World.Actor.Descriptors
             };
 
             return descriptor;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new NotImplementedException();
         }
 
         public event EventHandler ExperienceChanged;

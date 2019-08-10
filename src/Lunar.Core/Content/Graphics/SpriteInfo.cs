@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 namespace Lunar.Core.Content.Graphics
 {
     public class SpriteInfo
@@ -17,8 +18,6 @@ namespace Lunar.Core.Content.Graphics
         public Transform Transform { get; set; }
 
         public string TextureName { get; set; }
-
-        
 
         public SpriteInfo(string textureName)
         {

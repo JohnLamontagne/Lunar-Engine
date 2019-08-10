@@ -96,8 +96,8 @@ namespace Lunar.Client.Utilities
         {
             if (this.Subject != null)
             {
-                float x = MathHelper.Lerp(this.Position.X, (float)Math.Floor(this.Subject.Position.X) + (this.Subject.SpriteSheet.Sprite.SourceRectangle.Width / 2) - (Settings.ResolutionX / 2), this.Speed);
-                float y = MathHelper.Lerp(this.Position.Y, (float)Math.Floor(this.Subject.Position.Y) + (this.Subject.SpriteSheet.Sprite.SourceRectangle.Height / 2) - (Settings.ResolutionY / 2), this.Speed);
+                float x = MathHelper.Lerp(this.Position.X, (float)Math.Floor(this.Subject.Position.X) + (this.Subject.SpriteSheet.Sprite.Transform.Rect.Width / 2) - (Settings.ResolutionX / 2), this.Speed);
+                float y = MathHelper.Lerp(this.Position.Y, (float)Math.Floor(this.Subject.Position.Y) + (this.Subject.SpriteSheet.Sprite.Transform.Rect.Height / 2) - (Settings.ResolutionY / 2), this.Speed);
                 this.Position = new Vector2(x, y);
             }
         }

@@ -26,7 +26,7 @@ namespace Lunar.Editor
     public class Project
     {
         private DialogueFactory _dialogueFactory;
-        private IDataManager<MapDescriptor> _mapDataManager;
+        private IDataManager<BaseMap<BaseLayer<BaseTile<SpriteInfo>>>> _mapDataManager;
         private JObject _scriptMap;
 
         private readonly DirectoryInfo _serverRootDirectory;
@@ -238,8 +238,7 @@ namespace Lunar.Editor
         {
             var mapDescriptor = _mapDataManager.Load(new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
 
-            var map = new Map(mapDescriptor, textureLoader);
-            map.Initalize(this, textureLoader);
+            var map = new Map(mapDescriptor, textureLoader, this);
 
             if (!_maps.ContainsKey(Helpers.NormalizePath(filePath)))
                 _maps.Add(Helpers.NormalizePath(filePath), map);
@@ -251,7 +250,7 @@ namespace Lunar.Editor
 
         public void SaveMap(string filePath, Map map)
         {
-            _mapDataManager.Save(map.Descriptor, new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
+            _mapDataManager.Save(map, new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
         }
 
         public FileInfo ChangeMap(string oldFilePath, string newFilePath)

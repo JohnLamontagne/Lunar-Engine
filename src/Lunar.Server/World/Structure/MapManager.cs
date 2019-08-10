@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Lunar.Core;
+using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Data.FileSystem;
@@ -26,7 +27,7 @@ namespace Lunar.Server.World.Structure
     public class MapManager : IService
     {
         private Dictionary<string, Map> _maps;
-        private IDataManager<MapDescriptor> _mapDataLoader;
+        private IDataManager<BaseMap<BaseLayer<BaseTile<SpriteInfo>>>> _mapDataLoader;
 
         public MapManager()
         {
@@ -47,7 +48,7 @@ namespace Lunar.Server.World.Structure
                 Map map = new Map(_mapDataLoader.Load(new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(file.FullName))));
 
                 map.ConstructPathfinder();
-                _maps.Add(map.Descriptor.Name, map);
+                _maps.Add(map.Name, map);
             }
 
             Console.WriteLine($"Loaded {files.Length} maps.");

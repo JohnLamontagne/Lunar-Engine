@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Server.World.Structure;
 using System;
 using System.Collections.Generic;
@@ -27,13 +28,13 @@ namespace Lunar.Server.Utilities.Pathfinding
 
         // Holds search nodes that are avaliable to search.
         private List<SearchNode> openList = new List<SearchNode>();
+
         // Holds the nodes that have already been searched.
         private List<SearchNode> closedList = new List<SearchNode>();
 
-
         public Pathfinder(Map map, Layer layer)
         {
-            _mapBounds = map.Descriptor.Bounds;
+            _mapBounds = map.Bounds;
             _layer = layer;
             _map = map;
 
@@ -57,9 +58,9 @@ namespace Lunar.Server.Utilities.Pathfinding
             openList.Clear();
             closedList.Clear();
 
-            for (int x = _mapBounds.Left; x < _mapBounds.Width; x++)
+            for (int x = _mapBounds.X; x < _mapBounds.Width; x++)
             {
-                for (int y = _mapBounds.Top; y < _mapBounds.Height; y++)
+                for (int y = _mapBounds.Y; y < _mapBounds.Height; y++)
                 {
                     SearchNode node = _searchNodes[x, y];
 
@@ -106,11 +107,11 @@ namespace Lunar.Server.Utilities.Pathfinding
             Vector normStartPoint = new Vector((int)(startPoint.X / Settings.TileSize), (int)(startPoint.Y / Settings.TileSize));
             Vector normEndPoint = new Vector((int)(endPoint.X / Settings.TileSize), (int)(endPoint.Y / Settings.TileSize));
 
-            if (normStartPoint.X < _mapBounds.Left || normStartPoint.Y < _mapBounds.Top 
-                || normEndPoint.X < _mapBounds.Left || normEndPoint.Y < _mapBounds.Top)
+            if (normStartPoint.X < _mapBounds.X || normStartPoint.Y < _mapBounds.Y
+                || normEndPoint.X < _mapBounds.X || normEndPoint.Y < _mapBounds.Y)
                 return new List<Vector>();
 
-            if (normStartPoint.X >= _mapBounds.Width || normStartPoint.Y >= _mapBounds.Height 
+            if (normStartPoint.X >= _mapBounds.Width || normStartPoint.Y >= _mapBounds.Height
                 || normEndPoint.X >= _mapBounds.Width || normEndPoint.Y >= _mapBounds.Height)
                 return new List<Vector>();
 
@@ -121,9 +122,9 @@ namespace Lunar.Server.Utilities.Pathfinding
             }
 
             /////////////////////////////////////////////////////////////////////
-            // Step 1 : Clear the Open and Closed Lists and reset each node’s F 
-            //          and G values in case they are still set from the last 
-            //          time we tried to find a path. 
+            // Step 1 : Clear the Open and Closed Lists and reset each node’s F
+            //          and G values in case they are still set from the last
+            //          time we tried to find a path.
             /////////////////////////////////////////////////////////////////////
             ResetSearchNodes();
 
@@ -132,10 +133,10 @@ namespace Lunar.Server.Utilities.Pathfinding
             SearchNode endNode = _searchNodes[(int)normEndPoint.X, (int)normEndPoint.Y];
 
             /////////////////////////////////////////////////////////////////////
-            // Step 2 : Set the start node’s G value to 0 and its F value to the 
-            //          estimated distance between the start node and goal node 
-            //          (this is where our H function comes in) and add it to the 
-            //          Open List. 
+            // Step 2 : Set the start node’s G value to 0 and its F value to the
+            //          estimated distance between the start node and goal node
+            //          (this is where our H function comes in) and add it to the
+            //          Open List.
             /////////////////////////////////////////////////////////////////////
             startNode.InOpenList = true;
 
@@ -145,18 +146,18 @@ namespace Lunar.Server.Utilities.Pathfinding
             openList.Add(startNode);
 
             /////////////////////////////////////////////////////////////////////
-            // Setp 3 : While there are still nodes to look at in the Open list : 
+            // Setp 3 : While there are still nodes to look at in the Open list :
             /////////////////////////////////////////////////////////////////////
             while (openList.Count > 0)
             {
                 /////////////////////////////////////////////////////////////////
-                // a) : Loop through the Open List and find the node that 
+                // a) : Loop through the Open List and find the node that
                 //      has the smallest F value.
                 /////////////////////////////////////////////////////////////////
                 SearchNode currentNode = FindBestNode(collisionBody);
 
                 /////////////////////////////////////////////////////////////////
-                // b) : If the Open List empty or no node can be found, 
+                // b) : If the Open List empty or no node can be found,
                 //      no path can be found so the algorithm terminates.
                 /////////////////////////////////////////////////////////////////
                 if (currentNode == null)
@@ -165,7 +166,7 @@ namespace Lunar.Server.Utilities.Pathfinding
                 }
 
                 /////////////////////////////////////////////////////////////////
-                // c) : If the Active Node is the goal node, we will 
+                // c) : If the Active Node is the goal node, we will
                 //      find and return the final path.
                 /////////////////////////////////////////////////////////////////
 
@@ -183,8 +184,8 @@ namespace Lunar.Server.Utilities.Pathfinding
                     SearchNode neighbor = currentNode.GetNeighbors()[i];
 
                     //////////////////////////////////////////////////
-                    // i) : Make sure that the neighbouring node can 
-                    //      be walked across. 
+                    // i) : Make sure that the neighbouring node can
+                    //      be walked across.
                     //////////////////////////////////////////////////
                     if (neighbor == null || neighbor.Walkable == false)
                     {
@@ -200,19 +201,19 @@ namespace Lunar.Server.Utilities.Pathfinding
                     float heuristic = Heuristic(neighbor.Position, normEndPoint);
 
                     //////////////////////////////////////////////////
-                    // iii) If the neighbouring node is not in either the Open 
-                    //      List or the Closed List : 
+                    // iii) If the neighbouring node is not in either the Open
+                    //      List or the Closed List :
                     //////////////////////////////////////////////////
                     if (neighbor.InOpenList == false && neighbor.InClosedList == false)
                     {
-                        // (1) Set the neighbouring node’s G value to the G value 
+                        // (1) Set the neighbouring node’s G value to the G value
                         //     we just calculated.
                         neighbor.DistanceTraveled = distanceTraveled;
-                        // (2) Set the neighbouring node’s F value to the new G value + 
+                        // (2) Set the neighbouring node’s F value to the new G value +
                         //     the estimated distance between the neighbouring node and
                         //     goal node.
                         neighbor.DistanceToGoal = distanceTraveled + heuristic;
-                        // (3) Set the neighbouring node’s Parent property to point at the Active 
+                        // (3) Set the neighbouring node’s Parent property to point at the Active
                         //     Node.
                         neighbor.Parent = currentNode;
                         // (4) Add the neighbouring node to the Open List.
@@ -220,15 +221,15 @@ namespace Lunar.Server.Utilities.Pathfinding
                         openList.Add(neighbor);
                     }
                     //////////////////////////////////////////////////
-                    // iv) Else if the neighbouring node is in either the Open 
+                    // iv) Else if the neighbouring node is in either the Open
                     //     List or the Closed List :
                     //////////////////////////////////////////////////
                     else if (neighbor.InOpenList || neighbor.InClosedList)
                     {
-                        // (1) If our new G value is less than the neighbouring 
-                        //     node’s G value, we basically do exactly the same 
-                        //     steps as if the nodes are not in the Open and 
-                        //     Closed Lists except we do not need to add this node 
+                        // (1) If our new G value is less than the neighbouring
+                        //     node’s G value, we basically do exactly the same
+                        //     steps as if the nodes are not in the Open and
+                        //     Closed Lists except we do not need to add this node
                         //     the Open List again.
                         if (neighbor.DistanceTraveled > distanceTraveled)
                         {
@@ -241,7 +242,7 @@ namespace Lunar.Server.Utilities.Pathfinding
                 }
 
                 /////////////////////////////////////////////////////////////////
-                // e) Remove the Active Node from the Open List and add it to the 
+                // e) Remove the Active Node from the Open List and add it to the
                 //    Closed List
                 /////////////////////////////////////////////////////////////////
                 openList.Remove(currentNode);
@@ -266,11 +267,9 @@ namespace Lunar.Server.Utilities.Pathfinding
             // to find the best path.
             while (parentTile != startNode)
             {
-
                 closedList.Add(parentTile);
 
                 parentTile = parentTile.Parent;
-
             }
 
             List<Vector> finalPath = new List<Vector>();
@@ -315,11 +314,8 @@ namespace Lunar.Server.Utilities.Pathfinding
                         node.Walkable = true;
                         _searchNodes[x, y] = node;
                     }
-                        
                 }
             }
-
-
 
             // Loop back through and add the neighbors of the nodes.
             for (int x = 0; x < _searchNodes.GetLength(0); x++)
@@ -357,7 +353,6 @@ namespace Lunar.Server.Utilities.Pathfinding
                     _searchNodes[x, y].SetNeighbors(neighbors);
                 }
             }
-
         }
     }
 }

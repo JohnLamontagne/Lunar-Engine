@@ -12,24 +12,29 @@
 */
 
 using System;
-using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Core.Content.Graphics;
 
-namespace Lunar.Core.World.Structure.TileAttribute
+namespace Lunar.Core.World.Structure.Attribute
 {
     [Serializable]
-    public class NPCSpawnAttributeData : AttributeData
+    public class WarpTileAttribute : TileAttribute
     {
-        public string NPCID { get; set; }
+        public override Color Color => new Color(100, 255, 255, 100);
 
-        public int RespawnTime { get; set; }
+        public int X { get; set; }
 
-        public int MaxSpawns { get; set; }
+        public int Y { get; set; }
 
-        public NPCSpawnAttributeData(string npcID, int respawnTime, int maxSpawns)
+        public string WarpMap { get; set; }
+
+        public string LayerName { get; set; }
+
+        public WarpTileAttribute(int x, int y, string warpMap, string layerName)
         {
-            this.NPCID = npcID;
-            this.RespawnTime = respawnTime;
-            this.MaxSpawns = maxSpawns;
+            this.X = x;
+            this.Y = y;
+            this.WarpMap = warpMap;
+            this.LayerName = layerName;
         }
     }
 }
