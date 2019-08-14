@@ -22,9 +22,9 @@ using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor;
 using Lunar.Core.World.Actor.Descriptors;
 
-namespace Lunar.Server.Utilities.Data.FileSystem
+namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class PlayerFSDataLoader : FSDataManager<PlayerDescriptor>
+    public class PlayerFSDataManager : FSDataManager<PlayerDescriptor>
     {
         public override PlayerDescriptor Load(IDataManagerArguments arguments)
         {
@@ -70,6 +70,7 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                     }
                 }
 
+
                 var playerDescriptor = new PlayerDescriptor(name, password)
                 {
                     SpriteSheet = sprite,
@@ -79,8 +80,8 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                     MapID = mapID,
                     Stats = new Stats()
                     {
-                        Health = health,
-                        MaximumHealth = maximumHealth,
+                        CurrentHealth = health,
+                        Health = maximumHealth,
                         Strength = strength,
                         Intelligence = intelligence,
                         Dexterity = dexterity,
@@ -112,8 +113,8 @@ namespace Lunar.Server.Utilities.Data.FileSystem
                     binaryWriter.Write(playerDescriptor.SpriteSheet.FrameWidth);
                     binaryWriter.Write(playerDescriptor.SpriteSheet.FrameHeight);
                     binaryWriter.Write(playerDescriptor.Speed);
-                    binaryWriter.Write(playerDescriptor.Stats.MaximumHealth);
                     binaryWriter.Write(playerDescriptor.Stats.Health);
+                    binaryWriter.Write(playerDescriptor.Stats.CurrentHealth);
                     binaryWriter.Write(playerDescriptor.Stats.Strength);
                     binaryWriter.Write(playerDescriptor.Stats.Intelligence);
                     binaryWriter.Write(playerDescriptor.Stats.Dexterity);

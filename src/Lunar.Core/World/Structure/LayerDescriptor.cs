@@ -19,7 +19,7 @@ using System.IO;
 
 namespace Lunar.Core.World.Structure
 {
-    public class BaseLayer<T> : IBaseLayer<T> where T : IBaseTile<SpriteInfo>
+    public class LayerDescriptor<T> : ILayerDescriptor<T> where T : ITileDescriptor<SpriteInfo>
     {
         private string _name;
         private int _layerIndex;
@@ -50,7 +50,7 @@ namespace Lunar.Core.World.Structure
 
         public T[,] Tiles { get; protected set; }
 
-        public BaseLayer(Vector dimensions, string layerName, int lIndex)
+        public LayerDescriptor(Vector dimensions, string layerName, int lIndex)
         {
             this.Tiles = new T[(int)dimensions.X, (int)dimensions.Y];
 
@@ -58,7 +58,7 @@ namespace Lunar.Core.World.Structure
             this.LayerIndex = lIndex;
         }
 
-        protected BaseLayer()
+        protected LayerDescriptor()
         {
         }
 

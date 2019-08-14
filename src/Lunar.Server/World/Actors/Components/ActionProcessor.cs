@@ -18,7 +18,7 @@ using Lunar.Server.World.Actors.Actions;
 
 namespace Lunar.Server.World.Actors.Components
 {
-    public class ActionProcessor<T> where T : IActor<IActorDescriptor>
+    public class ActionProcessor<T> where T : IActor
     {
         private T Actor { get; }
 

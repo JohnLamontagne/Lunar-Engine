@@ -20,9 +20,7 @@ using System.Xml.Linq;
 namespace Lunar.Client
 {
     public static class Settings
-    {
-        private static readonly string _filePath = Constants.FILEPATH_DATA + "config.xml";
-
+    { 
         public static string GameName { get; set; }
 
         public static string Website { get; set; }
@@ -57,17 +55,17 @@ namespace Lunar.Client
                     new XElement("DisplayNetworkMessages", true)
                 )
             );
-            xml.Save(_filePath);
+             xml.Save(Constants.FILEPATH_DATA + "config.xml");
         }
 
         private static void LoadConfig()
         {
-            if (!File.Exists(_filePath))
+            if (!File.Exists(Constants.FILEPATH_DATA + "config.xml"))
                 CreateConfig();
 
             try
             {
-                var doc = XDocument.Load(_filePath);
+                var doc = XDocument.Load(Constants.FILEPATH_DATA + "config.xml");
 
                 var generalSettings = doc.Elements("Config").Elements("General");
                 Settings.GameName = generalSettings.Elements("Game_Name").FirstOrDefault().Value;

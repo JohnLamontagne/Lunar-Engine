@@ -106,12 +106,12 @@ namespace Lunar.Server.World
             }
         }
 
-        public void OnUse(IActor<IActorDescriptor> user)
+        public void OnUse(IActor user)
         {
             this.BehaviorDefinition?.OnUse?.Invoke(new ItemInteractionArgs(this, user));
         }
 
-        public void OnEquip(IActor<IActorDescriptor> user)
+        public void OnEquip(IActor user)
         {
             this.BehaviorDefinition?.OnEquip?.Invoke(new ItemInteractionArgs(this, user));
         }

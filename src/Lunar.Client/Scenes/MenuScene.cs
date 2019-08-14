@@ -14,9 +14,9 @@
 using Lidgren.Network;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
-using Lunar.Client.Utilities;
 using Lunar.Core;
 using Lunar.Core.Net;
+using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -39,18 +39,29 @@ namespace Lunar.Client.Scenes
             _gameWindow = gameWindow;
             _authenticating = false;
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_AuthenticationSuccess);
+            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_RegistrationSuccess);
             Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_SUCCESS, this.Handle_AuthenticationSuccess);
             Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_FAIL, this.Handle_AuthenticationFailure);
             Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.REGISTRATION_FAIL, this.Handle_AuthenticationFailure);
         }
 
+        private void Handle_RegistrationSuccess(PacketReceivedEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void OnEnter()
         {
             this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/menu/menu_interface.xml", this.ContentManager);
+
             this.HookInterfaceEvents();
 
             base.OnEnter();
+        }
+
+        private void SliderTest_ValueChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(((Slider)sender).Value);
         }
 
         protected override void OnExit()
@@ -105,6 +116,12 @@ namespace Lunar.Client.Scenes
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnLogin").Clicked += loginButton_ButtonClicked;
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnRegister").Clicked += registerButton_ButtonClicked;
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Button>("btnWebsite").Clicked += WebsiteButton_Clicked;
+
+            // this.GuiManager.GetWidget<WidgetContainer>("createCharContainer").GetWidget<Slider>("charSelectionSlider").ValueChanged += MenuScene_ValueChanged;
+        }
+
+        private void MenuScene_ValueChanged(object sender, EventArgs e)
+        {
         }
 
         private void PasswordText_ReturnPressed(object sender, EventArgs e)

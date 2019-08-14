@@ -3,7 +3,7 @@ using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World.Actors
 {
-    public interface IActorState<T> where T :IActor<IActorDescriptor>
+    public interface IActorState<T> where T :IActor
     {
         void OnEnter(T actor);
 

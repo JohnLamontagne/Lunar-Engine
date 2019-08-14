@@ -7,7 +7,7 @@ using Lunar.Graphics;
 
 namespace Lunar.Editor.World
 {
-    public class Tile : BaseTile<Sprite>
+    public class Tile : TileDescriptor<Sprite>
     {
         private long _nextAnimationTime;
         private Sprite _sprite;
@@ -33,7 +33,7 @@ namespace Lunar.Editor.World
             }
         }
 
-        public Tile(BaseTile<SpriteInfo> descriptor)
+        public Tile(TileDescriptor<SpriteInfo> descriptor)
         {
             this.Animated = descriptor.Animated;
             this.Attribute = descriptor.Attribute;

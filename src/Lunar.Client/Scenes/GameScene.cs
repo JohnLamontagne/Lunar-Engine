@@ -20,6 +20,7 @@ using Lunar.Client.World.Actors;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.World;
+using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -148,7 +149,7 @@ namespace Lunar.Client.Scenes
             dialogueWindow.Visible = true;
             dialogueWindow.ClearWidgets();
 
-            var font = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/dialogueFont");
+            var font = this.ContentManager.Load<SpriteFont>(Engine.ROOT_PATH + "gfx/Fonts/dialogueFont");
 
             var dialogueTextLabel = new Label(font);
             dialogueTextLabel.Position = new Vector2(dialogueWindow.Position.X + 20, dialogueWindow.Position.Y + 30);
@@ -199,13 +200,13 @@ namespace Lunar.Client.Scenes
         private void ResponseLabel_Mouse_Left(object sender, EventArgs e)
         {
             // Make the text regular
-            ((Label)sender).Font = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/dialogueFont");
+            ((Label)sender).Font = this.ContentManager.Load<SpriteFont>(Engine.ROOT_PATH + "/gfx/Fonts/dialogueFont");
         }
 
         private void ResponseLabel_Mouse_Hover(object sender, EventArgs e)
         {
             // Make the text bold
-            ((Label)sender).Font = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/dialogueFont_B");
+            ((Label)sender).Font = this.ContentManager.Load<SpriteFont>(Engine.ROOT_PATH + "/gfx/Fonts/dialogueFont_B");
         }
 
         private void ResponseLabel_Clicked(object sender, WidgetClickedEventArgs e)
@@ -221,7 +222,7 @@ namespace Lunar.Client.Scenes
         {
             var enemyPortraitContainer = this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer");
 
-            var uniqueID = args.Message.ReadInt64();
+            string uniqueID = args.Message.ReadString();
 
             _target = _worldManager.Map.GetEntity(uniqueID);
 
@@ -270,10 +271,10 @@ namespace Lunar.Client.Scenes
                     continue;
 
                 var itemName = args.Message.ReadString();
-                var textureName = args.Message.ReadString();
+                var texturePath = args.Message.ReadString();
                 EquipmentSlots slotType = (EquipmentSlots)args.Message.ReadInt32();
 
-                Texture2D texture2D = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName);
+                Texture2D texture2D = this.ContentManager.LoadTexture2D(Engine.ROOT_PATH + texturePath);
 
                 var equipSlot = new Picture(texture2D);
 
@@ -309,11 +310,11 @@ namespace Lunar.Client.Scenes
                 if (slotOccupied)
                 {
                     var itemName = args.Message.ReadString();
-                    var textureName = args.Message.ReadString();
+                    var texturePath = args.Message.ReadString();
                     var slotType = args.Message.ReadInt32();
                     var amount = args.Message.ReadInt32();
 
-                    Texture2D texture2D = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName);
+                    Texture2D texture2D = this.ContentManager.LoadTexture2D(Engine.ROOT_PATH + texturePath);
 
                     var invSlot = new Picture(texture2D);
                     invSlot.Position = new Vector2(((i % 5) * Constants.INV_SLOT_OFFSET) + Constants.INVENTORY_OFFSET_X, ((i / 5) * Constants.INV_SLOT_OFFSET) +
@@ -488,7 +489,7 @@ namespace Lunar.Client.Scenes
 
         private void InitalizeInterface()
         {
-            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/game/game_interface.xml", this.ContentManager);
+            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "/Interface/game/game_interface.xml", this.ContentManager);
 
             var chat = this.GuiManager.GetWidget<Chatbox>("chatbox");
             var messageEntry = chat.GetWidget<Textbox>("messageEntry");

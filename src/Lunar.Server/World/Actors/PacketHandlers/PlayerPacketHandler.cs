@@ -56,7 +56,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_ReqTarget(PacketReceivedEventArgs args)
         {
-            var targetUniqueID = args.Message.ReadInt64();
+            var targetUniqueID = args.Message.ReadString();
 
             // Make sure we don't target ourselves
             if (targetUniqueID == _player.UniqueID)

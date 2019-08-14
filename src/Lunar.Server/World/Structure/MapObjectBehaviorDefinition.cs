@@ -21,11 +21,11 @@ namespace Lunar.Server.World.Structure
 {
     public class MapObjectBehaviorDefinition
     {
-        public Action<MapObject, IActor<IActorDescriptor>> OnEntered { get; set; }
+        public Action<MapObject, IActor> OnEntered { get; set; }
 
-        public Action<MapObject, IActor<IActorDescriptor>> OnLeft { get; set; }
+        public Action<MapObject, IActor> OnLeft { get; set; }
 
-        public Action<MapObject, IActor<IActorDescriptor>> OnInteract { get; set; }
+        public Action<MapObject, IActor> OnInteract { get; set; }
 
         public Action<MapObject, GameTime> Update { get; set; }
     }

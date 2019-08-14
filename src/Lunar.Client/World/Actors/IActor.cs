@@ -21,7 +21,7 @@ namespace Lunar.Client.World.Actors
 {
     public interface IActor
     {
-        long UniqueID { get; }
+        string UniqueID { get; }
 
         string Name { get; }
 

@@ -21,7 +21,7 @@ namespace Lunar.Core.World.Structure
         public Vector Position { get; set; }
         public SpriteInfo Sprite { get; set; }
         public bool Interactable { get; set; }
-        public BaseLayer<BaseTile<SpriteInfo>> Layer { get; set; }
+        public LayerDescriptor<TileDescriptor<SpriteInfo>> Layer { get; set; }
         public bool Animated { get; set; }
         public int FrameTime { get; set; }
         public LightInformation LightInformation { get; set; }

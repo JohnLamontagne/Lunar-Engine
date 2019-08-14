@@ -26,6 +26,12 @@ namespace Lunar.Core.Net
 
         REGISTRATION_FAIL,
 
+        CREATE_CHAR,
+
+        CREATE_CHAR_SUCCESS,
+
+        CREATE_CHAR_FAILURE,
+
         ALERT_MSG,
 
         PLAYER_MSG,

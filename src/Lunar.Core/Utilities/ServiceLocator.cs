@@ -48,9 +48,20 @@ namespace Lunar.Core.Utilities
             return (T)(_services[typeof(T)]);
         }
 
+        /// <summary>
+        /// Registers the specified service. If a service of that type already exists, it will be replaced.
+        /// </summary>
+        /// <param name="service"></param>
         public void Register(IService service)
         {
+
+
             _services.Add(service.GetType(), service);
+        }
+
+        public void RegisterAs(IService service, Type type)
+        {
+            _services.Add(type, service);
         }
     }
 }

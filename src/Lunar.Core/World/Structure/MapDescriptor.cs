@@ -19,7 +19,7 @@ using Lunar.Core.Utilities.Data;
 namespace Lunar.Core.World.Structure
 {
     [Serializable]
-    public class BaseMap<T> : IBaseMap<T> where T : IBaseLayer<IBaseTile<SpriteInfo>>
+    public class MapDescriptor<T> : IMapDescriptor<T> where T : ILayerDescriptor<ITileDescriptor<SpriteInfo>>
     {
         private Vector _dimensions;
         private readonly Dictionary<string, T> _layers;
@@ -54,19 +54,19 @@ namespace Lunar.Core.World.Structure
 
         public IReadOnlyCollection<T> Layers => _layers.Values;
 
-        public BaseMap()
+        public MapDescriptor()
         {
             _layers = new Dictionary<string, T>();
             _tilesetPaths = new List<string>();
         }
 
-        protected BaseMap(List<string> tilesetPaths)
+        protected MapDescriptor(List<string> tilesetPaths)
         {
             _layers = new Dictionary<string, T>();
             _tilesetPaths = tilesetPaths;
         }
 
-        public BaseMap(Vector dimensions, string name)
+        public MapDescriptor(Vector dimensions, string name)
         : this(new List<string>())
         {
             this.Dimensions = dimensions;
@@ -102,7 +102,7 @@ namespace Lunar.Core.World.Structure
             return _layers[name];
         }
 
-        public void AddLayer(string name, IBaseLayer<IBaseTile<SpriteInfo>> layer)
+        public void AddLayer(string name, ILayerDescriptor<ITileDescriptor<SpriteInfo>> layer)
         {
             _layers.Add(name, (T)layer);
         }

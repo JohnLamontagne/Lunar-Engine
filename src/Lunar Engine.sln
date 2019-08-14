@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Client", "Lunar.Client\Lunar.Client.csproj", "{7059DCBE-446A-4B6F-A27C-CCF0BC84755E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Core", "Lunar.Core\Lunar.Core.csproj", "{7DC32392-0F22-4082-A9F9-208F598DD170}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Graphics", "Lunar.Graphics\Lunar.Graphics.csproj", "{AFD594BC-5272-4B55-B30D-2DCED67C6930}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Server", "Lunar.Server\Lunar.Server.csproj", "{7FD9C949-9921-44D4-8DD8-0C59A3171849}"
@@ -14,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.UnitTests", "Lunar.UnitTests\Lunar.UnitTests.csproj", "{65E0D8D1-B211-4AD5-9C0E-1B001E673F45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Editor", "Lunar.Editor\Lunar.Editor.csproj", "{FA334815-6D78-4E9A-9F4D-6C8A58222A57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Core", "Lunar.Core\Lunar.Core.csproj", "{60010A47-51D9-4668-BEDF-4F09034A8D2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,6 @@ Global
 		{7059DCBE-446A-4B6F-A27C-CCF0BC84755E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7059DCBE-446A-4B6F-A27C-CCF0BC84755E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7059DCBE-446A-4B6F-A27C-CCF0BC84755E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DC32392-0F22-4082-A9F9-208F598DD170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DC32392-0F22-4082-A9F9-208F598DD170}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DC32392-0F22-4082-A9F9-208F598DD170}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DC32392-0F22-4082-A9F9-208F598DD170}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFD594BC-5272-4B55-B30D-2DCED67C6930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFD594BC-5272-4B55-B30D-2DCED67C6930}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFD594BC-5272-4B55-B30D-2DCED67C6930}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{FA334815-6D78-4E9A-9F4D-6C8A58222A57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA334815-6D78-4E9A-9F4D-6C8A58222A57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA334815-6D78-4E9A-9F4D-6C8A58222A57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60010A47-51D9-4668-BEDF-4F09034A8D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60010A47-51D9-4668-BEDF-4F09034A8D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60010A47-51D9-4668-BEDF-4F09034A8D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60010A47-51D9-4668-BEDF-4F09034A8D2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

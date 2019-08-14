@@ -20,16 +20,16 @@ namespace Lunar.Server.World.Structure
     public class CollisionBody
     {
         private Rect _collisionArea;
-        private IActor<IActorDescriptor> _actor;
+        private IActor _actor;
 
         public Rect CollisionArea
         {
             get
             {
-                if (_actor?.Descriptor?.CollisionBounds != null)
+                if (_actor?.CollisionBounds != null)
                 {
-                    return new Rect(_actor.Descriptor.Position.X + _actor.Descriptor.CollisionBounds.X, _actor.Descriptor.Position.Y + _actor.Descriptor.CollisionBounds.Y,
-                        _actor.Descriptor.CollisionBounds.Width, _actor.Descriptor.CollisionBounds.Height);
+                    return new Rect(_actor.Position.X + _actor.CollisionBounds.X, _actor.Position.Y + _actor.CollisionBounds.Y,
+                        _actor.CollisionBounds.Width, _actor.CollisionBounds.Height);
                 }
                 else
                 {
@@ -43,7 +43,7 @@ namespace Lunar.Server.World.Structure
             _collisionArea = collisionArea;
         }
 
-        public CollisionBody(IActor<IActorDescriptor> actor)
+        public CollisionBody(IActor actor)
         {
             _actor = actor;
         }
@@ -53,7 +53,7 @@ namespace Lunar.Server.World.Structure
             return (this.CollisionArea.Intersects(collisionBody.CollisionArea));
         }
 
-        public bool Collides(IActor<IActorDescriptor> actor)
+        public bool Collides(IActor actor)
         {
             return (this.CollisionArea.Intersects(actor.CollisionBody.CollisionArea));
         }
@@ -65,7 +65,7 @@ namespace Lunar.Server.World.Structure
             return (reachArea.Intersects(collisionBody.CollisionArea));
         }
 
-        public bool Collides(IActor<IActorDescriptor> actor, Vector reach)
+        public bool Collides(IActor actor, Vector reach)
         {
             Rect reachArea = new Rect(this.CollisionArea.X, this.CollisionArea.Y, this.CollisionArea.Width + reach.X, this.CollisionArea.Height + reach.Y);
 

@@ -19,11 +19,9 @@ using Lunar.Server.World.Structure;
 
 namespace Lunar.Server.World.Actors
 {
-    public interface IActor<out T> : ISubject where T: class, IActorDescriptor
+    public interface IActor : IActorDescriptor
     {
-        T Descriptor { get; }
-
-        long UniqueID { get; }
+        string UniqueID { get; }
 
         bool Attackable { get; }
 
@@ -35,12 +33,12 @@ namespace Lunar.Server.World.Actors
 
         CollisionBody CollisionBody { get; }
 
-        IActor<IActorDescriptor> Target { get; set; }
+        IActor Target { get; set; }
 
         void Update(GameTime gameTime);
 
         void WarpTo(Vector position);
 
-        void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt);
+        void OnAttacked(IActor attacker, int damageDelt);
     }
 }

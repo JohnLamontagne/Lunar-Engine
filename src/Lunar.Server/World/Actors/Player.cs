@@ -34,7 +34,7 @@ using Lunar.Server.World.Conversation;
 
 namespace Lunar.Server.World.Actors
 {
-    public class Player : IActor<PlayerDescriptor>
+    public class Player : PlayerDescriptor, IActor
     {
         private readonly PlayerDescriptor _descriptor;
         private readonly PlayerConnection _connection;
@@ -44,7 +44,7 @@ namespace Lunar.Server.World.Actors
         private readonly PlayerNetworkComponent _networkComponent;
         private readonly ActionProcessor<Player> _actionProcessor;
 
-        private IActor<IActorDescriptor> _lastAttacker;
+        private IActor _lastAttacker;
 
         private Map _map;
 
@@ -66,7 +66,7 @@ namespace Lunar.Server.World.Actors
 
         public string MapID => _map != null ? _map.Name : _descriptor.MapID;
 
-        public long UniqueID => _connection.UniqueIdentifier;
+        public string UniqueID => _connection.UniqueIdentifier.ToString();
 
         public Layer Layer { get; set; }
 
@@ -76,19 +76,19 @@ namespace Lunar.Server.World.Actors
 
         public Equipment Equipment => _equipment;
 
-        public IActor<IActorDescriptor> Target { get; set; }
+        public IActor Target { get; set; }
 
         /// <summary>
         /// Last actor to deal damage to this player.
         /// </summary>
-        public IActor<IActorDescriptor> LastAttacker => _lastAttacker;
+        public IActor LastAttacker => _lastAttacker;
 
         /// <summary>
         /// Returns whether the client is currently still in the loading screen
         /// </summary>
         public bool InLoadingScreen => !this.MapLoaded;
 
-        public bool Alive => (this.Descriptor.Stats.Health + this.Descriptor.StatBoosts.Health) >= 0;
+        public bool Alive => (this.Descriptor.Stats.CurrentHealth + this.Descriptor.StatBoosts.CurrentHealth) >= 0;
 
         public bool Attackable
         {
@@ -179,15 +179,15 @@ namespace Lunar.Server.World.Actors
 
         public void InflictDamage(int amount)
         {
-            this.Descriptor.Stats.Health -= amount;
+            this.Descriptor.Stats.CurrentHealth -= amount;
 
-            if (this.Descriptor.Stats.Health <= 0)
+            if (this.Descriptor.Stats.CurrentHealth <= 0)
             {
                 this.OnDeath();
             }
         }
 
-        public void OnAttacked(IActor<IActorDescriptor> attacker, int damageDelt)
+        public void OnAttacked(IActor attacker, int damageDelt)
         {
             _lastAttacker = attacker;
 
@@ -326,7 +326,7 @@ namespace Lunar.Server.World.Actors
             {
                 _actionProcessor.Update(gameTime);
 
-                if (this.Descriptor.Stats.Health <= 0)
+                if (this.Descriptor.Stats.CurrentHealth <= 0)
                 {
                     this.OnDeath();
                     return;
@@ -339,12 +339,12 @@ namespace Lunar.Server.World.Actors
             }
         }
 
-        public IActor<IActorDescriptor> FindTarget()
+        public IActor FindTarget()
         {
-            return this.FindTarget<IActor<IActorDescriptor>>();
+            return this.FindTarget<IActor>();
         }
 
-        public T FindTarget<T>() where T : IActor<IActorDescriptor>
+        public T FindTarget<T>() where T : IActor
         {
             foreach (var actor in _map.GetActors<T>())
             {
@@ -376,8 +376,8 @@ namespace Lunar.Server.World.Actors
                 ? Settings.ExperienceThreshhold[this.Descriptor.Level + 1]
                 : 0);
 
+            buffer.Write(this.Descriptor.Stats.CurrentHealth);
             buffer.Write(this.Descriptor.Stats.Health);
-            buffer.Write(this.Descriptor.Stats.MaximumHealth);
             buffer.Write(this.Descriptor.Stats.Strength);
             buffer.Write(this.Descriptor.Stats.Intelligence);
             buffer.Write(this.Descriptor.Stats.Dexterity);

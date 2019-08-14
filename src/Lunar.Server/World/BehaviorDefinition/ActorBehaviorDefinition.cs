@@ -10,11 +10,9 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using Lunar.Server.Utilities.Scripting;
 using System;
 using Lunar.Core.Utilities;
 using Lunar.Server.World.Actors;
-using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World.BehaviorDefinition
@@ -25,27 +23,27 @@ namespace Lunar.Server.World.BehaviorDefinition
         /// <summary>
         /// Invoked upon actor death
         /// </summary>
-        public abstract void OnDeath(IActor<IActorDescriptor> actor);
+        public abstract void OnDeath(IActor actor);
 
         /// <summary>
         ///  Attacks the specified actor, returning the amount of damage delt.
         /// </summary>
-        public abstract int Attack(IActor<IActorDescriptor> attacker, IActor<IActorDescriptor> target);
+        public abstract int Attack(IActor attacker, IActor target);
 
         /// <summary>
         /// Invoked upon being attacked by the specified actor
         /// </summary>
-        public abstract void Attacked(IActor<IActorDescriptor> attacked, IActor<IActorDescriptor> attacker, int damageDelt);
+        public abstract void Attacked(IActor attacked, IActor attacker, int damageDelt);
 
         /// <summary>
         /// Invoked every actor Update() pass
         /// </summary>
-        public abstract void Update(IActor<IActorDescriptor> actor, GameTime gameTime);
+        public abstract void Update(IActor actor, GameTime gameTime);
 
         /// <summary>
         /// Invoked when the actor is created
         /// </summary>
-        public abstract void OnCreated(IActor<IActorDescriptor> actor);
+        public abstract void OnCreated(IActor actor);
 
         public virtual event EventHandler<SubjectEventArgs> EventOccured;
     }

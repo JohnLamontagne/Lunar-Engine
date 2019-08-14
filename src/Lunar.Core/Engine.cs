@@ -11,8 +11,12 @@ namespace Lunar.Core
     {
         public static ServiceLocator Services { get; private set; }
 
-        public static void Initialize()
+        public static string ROOT_PATH { get; private set; }
+
+        public static void Initialize(string rootPath)
         {
+            Engine.ROOT_PATH = rootPath;
+
             Services = new ServiceLocator();
             Services.Register(new Logger());
         }

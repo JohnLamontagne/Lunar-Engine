@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Lunar.Editor</RootNamespace>
     <AssemblyName>Lunar.Editor</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile>
@@ -129,7 +129,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Content\Graphics\Animation.cs" />
     <Compile Include="Controls\CreateDirectoryDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +165,12 @@
     </Compile>
     <Compile Include="Controls\DockDialogueDocument.Designer.cs">
       <DependentUpon>DockDialogueDocument.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DockSpellDocument.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DockSpellDocument.Designer.cs">
+      <DependentUpon>DockSpellDocument.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DockNPCEditor.cs">
       <SubType>UserControl</SubType>
@@ -312,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockDialogueDocument.resx">
       <DependentUpon>DockDialogueDocument.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DockSpellDocument.resx">
+      <DependentUpon>DockSpellDocument.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DockNPCEditor.resx">
       <DependentUpon>DockNPCEditor.cs</DependentUpon>

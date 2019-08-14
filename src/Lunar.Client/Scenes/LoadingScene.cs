@@ -17,6 +17,7 @@ using Lunar.Client.Net;
 using Lunar.Client.Utilities;
 using Lunar.Core;
 using Lunar.Core.Net;
+using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;

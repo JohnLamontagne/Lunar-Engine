@@ -20,19 +20,19 @@ using Lunar.Core.World.Structure.Attribute;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class MapFSDataManager : FSDataManager<BaseMap<BaseLayer<BaseTile<SpriteInfo>>>>
+    public class MapFSDataManager : FSDataManager<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>>
     {
         public MapFSDataManager()
         {
         }
 
-        public override BaseMap<BaseLayer<BaseTile<SpriteInfo>>> Load(IDataManagerArguments arguments)
+        public override MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> Load(IDataManagerArguments arguments)
         {
-            BaseMap<BaseLayer<BaseTile<SpriteInfo>>> map = null;
+            MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> map = null;
 
-            var mapArguments = (arguments as MapFSDataManagerArguments);
+            var mapArguments = (arguments as ContentFileDataLoaderArguments);
 
-            using (var fileStream = new FileStream(this.RootPath + mapArguments.Name + EngineConstants.MAP_FILE_EXT, FileMode.Open))
+            using (var fileStream = new FileStream(this.RootPath + mapArguments.FileName + EngineConstants.MAP_FILE_EXT, FileMode.Open))
             {
                 using (var bR = new BinaryReader(fileStream))
                 {
@@ -49,7 +49,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     string name = bR.ReadString();
                     var dimensions = new Vector(bR.ReadInt32(), bR.ReadInt32());
 
-                    map = new BaseMap<BaseLayer<BaseTile<SpriteInfo>>>(dimensions, name)
+                    map = new MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>(dimensions, name)
                     {
                         Dark = bR.ReadBoolean()
                     };
@@ -63,7 +63,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                         string layerName = bR.ReadString();
                         int lIndex = bR.ReadInt32();
 
-                        var layer = new BaseLayer<BaseTile<SpriteInfo>>(map.Dimensions, layerName, lIndex);
+                        var layer = new LayerDescriptor<TileDescriptor<SpriteInfo>>(map.Dimensions, layerName, lIndex);
 
                         for (int x = 0; x < layer.Tiles.GetLength(0); x++)
                         {
@@ -71,7 +71,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                             {
                                 if (bR.ReadBoolean())
                                 {
-                                    layer.Tiles[x, y] = new BaseTile<SpriteInfo>(new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE));
+                                    layer.Tiles[x, y] = new TileDescriptor<SpriteInfo>(new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE));
 
                                     if (bR.ReadBoolean()) // Is there a valid attribute saved for this tile?
                                     {
@@ -156,9 +156,9 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
         public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
         {
-            var mapDesc = (IBaseMap<IBaseLayer<IBaseTile<SpriteInfo>>>)descriptor;
+            var mapDesc = (IMapDescriptor<ILayerDescriptor<ITileDescriptor<SpriteInfo>>>)descriptor;
 
-            string filePath = this.RootPath + (arguments as MapFSDataManagerArguments).Name + EngineConstants.MAP_FILE_EXT;
+            string filePath = this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.MAP_FILE_EXT;
 
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
             {
@@ -246,7 +246,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
         public override bool Exists(IDataManagerArguments arguments)
         {
-            return File.Exists(this.RootPath + (arguments as MapFSDataManagerArguments).Name + EngineConstants.MAP_FILE_EXT);
+            return File.Exists(this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.MAP_FILE_EXT);
         }
     }
 }

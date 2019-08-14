@@ -43,7 +43,7 @@ namespace Lunar.Server.World
 
         private void Player_Connection_Lost(object sender, ConnectionEventArgs e)
         {
-            Player player = Engine.Services.Get<PlayerManager>().GetPlayer(e.Connection.RemoteUniqueIdentifier);
+            Player player = Engine.Services.Get<PlayerManager>().GetPlayer(e.Connection.RemoteUniqueIdentifier.ToString());
 
             if (player == null)
                 return;
@@ -54,7 +54,7 @@ namespace Lunar.Server.World
 
         private void Handle_PlayerMessage(PacketReceivedEventArgs args)
         {
-            Player player = Engine.Services.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
+            Player player = Engine.Services.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier.ToString());
 
             // Make sure the sender is online.
             if (player == null) return;
@@ -88,7 +88,7 @@ namespace Lunar.Server.World
 
             if (registerSuccess)
             {
-                var player = Engine.Services.Get<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier);
+                var player = Engine.Services.Get<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier.ToString());
 
                 this.JoinGame(player);
             }
@@ -108,7 +108,7 @@ namespace Lunar.Server.World
 
             if (loginSuccess)
             {
-                var player = Engine.Services.Get<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier);
+                var player = Engine.Services.Get<PlayerManager>().GetPlayer(senderConn.UniqueIdentifier.ToString());
 
                 this.JoinGame(player);
             }

@@ -60,7 +60,7 @@ namespace Lunar.Editor.Controls
             this.txtStr.Text = _npc.Stats.Strength.ToString();
             this.txtInt.Text = _npc.Stats.Intelligence.ToString();
             this.txtDef.Text = _npc.Stats.Defense.ToString();
-            this.txtHealth.Text = _npc.Stats.Health.ToString();
+            this.txtHealth.Text = _npc.Stats.CurrentHealth.ToString();
             this.txtDex.Text = _npc.Stats.Dexterity.ToString();
             this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
             this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
@@ -191,7 +191,7 @@ namespace Lunar.Editor.Controls
                 this.ContentFile = _project.ChangeNPC(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _npc.Name + EngineConstants.NPC_FILE_EXT);
             }
 
-            _npc.Save(this.ContentFile.FullName);
+            _project.SaveNPC(this.ContentFile.FullName, _npc);
         }
 
         private void txtEditor_TextChanged(object sender, System.EventArgs e)
@@ -359,7 +359,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(this.txtHealth.Text, out int newHealth);
 
-            _npc.Stats.Health = newHealth;
+            _npc.Stats.CurrentHealth = newHealth;
         }
 
         private void picSpriteSheet_Paint(object sender, PaintEventArgs e)

@@ -20,13 +20,18 @@ using Newtonsoft.Json.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using DarkUI.Controls;
+using Lunar.Graphics.Effects;
 
 namespace Lunar.Editor
 {
     public class Project
     {
         private DialogueFactory _dialogueFactory;
-        private IDataManager<BaseMap<BaseLayer<BaseTile<SpriteInfo>>>> _mapDataManager;
+
+        private IDataManager<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>> _mapDataManager;
+        private IDataManager<BaseAnimation<IAnimationLayer<SpriteInfo>>> _animationDataManager;
+        private IDataManager<NPCDescriptor> _npcDataManager;
+
         private JObject _scriptMap;
 
         private readonly DirectoryInfo _serverRootDirectory;
@@ -51,7 +56,7 @@ namespace Lunar.Editor
         private readonly Dictionary<string, Map> _maps;
         private readonly Dictionary<string, ItemDescriptor> _items;
         private readonly Dictionary<string, NPCDescriptor> _npcs;
-        private readonly Dictionary<string, AnimationDescriptor> _animations;
+        private readonly Dictionary<string, Animation> _animations;
         private readonly Dictionary<string, Dialogue> _dialogues;
 
         public JObject ScriptMap { get => _scriptMap; }
@@ -59,7 +64,7 @@ namespace Lunar.Editor
         public Dictionary<string, Map> Maps => _maps;
         public Dictionary<string, ItemDescriptor> Items => _items;
         public Dictionary<string, NPCDescriptor> NPCs => _npcs;
-        public Dictionary<string, AnimationDescriptor> Animations => _animations;
+        public Dictionary<string, Animation> Animations => _animations;
 
         public Dictionary<string, Dialogue> Dialogues => _dialogues;
 
@@ -95,12 +100,17 @@ namespace Lunar.Editor
             _maps = new Dictionary<string, Map>();
             _items = new Dictionary<string, ItemDescriptor>();
             _npcs = new Dictionary<string, NPCDescriptor>();
-            _animations = new Dictionary<string, AnimationDescriptor>();
+            _animations = new Dictionary<string, Animation>();
             _dialogues = new Dictionary<string, Dialogue>();
 
             _directories = new List<DirectoryInfo>();
 
-            _mapDataManager = new FSDataFactory().Create<MapFSDataManager>(new FSDataFactoryArguments(_serverWorldDirectory + "/Maps/"));
+            IDataManagerFactory dataManagerFactory = new FSDataFactory();
+            dataManagerFactory.Initalize();
+
+            _mapDataManager = dataManagerFactory.Create<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>>(new FSDataFactoryArguments(_serverWorldDirectory + "/Maps/"));
+            _animationDataManager = dataManagerFactory.Create<BaseAnimation<IAnimationLayer<SpriteInfo>>>(new FSDataFactoryArguments(_serverWorldDirectory + "/Animations/"));
+            _npcDataManager = dataManagerFactory.Create<NPCDescriptor>(new FSDataFactoryArguments(_serverWorldDirectory + "/NPCs/"));
 
             if (File.Exists(this.ServerRootDirectory + "/internal/.scriptmap"))
             {
@@ -236,7 +246,7 @@ namespace Lunar.Editor
 
         public Map LoadMap(string filePath, TextureLoader textureLoader)
         {
-            var mapDescriptor = _mapDataManager.Load(new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
+            var mapDescriptor = _mapDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
 
             var map = new Map(mapDescriptor, textureLoader, this);
 
@@ -250,7 +260,7 @@ namespace Lunar.Editor
 
         public void SaveMap(string filePath, Map map)
         {
-            _mapDataManager.Save(map, new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(filePath)));
+            _mapDataManager.Save(map, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
         }
 
         public FileInfo ChangeMap(string oldFilePath, string newFilePath)
@@ -426,7 +436,7 @@ namespace Lunar.Editor
 
         public FileInfo AddAnimation(string filePath)
         {
-            var animation = AnimationDescriptor.Create();
+            var animation = Animation.Create();
             animation.Name = Path.GetFileNameWithoutExtension(filePath);
             animation.Save(filePath);
             var animationFile = new FileInfo(filePath);
@@ -437,12 +447,15 @@ namespace Lunar.Editor
             return animationFile;
         }
 
-        public AnimationDescriptor LoadAnimation(string filePath)
+        public Animation LoadAnimation(string filePath)
         {
             if (_animations.ContainsKey(Helpers.NormalizePath(filePath)))
                 return _animations[Helpers.NormalizePath(filePath)];
 
-            var animation = AnimationDescriptor.Load(filePath);
+            var animationDesc = _animationDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
+
+            var animation = new Animation(animationDesc);
+
             _animations.Add(Helpers.NormalizePath(filePath), animation);
 
             return animation;
@@ -483,7 +496,7 @@ namespace Lunar.Editor
             string uniqueID = Path.GetFileNameWithoutExtension(filePath);
             var npc = NPCDescriptor.Create(uniqueID);
             npc.Name = Path.GetFileNameWithoutExtension(filePath);
-            npc.Save(filePath);
+            _npcDataManager.Save(npc, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
             var npcFile = new FileInfo(filePath);
             _npcFiles.Add(Helpers.NormalizePath(filePath), npcFile);
 
@@ -492,12 +505,17 @@ namespace Lunar.Editor
             return npcFile;
         }
 
+        public void SaveNPC(string filePath, NPCDescriptor npc)
+        {
+            _npcDataManager.Save(npc, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
+        }
+
         public NPCDescriptor LoadNPC(string filePath)
         {
             if (_npcs.ContainsKey(Helpers.NormalizePath(filePath)))
                 return _npcs[Helpers.NormalizePath(filePath)];
 
-            var npc = NPCDescriptor.Load(filePath);
+            var npc = _npcDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
             _npcs.Add(Helpers.NormalizePath(filePath), npc);
 
             return npc;

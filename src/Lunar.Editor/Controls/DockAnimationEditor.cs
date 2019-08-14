@@ -4,12 +4,11 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Lunar.Core;
-using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Logic;
-using Lunar.Editor.Content.Graphics;
 using Lunar.Editor.Utilities;
 using Lunar.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using Lunar.Graphics.Effects;
 
 namespace Lunar.Editor.Controls
 {
@@ -24,9 +23,7 @@ namespace Lunar.Editor.Controls
 
         private Project _project;
 
-        private AnimationDescriptor _animationDescription;
-        private Animation _subSurfaceAnimation;
-        private Animation _surfaceAnimation;
+        private Animation _animation;
 
         public DockAnimationEditor(Project project, string text, Image icon, FileInfo file)
             : base(file)
@@ -40,57 +37,41 @@ namespace Lunar.Editor.Controls
             _regularDockText = text;
             _unsavedDockText = text + "*";
 
-
             DockText = text;
             Icon = icon;
 
-            _animationDescription = _project.LoadAnimation(file.FullName);
+            this.txtSurfaceTexPath.Text = _animation.SurfaceAnimation.TexturePath;
+            this.txtSurfaceFrameTime.Text = _animation.SurfaceAnimation.FrameTime.ToString();
+            this.txtSurfaceFrameWidth.Text = _animation.SurfaceAnimation.FrameWidth.ToString();
+            this.txtSurfaceFrameHeight.Text = _animation.SurfaceAnimation.FrameHeight.ToString();
+            this.txtSurfaceLoopCount.Text = _animation.SurfaceAnimation.LoopCount.ToString();
 
-            this.txtSurfaceTexPath.Text = _animationDescription.SurfaceAnimation.TexturePath;
-            this.txtSurfaceFrameTime.Text = _animationDescription.SurfaceAnimation.FrameTime.ToString();
-            this.txtSurfaceFrameWidth.Text = _animationDescription.SurfaceAnimation.FrameWidth.ToString();
-            this.txtSurfaceFrameHeight.Text = _animationDescription.SurfaceAnimation.FrameHeight.ToString();
-            this.txtSurfaceLoopCount.Text = _animationDescription.SurfaceAnimation.LoopCount.ToString();
+            this.txtSubSurfaceTexPath.Text = _animation.SubSurfaceAnimation.TexturePath;
+            this.txtSubSurfaceFrameTime.Text = _animation.SubSurfaceAnimation.FrameTime.ToString();
+            this.txtSubSurfaceFrameWidth.Text = _animation.SubSurfaceAnimation.FrameWidth.ToString();
+            this.txtSubSurfaceFrameHeight.Text = _animation.SubSurfaceAnimation.FrameHeight.ToString();
+            this.txtSubSurfaceLoopCount.Text = _animation.SubSurfaceAnimation.LoopCount.ToString();
 
-            this.txtSubSurfaceTexPath.Text = _animationDescription.SubSurfaceAnimation.TexturePath;
-            this.txtSubSurfaceFrameTime.Text = _animationDescription.SubSurfaceAnimation.FrameTime.ToString();
-            this.txtSubSurfaceFrameWidth.Text = _animationDescription.SubSurfaceAnimation.FrameWidth.ToString();
-            this.txtSubSurfaceFrameHeight.Text = _animationDescription.SubSurfaceAnimation.FrameHeight.ToString();
-            this.txtSubSurfaceLoopCount.Text = _animationDescription.SubSurfaceAnimation.LoopCount.ToString();
-
-            _subSurfaceAnimation = new Animation(_animationDescription);
-            _surfaceAnimation = new Animation(_animationDescription);
-
-         
-
-            _subSurfaceAnimation.Play();
-            _surfaceAnimation.Play();
+            _animation.Play();
 
             this.subSurfaceAnimView.OnDraw = OnSubAnimDraw;
             this.surfaceAnimView.OnDraw = OnSurfAnimDraw;
 
-            this.subSurfaceAnimView.OnUpdate = OnSubAnimUpdate;
             this.surfaceAnimView.OnUpdate = OnSurfAnimUpdate;
         }
 
         private void OnSurfAnimUpdate(View view)
         {
-            _surfaceAnimation.Update(view.GameTime);
+            _animation.Update(view.GameTime);
         }
-
-        private void OnSubAnimUpdate(View view)
-        {
-            _subSurfaceAnimation.Update(view.GameTime);
-        }
-
         private void OnSurfAnimDraw(View view)
         {
-            _surfaceAnimation.Draw(view.SpriteBatch);
+            _animation.DrawSurface(view.SpriteBatch);
         }
 
         private void OnSubAnimDraw(View view)
         {
-            _subSurfaceAnimation.Draw(view.SpriteBatch);
+            _animation.DrawSubSurface(view.SpriteBatch);
         }
 
         public override void Close()
@@ -101,7 +82,7 @@ namespace Lunar.Editor.Controls
                 if (result == DialogResult.No)
                     return;
             }
-         
+
             base.Close();
         }
 
@@ -112,19 +93,19 @@ namespace Lunar.Editor.Controls
 
         public override void Save()
         {
-            _regularDockText = _animationDescription.Name + EngineConstants.ANIM_FILE_EXT;
+            _regularDockText = _animation.Name + EngineConstants.ANIM_FILE_EXT;
 
             this.DockText = _regularDockText;
             _unsaved = false;
 
-            if (_animationDescription.Name + EngineConstants.ITEM_FILE_EXT != this.ContentFile.Name)
+            if (_animation.Name + EngineConstants.ITEM_FILE_EXT != this.ContentFile.Name)
             {
-                File.Move(this.ContentFile.FullName, this.ContentFile.DirectoryName + "/" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
+                File.Move(this.ContentFile.FullName, this.ContentFile.DirectoryName + "/" + _animation.Name + EngineConstants.ITEM_FILE_EXT);
 
-                this.ContentFile = _project.ChangeItem(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _animationDescription.Name + EngineConstants.ITEM_FILE_EXT);
+                this.ContentFile = _project.ChangeItem(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _animation.Name + EngineConstants.ITEM_FILE_EXT);
             }
 
-            _animationDescription.Save(this.ContentFile.FullName);
+            _animation.Save(this.ContentFile.FullName);
         }
 
         private void buttonSave_Click(object sender, System.EventArgs e)
@@ -146,16 +127,16 @@ namespace Lunar.Editor.Controls
                 {
                     string path = dialog.FileName;
 
-                    _animationDescription.SurfaceAnimation.TexturePath = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
+                    _animation.SurfaceAnimation.TexturePath = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
 
                     Texture2D animTexture = _surfaceAnimationTextureLoader.LoadFromFile(path);
 
-                    _surfaceAnimation.SurfaceSprite = new Sprite(animTexture);
+                    _animation.SurfaceAnimation.Sprite = new Sprite(animTexture);
 
                     this.txtSurfaceFrameTime.Text = "1";
                     this.txtSurfaceFrameWidth.Text = animTexture.Width.ToString();
                     this.txtSurfaceFrameHeight.Text = animTexture.Height.ToString();
-                    this.txtSurfaceTexPath.Text = _animationDescription.SurfaceAnimation.TexturePath;
+                    this.txtSurfaceTexPath.Text = _animation.SurfaceAnimation.TexturePath;
 
                     this.MarkUnsaved();
                 }
@@ -168,8 +149,8 @@ namespace Lunar.Editor.Controls
 
             _surfaceAnimationTextureLoader = new TextureLoader(this.surfaceAnimView.GraphicsDevice);
 
-            if (File.Exists(_project.ClientRootDirectory + "/" + _animationDescription.SubSurfaceAnimation.TexturePath))
-                _surfaceAnimation.SurfaceSprite = new Sprite(_surfaceAnimationTextureLoader.LoadFromFile(_project.ClientRootDirectory + "/" + _animationDescription.SurfaceAnimation.TexturePath));
+            if (File.Exists(_project.ClientRootDirectory + "/" + _animation.SurfaceAnimation.TexturePath))
+                _animation.SurfaceAnimation.Sprite = new Sprite(_surfaceAnimationTextureLoader.LoadFromFile(_project.ClientRootDirectory + "/" + _animation.SurfaceAnimation.TexturePath));
         }
 
         private void subSurfaceAnimView_Load(object sender, EventArgs e)
@@ -178,10 +159,9 @@ namespace Lunar.Editor.Controls
 
             _subSurfaceAnimationTextureLoader = new TextureLoader(this.subSurfaceAnimView.GraphicsDevice);
 
-            if (File.Exists(_project.ClientRootDirectory + "/" + _animationDescription.SubSurfaceAnimation.TexturePath))
-                _subSurfaceAnimation.SubSurfaceSprite = new Sprite(_subSurfaceAnimationTextureLoader.LoadFromFile(_project.ClientRootDirectory + "/" +_animationDescription.SubSurfaceAnimation.TexturePath));
+            if (File.Exists(_project.ClientRootDirectory + "/" + _animation.SubSurfaceAnimation.TexturePath))
+                _animation.SubSurfaceAnimation.Sprite = new Sprite(_subSurfaceAnimationTextureLoader.LoadFromFile(_project.ClientRootDirectory + "/" + _animation.SubSurfaceAnimation.TexturePath));
         }
-
 
         private void txtSurfaceFrameTime_TextChanged(object sender, EventArgs e)
         {
@@ -189,7 +169,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSurfaceFrameTime.Text, out int frameTime);
 
-            _animationDescription.SurfaceAnimation.FrameTime = frameTime;
+            _animation.SurfaceAnimation.FrameTime = frameTime;
         }
 
         private void txtSurfaceFrameTime_KeyPress(object sender, KeyPressEventArgs e)
@@ -206,7 +186,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSurfaceFrameWidth.Text, out int frameWidth);
 
-            _animationDescription.SurfaceAnimation.FrameWidth = frameWidth;
+            _animation.SurfaceAnimation.FrameWidth = frameWidth;
         }
 
         private void txtSurfaceFrameWidth_KeyPress(object sender, KeyPressEventArgs e)
@@ -223,7 +203,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSurfaceFrameHeight.Text, out int frameHeight);
 
-            _animationDescription.SurfaceAnimation.FrameHeight = frameHeight;
+            _animation.SurfaceAnimation.FrameHeight = frameHeight;
         }
 
         private void txtSurfaceFrameHeight_KeyPress(object sender, KeyPressEventArgs e)
@@ -248,16 +228,16 @@ namespace Lunar.Editor.Controls
                 {
                     string path = dialog.FileName;
 
-                    _animationDescription.SubSurfaceAnimation.TexturePath = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
+                    _animation.SubSurfaceAnimation.TexturePath = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/");
 
                     Texture2D animTexture = _subSurfaceAnimationTextureLoader.LoadFromFile(path);
 
-                    _subSurfaceAnimation.SubSurfaceSprite = new Sprite(animTexture);
+                    _animation.SubSurfaceAnimation.Sprite = new Sprite(animTexture);
 
                     this.txtSubSurfaceFrameTime.Text = "1";
                     this.txtSubSurfaceFrameWidth.Text = animTexture.Width.ToString();
                     this.txtSubSurfaceFrameHeight.Text = animTexture.Height.ToString();
-                    this.txtSubSurfaceTexPath.Text = _animationDescription.SubSurfaceAnimation.TexturePath;
+                    this.txtSubSurfaceTexPath.Text = _animation.SubSurfaceAnimation.TexturePath;
 
                     this.MarkUnsaved();
                 }
@@ -270,7 +250,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSubSurfaceFrameTime.Text, out int frameTime);
 
-            _animationDescription.SubSurfaceAnimation.FrameTime = frameTime;
+            _animation.SubSurfaceAnimation.FrameTime = frameTime;
         }
 
         private void txtSubSurfaceFrameTime_KeyPress(object sender, KeyPressEventArgs e)
@@ -287,7 +267,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSubSurfaceFrameWidth.Text, out int frameWidth);
 
-            _animationDescription.SubSurfaceAnimation.FrameWidth = frameWidth;
+            _animation.SubSurfaceAnimation.FrameWidth = frameWidth;
         }
 
         private void txtSubSurfaceFrameWidth_KeyPress(object sender, KeyPressEventArgs e)
@@ -304,7 +284,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSubSurfaceFrameHeight.Text, out int frameHeight);
 
-            _animationDescription.SubSurfaceAnimation.FrameHeight = frameHeight;
+            _animation.SubSurfaceAnimation.FrameHeight = frameHeight;
         }
 
         private void txtSubSurfaceFrameHeight_KeyPress(object sender, KeyPressEventArgs e)
@@ -321,7 +301,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSubSurfaceFrameHeight.Text, out int loopCount);
 
-            _animationDescription.SubSurfaceAnimation.LoopCount = loopCount;
+            _animation.SubSurfaceAnimation.LoopCount = loopCount;
         }
 
         private void txtSurfaceLoopCount_KeyPress(object sender, KeyPressEventArgs e)
@@ -338,7 +318,7 @@ namespace Lunar.Editor.Controls
 
             int.TryParse(txtSubSurfaceFrameHeight.Text, out int frameHeight);
 
-            _animationDescription.SubSurfaceAnimation.FrameHeight = frameHeight;
+            _animation.SubSurfaceAnimation.FrameHeight = frameHeight;
         }
 
         private void txtSubSurfaceLoopCount_KeyPress(object sender, KeyPressEventArgs e)

@@ -12,7 +12,7 @@ using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Editor.World
 {
-    public class Map : BaseMap<Layer>
+    public class Map : MapDescriptor<Layer>
     {
         private Dictionary<string, Texture2D> _tilesets;
 
@@ -36,7 +36,7 @@ namespace Lunar.Editor.World
             this.AddLayer("Fringe", new Layer(this.Dimensions, "Fringe", 3));
         }
 
-        public Map(BaseMap<BaseLayer<BaseTile<SpriteInfo>>> descriptor, TextureLoader textureLoader, Project project)
+        public Map(MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> descriptor, TextureLoader textureLoader, Project project)
             : base(descriptor.TilesetPaths)
         {
             _tilesets = new Dictionary<string, Texture2D>();
@@ -99,7 +99,7 @@ namespace Lunar.Editor.World
             }
         }
 
-        private void Initalize(Project project, TextureLoader textureLoader, BaseMap<BaseLayer<BaseTile<SpriteInfo>>> descriptor)
+        private void Initalize(Project project, TextureLoader textureLoader, MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> descriptor)
         {
             this.Name = descriptor.Name;
             this.Bounds = descriptor.Bounds;

@@ -23,7 +23,7 @@ namespace Lunar.Core.World.Actor
         private int _defense;
         private int _maximumHealth;
 
-        public int Health
+        public int CurrentHealth
         {
             get => _health;
             set
@@ -33,7 +33,7 @@ namespace Lunar.Core.World.Actor
             }
         }
 
-        public int MaximumHealth
+        public int Health
         {
             get => _maximumHealth;
             set
@@ -81,6 +81,21 @@ namespace Lunar.Core.World.Actor
                 _defense = value;
                 this.Changed?.Invoke(this, new EventArgs());
             }
+        }
+
+        public Stats()
+        {
+
+        }
+
+        public Stats(Stats stats)
+        {
+            this.CurrentHealth = stats.CurrentHealth;
+            this.Strength = stats.Strength;
+            this.Health = stats.Health;
+            this.Intelligence = stats.Intelligence;
+            this.Dexterity = stats.Dexterity;
+            this.Defense = stats.Defense;
         }
 
         public event EventHandler Changed;

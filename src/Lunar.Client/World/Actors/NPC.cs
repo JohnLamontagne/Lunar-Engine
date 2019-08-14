@@ -38,7 +38,7 @@ namespace Lunar.Client.World.Actors
         private int _maximumHealth;
         private Vector2 _position;
         private SpriteSheet _spriteSheet;
-        private long _uniqueID;
+        private string _uniqueID;
         private Queue<Vector2> _targetPath;
         private bool _moving;
         private Direction _direction;
@@ -95,7 +95,7 @@ namespace Lunar.Client.World.Actors
             }
         }
 
-        public long UniqueID => _uniqueID;
+        public string UniqueID => _uniqueID;
 
         public Layer Layer => _layer;
 
@@ -115,7 +115,7 @@ namespace Lunar.Client.World.Actors
 
         public Emitter Emitter { get; set; }
 
-        public NPC(long uniqueID)
+        public NPC(string uniqueID)
         {
             _uniqueID = uniqueID;
 
@@ -128,7 +128,7 @@ namespace Lunar.Client.World.Actors
 
         private void Handle_NPCMoving(PacketReceivedEventArgs args)
         {
-            long uniqueID = args.Message.ReadInt64();
+            string uniqueID = args.Message.ReadString();
 
             if (_uniqueID != uniqueID)
                 return;
@@ -290,7 +290,7 @@ namespace Lunar.Client.World.Actors
             string texturePath = buffer.ReadString();
 
             var sprite = new Sprite(
-                contentManager.LoadTexture2D(Constants.FILEPATH_DATA + texturePath));
+                contentManager.LoadTexture2D(Engine.ROOT_PATH + texturePath));
             this.Speed = buffer.ReadFloat();
 
             this.Health = buffer.ReadInt32();

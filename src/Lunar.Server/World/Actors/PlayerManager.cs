@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lidgren.Network;
 using Lunar.Server.Net;
 using System;
@@ -20,22 +21,21 @@ using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor.Descriptors;
-using Lunar.Server.Utilities.Data.FileSystem;
 using Lunar.Core;
 
 namespace Lunar.Server.World.Actors
 {
     public class PlayerManager : ISubject, IService
     {
-        private readonly Dictionary<long, Player> _players;
+        private readonly Dictionary<string, Player> _players;
 
         private IDataManager<PlayerDescriptor> _playerDataManager;
 
         public PlayerManager()
         {
-            _players = new Dictionary<long, Player>();
+            _players = new Dictionary<string, Player>();
 
-            _playerDataManager = Engine.Services.Get<FSDataFactory>().Create<PlayerFSDataLoader>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
+            _playerDataManager = Engine.Services.Get<IDataManagerFactory>().Create<PlayerDescriptor>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
         }
 
         private void AddPlayer(Player player)
@@ -48,7 +48,7 @@ namespace Lunar.Server.World.Actors
             };
         }
 
-        public Player GetPlayer(long uniqueID)
+        public Player GetPlayer(string uniqueID)
         {
             if (!_players.ContainsKey(uniqueID))
                 return null;
@@ -61,13 +61,13 @@ namespace Lunar.Server.World.Actors
             foreach (var player in _players.Values)
                 _playerDataManager.Save(player.Descriptor, null);
         }
-      
-        public Player GetPlayer(string name)
+
+        public Player GetPlayerByName(string name)
         {
             return _players.Values.FirstOrDefault(p => p.Descriptor.Name == name);
         }
 
-        public void RemovePlayer(long uniqueID)
+        public void RemovePlayer(string uniqueID)
         {
             if (_players.ContainsKey(uniqueID))
                 _players.Remove(uniqueID);
@@ -106,7 +106,6 @@ namespace Lunar.Server.World.Actors
             {
                 // Whoa, they weren't lying!
                 // Let's go ahead and grant them access.
-                    
 
                 // First, we'll add them to the list of online players.
                 var player = new Player(playerDescriptor, connection);
@@ -114,7 +113,6 @@ namespace Lunar.Server.World.Actors
 
                 if (Settings.UserPermissions.ContainsKey(player.Descriptor.Name))
                     player.Descriptor.Role = Settings.UserPermissions[player.Descriptor.Name];
-               
 
                 // Now we'll go ahead and tell their client to make whatever preperations that it needs to.
                 // We'll also tell them their super duper unique id.

@@ -16,17 +16,23 @@ using System.Collections.Generic;
 using System.IO;
 using Lunar.Core;
 using Lunar.Core.Utilities;
+using Lunar.Core.Utilities.Data.FileSystem;
+using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Server.World.Actors
 {
     public class NPCManager : IService
     {
-        private Dictionary<string, NPCDefinition> _npcs;
+        private Dictionary<string, NPCDescriptor> _npcs;
+
+        private IDataManager<NPCDescriptor> _npcDataManager;
 
         public NPCManager()
         {
-            _npcs = new Dictionary<string, NPCDefinition>();
+            _npcs = new Dictionary<string, NPCDescriptor>();
+
+            _npcDataManager = Engine.Services.Get<IDataManagerFactory>().Create<NPCDescriptor>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
         }
 
         private void LoadNPCS()
@@ -38,16 +44,16 @@ namespace Lunar.Server.World.Actors
 
             foreach (var file in files)
             {
-                NPCDescriptor npcDesc = NPCDescriptor.Load(file.FullName);
+                NPCDescriptor npcDesc = _npcDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(file.Name)));
 
                 if (npcDesc != null)
-                    _npcs.Add(npcDesc.UniqueID, new NPCDefinition(npcDesc));
+                    _npcs.Add(npcDesc.UniqueID, npcDesc);
             }
 
             Console.WriteLine($"Loaded {_npcs.Count} NPCs.");
         }
 
-        public NPCDefinition GetNPC(string npcName)
+        public NPCDescriptor Get(string npcName)
         {
             return !_npcs.ContainsKey(npcName) ? null : _npcs[npcName];
         }

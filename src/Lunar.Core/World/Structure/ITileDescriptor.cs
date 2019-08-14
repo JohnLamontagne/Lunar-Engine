@@ -4,7 +4,7 @@ using Lunar.Core.World.Structure.Attribute;
 
 namespace Lunar.Core.World.Structure
 {
-    public interface IBaseTile<out T> where T : SpriteInfo
+    public interface ITileDescriptor<out T> where T : SpriteInfo
     {
         Vector Position { get; set; }
 

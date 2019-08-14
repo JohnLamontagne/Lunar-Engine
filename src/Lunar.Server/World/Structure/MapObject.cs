@@ -28,12 +28,12 @@ namespace Lunar.Server.World.Structure
 {
     public class MapObject
     {
-        private List<IActor<IActorDescriptor>> _interactingEntities;
-        private Dictionary<IActor<IActorDescriptor>, double> _cooldowns;
+        private List<IActor> _interactingEntities;
+        private Dictionary<IActor, double> _cooldowns;
         private bool _blocked;
 
-        protected Dictionary<IActor<IActorDescriptor>, double> Cooldowns { get { return _cooldowns; } }
-        protected List<IActor<IActorDescriptor>> InteractingEntities { get { return _interactingEntities; } }
+        protected Dictionary<IActor, double> Cooldowns { get { return _cooldowns; } }
+        protected List<IActor> InteractingEntities { get { return _interactingEntities; } }
 
         public Vector Position { get; set; }
         public SpriteInfo Sprite { get; set; }
@@ -57,15 +57,15 @@ namespace Lunar.Server.World.Structure
 
         public MapObject(Layer layer)
         {
-            _interactingEntities = new List<IActor<IActorDescriptor>>();
-            _cooldowns = new Dictionary<IActor<IActorDescriptor>, double>();
+            _interactingEntities = new List<IActor>();
+            _cooldowns = new Dictionary<IActor, double>();
 
             this.MapObjectBehaviorDefinition = new MapObjectBehaviorDefinition();
 
             this.Layer = layer;
         }
 
-        public virtual void OnLeft(IActor<IActorDescriptor> actor)
+        public virtual void OnLeft(IActor actor)
         {
             if (_interactingEntities.Contains(actor))
             {
@@ -75,7 +75,7 @@ namespace Lunar.Server.World.Structure
             }
         }
 
-        public virtual void OnEntered(IActor<IActorDescriptor> actor)
+        public virtual void OnEntered(IActor actor)
         {
             if (this.Blocked)
                 return;
@@ -91,7 +91,7 @@ namespace Lunar.Server.World.Structure
             }
         }
 
-        public void OnInteract(IActor<IActorDescriptor> actor)
+        public void OnInteract(IActor actor)
         {
             this.MapObjectBehaviorDefinition.OnInteract?.Invoke(this, actor);
         }

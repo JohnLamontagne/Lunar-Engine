@@ -27,13 +27,13 @@ namespace Lunar.Server.World.Structure
     public class MapManager : IService
     {
         private Dictionary<string, Map> _maps;
-        private IDataManager<BaseMap<BaseLayer<BaseTile<SpriteInfo>>>> _mapDataLoader;
+        private IDataManager<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>> _mapDataLoader;
 
         public MapManager()
         {
             _maps = new Dictionary<string, Map>();
 
-            _mapDataLoader = Engine.Services.Get<FSDataFactory>().Create<MapFSDataManager>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
+            _mapDataLoader = Engine.Services.Get<IDataManagerFactory>().Create<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
         }
 
         private void LoadMaps()
@@ -45,7 +45,7 @@ namespace Lunar.Server.World.Structure
 
             foreach (var file in files)
             {
-                Map map = new Map(_mapDataLoader.Load(new MapFSDataManagerArguments(Path.GetFileNameWithoutExtension(file.FullName))));
+                Map map = new Map(_mapDataLoader.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(file.FullName))));
 
                 map.ConstructPathfinder();
                 _maps.Add(map.Name, map);

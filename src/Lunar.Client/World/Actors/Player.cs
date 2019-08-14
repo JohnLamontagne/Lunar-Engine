@@ -32,7 +32,7 @@ namespace Lunar.Client.World.Actors
 {
     public class Player : IActor
     {
-        private readonly long _uniqueID;
+        private readonly string _uniqueID;
         private readonly Camera _camera;
 
         private string _name;
@@ -61,7 +61,7 @@ namespace Lunar.Client.World.Actors
 
         public event EventHandler DataChanged;
 
-        public long UniqueID => _uniqueID;
+        public string UniqueID => _uniqueID;
 
         public string Name => _name;
 
@@ -136,7 +136,7 @@ namespace Lunar.Client.World.Actors
 
         public Emitter Emitter { get; set; }
 
-        public Player(Camera camera, long uniqueID)
+        public Player(Camera camera, string uniqueID)
         {
             _camera = camera;
             _camera.Subject = this;
@@ -153,7 +153,7 @@ namespace Lunar.Client.World.Actors
             this.InitalizePacketHandlers();
         }
 
-        public Player(long uniqueID)
+        public Player(string uniqueID)
         {
             _uniqueID = uniqueID;
             _mainPlayer = false;
@@ -174,7 +174,7 @@ namespace Lunar.Client.World.Actors
 
         private void Handle_PlayerStats(PacketReceivedEventArgs args)
         {
-            long uniqueID = args.Message.ReadInt64();
+            string uniqueID = args.Message.ReadString();
 
             if (this.UniqueID != uniqueID)
                 return;
@@ -193,7 +193,7 @@ namespace Lunar.Client.World.Actors
 
         public void Handle_PlayerMoving(PacketReceivedEventArgs args)
         {
-            long uniqueID = args.Message.ReadInt64();
+            string uniqueID = args.Message.ReadString();
 
             if (this.UniqueID != uniqueID)
                 return;
@@ -408,9 +408,10 @@ namespace Lunar.Client.World.Actors
             _dexterity = buffer.ReadInt32();
             _defence = buffer.ReadInt32();
             this.Position = new Vector2(buffer.ReadFloat(), buffer.ReadFloat());
+            string texturePath = buffer.ReadString();
 
             var sprite = new Sprite(
-                contentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Characters/" + buffer.ReadString()));
+                contentManager.LoadTexture2D(Engine.ROOT_PATH + texturePath));
 
             int frameWidth = buffer.ReadInt32();
             int frameHeight = buffer.ReadInt32();

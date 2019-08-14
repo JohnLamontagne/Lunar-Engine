@@ -1,0 +1,91 @@
+<Widgets>
+	<label name="lblMenuTitle">
+		<text>Selected Class: </text>
+		<position>
+			<x>-160</x>
+			<y>-100</y>
+		</position>
+		<font>interfaceFont</font>
+	</label>
+	<slider name="charSelectionSlider">
+		<texture>/gfx/Interface/sliderContainer.png</texture>
+		<control_texture>/gfx/Interface/sliderControl.png</control_texture>
+		<position><x>-160</x><y>-75</y></position>
+		<padding><x>0</x><y>-4</y></padding>
+		<zorder>1</zorder>
+		<maximum_value>2</maximum_value>
+	</slider>
+		
+		
+		<label name="charStatsHeaderLabel">
+			<font>interfaceFont</font>
+			<position>
+				<x>-160</x>
+				<y>0</y>
+			</position>
+			<text>Class Stats:</text>
+			<color>White</color>
+			<zorder>1</zorder>
+		</label>
+		
+		<label name="charHealthLabel">
+			<font>interfaceFont</font>
+			<position>
+				<x>-160</x>
+				<y>45</y>
+			</position>
+			<text>Health: 0/0</text>
+			<color>White</color>
+			<zorder>1</zorder>
+		</label>
+		<label name="charStrengthLabel">
+			<font>interfaceFont</font>
+			<position>
+				<x>-160</x>
+				<y>70</y>
+			</position>
+			<text>Strength:0/0</text>
+			<color>White</color>
+			<zorder>1</zorder>
+		</label>
+		<label name="charIntLabel">
+			<font>interfaceFont</font>
+			<position>
+				<x>-160</x>
+				<y>95</y>
+			</position>
+			<text>Intelligence: 0/0</text>
+			<color>White</color>
+			<zorder>1</zorder>
+		</label>
+	
+		
+		<label name="charDefLabel">
+			<font>interfaceFont</font>
+			<position>
+				<x>-160</x>
+				<y>120</y>
+			</position>
+			<text>Defense: 0/0</text>
+			<color>White</color>
+			<zorder>1</zorder>
+		</label>
+		
+		<label name="charDexLabel">
+			<font>interfaceFont</font>
+			<position>
+				<x>-160</x>
+				<y>145</y>
+			</position>
+			<text>Dexterity: 0/0</text>
+			<zorder>1</zorder>
+			<color>White</color>
+		</label>
+
+		<picture name="picChar">
+			<position>
+				<x>-100</x>
+				<y>0</y>
+			</position>
+		</picture>
+</Widgets>

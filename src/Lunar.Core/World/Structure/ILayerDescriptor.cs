@@ -3,7 +3,7 @@ using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Core.World.Structure
 {
-    public interface IBaseLayer<out T> where T : IBaseTile<SpriteInfo>
+    public interface ILayerDescriptor<out T> where T : ITileDescriptor<SpriteInfo>
     {
         string Name { get; set; }
 

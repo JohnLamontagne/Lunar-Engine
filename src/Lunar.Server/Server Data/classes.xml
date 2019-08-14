@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Classes>
+  <Class name="Warrior">
+    <Texture>/gfx/Characters/soldier.png</Texture>
+    <Strength>5</Strength>
+    <Intelligence>2</Intelligence>
+    <Health>10</Health>
+    <Defense>4</Defense>
+    <Dexterity>1</Dexterity>
+    <Start_Map>Misty Forest</Start_Map>
+  </Class>
+</Classes>

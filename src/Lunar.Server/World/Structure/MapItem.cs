@@ -50,7 +50,7 @@ namespace Lunar.Server.World.Structure
             this.Amount = amount;
         }
 
-        public bool WithinReachOf(IActor<IActorDescriptor> actor)
+        public bool WithinReachOf(IActor actor)
         {
             return (_collisionDescriptor.Collides(actor));
         }

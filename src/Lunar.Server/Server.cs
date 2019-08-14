@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+#define DEV_MODE
 
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
@@ -28,6 +29,8 @@ using Lunar.Server.Utilities.Events;
 using Lunar.Server.Utilities.Plugin;
 using System.Diagnostics;
 using Lunar.Server.World.Conversation;
+using Lunar.Core.Utilities.Data.Management;
+
 
 namespace Lunar.Server
 {
@@ -50,7 +53,13 @@ namespace Lunar.Server
         {
             Console.WriteLine("Firing up engine...");
 
-            Engine.Initialize();
+            #if DEV_MODE
+            string rootPath = AppDomain.CurrentDomain.BaseDirectory + "../../";
+            #else
+            string rootPath = AppDomain.CurrentDomain.BaseDirectory;
+            #endif
+
+            Engine.Initialize(rootPath);
 
             Console.WriteLine("Initalizing server...");
 
@@ -77,12 +86,18 @@ namespace Lunar.Server
             Packet.Initalize(netHandler);
 
             // Register the data loader factories
-            Engine.Services.Register(new FSDataFactory());
+            IDataManagerFactory dataFactory = new FSDataFactory();
+            Engine.Services.RegisterAs(dataFactory, typeof(IDataManagerFactory));
+            dataFactory.Initalize();
 
             // Create and initalize the game content managers.
             var itemManager = new ItemManager();
             Engine.Services.Register(itemManager);
             itemManager.Initalize();
+
+            var classManager = new ClassManager();
+            Engine.Services.Register(classManager);
+            classManager.Initalize();
 
             var npcManager = new NPCManager();
             Engine.Services.Register(npcManager);

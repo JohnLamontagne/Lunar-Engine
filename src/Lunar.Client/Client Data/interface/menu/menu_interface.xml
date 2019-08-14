@@ -32,6 +32,23 @@
 			</Widgets>
 		</container>
 
+		<container name="charCreateContainer">
+			<texture>gfx/Interface/windowback.png</texture>
+			<position>
+				<x>47%</x>
+				<y>50%</y>
+			</position>
+			<visible>false</visible>
+			<origin>
+				<x>226.5</x>
+				<y>133</y>
+			</origin>
+			<Widgets>
+				<import file="interface/menu/createCharContainer.xml" />
+			</Widgets>
+			<size><x>150%</x><y>125%</y></size>
+		</container>
+
 		<label name="lblVersion">
 			<text>Version 0.2</text>
 			<position>

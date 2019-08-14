@@ -10,22 +10,42 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data.Management;
+using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Core.World.Structure;
+using System;
+using System.Collections.Generic;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
     public class FSDataFactory : IDataManagerFactory
     {
-        public T Create<T>(IDataFactoryArguments args) where T: IDataManager<IContentDescriptor>, new()
+        private Dictionary<Type, Type> _lookupTable;
+
+        public FSDataFactory()
         {
-            dynamic dataManager = new T();
-            dataManager.RootPath = (args as FSDataFactoryArguments).RootPath;
-            return dataManager;
+            _lookupTable = new Dictionary<Type, Type>();
+        }
+
+        public IDataManager<T> Create<T>(IDataFactoryArguments args) where T: IContentDescriptor
+        {
+            if (_lookupTable.ContainsKey(typeof(T)))
+            {
+                var dataManager = (FSDataManager<T>)Activator.CreateInstance(_lookupTable[typeof(T)]);
+                dataManager.RootPath = (args as FSDataFactoryArguments).RootPath;
+                return (IDataManager<T>)dataManager;
+            }
+
+            return null;
         }
 
         public void Initalize()
         {
-          
+            _lookupTable.Add(typeof(MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>), typeof(MapFSDataManager));
+            _lookupTable.Add(typeof(BaseAnimation<IAnimationLayer<SpriteInfo>>), typeof(AnimationFSDataManager));
+            _lookupTable.Add(typeof(PlayerDescriptor), typeof(PlayerFSDataManager));
+            _lookupTable.Add(typeof(NPCDescriptor), typeof(NPCFSDataManager));
         }
     }
 }

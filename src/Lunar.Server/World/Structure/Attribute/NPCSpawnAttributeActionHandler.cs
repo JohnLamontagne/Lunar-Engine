@@ -43,7 +43,7 @@ namespace Lunar.Server.World.Structure.Attribute
 
             if (_nextNPCSpawnTime <= gameTime.TotalGameTime.TotalMilliseconds && _heartbeatListener.NPCs.Count < attribute.MaxSpawns)
             {
-                var npcDesc = Engine.Services.Get<NPCManager>().GetNPC(attribute.NPCID);
+                var npcDesc = Engine.Services.Get<NPCManager>().Get(attribute.NPCID);
 
                 if (npcDesc == null)
                 {

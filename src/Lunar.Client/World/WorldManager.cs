@@ -65,7 +65,7 @@ namespace Lunar.Client.World
 
         private void Handle_PositionUpdate(PacketReceivedEventArgs args)
         {
-            long unqiueID = args.Message.ReadInt64();
+            string unqiueID = args.Message.ReadString();
             var player = _map.GetEntity<Player>(unqiueID);
 
             if (player != null)
@@ -78,13 +78,13 @@ namespace Lunar.Client.World
 
         private void Handle_PlayerLeft(PacketReceivedEventArgs args)
         {
-            long uniqueID = args.Message.ReadInt64();
+            string uniqueID = args.Message.ReadString();
             _map.RemoveEntity(uniqueID);
         }
 
         private void Handle_NPCData(PacketReceivedEventArgs args)
         {
-            var uniqueID = args.Message.ReadInt64();
+            string uniqueID = args.Message.ReadString();
 
             if (!_map.EntityExists(uniqueID))
             {
@@ -100,7 +100,7 @@ namespace Lunar.Client.World
 
         private void Handle_PlayerData(PacketReceivedEventArgs args)
         {
-            long uniqueID = args.Message.ReadInt64();
+            string uniqueID = args.Message.ReadString();
 
             if (uniqueID == Engine.Services.Get<NetHandler>().UniqueID)
             {
@@ -118,7 +118,7 @@ namespace Lunar.Client.World
 
         private void Handle_PlayerJoined(PacketReceivedEventArgs args)
         {
-            var uniqueID = args.Message.ReadInt64();
+            var uniqueID = args.Message.ReadString();
 
             Player player;
 
@@ -181,7 +181,7 @@ namespace Lunar.Client.World
                 _map?.Draw(spriteBatch, _camera);
         }
 
-        public void RemovePlayer(long uniqueID)
+        public void RemovePlayer(string uniqueID)
         {
             _map.RemoveEntity(uniqueID);
         }

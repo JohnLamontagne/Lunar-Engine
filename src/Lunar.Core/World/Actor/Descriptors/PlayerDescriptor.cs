@@ -17,6 +17,7 @@ using System.Runtime.Serialization;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.Utilities.Data.Management;
 
 namespace Lunar.Core.World.Actor.Descriptors
 {
@@ -70,7 +71,7 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Stats Stats { get; set; }
 
-        public Stats StatBoosts { get; private set; }
+        public Stats StatBoosts { get; set; }
 
         public Vector Position
         {
@@ -94,6 +95,11 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Vector Reach { get; set; }
 
+        public PlayerDescriptor()
+        {
+
+        }
+
         public PlayerDescriptor(string username, string password)
         {
             _name = username;
@@ -114,8 +120,8 @@ namespace Lunar.Core.World.Actor.Descriptors
                 Speed = .1f,
                 Stats = new Stats()
                 {
+                    CurrentHealth = 100,
                     Health = 100,
-                    MaximumHealth = 100,
                     Strength = 10,
                     Intelligence = 10,
                     Dexterity = 10,
@@ -127,11 +133,6 @@ namespace Lunar.Core.World.Actor.Descriptors
             };
 
             return descriptor;
-        }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new NotImplementedException();
         }
 
         public event EventHandler ExperienceChanged;

@@ -39,6 +39,12 @@ namespace Lunar.Core.Utilities.Data
             _y = y;
         }
 
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
         public static Vector FromString(string value)
         {
             try
@@ -145,6 +151,8 @@ namespace Lunar.Core.Utilities.Data
         {
             return !(vecOne == vecTwo);
         }
+
+        
 
         public static implicit operator Vector(Vector2 vector)
         {

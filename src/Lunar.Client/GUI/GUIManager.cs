@@ -16,6 +16,7 @@ using Lunar.Client.Utilities;
 using Lunar.Client.Utilities.Services;
 using Lunar.Core;
 using Lunar.Core.Utilities.Data;
+using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -199,12 +200,10 @@ namespace Lunar.Client.GUI
                         widget.OnRightMouseDown(mouseState);
                     }
                 }
-                else
+
+                if (widget.Contains(mouseState.Position) && (this.ActiveWidget == null || !this.ActiveWidget.Contains(mouseState.Position)))
                 {
-                    if (widget.Contains(mouseState.Position) && (this.ActiveWidget == null || !this.ActiveWidget.Contains(mouseState.Position)))
-                    {
-                        widget.OnMouseHover(mouseState);
-                    }
+                    widget.OnMouseHover(mouseState);
                 }
             }
 
@@ -318,6 +317,50 @@ namespace Lunar.Client.GUI
             {
                 this.LoadChatboxFromXML(chatboxElement, fonts, content, parent);
             }
+
+            foreach (var sliderElement in widgetEntries.Elements("slider"))
+            {
+                this.LoadSliderFromXML(sliderElement, content, parent);
+            }
+        }
+
+        private void LoadSliderFromXML(XElement sliderElement, ContentManager content, GUIManager parent)
+        {
+            string sliderName = sliderElement.Attribute("name")?.Value.ToString();
+
+            string texturePath = sliderElement.Element("texture")?.Value.ToString();
+            string controlTexturePath = sliderElement.Element("control_texture")?.Value.ToString();
+
+            int.TryParse(sliderElement.Element("padding")?.Element("x")?.Value.ToString(), out int paddingX);
+            int.TryParse(sliderElement.Element("padding")?.Element("y")?.Value.ToString(), out int paddingY);
+
+            Enum.TryParse(sliderElement.Element("orientation")?.Value.ToString(), out Orientation orientation);
+
+            int.TryParse(sliderElement.Element("zorder")?.Value.ToString(), out int zOrder);
+
+            var position = parent.ParsePosition(sliderElement.Element("position")?.Element("x")?.Value.ToString(),
+                sliderElement.Element("position")?.Element("y")?.Value.ToString());
+
+            int.TryParse(sliderElement.Element("maximum_value")?.Value.ToString(), out int maxValue);
+
+            if (!bool.TryParse(sliderElement.Element("visible")?.Value, out bool visible))
+            {
+                visible = true;
+            }
+
+            Texture2D containerTexture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
+            Texture2D controlTexture = content.LoadTexture2D(Constants.FILEPATH_DATA + controlTexturePath);
+
+            var slider = new Slider(containerTexture, controlTexture, orientation)
+            {
+                Position = position,
+                ZOrder = zOrder,
+                Padding = new Vector2(paddingX, paddingY),
+                Visible = visible,
+                MaximumValue = maxValue
+            };
+
+            parent.AddWidget(slider, sliderName);
         }
 
         private void LoadChatboxFromXML(XElement chatboxElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
@@ -484,20 +527,8 @@ namespace Lunar.Client.GUI
 
             Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
-            float sizeX = texture.Width;
-            float sizeY = texture.Height;
-
-            if (containerElement.Element("size")?.Element("x") != null)
-            {
-                float.TryParse(containerElement.Element("size")?.Element("x")?.Value.ToString(), out sizeX);
-            }
-
-            if (containerElement.Element("size")?.Element("y") != null)
-            {
-                float.TryParse(containerElement.Element("size")?.Element("y")?.Value.ToString(), out sizeY);
-            }
-
-            Vector2 size = new Vector2(sizeX, sizeY);
+            Vector2 size = this.ParseSize(containerElement.Element("size")?.Element("x")?.Value.ToString(),
+                containerElement.Element("size")?.Element("y")?.Value.ToString(), texture);
 
             int.TryParse(containerElement.Element("zorder")?.Value.ToString(), out int zOrder);
 
@@ -697,12 +728,48 @@ namespace Lunar.Client.GUI
             }
         }
 
+        protected virtual Vector ParseSize(string sizeX, string sizeY, Texture2D texture)
+        {
+            float x = 0;
+            float y = 0;
+
+            if (string.IsNullOrEmpty(sizeX))
+            {
+                x = texture.Width;
+            }
+            else if (sizeX.Contains("%"))
+            {
+                float.TryParse(sizeX.Replace("%", ""), out float pX);
+                x = texture.Width * (pX / 100f);
+            }
+            else
+            {
+                float.TryParse(sizeX, out x);
+            }
+
+            if (string.IsNullOrEmpty(sizeY))
+            {
+                y = texture.Height;
+            }
+            else if (sizeY.Contains("%"))
+            {
+                float.TryParse(sizeY.Replace("%", ""), out float pY);
+                y = texture.Height * (pY / 100f);
+            }
+            else
+            {
+                float.TryParse(sizeY, out y);
+            }
+
+            return new Vector2(x, y);
+        }
+
         protected virtual Vector2 ParsePosition(string posX, string posY)
         {
             float x = 0;
             float y = 0;
 
-            if (posX == null)
+            if (string.IsNullOrEmpty(posX))
             {
                 x = 0;
             }
@@ -716,7 +783,7 @@ namespace Lunar.Client.GUI
                 float.TryParse(posX, out x);
             }
 
-            if (posY == null)
+            if (string.IsNullOrEmpty(posY))
             {
                 y = 0;
             }

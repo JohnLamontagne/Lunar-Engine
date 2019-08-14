@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Penumbra;
 using Lunar.Client.Utilities.Services;
 using Lunar.Core;
+using Lunar.Graphics;
 
 namespace Lunar.Client.World
 {

@@ -77,8 +77,8 @@ namespace Lunar.Server.World.Actors.Components
             packet.Message.Write(_player.UniqueID);
             packet.Message.Write(_player.Descriptor.Speed);
             packet.Message.Write(_player.Descriptor.Level);
+            packet.Message.Write(_player.Descriptor.Stats.CurrentHealth);
             packet.Message.Write(_player.Descriptor.Stats.Health);
-            packet.Message.Write(_player.Descriptor.Stats.MaximumHealth);
             packet.Message.Write(_player.Descriptor.Stats.Strength + _player.Descriptor.StatBoosts.Strength);
             packet.Message.Write(_player.Descriptor.Stats.Intelligence + _player.Descriptor.StatBoosts.Intelligence);
             packet.Message.Write(_player.Descriptor.Stats.Dexterity + _player.Descriptor.StatBoosts.Dexterity);

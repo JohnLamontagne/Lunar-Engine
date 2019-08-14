@@ -44,7 +44,7 @@ namespace Lunar.Client.Net
         /// </summary>
         private readonly List<Tuple<NetOutgoingMessage, NetDeliveryMethod, ChannelType>> _packetCache;
 
-        public long UniqueID => _client.UniqueIdentifier;
+        public string UniqueID => _client.UniqueIdentifier.ToString();
 
         public bool Connected => _client.ConnectionStatus == NetConnectionStatus.Connected;
 
@@ -162,6 +162,9 @@ namespace Lunar.Client.Net
                     {
                         if (Settings.DisplayNetworkMessages)
                             Console.WriteLine("Handling packet {0} by {1}", packetType.ToString(), handler.Method.ToString());
+
+                        // Reset the read position.
+                        args.Message.Position = 0;
 
                         handler.Invoke(args);
                     }

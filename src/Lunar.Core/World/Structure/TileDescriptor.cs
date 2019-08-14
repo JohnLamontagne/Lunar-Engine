@@ -16,7 +16,7 @@ using Lunar.Core.Utilities.Data;
 
 namespace Lunar.Core.World.Structure
 {
-    public class BaseTile<T> : IBaseTile<T> where T : SpriteInfo
+    public class TileDescriptor<T> : ITileDescriptor<T> where T : SpriteInfo
     {
         public Vector Position { get; set; }
 
@@ -38,12 +38,12 @@ namespace Lunar.Core.World.Structure
 
         public virtual T Sprite { get; set; }
 
-        protected BaseTile()
+        protected TileDescriptor()
         {
             this.Attribute = null;
         }
 
-        public BaseTile(T sprite)
+        public TileDescriptor(T sprite)
             : this()
         {
             this.Sprite = sprite;
@@ -51,7 +51,7 @@ namespace Lunar.Core.World.Structure
             this.Animated = false;
         }
 
-        public BaseTile(Vector position)
+        public TileDescriptor(Vector position)
             : this()
         {
             this.Position = position;

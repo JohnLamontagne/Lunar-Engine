@@ -30,21 +30,21 @@ using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Server.World.Structure
 {
-    public class Map : BaseMap<Layer>
+    public class Map : MapDescriptor<Layer>
     {
         private readonly Dictionary<Layer, Pathfinder> _pathFinders;
-        private WorldDictionary<long, IActor<IActorDescriptor>> _actors;
-        private WorldDictionary<IActor<IActorDescriptor>, List<MapObject>> _actorCollidingObjects;
+        private WorldDictionary<string, IActor> _actors;
+        private WorldDictionary<IActor, List<MapObject>> _actorCollidingObjects;
 
         private List<Tuple<Vector, Layer>> _playerSpawnAreas;
         private List<MapItem> _mapItems;
 
         public List<Player> Players => this.GetActors<Player>().ToList();
 
-        public Map(BaseMap<BaseLayer<BaseTile<SpriteInfo>>> descriptor)
+        public Map(MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> descriptor)
         {
-            _actors = new WorldDictionary<long, IActor<IActorDescriptor>>();
-            _actorCollidingObjects = new WorldDictionary<IActor<IActorDescriptor>, List<MapObject>>();
+            _actors = new WorldDictionary<string, IActor>();
+            _actorCollidingObjects = new WorldDictionary<IActor, List<MapObject>>();
             _playerSpawnAreas = new List<Tuple<Vector, Layer>>();
             _pathFinders = new Dictionary<Layer, Pathfinder>();
             _mapItems = new List<MapItem>();
@@ -177,18 +177,18 @@ namespace Lunar.Server.World.Structure
             }
         }
 
-        public bool ActorInMap<T>(T actor) where T : IActor<IActorDescriptor>
+        public bool ActorInMap<T>(T actor) where T : IActor
         {
             return _actors.ContainsKey(actor.UniqueID);
         }
 
-        public virtual void AddActor<T>(IActor<T> actor) where T : class, IActorDescriptor
+        public virtual void AddActor<T>(T actor) where T : class, IActor
         {
             _actors.Add(actor.UniqueID, actor);
             _actorCollidingObjects.Add(actor, new List<MapObject>());
         }
 
-        public IActor<IActorDescriptor> GetActor(long actorID)
+        public IActor GetActor(string actorID)
         {
             if (_actors.ContainsKey(actorID))
                 return _actors[actorID];
@@ -196,7 +196,7 @@ namespace Lunar.Server.World.Structure
                 return null;
         }
 
-        public virtual IEnumerable<T> GetActors<T>() where T : IActor<IActorDescriptor>
+        public virtual IEnumerable<T> GetActors<T>() where T : IActor
         {
             return from actor in _actors
                    where actor is T
@@ -264,7 +264,7 @@ namespace Lunar.Server.World.Structure
             }
         }
 
-        public virtual void RemoveActor(long actorID)
+        public virtual void RemoveActor(string actorID)
         {
             if (!_actors.ContainsKey(actorID))
             {

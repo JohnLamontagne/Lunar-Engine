@@ -6,9 +6,9 @@ namespace Lunar.Server.World
 {
     internal class ItemInteractionArgs : ItemArgs
     {
-        public IActor<IActorDescriptor> User { get; }
+        public IActor User { get; }
 
-        public ItemInteractionArgs(Item item, IActor<IActorDescriptor> user)
+        public ItemInteractionArgs(Item item, IActor user)
             : base(item)
         {
             this.User = user;

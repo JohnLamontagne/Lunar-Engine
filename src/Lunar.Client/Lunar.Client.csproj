@@ -13,7 +13,7 @@
     <AssemblyName>Lunar.Client</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -68,7 +68,9 @@
     <Compile Include="GUI\Widgets\ILexicalWidget.cs" />
     <Compile Include="GUI\Widgets\IWidget.cs" />
     <Compile Include="GUI\Widgets\Label.cs" />
+    <Compile Include="GUI\Widgets\Orientation.cs" />
     <Compile Include="GUI\Widgets\Picture.cs" />
+    <Compile Include="GUI\Widgets\Slider.cs" />
     <Compile Include="GUI\Widgets\StatusBar.cs" />
     <Compile Include="GUI\Widgets\Textbox.cs" />
     <Compile Include="GUI\Widgets\WidgetClickedEventArgs.cs" />
@@ -92,9 +94,7 @@
     <Compile Include="Utilities\CommandInterpreter.cs" />
     <Compile Include="Utilities\ConsoleCommands.cs" />
     <Compile Include="Utilities\ConsoleRedirector.cs" />
-    <Compile Include="Utilities\ContentManagerExtensions.cs" />
     <Compile Include="Utilities\Input\InputHelper.cs" />
-    <Compile Include="Utilities\Services\ContentManagerService.cs" />
     <Compile Include="Utilities\Services\GraphicsDeviceService.cs" />
     <Compile Include="Utilities\Services\LightManagerService.cs" />
     <Compile Include="World\Actors\IActor.cs" />

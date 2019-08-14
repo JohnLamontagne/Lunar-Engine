@@ -10,38 +10,36 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 namespace Lunar.Core.Content.Graphics
 {
-    public class AnimationLayerDescriptor
+    public interface IAnimationLayer<out T> where T : SpriteInfo
     {
         /// <summary>
         /// The width of each frame.
         /// </summary>
-        public int FrameWidth { get; set; }
+        int FrameWidth { get; set; }
 
         /// <summary>
         /// The height of each frame.
         /// </summary>
-        public int FrameHeight { get; set; }
+        int FrameHeight { get; set; }
 
         /// <summary>
         /// The amount of time each frame will last on screen.
         /// </summary>
-        public int FrameTime { get; set; }
+        int FrameTime { get; set; }
 
         /// <summary>
         /// Whether the animation will reset & continue playing after completion.
         /// </summary>
-        public int LoopCount { get; set; }
+        int LoopCount { get; set; }
 
         /// <summary>
-        /// The animation's sprite.
+        /// Path to animation layers texture
         /// </summary>
-        public string TexturePath { get; set; }
+        string TexturePath { get; set; }
 
-        internal AnimationLayerDescriptor()
-        {
-
-        }
+        T Sprite { get; }
     }
 }

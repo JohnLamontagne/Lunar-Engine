@@ -65,7 +65,7 @@ namespace Lunar.Server.Utilities.Commands
             if (_scriptedCommandHandlers.ContainsKey(command))
             {
                 // Get the player
-                var player = Engine.Services.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier);
+                var player = Engine.Services.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier.ToString());
 
                 _scriptedCommandHandlers[command].ForEach(a =>
                     {

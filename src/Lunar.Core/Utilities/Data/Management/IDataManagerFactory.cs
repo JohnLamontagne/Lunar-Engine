@@ -14,7 +14,7 @@ namespace Lunar.Core.Utilities.Data.Management
 {
     public interface IDataManagerFactory : IService
     {
-        T Create<T>(IDataFactoryArguments args) where T : IDataManager<IContentDescriptor>, new();
+        IDataManager<T> Create<T>(IDataFactoryArguments args) where T : IContentDescriptor;
     }
 
 }

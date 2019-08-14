@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+#define DEV_MODE
 
 using Lunar.Client.Net;
 using Lunar.Client.Scenes;
@@ -51,6 +52,16 @@ namespace Lunar.Client
 
         public Client()
         {
+
+            #if DEV_MODE
+                string rootPath = AppDomain.CurrentDomain.BaseDirectory + "../../../../";
+            #else
+             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
+            #endif
+
+
+            Engine.Initialize(rootPath);
+
             Settings.Initalize();
 
             _graphics = new GraphicsDeviceManager(this)
@@ -62,6 +73,7 @@ namespace Lunar.Client
             _graphics.PreparingDeviceSettings += _graphics_PreparingDeviceSettings;
 
             Content.RootDirectory = "Content";
+
         }
 
         private void _graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
@@ -79,7 +91,6 @@ namespace Lunar.Client
         {
             Window.Title = Settings.GameName;
 
-            Engine.Initialize();
 
             Engine.Services.Register(new GraphicsDeviceService(this.GraphicsDevice));
             Engine.Services.Register(new ContentManagerService(this.Content));

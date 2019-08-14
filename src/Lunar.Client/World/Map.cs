@@ -29,7 +29,7 @@ namespace Lunar.Client.World
     public class Map
     {
         private readonly Dictionary<string, Layer> _layers;
-        private readonly Dictionary<long, IActor> _entities;
+        private readonly Dictionary<string, IActor> _entities;
         private readonly Dictionary<Vector2, List<MapItem>> _mapItems;
         private readonly List<MapObject> _mapObjects;
 
@@ -53,7 +53,7 @@ namespace Lunar.Client.World
             this.Bounds = new Rectangle(0, 0, (int)this.Dimensions.X, (int)this.Dimensions.Y);
 
             _layers = new Dictionary<string, Layer>();
-            _entities = new Dictionary<long, IActor>();
+            _entities = new Dictionary<string, IActor>();
             _mapItems = new Dictionary<Vector2, List<MapItem>>();
             _mapObjects = new List<MapObject>();
 
@@ -169,12 +169,12 @@ namespace Lunar.Client.World
             _entities.Clear();
         }
 
-        public IActor GetEntity(long uniqueID)
+        public IActor GetEntity(string uniqueID)
         {
             return _entities[uniqueID];
         }
 
-        public T GetEntity<T>(long uniqueID) where T : IActor
+        public T GetEntity<T>(string uniqueID) where T : IActor
         {
             var value = _entities[uniqueID];
 
@@ -191,19 +191,19 @@ namespace Lunar.Client.World
             return _entities.Values;
         }
 
-        public bool EntityExists(long uniqueID)
+        public bool EntityExists(string uniqueID)
         {
             return _entities.ContainsKey(uniqueID);
         }
 
-        public void AddEntity(long uniqueID, IActor actor)
+        public void AddEntity(string uniqueID, IActor actor)
         {
             _entities.Add(uniqueID, actor);
 
             Engine.Services.Get<LightManagerService>().Component.Lights.Add(actor.Light);
         }
 
-        public void RemoveEntity(long uniqueID)
+        public void RemoveEntity(string uniqueID)
         {
             Engine.Services.Get<LightManagerService>().Component.Lights.Remove(_entities[uniqueID].Light);
 
