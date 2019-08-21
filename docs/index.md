@@ -1,12 +1,8 @@
 
-Lunar Engine
-============
-
+# Lunar Engine
 Lunar Engine is a free, open source 2D online RPG engine in C#
 
-Project Detials
----------------
-
+## Project Detials
 Lunar Engine is provided as a software package, the binaries of which consist of a client, server, and game editor. There are a number of important core components which make up this software package which are described in detail below.
 
 ### Lunar.Client
@@ -31,17 +27,13 @@ Lunar.Core contains code which is shared throughout the rest of the project. Thi
 Lunar.Graphics contains shared graphics and graphics processing related code, mainly shared between the game-editor and game-client.
 
 
-License
--------
-
+## License
 Licensed under the Apache License, Version 2.0 (the "License").
 
-Website & Community
--------
+## Website & Community
 https://www.indieorigin.com
 
-Multimedia
--------
+## Multimedia
 ![](https://i.imgur.com/9K62FUP.png)
 ![](https://i.imgur.com/xDiIT1Y.png)
 ![](https://i.imgur.com/7rXeYcc.png)
