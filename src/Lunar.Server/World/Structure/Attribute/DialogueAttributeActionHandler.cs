@@ -5,7 +5,7 @@ using Lunar.Server.World.Conversation;
 
 namespace Lunar.Server.World.Structure.Attribute
 {
-    internal class DialogueAttributeActionHandler : TileAttributeActionHandler
+    internal class DialogueTileAttributeActionHandler : TileAttributeActionHandler
     {
         public override void OnInitalize(ITileAttributeArgs args)
         {

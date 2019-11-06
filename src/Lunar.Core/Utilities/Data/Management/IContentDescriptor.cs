@@ -18,7 +18,7 @@ limitations under the License.
 
 namespace Lunar.Core.Utilities.Data.Management
 {
-    public interface IContentDescriptor
+    public interface IContentModel
     {
     }
 }

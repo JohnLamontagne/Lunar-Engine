@@ -10,6 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Actor.Descriptors;
@@ -19,14 +20,14 @@ using Lunar.Server.World.Structure;
 
 namespace Lunar.Server.World.Actors
 {
-    public interface IActor : IActorDescriptor
+    public interface IActor : IActorModel
     {
         string UniqueID { get; }
 
         bool Attackable { get; }
 
         bool Alive { get; }
-       
+
         Layer Layer { get; set; }
 
         ActorBehaviorDefinition Behavior { get; }

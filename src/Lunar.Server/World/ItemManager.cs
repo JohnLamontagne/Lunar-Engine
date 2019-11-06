@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.IO;
 using Lunar.Core;
 using Lunar.Core.Utilities;
+using Lunar.Core.Utilities.Data.FileSystem;
+using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World;
 using Lunar.Server.Utilities;
 
@@ -23,11 +25,13 @@ namespace Lunar.Server.World
 {
     public class ItemManager : IService
     {
-        private Dictionary<string, ItemDescriptor> _items;
+        private Dictionary<string, ItemModel> _items;
+        private IDataManager<ItemModel> _dataManager;
 
         public ItemManager()
         {
-            _items = new Dictionary<string, ItemDescriptor>();
+            _items = new Dictionary<string, ItemModel>();
+            _dataManager = Engine.Services.Get<IDataManagerFactory>().Create<ItemModel>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
         }
 
         private void LoadItems()
@@ -35,18 +39,20 @@ namespace Lunar.Server.World
             Console.WriteLine("Loading Items...");
 
             var directoryInfo = new DirectoryInfo(Constants.FILEPATH_ITEMS);
-            FileInfo[] files = directoryInfo.GetFiles("*.litm");
+            FileInfo[] files = directoryInfo.GetFiles($"*.{EngineConstants.ITEM_FILE_EXT}");
 
             foreach (var file in files)
             {
-                ItemDescriptor itemDescriptor = ItemDescriptor.Load(Constants.FILEPATH_ITEMS + file.Name);
-                _items.Add(itemDescriptor.Name, itemDescriptor);
+                var itemDesc = _dataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(file.Name)));
+
+                if (itemDesc != null)
+                    _items.Add(itemDesc.Name, itemDesc);
             }
 
             Console.WriteLine($"Loaded {files.Length} items.");
         }
 
-        public ItemDescriptor Get(string itemName)
+        public ItemModel Get(string itemName)
         {
             if (!_items.ContainsKey(itemName))
             {

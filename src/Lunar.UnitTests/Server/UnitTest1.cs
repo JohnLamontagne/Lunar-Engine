@@ -11,7 +11,6 @@ namespace Lunar.UnitTests.Server
     [TestClass]
     public class ServerPlayerTests
     {
-        
         public ServerPlayerTests()
         {
             this.BuildDirectories();
@@ -21,7 +20,7 @@ namespace Lunar.UnitTests.Server
         [TestMethod]
         public void TestNewPlayer()
         {
-            PlayerDescriptor descriptor = new PlayerDescriptor("test", "test");
+            PlayerModel descriptor = new PlayerModel("test", "test");
 
             Player player = new Player(descriptor, new TestPlayerConnection());
 
@@ -43,7 +42,6 @@ namespace Lunar.UnitTests.Server
 
             Assert.IsNotNull(player);
         }
-
 
         private void BuildDirectories()
         {
@@ -77,10 +75,7 @@ namespace Lunar.UnitTests.Server
             public TestPlayerConnection()
                 : base(null, new NetHandler("bla", 0000))
             {
-                
             }
         }
     }
-
-   
 }

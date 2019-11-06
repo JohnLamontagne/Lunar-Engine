@@ -31,14 +31,13 @@ using Lunar.Server.World.Conversation;
 
 namespace Lunar.Server.World.Actors
 {
-    public sealed class NPC : NPCDescriptor, IActor
+    public sealed class NPC : NPCModel, IActor
     {
         private Map _map;
         private Stack<Vector> _targetPath;
         private Random _random;
         private long _nextMoveTime;
         private List<Script> _scripts;
-
 
         private float _avgMoveSpeedX = 0;
         private float _avgMoveSpeedY = 0;
@@ -57,7 +56,7 @@ namespace Lunar.Server.World.Actors
 
         public bool Attackable { get; set; }
 
-        public bool Alive => this.Stats.CurrentHealth > 0;
+        public bool Alive => this.Stats.Vitality > 0;
 
         public ActorBehaviorDefinition Behavior { get; set; }
 
@@ -71,7 +70,7 @@ namespace Lunar.Server.World.Actors
 
         public new Dialogue Dialogue { get; }
 
-        protected NPC(NPCDescriptor descriptor)
+        protected NPC(NPCModel descriptor)
         {
             _scripts = new List<Script>();
 
@@ -87,8 +86,8 @@ namespace Lunar.Server.World.Actors
             this.TexturePath = descriptor.TexturePath;
             this.Stats.Defense = descriptor.Stats.Defense;
             this.Stats.Dexterity = descriptor.Stats.Dexterity;
-            this.Stats.CurrentHealth = descriptor.Stats.CurrentHealth;
-            this.Stats.Health = descriptor.Stats.Health;
+            this.Stats.Vitality = descriptor.Stats.Vitality;
+            this.Stats.Vitality = descriptor.Stats.Vitality;
             this.Stats.Strength = descriptor.Stats.Strength;
             this.Stats.Intelligence = descriptor.Stats.Intelligence;
             this.CollisionBounds = descriptor.CollisionBounds;
@@ -103,7 +102,7 @@ namespace Lunar.Server.World.Actors
             }
         }
 
-        public NPC(NPCDescriptor descriptor, Map map)
+        public NPC(NPCModel descriptor, Map map)
             : this(descriptor)
         {
             if (descriptor == null)
@@ -474,8 +473,8 @@ namespace Lunar.Server.World.Actors
             netBuffer.Write(this.Name);
             netBuffer.Write(this.Sprite.TextureName);
             netBuffer.Write(this.Speed);
-            netBuffer.Write(this.Stats.CurrentHealth);
-            netBuffer.Write(this.Stats.Health);
+            netBuffer.Write(this.Stats.Vitality);
+            netBuffer.Write(this.Stats.Vitality);
             netBuffer.Write(this.Level);
             netBuffer.Write(this.Position.X);
             netBuffer.Write(this.Position.Y);

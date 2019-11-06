@@ -14,7 +14,7 @@ namespace Lunar.Graphics.Effects
         public int FrameHeight { get; set; }
         public int FrameTime { get; set; }
         public int LoopCount { get; set; }
-        public string TexturePath { get => this.Sprite.TextureName; set { } }
+        public string TexturePath { get => this.Sprite.TextureName ?? ""; set { } }
 
         public Sprite Sprite { get; set; }
 

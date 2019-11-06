@@ -11,19 +11,27 @@
 	limitations under the License.
 */
 
-using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.Utilities.Data.Management;
 
-namespace Lunar.Core.World.Structure
+namespace Lunar.Core.World.Actor.Descriptors
 {
-    public class MapObjectDescriptor
+    public interface IActorModel : IContentModel
     {
-        public Vector Position { get; set; }
-        public SpriteInfo Sprite { get; set; }
-        public bool Interactable { get; set; }
-        public LayerDescriptor<TileDescriptor<SpriteInfo>> Layer { get; set; }
-        public bool Animated { get; set; }
-        public int FrameTime { get; set; }
-        public LightInformation LightInformation { get; set; }
+        string Name { get; }
+
+        float Speed { get; set; }
+
+        int Level { get; set; }
+
+        Stats Stats { get; }
+
+        Stats StatBoosts { get; }
+
+        Vector Position { get; set; }
+
+        Rect CollisionBounds { get; set; }
+
+        Vector Reach { get; set; }
     }
 }

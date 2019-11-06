@@ -23,13 +23,13 @@ using Lunar.Server.World.Structure.Attribute;
 
 namespace Lunar.Server.World.Structure
 {
-    public class Tile : TileDescriptor<SpriteInfo>
+    public class Tile : TileModel<SpriteInfo>
     {
         private Rect _collisionArea;
 
         public Layer Layer { get; }
 
-        protected Tile(TileDescriptor<SpriteInfo> tileData)
+        protected Tile(TileModel<SpriteInfo> tileData)
         {
             this.Animated = tileData.Animated;
             this.Attribute = tileData.Attribute;
@@ -43,7 +43,7 @@ namespace Lunar.Server.World.Structure
             this.Teleporter = tileData.Teleporter;
         }
 
-        public Tile(Layer layer, TileDescriptor<SpriteInfo> tileData)
+        public Tile(Layer layer, TileModel<SpriteInfo> tileData)
             : this(tileData)
         {
             this.Layer = layer;

@@ -22,7 +22,6 @@ using System.Linq;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities.Data;
-using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 using Lunar.Core.Utilities;
 using Lunar.Core.World.Structure.Attribute;
@@ -30,7 +29,7 @@ using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Server.World.Structure
 {
-    public class Map : MapDescriptor<Layer>
+    public class Map : MapModel<Layer>
     {
         private readonly Dictionary<Layer, Pathfinder> _pathFinders;
         private WorldDictionary<string, IActor> _actors;
@@ -41,7 +40,7 @@ namespace Lunar.Server.World.Structure
 
         public List<Player> Players => this.GetActors<Player>().ToList();
 
-        public Map(MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> descriptor)
+        public Map(MapModel<LayerModel<TileModel<SpriteInfo>>> descriptor)
         {
             _actors = new WorldDictionary<string, IActor>();
             _actorCollidingObjects = new WorldDictionary<IActor, List<MapObject>>();

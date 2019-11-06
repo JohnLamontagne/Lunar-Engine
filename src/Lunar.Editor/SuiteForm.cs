@@ -160,10 +160,20 @@ namespace Lunar.Editor
                 return;
             }
 
+            itemDoc.Closed += ItemDoc_Closed;
+
             itemDoc.Parent = this.DockPanel;
 
             _editorDocuments.Add(itemDoc);
             this.DockPanel.AddContent(itemDoc);
+        }
+
+        private void ItemDoc_Closed(object sender, EventArgs e)
+        {
+            var file = (sender as DockDialogueDocument).ContentFile;
+            _project.UnloadItem(file.FullName);
+
+            _dockProject.RefreshItemScripts(file);
         }
 
         public void OpenAnimationDocument(FileInfo file)
@@ -242,6 +252,35 @@ namespace Lunar.Editor
             _project.UnloadDialogue(file.FullName);
 
             _dockProject.RefreshDialogueScripts(file);
+        }
+
+        private void OpenSpellDocument(FileInfo file)
+        {
+            var spellDoc = new DockSpellDocument(_project, file.Name, Icons.document_16xLG, file)
+            {
+                Tag = file
+            };
+
+            // Make sure there isn't already an open document of this file
+            var existingDoc = this.FindOpenDocument(file);
+            if (existingDoc != null)
+            {
+                this.DockPanel.ActiveContent = existingDoc;
+                return;
+            }
+
+            spellDoc.Closed += SpellDoc_Closed;
+
+            _editorDocuments.Add(spellDoc);
+            this.DockPanel.AddContent(spellDoc);
+        }
+
+        private void SpellDoc_Closed(object sender, EventArgs e)
+        {
+            var file = (sender as DockSpellDocument).ContentFile;
+            _project.UnloadSpell(file.FullName);
+
+            _dockProject.RefreshSpellScripts(file);
         }
 
         private void OpenMapDocument(FileInfo file)
@@ -361,6 +400,10 @@ namespace Lunar.Editor
             else if (file.Extension == EngineConstants.DIALOGUE_FILE_EXT)
             {
                 this.OpenDialogueDocument(file);
+            }
+            else if (file.Extension == EngineConstants.SPELL_FILE_EXT)
+            {
+                this.OpenSpellDocument(file);
             }
         }
 

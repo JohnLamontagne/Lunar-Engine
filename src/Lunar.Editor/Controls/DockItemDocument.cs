@@ -19,7 +19,7 @@ namespace Lunar.Editor.Controls
 
         private Project _project;
 
-        private ItemDescriptor _item;
+        private ItemModel _item;
 
         public DockItemDocument()
         {
@@ -137,7 +137,7 @@ namespace Lunar.Editor.Controls
                 this.ContentFile = _project.ChangeItem(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _item.Name + EngineConstants.ITEM_FILE_EXT);
             }
 
-            _item.Save(this.ContentFile.FullName);
+            _project.SaveItem(this.ContentFile.FullName, _item);
         }
 
         private void txtEditor_TextChanged(object sender, System.EventArgs e)

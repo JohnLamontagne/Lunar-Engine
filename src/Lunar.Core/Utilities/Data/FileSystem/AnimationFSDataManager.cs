@@ -41,7 +41,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             return animationDescription;
         }
 
-        public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IContentModel descriptor, IDataManagerArguments arguments)
         {
             throw new NotImplementedException();
         }

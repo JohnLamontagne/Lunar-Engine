@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using System;
+
 /** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,33 +12,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 namespace Lunar.Core.World.Actor
 {
     public class Stats
     {
-        private int _health;
+        private int _vitality;
         private int _strength;
         private int _intelligence;
         private int _dexterity;
         private int _defense;
-        private int _maximumHealth;
 
-        public int CurrentHealth
+        public int Vitality
         {
-            get => _health;
+            get => _vitality;
             set
             {
-                _health = value;
-                this.Changed?.Invoke(this, new EventArgs());
-            }
-        }
-
-        public int Health
-        {
-            get => _maximumHealth;
-            set
-            {
-                _maximumHealth = value;
+                _vitality = value;
                 this.Changed?.Invoke(this, new EventArgs());
             }
         }
@@ -85,14 +75,13 @@ namespace Lunar.Core.World.Actor
 
         public Stats()
         {
-
         }
 
         public Stats(Stats stats)
         {
-            this.CurrentHealth = stats.CurrentHealth;
+            this.Vitality = stats.Vitality;
             this.Strength = stats.Strength;
-            this.Health = stats.Health;
+            this.Vitality = stats.Vitality;
             this.Intelligence = stats.Intelligence;
             this.Dexterity = stats.Dexterity;
             this.Defense = stats.Defense;

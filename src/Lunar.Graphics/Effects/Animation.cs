@@ -94,8 +94,9 @@ namespace Lunar.Graphics.Effects
         public new static Animation Create()
         {
             var animation = new Animation(BaseAnimation<IAnimationLayer<SpriteInfo>>.Create());
-            animation.SubSurfaceAnimation = new AnimationLayer()
+            animation.SubSurfaceAnimation = new AnimationLayer();
             animation.SubSurfaceAnimation.TexturePath = "";
+            animation.SurfaceAnimation = new AnimationLayer();
             animation.SurfaceAnimation.TexturePath = "";
 
             return animation;

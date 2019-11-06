@@ -12,7 +12,6 @@
 */
 
 using Lunar.Client.GUI.Widgets;
-using Lunar.Client.Utilities;
 using Lunar.Client.Utilities.Services;
 using Lunar.Core;
 using Lunar.Core.Utilities.Data;

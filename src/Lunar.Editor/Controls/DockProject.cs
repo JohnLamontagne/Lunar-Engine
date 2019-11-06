@@ -96,6 +96,14 @@ namespace Lunar.Editor.Controls
         {
         }
 
+        public void RefreshSpellScripts(FileInfo file)
+        {
+        }
+
+        public void RefreshItemScripts(FileInfo file)
+        {
+        }
+
         public void RefreshNPCScripts(FileInfo npcFile)
         {
             var npcNode = treeProject.FindNode($"Default\\Game Data\\Npcs\\{npcFile.Name}");
@@ -127,7 +135,7 @@ namespace Lunar.Editor.Controls
         {
             // Let's get nasty with an inline recursive function ;)
             Func<DarkTreeNode, DarkTreeNode> recFind = null;
-            // We have to use this little trick of splitting the defining the variable and assigning its value in order to allow the function to reference itself.
+            // We have to use this little trick of splitting the variable definition and its value assignment in order to allow the function to reference itself.
             recFind = new Func<DarkTreeNode, DarkTreeNode>((curNode) =>
             {
                 if (this.treeProject.GetNodeFullRowArea(curNode).Contains(point))
@@ -278,6 +286,8 @@ namespace Lunar.Editor.Controls
                     Icon = Icons.document_16xLG,
                 };
                 animationPathNode.Nodes.Add(fileNode);
+
+                this.AddScriptFileNodes(fileNode, animationFile);
             }
 
             var addNode = new DarkTreeNode("Add Animation")
@@ -307,6 +317,55 @@ namespace Lunar.Editor.Controls
             animationPathNode.Nodes.Add(addNode);
 
             return animationPathNode;
+        }
+
+        private DarkTreeNode BuildSpellTree()
+        {
+            var spellPathNode = new DarkTreeNode("Spells")
+            {
+                Icon = Icons.folder_closed,
+                ExpandedIcon = Icons.folder_open
+            };
+
+            foreach (var spellFile in _project.SpellFiles)
+            {
+                var fileNode = new DarkTreeNode(spellFile.Name)
+                {
+                    Tag = spellFile,
+                    Icon = Icons.document_16xLG,
+                };
+                spellPathNode.Nodes.Add(fileNode);
+
+                this.AddScriptFileNodes(fileNode, spellFile);
+            }
+
+            var addNode = new DarkTreeNode("Add Spell")
+            {
+                Icon = Icons.Plus,
+                Tag = (Action<DarkTreeNode>)((node) =>
+                {
+                    using (SaveFileDialog dialog = new SaveFileDialog())
+                    {
+                        dialog.RestoreDirectory = true;
+                        dialog.InitialDirectory = _project.ServerWorldDirectory.FullName + @"Spells";
+                        dialog.Filter = $@"Lunar Engine Spell Files (*{EngineConstants.SPELL_FILE_EXT})|*{EngineConstants.SPELL_FILE_EXT}";
+                        dialog.DefaultExt = EngineConstants.SPELL_FILE_EXT;
+                        dialog.AddExtension = true;
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string path = dialog.FileName;
+
+                            var file = _project.AddSpell(path);
+
+                            this.FileCreated?.Invoke(this, new FileEventArgs(file));
+                        }
+                    }
+                })
+            };
+
+            spellPathNode.Nodes.Add(addNode);
+
+            return spellPathNode;
         }
 
         private DarkTreeNode BuildScriptTree()
@@ -372,6 +431,8 @@ namespace Lunar.Editor.Controls
                     Icon = Icons.document_16xLG,
                 };
                 mapPathNode.Nodes.Add(fileNode);
+
+                this.AddScriptFileNodes(fileNode, mapFile);
             }
 
             var addNode = new DarkTreeNode("Add Map")
@@ -403,6 +464,37 @@ namespace Lunar.Editor.Controls
             return mapPathNode;
         }
 
+        private void AddScriptFileNodes(DarkTreeNode parentNode, FileInfo contentFile)
+        {
+            if (_project.ScriptMap.ContainsKey(contentFile.Name))
+            {
+                foreach (var scriptPath in _project.ScriptMap[contentFile.Name].ToObject<string[]>())
+                {
+                    if (!File.Exists(scriptPath))
+                    {
+                        var result = MessageBox.Show($"Script {scriptPath} does not exist, would you like to reload it?", "Error!", MessageBoxButtons.YesNo);
+
+                        if (result == DialogResult.Yes)
+                        {
+                        }
+                        else
+                        {
+                            _project.ScriptMap.Remove(scriptPath);
+                            continue;
+                        }
+                    }
+
+                    var scriptFile = new FileInfo(scriptPath);
+                    var scriptNode = new DarkTreeNode(scriptFile.Name)
+                    {
+                        Tag = scriptFile,
+                        Icon = Icons.document_16xLG
+                    };
+                    parentNode.Nodes.Add(scriptNode);
+                }
+            }
+        }
+
         private DarkTreeNode BuildDialogueTree()
         {
             var dialoguePathNode = new DarkTreeNode("Dialogues")
@@ -420,19 +512,7 @@ namespace Lunar.Editor.Controls
                 };
                 dialoguePathNode.Nodes.Add(fileNode);
 
-                if (_project.ScriptMap.ContainsKey(file.Name))
-                {
-                    foreach (var scriptPath in _project.ScriptMap[file.Name].ToObject<string[]>())
-                    {
-                        var scriptFile = new FileInfo(scriptPath);
-                        var scriptNode = new DarkTreeNode(scriptFile.Name)
-                        {
-                            Tag = scriptFile,
-                            Icon = Icons.document_16xLG
-                        };
-                        fileNode.Nodes.Add(scriptNode);
-                    }
-                }
+                this.AddScriptFileNodes(fileNode, file);
             }
 
             var addNode = new DarkTreeNode("Add Dialogue")
@@ -528,19 +608,7 @@ namespace Lunar.Editor.Controls
                 };
                 npcPathNode.Nodes.Add(fileNode);
 
-                if (_project.ScriptMap.ContainsKey(npcFile.Name))
-                {
-                    foreach (var scriptPath in _project.ScriptMap[npcFile.Name].ToObject<string[]>())
-                    {
-                        var scriptFile = new FileInfo(scriptPath);
-                        var scriptNode = new DarkTreeNode(scriptFile.Name)
-                        {
-                            Tag = scriptFile,
-                            Icon = Icons.document_16xLG
-                        };
-                        fileNode.Nodes.Add(scriptNode);
-                    }
-                }
+                this.AddScriptFileNodes(fileNode, npcFile);
             }
 
             // Save any changes that might have occurred due to faulty script references (i.e., the NPC doesn't actually have a script in the map attached to it).
@@ -585,6 +653,7 @@ namespace Lunar.Editor.Controls
 
             projectTreeNode.Nodes.Add(this.BuildMapTree());
             projectTreeNode.Nodes.Add(this.BuildItemTree());
+            projectTreeNode.Nodes.Add(this.BuildSpellTree());
             projectTreeNode.Nodes.Add(this.BuildDialogueTree());
             projectTreeNode.Nodes.Add(this.BuildAnimationTree());
             projectTreeNode.Nodes.Add(this.BuildNPCTree());

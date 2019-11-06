@@ -54,9 +54,9 @@ namespace Lunar.Editor.Controls
 
             _animation.Play();
 
+            // Hook up UI display view handlers
             this.subSurfaceAnimView.OnDraw = OnSubAnimDraw;
             this.surfaceAnimView.OnDraw = OnSurfAnimDraw;
-
             this.surfaceAnimView.OnUpdate = OnSurfAnimUpdate;
         }
 
@@ -64,6 +64,7 @@ namespace Lunar.Editor.Controls
         {
             _animation.Update(view.GameTime);
         }
+
         private void OnSurfAnimDraw(View view)
         {
             _animation.DrawSurface(view.SpriteBatch);

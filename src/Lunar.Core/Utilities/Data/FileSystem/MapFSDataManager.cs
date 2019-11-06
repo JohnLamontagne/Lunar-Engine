@@ -20,15 +20,15 @@ using Lunar.Core.World.Structure.Attribute;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class MapFSDataManager : FSDataManager<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>>
+    public class MapFSDataManager : FSDataManager<MapModel<LayerModel<TileModel<SpriteInfo>>>>
     {
         public MapFSDataManager()
         {
         }
 
-        public override MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> Load(IDataManagerArguments arguments)
+        public override MapModel<LayerModel<TileModel<SpriteInfo>>> Load(IDataManagerArguments arguments)
         {
-            MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>> map = null;
+            MapModel<LayerModel<TileModel<SpriteInfo>>> map = null;
 
             var mapArguments = (arguments as ContentFileDataLoaderArguments);
 
@@ -49,7 +49,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     string name = bR.ReadString();
                     var dimensions = new Vector(bR.ReadInt32(), bR.ReadInt32());
 
-                    map = new MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>(dimensions, name)
+                    map = new MapModel<LayerModel<TileModel<SpriteInfo>>>(dimensions, name)
                     {
                         Dark = bR.ReadBoolean()
                     };
@@ -63,7 +63,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                         string layerName = bR.ReadString();
                         int lIndex = bR.ReadInt32();
 
-                        var layer = new LayerDescriptor<TileDescriptor<SpriteInfo>>(map.Dimensions, layerName, lIndex);
+                        var layer = new LayerModel<TileModel<SpriteInfo>>(map.Dimensions, layerName, lIndex);
 
                         for (int x = 0; x < layer.Tiles.GetLength(0); x++)
                         {
@@ -71,7 +71,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                             {
                                 if (bR.ReadBoolean())
                                 {
-                                    layer.Tiles[x, y] = new TileDescriptor<SpriteInfo>(new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE));
+                                    layer.Tiles[x, y] = new TileModel<SpriteInfo>(new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE));
 
                                     if (bR.ReadBoolean()) // Is there a valid attribute saved for this tile?
                                     {
@@ -154,9 +154,9 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             return map;
         }
 
-        public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IContentModel descriptor, IDataManagerArguments arguments)
         {
-            var mapDesc = (IMapDescriptor<ILayerDescriptor<ITileDescriptor<SpriteInfo>>>)descriptor;
+            var mapDesc = (IMapModel<ILayerModel<ITileModel<SpriteInfo>>>)descriptor;
 
             string filePath = this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.MAP_FILE_EXT;
 

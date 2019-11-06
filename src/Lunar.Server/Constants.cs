@@ -60,6 +60,8 @@ namespace Lunar.Server
 
         public static readonly string FILEPATH_DIALOGUE;
 
+        public static readonly string FILEPATH_SPELLS;
+
         static Constants()
         {
             Constants.FILEPATH_DATA = Engine.ROOT_PATH + "/Server Data/";
@@ -73,8 +75,7 @@ namespace Lunar.Server
             Constants.FILEPATH_PLUGINS = Constants.FILEPATH_WORLD + "/Plugins/";
             Constants.FILEPATH_ANIMATIONS = Constants.FILEPATH_WORLD + "/Animations/";
             Constants.FILEPATH_DIALOGUE = Constants.FILEPATH_WORLD + "/Dialogues/";
+            Constants.FILEPATH_SPELLS = Constants.FILEPATH_WORLD + "/Spells/";
         }
-
-      
     }
 }

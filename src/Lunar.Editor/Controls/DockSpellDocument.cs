@@ -7,6 +7,7 @@ using Lunar.Core;
 using Lunar.Core.Utilities.Logic;
 using Lunar.Core.World;
 using ScintillaNET;
+using Lunar.Graphics.Effects;
 
 namespace Lunar.Editor.Controls
 {
@@ -17,9 +18,12 @@ namespace Lunar.Editor.Controls
         private bool _unsaved;
         private string _activeScript;
 
+        private Animation _casterAnimation;
+        private Animation _targetAnimation;
+
         private Project _project;
 
-        private ItemDescriptor _item;
+        private SpellModel _spell;
 
         public DockSpellDocument()
         {
@@ -41,22 +45,73 @@ namespace Lunar.Editor.Controls
             DockText = text;
             Icon = icon;
 
-            _item = _project.LoadItem(file.FullName);
+            _spell = _project.LoadSpell(file.FullName);
 
-            this.txtName.Text = _item.Name;
+            this.txtName.Text = _spell.Name;
 
-            this.txtStr.Text = _item.Strength.ToString();
-            this.txtInt.Text = _item.Intelligence.ToString();
-            this.txtDef.Text = _item.Defence.ToString();
-            this.txtHealth.Text = _item.Health.ToString();
-            this.txtDex.Text = _item.Dexterity.ToString();
+            this.txtCastTime.Text = _spell.CastTime.ToString();
+            this.txtCooldownTime.Text = _spell.CooldownTime.ToString();
+            this.txtActiveTime.Text = _spell.ActiveTime.ToString();
 
-            _regularDockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            this.txtReqStr.Text = _spell.ReqStats.Strength.ToString();
+            this.txtReqInt.Text = _spell.ReqStats.Intelligence.ToString();
+            this.txtReqDef.Text = _spell.ReqStats.Defense.ToString();
+            this.txtReqHealth.Text = _spell.ReqStats.Vitality.ToString();
+            this.txtReqDex.Text = _spell.ReqStats.Dexterity.ToString();
+
+            this.txtStrMod.Text = _spell.StatModifiers.Strength.ToString();
+            this.txtDefMod.Text = _spell.StatModifiers.Defense.ToString();
+            this.txtIntMod.Text = _spell.StatModifiers.Intelligence.ToString();
+            this.txtDexMod.Text = _spell.StatModifiers.Dexterity.ToString();
+            this.txtHealthMod.Text = _spell.StatModifiers.Vitality.ToString();
+
+            this.txtHealthCost.Text = _spell.HealthCost.ToString();
+            this.txtManaCost.Text = _spell.ManaCost.ToString();
+
+            _regularDockText = _spell.Name + EngineConstants.SCRIPT_FILE_EXT;
             this.DockText = _regularDockText;
             _unsavedDockText = _regularDockText + "*";
 
-            if (File.Exists(_project.ClientRootDirectory + "/" + _item.SpriteInfo.TextureName))
-                this.picTexture.Load(_project.ClientRootDirectory + "/" + _item.SpriteInfo.TextureName);
+            if (File.Exists(_project.ClientRootDirectory + "/" + _spell.DisplaySprite.TextureName))
+                this.picTexture.Load(_project.ClientRootDirectory + "/" + _spell.DisplaySprite.TextureName);
+
+            if (!string.IsNullOrEmpty(_spell.CasterAnimationPath))
+            {
+                _casterAnimation = _project.LoadAnimation(_project.ClientRootDirectory + "/" + _spell.CasterAnimationPath);
+            }
+
+            if (!string.IsNullOrEmpty(_spell.TargetAnimationPath))
+            {
+                _targetAnimation = _project.LoadAnimation(_project.ClientRootDirectory + "/" + _spell.TargetAnimationPath);
+            }
+
+            // Hook up UI display view handlers for animation rendering
+            this.targetAnimView.OnDraw = OnTargetAnimationDraw;
+            this.casterAnimView.OnDraw = OnCasterAnimationDraw;
+            this.casterAnimView.OnUpdate = OnCasterAnimationUpdate;
+            this.targetAnimView.OnUpdate = OnTargetAnimationUpdate;
+        }
+
+        private void OnTargetAnimationUpdate(View view)
+        {
+            _targetAnimation?.Update(view.GameTime);
+        }
+
+        private void OnCasterAnimationUpdate(View view)
+        {
+            _casterAnimation?.Update(view.GameTime);
+        }
+
+        private void OnTargetAnimationDraw(View view)
+        {
+            _targetAnimation?.DrawSubSurface(view.SpriteBatch);
+            _targetAnimation?.DrawSurface(view.SpriteBatch);
+        }
+
+        private void OnCasterAnimationDraw(View view)
+        {
+            _casterAnimation?.DrawSubSurface(view.SpriteBatch);
+            _casterAnimation?.DrawSurface(view.SpriteBatch);
         }
 
         public override void Close()
@@ -73,25 +128,25 @@ namespace Lunar.Editor.Controls
 
         private void DockItemEditor_Load(object sender, System.EventArgs e)
         {
-            this.DockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            this.DockText = _spell.Name + EngineConstants.SPELL_FILE_EXT;
             _unsaved = false;
         }
 
         public override void Save()
         {
-            _regularDockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            _regularDockText = _spell.Name + EngineConstants.SPELL_FILE_EXT;
 
             this.DockText = _regularDockText;
             _unsaved = false;
 
-            if (_item.Name + EngineConstants.ITEM_FILE_EXT != this.ContentFile.Name)
+            if (_spell.Name + EngineConstants.SPELL_FILE_EXT != this.ContentFile.Name)
             {
-                File.Move(this.ContentFile.FullName, this.ContentFile.DirectoryName + "/" + _item.Name + EngineConstants.ITEM_FILE_EXT);
+                File.Move(this.ContentFile.FullName, this.ContentFile.DirectoryName + "/" + _spell.Name + EngineConstants.SPELL_FILE_EXT);
 
-                this.ContentFile = _project.ChangeItem(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _item.Name + EngineConstants.ITEM_FILE_EXT);
+                this.ContentFile = _project.ChangeSpell(this.ContentFile.FullName, this.ContentFile.DirectoryName + "\\" + _spell.Name + EngineConstants.SPELL_FILE_EXT);
             }
 
-            _item.Save(this.ContentFile.FullName);
+            _project.SaveSpell(this.ContentFile.FullName, _spell);
         }
 
         private void buttonSave_Click(object sender, System.EventArgs e)
@@ -116,7 +171,7 @@ namespace Lunar.Editor.Controls
 
                     string path = dialog.FileName;
 
-                    _item.SpriteInfo.TextureName = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/"); ;
+                    _spell.DisplaySprite.TextureName = Helpers.MakeRelative(path, _project.ClientRootDirectory.FullName + "/"); ;
 
                     this.picTexture.Load(path);
                 }
@@ -143,9 +198,9 @@ namespace Lunar.Editor.Controls
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            _item.Name = txtName.Text;
+            _spell.Name = txtName.Text;
 
-            _regularDockText = _item.Name + EngineConstants.ITEM_FILE_EXT;
+            _regularDockText = _spell.Name + EngineConstants.SPELL_FILE_EXT;
             this.DockText = _regularDockText;
             _unsavedDockText = _regularDockText + "*";
 
@@ -156,6 +211,126 @@ namespace Lunar.Editor.Controls
         {
             this.DockText = _unsavedDockText;
             _unsaved = true;
+        }
+
+        private void TxtReqStr_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtReqStr.Text, out int reqStr))
+            {
+                _spell.StatRequirements.Strength = reqStr;
+            }
+        }
+
+        private void TxtReqInt_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtReqInt.Text, out int reqInt))
+            {
+                _spell.StatRequirements.Intelligence = reqInt;
+            }
+        }
+
+        private void TxtReqDex_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtReqDex.Text, out int reqDex))
+            {
+                _spell.StatRequirements.Dexterity = reqDex;
+            }
+        }
+
+        private void TxtReqDef_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtReqDef.Text, out int reqDef))
+            {
+                _spell.StatRequirements.Defense = reqDef;
+            }
+        }
+
+        private void TxtReqHealth_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtReqHealth.Text, out int reqHealth))
+            {
+                _spell.StatRequirements.Vitality = reqHealth;
+            }
+        }
+
+        private void TxtManaCost_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtManaCost.Text, out int manaCost))
+            {
+                _spell.ManaCost = manaCost;
+            }
+        }
+
+        private void TxtHealthCost_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtHealthCost.Text, out int healthCost))
+            {
+                _spell.HealthCost = healthCost;
+            }
+        }
+
+        private void TxtStrMod_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtStrMod.Text, out int strMod))
+            {
+                _spell.StatModifiers.Strength = strMod;
+            }
+        }
+
+        private void TxtIntMod_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtIntMod.Text, out int intMod))
+            {
+                _spell.StatModifiers.Intelligence = intMod;
+            }
+        }
+
+        private void TxtDexMod_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtDexMod.Text, out int dexMod))
+            {
+                _spell.StatModifiers.Dexterity = dexMod;
+            }
+        }
+
+        private void TxtDefMod_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtDefMod.Text, out int defMod))
+            {
+                _spell.StatModifiers.Strength = defMod;
+            }
+        }
+
+        private void TxtHealthMod_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtHealthMod.Text, out int healthMod))
+            {
+                _spell.StatModifiers.Vitality = healthMod;
+            }
+        }
+
+        private void TxtCastTime_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtCastTime.Text, out int castTime))
+            {
+                _spell.CastTime = castTime;
+            }
+        }
+
+        private void TxtActiveTime_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtActiveTime.Text, out int activeTime))
+            {
+                _spell.ActiveTime = activeTime;
+            }
+        }
+
+        private void TxtCooldownTime_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.txtCooldownTime.Text, out int cooldownTime))
+            {
+                _spell.CooldownTime = cooldownTime;
+            }
         }
     }
 }

@@ -24,9 +24,9 @@ using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class PlayerFSDataManager : FSDataManager<PlayerDescriptor>
+    public class PlayerFSDataManager : FSDataManager<PlayerModel>
     {
-        public override PlayerDescriptor Load(IDataManagerArguments arguments)
+        public override PlayerModel Load(IDataManagerArguments arguments)
         {
             string filePath = this.RootPath + (arguments as PlayerDataArguments).Username + EngineConstants.ACC_FILE_EXT;
 
@@ -70,8 +70,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     }
                 }
 
-
-                var playerDescriptor = new PlayerDescriptor(name, password)
+                var playerDescriptor = new PlayerModel(name, password)
                 {
                     SpriteSheet = sprite,
                     Speed = speed,
@@ -80,8 +79,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     MapID = mapID,
                     Stats = new Stats()
                     {
-                        CurrentHealth = health,
-                        Health = maximumHealth,
+                        Vitality = health,
                         Strength = strength,
                         Intelligence = intelligence,
                         Dexterity = dexterity,
@@ -99,9 +97,9 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             }
         }
 
-        public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IContentModel descriptor, IDataManagerArguments arguments)
         {
-            PlayerDescriptor playerDescriptor = ((PlayerDescriptor)descriptor);
+            PlayerModel playerDescriptor = ((PlayerModel)descriptor);
 
             using (var fileStream = new FileStream(this.RootPath + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT, FileMode.OpenOrCreate))
             {
@@ -113,8 +111,8 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     binaryWriter.Write(playerDescriptor.SpriteSheet.FrameWidth);
                     binaryWriter.Write(playerDescriptor.SpriteSheet.FrameHeight);
                     binaryWriter.Write(playerDescriptor.Speed);
-                    binaryWriter.Write(playerDescriptor.Stats.Health);
-                    binaryWriter.Write(playerDescriptor.Stats.CurrentHealth);
+                    binaryWriter.Write(playerDescriptor.Stats.Vitality);
+                    binaryWriter.Write(playerDescriptor.Stats.Vitality);
                     binaryWriter.Write(playerDescriptor.Stats.Strength);
                     binaryWriter.Write(playerDescriptor.Stats.Intelligence);
                     binaryWriter.Write(playerDescriptor.Stats.Dexterity);

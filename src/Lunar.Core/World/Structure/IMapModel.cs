@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Lunar.Core.World.Structure
 {
-    public interface IMapDescriptor<out T> : IContentDescriptor where T : ILayerDescriptor<ITileDescriptor<SpriteInfo>>
+    public interface IMapModel<out T> : IContentModel where T : ILayerModel<ITileModel<SpriteInfo>>
     {
         string Name { get; set; }
 
@@ -21,7 +21,7 @@ namespace Lunar.Core.World.Structure
 
         bool LayerExists(string name);
 
-        void AddLayer(string name, ILayerDescriptor<ITileDescriptor<SpriteInfo>> layer);
+        void AddLayer(string name, ILayerModel<ITileModel<SpriteInfo>> layer);
 
         void RemoveLayer(string name);
     }

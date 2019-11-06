@@ -31,7 +31,6 @@ using System.Diagnostics;
 using Lunar.Server.World.Conversation;
 using Lunar.Core.Utilities.Data.Management;
 
-
 namespace Lunar.Server
 {
     public class Server
@@ -53,11 +52,11 @@ namespace Lunar.Server
         {
             Console.WriteLine("Firing up engine...");
 
-            #if DEV_MODE
+#if DEV_MODE
             string rootPath = AppDomain.CurrentDomain.BaseDirectory + "../../";
-            #else
+#else
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
-            #endif
+#endif
 
             Engine.Initialize(rootPath);
 
@@ -193,6 +192,8 @@ namespace Lunar.Server
             Directory.CreateDirectory(Constants.FILEPATH_NPCS);
 
             Directory.CreateDirectory(Constants.FILEPATH_ANIMATIONS);
+
+            Directory.CreateDirectory(Constants.FILEPATH_SPELLS);
         }
     }
 }

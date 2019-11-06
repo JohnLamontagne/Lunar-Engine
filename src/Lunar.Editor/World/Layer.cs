@@ -13,7 +13,7 @@ using Lunar.Core.Utilities;
 
 namespace Lunar.Editor.World
 {
-    public class Layer : LayerDescriptor<Tile>
+    public class Layer : LayerModel<Tile>
     {
         private List<MapObject> _mapObjects;
 
@@ -35,7 +35,7 @@ namespace Lunar.Editor.World
             this.Visible = true;
         }
 
-        public Layer(LayerDescriptor<TileDescriptor<SpriteInfo>> layerDescriptor)
+        public Layer(LayerModel<TileModel<SpriteInfo>> layerDescriptor)
         {
             this.Name = layerDescriptor.Name;
 

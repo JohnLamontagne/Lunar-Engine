@@ -24,7 +24,7 @@ namespace Lunar.Editor.Controls
 
         private Project _project;
 
-        private NPCDescriptor _npc;
+        private NPCModel _npc;
 
         private Dialogue _selectedDialogue;
 
@@ -60,7 +60,7 @@ namespace Lunar.Editor.Controls
             this.txtStr.Text = _npc.Stats.Strength.ToString();
             this.txtInt.Text = _npc.Stats.Intelligence.ToString();
             this.txtDef.Text = _npc.Stats.Defense.ToString();
-            this.txtHealth.Text = _npc.Stats.CurrentHealth.ToString();
+            this.txtHealth.Text = _npc.Stats.Vitality.ToString();
             this.txtDex.Text = _npc.Stats.Dexterity.ToString();
             this.txtFrameWidth.Text = _npc.FrameSize.X.ToString();
             this.txtFrameHeight.Text = _npc.FrameSize.Y.ToString();
@@ -275,91 +275,132 @@ namespace Lunar.Editor.Controls
 
         private void txtColTop_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtColTop.Text, out int newTop))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtColTop.Text, out int newTop);
+                _npc.CollisionBounds = new Rect(_npc.CollisionBounds.X, newTop, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
 
-            _npc.CollisionBounds = new Core.Utilities.Data.Rect(_npc.CollisionBounds.X, newTop, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
-
-            this.picCollisionPreview.Invalidate();
+                this.picCollisionPreview.Invalidate();
+            }
+            else
+            {
+                this.txtColTop.Text = _npc.CollisionBounds.Y.ToString();
+            }
         }
 
         private void txtColHeight_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtColHeight.Text, out int newHeight))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtColHeight.Text, out int newHeight);
+                _npc.CollisionBounds = new Rect(_npc.CollisionBounds.X, _npc.CollisionBounds.Y, _npc.CollisionBounds.Width, newHeight);
 
-            _npc.CollisionBounds = new Core.Utilities.Data.Rect(_npc.CollisionBounds.X, _npc.CollisionBounds.Y, _npc.CollisionBounds.Width, newHeight);
-
-            this.picCollisionPreview.Invalidate();
+                this.picCollisionPreview.Invalidate();
+            }
+            else
+            {
+                this.txtColHeight.Text = _npc.CollisionBounds.Height.ToString();
+            }
         }
 
         private void txtColLeft_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtColLeft.Text, out int newLeft))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtColLeft.Text, out int newLeft);
+                _npc.CollisionBounds = new Rect(newLeft, _npc.CollisionBounds.Y, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
 
-            _npc.CollisionBounds = new Core.Utilities.Data.Rect(newLeft, _npc.CollisionBounds.Y, _npc.CollisionBounds.Width, _npc.CollisionBounds.Height);
-
-            this.picCollisionPreview.Invalidate();
+                this.picCollisionPreview.Invalidate();
+            }
+            else
+            {
+                this.txtColLeft.Text = _npc.CollisionBounds.X.ToString();
+            }
         }
 
         private void txtColWidth_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtColWidth.Text, out int newWidth))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtColWidth.Text, out int newWidth);
+                _npc.CollisionBounds = new Rect(_npc.CollisionBounds.X, _npc.CollisionBounds.Y, newWidth, _npc.CollisionBounds.Height);
 
-            _npc.CollisionBounds = new Core.Utilities.Data.Rect(_npc.CollisionBounds.X, _npc.CollisionBounds.Y, newWidth, _npc.CollisionBounds.Height);
-
-            this.picCollisionPreview.Invalidate();
+                this.picCollisionPreview.Invalidate();
+            }
+            else
+            {
+                this.txtColWidth.Text = _npc.CollisionBounds.Width.ToString();
+            }
         }
 
         private void txtStr_TextChanged(object sender, EventArgs e)
         {
             this.MarkUnsaved();
 
-            int.TryParse(this.txtStr.Text, out int newStr);
-
-            _npc.Stats.Strength = newStr;
+            if (int.TryParse(this.txtStr.Text, out int newStr))
+            {
+                _npc.Stats.Strength = newStr;
+            }
         }
 
         private void txtInt_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtInt.Text, out int newInt))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtInt.Text, out int newInt);
-
-            _npc.Stats.Intelligence = newInt;
+                _npc.Stats.Intelligence = newInt;
+            }
+            else
+            {
+                this.txtInt.Text = _npc.Stats.Intelligence.ToString();
+            }
         }
 
         private void txtDex_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtDex.Text, out int newDex))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtDex.Text, out int newDex);
-
-            _npc.Stats.Dexterity = newDex;
+                _npc.Stats.Dexterity = newDex;
+            }
+            else
+            {
+                this.txtDex.Text = _npc.Stats.Dexterity.ToString();
+            }
         }
 
         private void txtDef_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtDef.Text, out int newDef))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtDef.Text, out int newDef);
-
-            _npc.Stats.Defense = newDef;
+                _npc.Stats.Defense = newDef;
+            }
+            else
+            {
+                this.txtDef.Text = _npc.StatBoosts.Defense.ToString();
+            }
         }
 
         private void txtHealth_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
+            if (int.TryParse(this.txtHealth.Text, out int newHealth))
+            {
+                this.MarkUnsaved();
 
-            int.TryParse(this.txtHealth.Text, out int newHealth);
-
-            _npc.Stats.CurrentHealth = newHealth;
+                _npc.Stats.Vitality = newHealth;
+            }
+            else
+            {
+                this.txtHealth.Text = _npc.Stats.Vitality.ToString();
+            }
         }
 
         private void picSpriteSheet_Paint(object sender, PaintEventArgs e)
@@ -446,45 +487,41 @@ namespace Lunar.Editor.Controls
 
         private void txtFrameWidth_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(this.txtFrameWidth.Text))
-                return;
+            if (int.TryParse(this.txtFrameWidth.Text, out int newWidth))
+            {
+                this.MarkUnsaved();
 
-            this.MarkUnsaved();
+                if (newWidth <= 0)
+                    return;
 
-            int.TryParse(this.txtFrameWidth.Text, out int newWidth);
+                _npc.FrameSize = new Vector(newWidth, _npc.FrameSize.Y);
 
-            if (newWidth <= 0)
-                return;
-
-            _npc.FrameSize = new Vector(newWidth, _npc.FrameSize.Y);
-
-            this.picSpriteSheet.Invalidate();
+                this.picSpriteSheet.Invalidate();
+            }
         }
 
         private void txtFrameHeight_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(this.txtFrameHeight.Text))
-                return;
+            if (int.TryParse(this.txtFrameHeight.Text, out int newHeight))
+            {
+                this.MarkUnsaved();
 
-            this.MarkUnsaved();
+                if (newHeight <= 0)
+                    return;
 
-            int.TryParse(this.txtFrameHeight.Text, out int newHeight);
+                _npc.FrameSize = new Vector(_npc.FrameSize.X, newHeight);
 
-            if (newHeight <= 0)
-                return;
-
-            _npc.FrameSize = new Vector(_npc.FrameSize.X, newHeight);
-
-            this.picSpriteSheet.Invalidate();
+                this.picSpriteSheet.Invalidate();
+            }
         }
 
         private void txtMaxRoam_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
-
-            int.TryParse(this.txtMaxRoam.Text, out int newMaxRoam);
-
-            _npc.MaxRoam = new Vector(newMaxRoam, newMaxRoam);
+            if (int.TryParse(this.txtMaxRoam.Text, out int newMaxRoam))
+            {
+                this.MarkUnsaved();
+                _npc.MaxRoam = new Vector(newMaxRoam, newMaxRoam);
+            }
         }
 
         private void MarkUnsaved()
@@ -641,11 +678,11 @@ namespace Lunar.Editor.Controls
 
         private void TxtReachY_TextChanged(object sender, EventArgs e)
         {
-            this.MarkUnsaved();
-
-            int.TryParse(this.txtReachY.Text, out int reachY);
-
-            _npc.Reach = new Vector(_npc.Reach.X, reachY);
+            if (int.TryParse(this.txtReachY.Text, out int reachY))
+            {
+                this.MarkUnsaved();
+                _npc.Reach = new Vector(_npc.Reach.X, reachY);
+            }
         }
     }
 

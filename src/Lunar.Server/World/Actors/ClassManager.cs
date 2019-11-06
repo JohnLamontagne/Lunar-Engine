@@ -9,10 +9,9 @@ using System.Xml.Linq;
 
 namespace Lunar.Server.World.Actors
 {
-    class ClassManager : IService
+    internal class ClassManager : IService
     {
         private Dictionary<string, ClassInformation> _classes;
-
 
         public ICollection<ClassInformation> Classes { get => _classes.Values; }
 
@@ -20,7 +19,6 @@ namespace Lunar.Server.World.Actors
         {
             _classes = new Dictionary<string, ClassInformation>();
         }
-
 
         private void LoadClasses(string filePath)
         {
@@ -38,11 +36,10 @@ namespace Lunar.Server.World.Actors
 
                 Stats stats = new Stats()
                 {
-                    Health = int.Parse(classNode.Element("Health")?.Value),
+                    Vitality = int.Parse(classNode.Element("Health")?.Value),
                     Strength = int.Parse(classNode.Element("Strength")?.Value),
                     Intelligence = int.Parse(classNode.Element("Intelligence")?.Value),
                     Defense = int.Parse(classNode.Element("Defense")?.Value),
-                    CurrentHealth = int.Parse(classNode.Element("Health")?.Value),
                     Dexterity = int.Parse(classNode.Element("Dexterity")?.Value)
                 };
 

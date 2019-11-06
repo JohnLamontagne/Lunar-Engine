@@ -27,17 +27,17 @@ namespace Lunar.Server.World
 {
     public class Item
     {
-        public ItemDescriptor Descriptor { get; }
+        public ItemModel Descriptor { get; }
 
         public ItemBehaviorDefinition BehaviorDefinition { get; set; }
 
-        public Item(ItemDescriptor descriptor)
+        public Item(ItemModel descriptor)
         {
             if (descriptor == null)
             {
                 Engine.Services.Get<Logger>().LogEvent("Null item!", LogTypes.ERROR, new Exception("Null item"));
 
-                Descriptor = new ItemDescriptor()
+                Descriptor = new ItemModel()
                 {
                     Name = "Null",
                     SpriteInfo = new SpriteInfo("nullItem")

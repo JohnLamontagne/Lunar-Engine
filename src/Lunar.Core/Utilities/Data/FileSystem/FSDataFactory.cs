@@ -10,8 +10,10 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data.Management;
+using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
 using System;
@@ -28,7 +30,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             _lookupTable = new Dictionary<Type, Type>();
         }
 
-        public IDataManager<T> Create<T>(IDataFactoryArguments args) where T: IContentDescriptor
+        public IDataManager<T> Create<T>(IDataFactoryArguments args) where T : IContentModel
         {
             if (_lookupTable.ContainsKey(typeof(T)))
             {
@@ -42,10 +44,12 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
         public void Initalize()
         {
-            _lookupTable.Add(typeof(MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>), typeof(MapFSDataManager));
+            _lookupTable.Add(typeof(MapModel<LayerModel<TileModel<SpriteInfo>>>), typeof(MapFSDataManager));
             _lookupTable.Add(typeof(BaseAnimation<IAnimationLayer<SpriteInfo>>), typeof(AnimationFSDataManager));
-            _lookupTable.Add(typeof(PlayerDescriptor), typeof(PlayerFSDataManager));
-            _lookupTable.Add(typeof(NPCDescriptor), typeof(NPCFSDataManager));
+            _lookupTable.Add(typeof(PlayerModel), typeof(PlayerFSDataManager));
+            _lookupTable.Add(typeof(NPCModel), typeof(NPCFSDataManager));
+            _lookupTable.Add(typeof(ItemModel), typeof(ItemFSDataManager));
+            _lookupTable.Add(typeof(SpellModel), typeof(SpellFSDataManager));
         }
     }
 }

@@ -42,6 +42,13 @@ namespace Lunar.Editor.Controls
 
         private void DockLUADocument_Load(object sender, System.EventArgs e)
         {
+            if (!File.Exists(this.ContentFile.FullName))
+            {
+                MessageBox.Show($"Could not load: {this.ContentFile.FullName}. File does not exist!", "Error!", MessageBoxButtons.OK);
+                this.Close();
+                return;
+            }
+
             this.DockText = _regularDockText;
             _unsaved = false;
 

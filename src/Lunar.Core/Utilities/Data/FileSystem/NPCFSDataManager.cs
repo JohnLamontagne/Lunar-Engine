@@ -7,16 +7,15 @@ using System.IO;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
-    public class NPCFSDataManager : FSDataManager<NPCDescriptor>
+    public class NPCFSDataManager : FSDataManager<NPCModel>
     {
         public override bool Exists(IDataManagerArguments arguments)
         {
             return File.Exists(this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.NPC_FILE_EXT);
         }
 
-        public override NPCDescriptor Load(IDataManagerArguments arguments)
+        public override NPCModel Load(IDataManagerArguments arguments)
         {
-
             try
             {
                 var npcArguments = (arguments as ContentFileDataLoaderArguments);
@@ -49,9 +48,8 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                             Strength = binaryReader.ReadInt32(),
                             Defense = binaryReader.ReadInt32(),
                             Dexterity = binaryReader.ReadInt32(),
-                            CurrentHealth = binaryReader.ReadInt32(),
+                            Vitality = binaryReader.ReadInt32(),
                             Intelligence = binaryReader.ReadInt32(),
-                            Health = binaryReader.ReadInt32()
                         };
 
                         collisionBounds = new Rect(binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
@@ -72,7 +70,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     }
                 }
 
-                var desc = NPCDescriptor.Create(npcArguments.FileName);
+                var desc = NPCModel.Create(npcArguments.FileName);
                 desc.Name = name;
                 desc.Level = level;
                 desc.Speed = speed;
@@ -96,9 +94,9 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             }
         }
 
-        public override void Save(IContentDescriptor descriptor, IDataManagerArguments arguments)
+        public override void Save(IContentModel descriptor, IDataManagerArguments arguments)
         {
-            var npcDesc = (NPCDescriptor)descriptor;
+            var npcDesc = (NPCModel)descriptor;
 
             string filePath = this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.NPC_FILE_EXT;
 
@@ -112,9 +110,9 @@ namespace Lunar.Core.Utilities.Data.FileSystem
                     binaryWriter.Write(npcDesc.Stats.Strength);
                     binaryWriter.Write(npcDesc.Stats.Defense);
                     binaryWriter.Write(npcDesc.Stats.Dexterity);
-                    binaryWriter.Write(npcDesc.Stats.CurrentHealth);
+                    binaryWriter.Write(npcDesc.Stats.Vitality);
                     binaryWriter.Write(npcDesc.Stats.Intelligence);
-                    binaryWriter.Write(npcDesc.Stats.Health);
+                    binaryWriter.Write(npcDesc.Stats.Vitality);
                     binaryWriter.Write(npcDesc.CollisionBounds.X);
                     binaryWriter.Write(npcDesc.CollisionBounds.Y);
                     binaryWriter.Write(npcDesc.CollisionBounds.Width);

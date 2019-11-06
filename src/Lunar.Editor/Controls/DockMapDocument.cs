@@ -172,9 +172,6 @@ namespace Lunar.Editor.Controls
 
         private void _tilesetTools_Tileset_Unloaded(object sender, DockTilesetTools.TilesetLoadedEventArgs e)
         {
-            string tilesetPath =
-                Helpers.MakeRelative(e.TilesetPath, _project.ClientRootDirectory.FullName + "/");
-
             if (_dockTilesetTools.Map == _map)
             {
                 foreach (var layer in _map.Layers)
@@ -183,7 +180,7 @@ namespace Lunar.Editor.Controls
                     {
                         for (int y = 0; y < _map.Dimensions.Y; y++)
                         {
-                            if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Sprite.Texture == _map.GetTileset(tilesetPath))
+                            if (layer.GetTile(x, y) != null && layer.GetTile(x, y).Sprite.Texture == _map.GetTileset(e.TilesetPath))
                             {
                                 layer.SetTile(x, y, new Tile());
                             }
@@ -192,7 +189,7 @@ namespace Lunar.Editor.Controls
                 }
             }
 
-            _map.RemoveTileset(tilesetPath);
+            _map.RemoveTileset(e.TilesetPath);
             this.MarkUnsaved();
         }
 

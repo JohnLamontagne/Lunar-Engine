@@ -25,6 +25,8 @@ namespace Lunar.Core
 
         public const string ITEM_FILE_EXT = ".idat";
 
+        public const string SPELL_FILE_EXT = ".sdat";
+
         public const string MAP_FILE_EXT = ".mdat";
 
         public const string ANIM_FILE_EXT = ".adat";

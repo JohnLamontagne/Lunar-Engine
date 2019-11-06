@@ -10,11 +10,11 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
 namespace Lunar.Core.Utilities.Data.Management
 {
     public interface IDataManagerFactory : IService
     {
-        IDataManager<T> Create<T>(IDataFactoryArguments args) where T : IContentDescriptor;
+        IDataManager<T> Create<T>(IDataFactoryArguments args) where T : IContentModel;
     }
-
 }

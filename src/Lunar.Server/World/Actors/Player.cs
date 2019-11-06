@@ -34,9 +34,9 @@ using Lunar.Server.World.Conversation;
 
 namespace Lunar.Server.World.Actors
 {
-    public class Player : PlayerDescriptor, IActor
+    public class Player : PlayerModel, IActor
     {
-        private readonly PlayerDescriptor _descriptor;
+        private readonly PlayerModel _descriptor;
         private readonly PlayerConnection _connection;
         private readonly Inventory _inventory;
         private readonly Equipment _equipment;
@@ -56,7 +56,7 @@ namespace Lunar.Server.World.Actors
 
         public event EventHandler<SubjectEventArgs> EventOccured;
 
-        public PlayerDescriptor Descriptor => _descriptor;
+        public PlayerModel Descriptor => _descriptor;
 
         public PlayerNetworkComponent NetworkComponent => _networkComponent;
 
@@ -88,7 +88,7 @@ namespace Lunar.Server.World.Actors
         /// </summary>
         public bool InLoadingScreen => !this.MapLoaded;
 
-        public bool Alive => (this.Descriptor.Stats.CurrentHealth + this.Descriptor.StatBoosts.CurrentHealth) >= 0;
+        public bool Alive => (this.Descriptor.Stats.Vitality + this.Descriptor.StatBoosts.Vitality) >= 0;
 
         public bool Attackable
         {
@@ -111,7 +111,7 @@ namespace Lunar.Server.World.Actors
 
         public CollisionBody CollisionBody { get; }
 
-        public Player(PlayerDescriptor descriptor, PlayerConnection connection)
+        public Player(PlayerModel descriptor, PlayerConnection connection)
         {
             _descriptor = descriptor;
             _connection = connection;
@@ -179,9 +179,9 @@ namespace Lunar.Server.World.Actors
 
         public void InflictDamage(int amount)
         {
-            this.Descriptor.Stats.CurrentHealth -= amount;
+            this.Descriptor.Stats.Vitality -= amount;
 
-            if (this.Descriptor.Stats.CurrentHealth <= 0)
+            if (this.Descriptor.Stats.Vitality <= 0)
             {
                 this.OnDeath();
             }
@@ -326,7 +326,7 @@ namespace Lunar.Server.World.Actors
             {
                 _actionProcessor.Update(gameTime);
 
-                if (this.Descriptor.Stats.CurrentHealth <= 0)
+                if (this.Descriptor.Stats.Vitality <= 0)
                 {
                     this.OnDeath();
                     return;
@@ -376,8 +376,8 @@ namespace Lunar.Server.World.Actors
                 ? Settings.ExperienceThreshhold[this.Descriptor.Level + 1]
                 : 0);
 
-            buffer.Write(this.Descriptor.Stats.CurrentHealth);
-            buffer.Write(this.Descriptor.Stats.Health);
+            buffer.Write(this.Descriptor.Stats.Vitality);
+            buffer.Write(this.Descriptor.Stats.Vitality);
             buffer.Write(this.Descriptor.Stats.Strength);
             buffer.Write(this.Descriptor.Stats.Intelligence);
             buffer.Write(this.Descriptor.Stats.Dexterity);

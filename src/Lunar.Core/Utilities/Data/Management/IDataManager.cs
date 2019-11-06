@@ -13,11 +13,11 @@
 
 namespace Lunar.Core.Utilities.Data.Management
 {
-    public interface IDataManager<out T> where T : IContentDescriptor
+    public interface IDataManager<out T> where T : IContentModel
     {
         T Load(IDataManagerArguments arguments);
 
-        void Save(IContentDescriptor descriptor, IDataManagerArguments arguments);
+        void Save(IContentModel descriptor, IDataManagerArguments arguments);
 
         bool Exists(IDataManagerArguments arguments);
     }

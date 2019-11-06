@@ -273,16 +273,17 @@ namespace Lunar.Client.GUI.Widgets
             {
                 this.State = WidgetStates.Pressed;
 
+                this.Clicked?.Invoke(this, new WidgetClickedEventArgs(MouseButtons.Left));
+
                 this.ButtonDown_Sound?.Play();
             }
         }
 
         public void OnMouseHover(MouseState mouseState)
         {
-            if (this.State == WidgetStates.Pressed)
+            if (this.State == WidgetStates.Pressed && mouseState.LeftButton != ButtonState.Pressed)
             {
-                this.Clicked?.Invoke(this, new WidgetClickedEventArgs(MouseButtons.Left));
-
+                
                 this.State = WidgetStates.Hover;
 
                 this.ButtonHover_Sound?.Play();

@@ -29,13 +29,13 @@ namespace Lunar.Server.World.Actors
     {
         private readonly Dictionary<string, Player> _players;
 
-        private IDataManager<PlayerDescriptor> _playerDataManager;
+        private IDataManager<PlayerModel> _playerDataManager;
 
         public PlayerManager()
         {
             _players = new Dictionary<string, Player>();
 
-            _playerDataManager = Engine.Services.Get<IDataManagerFactory>().Create<PlayerDescriptor>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
+            _playerDataManager = Engine.Services.Get<IDataManagerFactory>().Create<PlayerModel>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
         }
 
         private void AddPlayer(Player player)
@@ -149,7 +149,7 @@ namespace Lunar.Server.World.Actors
             }
 
             // Create their player.
-            var descriptor = PlayerDescriptor.Create(username, password);
+            var descriptor = PlayerModel.Create(username, password);
             descriptor.MapID = Settings.StartingMap;
             descriptor.Role = Settings.DefaultRole;
             var player = new Player(descriptor, connection);

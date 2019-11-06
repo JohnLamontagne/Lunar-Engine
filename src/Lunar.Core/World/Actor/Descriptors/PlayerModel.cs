@@ -21,7 +21,7 @@ using Lunar.Core.Utilities.Data.Management;
 
 namespace Lunar.Core.World.Actor.Descriptors
 {
-    public class PlayerDescriptor : IActorDescriptor
+    public class PlayerModel : IActorModel
     {
         private string _name;
         private string _password;
@@ -95,12 +95,11 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Vector Reach { get; set; }
 
-        public PlayerDescriptor()
+        public PlayerModel()
         {
-
         }
 
-        public PlayerDescriptor(string username, string password)
+        public PlayerModel(string username, string password)
         {
             _name = username;
             _password = password;
@@ -108,9 +107,9 @@ namespace Lunar.Core.World.Actor.Descriptors
             this.StatBoosts = new Stats();
         }
 
-        public static PlayerDescriptor Create(string name, string password)
+        public static PlayerModel Create(string name, string password)
         {
-            var descriptor = new PlayerDescriptor(name, password)
+            var descriptor = new PlayerModel(name, password)
             {
                 Name = name,
                 Password = password,
@@ -120,8 +119,7 @@ namespace Lunar.Core.World.Actor.Descriptors
                 Speed = .1f,
                 Stats = new Stats()
                 {
-                    CurrentHealth = 100,
-                    Health = 100,
+                    Vitality = 100,
                     Strength = 10,
                     Intelligence = 10,
                     Dexterity = 10,

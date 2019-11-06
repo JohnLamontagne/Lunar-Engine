@@ -14,12 +14,10 @@
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Logic;
-using System;
-using System.IO;
 
 namespace Lunar.Core.World.Structure
 {
-    public class LayerDescriptor<T> : ILayerDescriptor<T> where T : ITileDescriptor<SpriteInfo>
+    public class LayerModel<T> : ILayerModel<T> where T : ITileModel<SpriteInfo>
     {
         private string _name;
         private int _layerIndex;
@@ -50,7 +48,7 @@ namespace Lunar.Core.World.Structure
 
         public T[,] Tiles { get; protected set; }
 
-        public LayerDescriptor(Vector dimensions, string layerName, int lIndex)
+        public LayerModel(Vector dimensions, string layerName, int lIndex)
         {
             this.Tiles = new T[(int)dimensions.X, (int)dimensions.Y];
 
@@ -58,7 +56,7 @@ namespace Lunar.Core.World.Structure
             this.LayerIndex = lIndex;
         }
 
-        protected LayerDescriptor()
+        protected LayerModel()
         {
         }
 

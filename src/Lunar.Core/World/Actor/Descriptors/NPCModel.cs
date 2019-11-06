@@ -12,15 +12,11 @@
 */
 
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization;
-using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
-using Lunar.Core.Utilities.Data.Management;
 
 namespace Lunar.Core.World.Actor.Descriptors
 {
-    public class NPCDescriptor : IActorDescriptor
+    public class NPCModel : IActorModel
     {
         private int _level;
         private float _speed;
@@ -43,7 +39,7 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Vector Position { get; set; }
 
-        public Stats Stats { get;  set; }
+        public Stats Stats { get; set; }
 
         public Stats StatBoosts { get; private set; }
 
@@ -67,7 +63,7 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public Dictionary<string, object> CustomVariables { get; }
 
-        protected NPCDescriptor()
+        protected NPCModel()
         {
             _scripts = new List<string>();
             this.CustomVariables = new Dictionary<string, object>();
@@ -75,9 +71,9 @@ namespace Lunar.Core.World.Actor.Descriptors
             this.Stats = new Stats();
         }
 
-        public static NPCDescriptor Create(string uniqueID)
+        public static NPCModel Create(string uniqueID)
         {
-            return new NPCDescriptor()
+            return new NPCModel()
             {
                 Name = "",
                 AggresiveRange = 0,

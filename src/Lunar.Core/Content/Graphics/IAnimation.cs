@@ -2,7 +2,7 @@
 
 namespace Lunar.Core.Content.Graphics
 {
-    public interface IAnimation<out T> : IContentDescriptor where T : IAnimationLayer<SpriteInfo>
+    public interface IAnimation<out T> : IContentModel where T : IAnimationLayer<SpriteInfo>
     {
     }
 }

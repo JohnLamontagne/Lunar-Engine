@@ -410,7 +410,7 @@
             this.darkSectionPanel4.Controls.Add(this.cmbEquipSlot);
             this.darkSectionPanel4.Controls.Add(this.lstItems);
             this.darkSectionPanel4.Enabled = false;
-            this.darkSectionPanel4.Location = new System.Drawing.Point(428, 33);
+            this.darkSectionPanel4.Location = new System.Drawing.Point(428, 32);
             this.darkSectionPanel4.Name = "darkSectionPanel4";
             this.darkSectionPanel4.SectionHeader = "Equipment Information";
             this.darkSectionPanel4.Size = new System.Drawing.Size(421, 181);

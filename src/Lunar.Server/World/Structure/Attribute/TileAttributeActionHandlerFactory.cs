@@ -19,7 +19,7 @@ namespace Lunar.Server.World.Structure.Attribute
 
             _lookupTable.Add(typeof(WarpTileAttribute), typeof(WarpTileAttributeActionHandler));
             _lookupTable.Add(typeof(NPCSpawnTileAttribute), typeof(NPCSpawnAttributeActionHandler));
-            _lookupTable.Add(typeof(StartDialogueTileAttribute), typeof(DialogueAttributeActionHandler));
+            _lookupTable.Add(typeof(StartDialogueTileAttribute), typeof(DialogueTileAttributeActionHandler));
         }
 
         public static ITileAttributeActionHandler Create(TileAttribute attribute)

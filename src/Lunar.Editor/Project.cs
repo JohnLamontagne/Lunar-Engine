@@ -28,9 +28,11 @@ namespace Lunar.Editor
     {
         private DialogueFactory _dialogueFactory;
 
-        private IDataManager<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>> _mapDataManager;
+        private IDataManager<MapModel<LayerModel<TileModel<SpriteInfo>>>> _mapDataManager;
         private IDataManager<BaseAnimation<IAnimationLayer<SpriteInfo>>> _animationDataManager;
-        private IDataManager<NPCDescriptor> _npcDataManager;
+        private IDataManager<NPCModel> _npcDataManager;
+        private IDataManager<ItemModel> _itemDataManager;
+        private IDataManager<SpellModel> _spellDataManager;
 
         private JObject _scriptMap;
 
@@ -52,19 +54,23 @@ namespace Lunar.Editor
         private Dictionary<string, FileInfo> _animationFiles;
         private Dictionary<string, FileInfo> _scriptFiles;
         private Dictionary<string, FileInfo> _dialogueFiles;
+        private Dictionary<string, FileInfo> _spellFiles;
 
         private readonly Dictionary<string, Map> _maps;
-        private readonly Dictionary<string, ItemDescriptor> _items;
-        private readonly Dictionary<string, NPCDescriptor> _npcs;
+        private readonly Dictionary<string, ItemModel> _items;
+        private readonly Dictionary<string, NPCModel> _npcs;
         private readonly Dictionary<string, Animation> _animations;
         private readonly Dictionary<string, Dialogue> _dialogues;
+        private readonly Dictionary<string, SpellModel> _spells;
 
         public JObject ScriptMap { get => _scriptMap; }
 
         public Dictionary<string, Map> Maps => _maps;
-        public Dictionary<string, ItemDescriptor> Items => _items;
-        public Dictionary<string, NPCDescriptor> NPCs => _npcs;
+        public Dictionary<string, ItemModel> Items => _items;
+        public Dictionary<string, NPCModel> NPCs => _npcs;
         public Dictionary<string, Animation> Animations => _animations;
+
+        public Dictionary<string, SpellModel> Spells => _spells;
 
         public Dictionary<string, Dialogue> Dialogues => _dialogues;
 
@@ -76,6 +82,8 @@ namespace Lunar.Editor
         public IEnumerable<FileInfo> NPCFiles => _npcFiles.Values;
 
         public IEnumerable<FileInfo> DialogueFiles => _dialogueFiles.Values;
+
+        public IEnumerable<FileInfo> SpellFiles => _spellFiles.Values;
 
         public IEnumerable<DirectoryInfo> Directories => _directories;
 
@@ -96,21 +104,25 @@ namespace Lunar.Editor
             _animationFiles = new Dictionary<string, FileInfo>();
             _scriptFiles = new Dictionary<string, FileInfo>();
             _dialogueFiles = new Dictionary<string, FileInfo>();
+            _spellFiles = new Dictionary<string, FileInfo>();
 
             _maps = new Dictionary<string, Map>();
-            _items = new Dictionary<string, ItemDescriptor>();
-            _npcs = new Dictionary<string, NPCDescriptor>();
+            _items = new Dictionary<string, ItemModel>();
+            _npcs = new Dictionary<string, NPCModel>();
             _animations = new Dictionary<string, Animation>();
             _dialogues = new Dictionary<string, Dialogue>();
+            _spells = new Dictionary<string, SpellModel>();
 
             _directories = new List<DirectoryInfo>();
 
             IDataManagerFactory dataManagerFactory = new FSDataFactory();
             dataManagerFactory.Initalize();
 
-            _mapDataManager = dataManagerFactory.Create<MapDescriptor<LayerDescriptor<TileDescriptor<SpriteInfo>>>>(new FSDataFactoryArguments(_serverWorldDirectory + "/Maps/"));
+            _mapDataManager = dataManagerFactory.Create<MapModel<LayerModel<TileModel<SpriteInfo>>>>(new FSDataFactoryArguments(_serverWorldDirectory + "/Maps/"));
             _animationDataManager = dataManagerFactory.Create<BaseAnimation<IAnimationLayer<SpriteInfo>>>(new FSDataFactoryArguments(_serverWorldDirectory + "/Animations/"));
-            _npcDataManager = dataManagerFactory.Create<NPCDescriptor>(new FSDataFactoryArguments(_serverWorldDirectory + "/NPCs/"));
+            _npcDataManager = dataManagerFactory.Create<NPCModel>(new FSDataFactoryArguments(_serverWorldDirectory + "/NPCs/"));
+            _itemDataManager = dataManagerFactory.Create<ItemModel>(new FSDataFactoryArguments(_serverWorldDirectory + "/Items/"));
+            _spellDataManager = dataManagerFactory.Create<SpellModel>(new FSDataFactoryArguments(_serverWorldDirectory + "/Spells/"));
 
             if (File.Exists(this.ServerRootDirectory + "/internal/.scriptmap"))
             {
@@ -292,9 +304,11 @@ namespace Lunar.Editor
             if (!_mapFiles.ContainsKey(Helpers.NormalizePath(filePath)))
                 return;
 
+            var mapFile = _mapFiles[Helpers.NormalizePath(filePath)];
+
             _maps.Remove(Helpers.NormalizePath(filePath));
 
-            this.MapDeleted?.Invoke(this, new FileEventArgs(_mapFiles[filePath]));
+            this.MapDeleted?.Invoke(this, new FileEventArgs(mapFile));
 
             File.Delete(filePath);
 
@@ -371,9 +385,9 @@ namespace Lunar.Editor
 
         public FileInfo AddItem(string filePath)
         {
-            var item = ItemDescriptor.Create();
+            var item = ItemModel.Create();
             item.Name = Path.GetFileNameWithoutExtension(filePath);
-            item.Save(filePath);
+            _itemDataManager.Save(item, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
             var itemFile = new FileInfo(filePath);
 
             if (!_itemFiles.ContainsKey(Helpers.NormalizePath(filePath)))
@@ -384,12 +398,20 @@ namespace Lunar.Editor
             return itemFile;
         }
 
-        public ItemDescriptor LoadItem(string filePath)
+        public void UnloadItem(string filePath)
+        {
+            if (_items.ContainsKey(Helpers.NormalizePath(filePath)))
+            {
+                _items.Remove(Helpers.NormalizePath(filePath));
+            }
+        }
+
+        public ItemModel LoadItem(string filePath)
         {
             if (_items.ContainsKey(Helpers.NormalizePath(filePath)))
                 return _items[Helpers.NormalizePath(filePath)];
 
-            var item = ItemDescriptor.Load(filePath);
+            var item = _itemDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
             _items.Add(Helpers.NormalizePath(filePath), item);
 
             return item;
@@ -419,6 +441,11 @@ namespace Lunar.Editor
             return file;
         }
 
+        public void SaveItem(string filePath, ItemModel item)
+        {
+            _itemDataManager.Save(item, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
+        }
+
         public void RemoveItem(string filePath)
         {
             if (!_itemFiles.ContainsKey(Helpers.NormalizePath(filePath)))
@@ -432,6 +459,85 @@ namespace Lunar.Editor
             File.Delete(filePath);
 
             _itemFiles.Remove(Helpers.NormalizePath(filePath));
+        }
+
+        //
+        public FileInfo AddSpell(string filePath)
+        {
+            var spell = new SpellModel();
+            spell.Name = Path.GetFileNameWithoutExtension(filePath);
+            _spellDataManager.Save(spell, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
+            var spellFile = new FileInfo(filePath);
+
+            if (!_spellFiles.ContainsKey(Helpers.NormalizePath(filePath)))
+                _spellFiles.Add(Helpers.NormalizePath(filePath), spellFile);
+
+            this.SpellAdded?.Invoke(this, new FileEventArgs(spellFile));
+
+            return spellFile;
+        }
+
+        public void UnloadSpell(string filePath)
+        {
+            if (_spells.ContainsKey(Helpers.NormalizePath(filePath)))
+            {
+                _spells.Remove(Helpers.NormalizePath(filePath));
+            }
+        }
+
+        public SpellModel LoadSpell(string filePath)
+        {
+            if (_spells.ContainsKey(Helpers.NormalizePath(filePath)))
+                return _spells[Helpers.NormalizePath(filePath)];
+
+            var spell = _spellDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
+            _spells.Add(Helpers.NormalizePath(filePath), spell);
+
+            return spell;
+        }
+
+        public void AddSpell(FileInfo file)
+        {
+            if (!_spellFiles.ContainsKey(Helpers.NormalizePath(file.FullName)))
+                _spellFiles.Add(Helpers.NormalizePath(file.FullName), file);
+
+            this.SpellAdded?.Invoke(this, new FileEventArgs(file));
+        }
+
+        public FileInfo ChangeSpell(string oldFilePath, string newFilePath)
+        {
+            var oldFile = _spellFiles[Helpers.NormalizePath(oldFilePath)];
+            _spellFiles.Remove(Helpers.NormalizePath(oldFilePath));
+            var file = new FileInfo(newFilePath);
+            _spellFiles.Add(Helpers.NormalizePath(newFilePath), new FileInfo(newFilePath));
+
+            var spell = _spells[Helpers.NormalizePath(oldFilePath)];
+            _spells.Remove(Helpers.NormalizePath(oldFilePath));
+            _spells.Add(Helpers.NormalizePath(newFilePath), spell);
+
+            this.SpellChanged?.Invoke(this, new GameFileChangedEventArgs(oldFile, file));
+
+            return file;
+        }
+
+        public void SaveSpell(string filePath, SpellModel spell)
+        {
+            _spellDataManager.Save(spell, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
+        }
+
+        public void RemoveSpell(string filePath)
+        {
+            if (!_spellFiles.ContainsKey(Helpers.NormalizePath(filePath)))
+                return;
+
+            if (_spells.ContainsKey(Helpers.NormalizePath(filePath)))
+                _spells.Remove(Helpers.NormalizePath(filePath));
+
+            this.SpellDeleted?.Invoke(this, new FileEventArgs(_spellFiles[Helpers.NormalizePath(filePath)]));
+
+            File.Delete(filePath);
+
+            _spellFiles.Remove(Helpers.NormalizePath(filePath));
         }
 
         public FileInfo AddAnimation(string filePath)
@@ -494,7 +600,7 @@ namespace Lunar.Editor
         public FileInfo AddNPC(string filePath)
         {
             string uniqueID = Path.GetFileNameWithoutExtension(filePath);
-            var npc = NPCDescriptor.Create(uniqueID);
+            var npc = NPCModel.Create(uniqueID);
             npc.Name = Path.GetFileNameWithoutExtension(filePath);
             _npcDataManager.Save(npc, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
             var npcFile = new FileInfo(filePath);
@@ -505,12 +611,12 @@ namespace Lunar.Editor
             return npcFile;
         }
 
-        public void SaveNPC(string filePath, NPCDescriptor npc)
+        public void SaveNPC(string filePath, NPCModel npc)
         {
             _npcDataManager.Save(npc, new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(filePath)));
         }
 
-        public NPCDescriptor LoadNPC(string filePath)
+        public NPCModel LoadNPC(string filePath)
         {
             if (_npcs.ContainsKey(Helpers.NormalizePath(filePath)))
                 return _npcs[Helpers.NormalizePath(filePath)];
@@ -651,6 +757,10 @@ namespace Lunar.Editor
 
         public event EventHandler<FileEventArgs> ScriptDeleted;
 
+        public event EventHandler<FileEventArgs> SpellDeleted;
+
+        public event EventHandler<FileEventArgs> DialogueDeleted;
+
         public event EventHandler<GameFileChangedEventArgs> NPCChanged;
 
         public event EventHandler<GameFileChangedEventArgs> AnimationChanged;
@@ -662,6 +772,8 @@ namespace Lunar.Editor
         public event EventHandler<GameFileChangedEventArgs> ScriptChanged;
 
         public event EventHandler<GameFileChangedEventArgs> DialogueChanged;
+
+        public event EventHandler<GameFileChangedEventArgs> SpellChanged;
 
         public event EventHandler<FileEventArgs> ItemAdded;
 
@@ -675,6 +787,6 @@ namespace Lunar.Editor
 
         public event EventHandler<FileEventArgs> DialogueAdded;
 
-        public event EventHandler<FileEventArgs> DialogueDeleted;
+        public event EventHandler<FileEventArgs> SpellAdded;
     }
 }

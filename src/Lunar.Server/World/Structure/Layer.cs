@@ -28,7 +28,7 @@ using Lunar.Core.Content.Graphics;
 
 namespace Lunar.Server.World.Structure
 {
-    public class Layer : LayerDescriptor<Tile>
+    public class Layer : LayerModel<Tile>
     {
         public Map Map { get; }
 
@@ -38,7 +38,7 @@ namespace Lunar.Server.World.Structure
 
         public Dictionary<Vector, CollisionBody> CollisionDescriptors { get { return _collisionDescriptors; } }
 
-        private Layer(LayerDescriptor<TileDescriptor<SpriteInfo>> baseLayer)
+        private Layer(LayerModel<TileModel<SpriteInfo>> baseLayer)
         {
             this.Name = baseLayer.Name;
 
@@ -62,7 +62,7 @@ namespace Lunar.Server.World.Structure
             }
         }
 
-        public Layer(Map map, LayerDescriptor<TileDescriptor<SpriteInfo>> descriptor)
+        public Layer(Map map, LayerModel<TileModel<SpriteInfo>> descriptor)
             : this(descriptor)
         {
             this.Map = map;

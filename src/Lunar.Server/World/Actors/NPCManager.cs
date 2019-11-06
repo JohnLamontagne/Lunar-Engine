@@ -24,15 +24,15 @@ namespace Lunar.Server.World.Actors
 {
     public class NPCManager : IService
     {
-        private Dictionary<string, NPCDescriptor> _npcs;
+        private Dictionary<string, NPCModel> _npcs;
 
-        private IDataManager<NPCDescriptor> _npcDataManager;
+        private IDataManager<NPCModel> _npcDataManager;
 
         public NPCManager()
         {
-            _npcs = new Dictionary<string, NPCDescriptor>();
+            _npcs = new Dictionary<string, NPCModel>();
 
-            _npcDataManager = Engine.Services.Get<IDataManagerFactory>().Create<NPCDescriptor>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
+            _npcDataManager = Engine.Services.Get<IDataManagerFactory>().Create<NPCModel>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
         }
 
         private void LoadNPCS()
@@ -44,7 +44,7 @@ namespace Lunar.Server.World.Actors
 
             foreach (var file in files)
             {
-                NPCDescriptor npcDesc = _npcDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(file.Name)));
+                NPCModel npcDesc = _npcDataManager.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(file.Name)));
 
                 if (npcDesc != null)
                     _npcs.Add(npcDesc.UniqueID, npcDesc);
@@ -53,7 +53,7 @@ namespace Lunar.Server.World.Actors
             Console.WriteLine($"Loaded {_npcs.Count} NPCs.");
         }
 
-        public NPCDescriptor Get(string npcName)
+        public NPCModel Get(string npcName)
         {
             return !_npcs.ContainsKey(npcName) ? null : _npcs[npcName];
         }
