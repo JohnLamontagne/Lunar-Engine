@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJohnLamontagne%2FLunar-Engine.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FJohnLamontagne%2FLunar-Engine?ref=badge_shield)
+
 Lunar Engine
 ============
 
@@ -46,3 +48,7 @@ Multimedia
 ![](https://i.imgur.com/7rXeYcc.png)
 ![](https://i.imgur.com/PMhsVF5.png)
 ![](https://i.imgur.com/UIFJNjJ.png)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJohnLamontagne%2FLunar-Engine.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FJohnLamontagne%2FLunar-Engine?ref=badge_large)
