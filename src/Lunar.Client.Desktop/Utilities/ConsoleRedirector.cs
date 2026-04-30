@@ -11,32 +11,38 @@
 	limitations under the License.
 */
 
-using QuakeConsole;
 using System;
 using System.IO;
 using System.Text;
+using Lunar.Client;
 
 namespace Lunar.Client.Utilities
 {
-    public class ConsoleRedirector : TextWriter
+    internal class ConsoleRedirector : TextWriter
     {
         public override Encoding Encoding => Encoding.UTF8;
 
-        private ConsoleComponent _consoleComponent;
+        private readonly DeveloperConsoleComponent _consoleComponent;
+        private readonly TextWriter _fallbackWriter;
 
-        public ConsoleRedirector(ConsoleComponent consoleComponent)
+        public ConsoleRedirector(DeveloperConsoleComponent consoleComponent)
         {
             _consoleComponent = consoleComponent;
+            _fallbackWriter = Console.Out;
         }
 
         public override void Write(string value)
         {
-            _consoleComponent.Output.Append($"[{DateTime.Now}]: " + value);
+            var formatted = $"[{DateTime.Now:T}] {value}";
+            _consoleComponent?.AppendLine(formatted);
+            _fallbackWriter?.Write(value);
         }
 
         public override void WriteLine(string value)
         {
-            _consoleComponent.Output.Append($"[{DateTime.Now}]: " + value);
+            var formatted = $"[{DateTime.Now:T}] {value}";
+            _consoleComponent?.AppendLine(formatted);
+            _fallbackWriter?.WriteLine(value);
         }
     }
 }

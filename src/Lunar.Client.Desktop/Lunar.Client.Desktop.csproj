@@ -13,11 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.QuakeConsole.DesktopGL" Version="3.0.0" />
-    <PackageReference Include="MonoGame.QuakeConsole.ManualInterpreter.DesktopGL" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Lunar.Client\Lunar.Client.csproj" />
   </ItemGroup>
 

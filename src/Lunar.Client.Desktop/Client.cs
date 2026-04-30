@@ -22,7 +22,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Penumbra;
-using QuakeConsole;
 using System;
 
 namespace Lunar.Client
@@ -33,14 +32,14 @@ namespace Lunar.Client
         private Vector2 _cursorPos;
         private KeyboardState _previousKeyboardState;
         private ConsoleRedirector _consoleRedirector;
-        private ConsoleComponent _consoleComponent;
+        private DeveloperConsoleComponent _consoleComponent;
 
         public static bool ShuttingDown { get; set; }
 
         public Client()
         {
 #if DEV_MODE
-            string rootPath = AppDomain.CurrentDomain.BaseDirectory + "../../../../";
+            string rootPath = Engine.FindDevRootPath("Client Data");
 #else
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
 #endif
@@ -54,7 +53,7 @@ namespace Lunar.Client
             };
             _graphics.PreparingDeviceSettings += OnPreparingDeviceSettings;
 
-            Content.RootDirectory = "Content";
+            Content.RootDirectory = "Client Data";
         }
 
         private void OnPreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
@@ -72,12 +71,10 @@ namespace Lunar.Client
             var lightManager = services.GetRequiredService<LightManagerService>();
             lightManager.Component.Initialize();
 
-            _consoleComponent = new ConsoleComponent(this);
+            var interpreter = new CommandInterpreter(services.GetRequiredService<NetHandler>());
+            _consoleComponent = new DeveloperConsoleComponent(this, interpreter);
             _consoleComponent.FontColor = Color.Wheat;
             this.Components.Add(_consoleComponent);
-
-            var interpreter = new CommandInterpreter(services.GetRequiredService<NetHandler>());
-            _consoleComponent.Interpreter = interpreter;
 
             _consoleRedirector = new ConsoleRedirector(_consoleComponent);
             Console.SetOut(_consoleRedirector);

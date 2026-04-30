@@ -14,24 +14,26 @@
 using Lunar.Client.Net;
 using Lunar.Core;
 using Lunar.Core.Net;
-using QuakeConsole;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Lunar.Client.Utilities
 {
-    public class CommandInterpreter : ICommandInterpreter
+    public class CommandInterpreter
     {
         private static readonly string[] CommandAndArgumentSeparator = { " " };
         private static readonly string[] InstructionSeparator = { ";" };
-        private const StringComparison StringComparisonMethod = StringComparison.OrdinalIgnoreCase;
+        private static readonly string[] LocalCommands = { "help", "clear" };
 
-        private readonly ManualInterpreter _manualInterpreter;
         private readonly NetHandler _netHandler;
+        private readonly HashSet<string> _availableCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private List<string> _autocompleteMatches = new List<string>();
+        private string _autocompletePrefix;
+        private int _autocompleteIndex = -1;
 
         public CommandInterpreter(NetHandler netHandler)
         {
-            _manualInterpreter = new ManualInterpreter();
             _netHandler = netHandler;
 
             netHandler.AddPacketHandler(PacketType.AVAILABLE_COMMANDS, this.Handle_AvailableCommands);
@@ -45,41 +47,93 @@ namespace Lunar.Client.Utilities
             {
                 string commandName = args.Packet.ReadString();
 
-                _manualInterpreter.RegisterCommand(commandName, (delegate (string[] strings) { }));
+                _availableCommands.Add(commandName);
             }
         }
 
-        public void Autocomplete(IConsoleInput input, bool forward)
+        public string Autocomplete(string input, bool forward)
         {
-            _manualInterpreter.Autocomplete(input, forward);
-        }
+            var prefix = (input ?? string.Empty).Trim();
+            if (prefix.Contains(" "))
+                return input;
 
-        public void Execute(IConsoleOutput output, string input)
-        {
-            _manualInterpreter.Execute(output, input);
-
-            if (_netHandler.Connected)
+            if (!string.Equals(_autocompletePrefix, prefix, StringComparison.OrdinalIgnoreCase))
             {
-                string[] instructions = input.Split(InstructionSeparator, StringSplitOptions.RemoveEmptyEntries);
+                var allCommands = new HashSet<string>(_availableCommands, StringComparer.OrdinalIgnoreCase);
+                foreach (var localCommand in LocalCommands)
+                    allCommands.Add(localCommand);
 
-                foreach (var instruction in instructions)
-                {
-                    string[] inputSplit = instruction.Trim().Split(CommandAndArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
-                    if (inputSplit.Length == 0) return;
+                _autocompleteMatches = allCommands
+                    .Where(command => command.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(command => command, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
 
-                    string command = inputSplit[0];
-                    string[] commandArgs = inputSplit.Skip(1).ToArray();
-
-                    var packet = new Packet();
-                    packet.Write(command);
-                    packet.Write(commandArgs.Length);
-
-                    foreach (var arg in commandArgs)
-                        packet.Write(arg);
-
-                    _netHandler.SendPacket(PacketType.CLIENT_COMMAND, packet, DeliveryMethod.ReliableOrdered);
-                }
+                _autocompletePrefix = prefix;
+                _autocompleteIndex = -1;
             }
+
+            if (_autocompleteMatches.Count == 0)
+                return input;
+
+            _autocompleteIndex = forward
+                ? (_autocompleteIndex + 1) % _autocompleteMatches.Count
+                : (_autocompleteIndex - 1 + _autocompleteMatches.Count) % _autocompleteMatches.Count;
+
+            return _autocompleteMatches[_autocompleteIndex] + " ";
+        }
+
+        public bool Execute(string input, Action<string> appendLine)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+
+            bool clearRequested = false;
+            string[] instructions = input.Split(InstructionSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var instruction in instructions)
+            {
+                string[] inputSplit = instruction.Trim().Split(CommandAndArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
+                if (inputSplit.Length == 0)
+                    continue;
+
+                string command = inputSplit[0];
+                string[] commandArgs = inputSplit.Skip(1).ToArray();
+
+                if (string.Equals(command, "clear", StringComparison.OrdinalIgnoreCase))
+                {
+                    clearRequested = true;
+                    continue;
+                }
+
+                if (string.Equals(command, "help", StringComparison.OrdinalIgnoreCase))
+                {
+                    var knownCommands = _availableCommands
+                        .Concat(LocalCommands)
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                        .ToArray();
+
+                    appendLine($"Commands: {string.Join(", ", knownCommands)}");
+                    continue;
+                }
+
+                if (!_netHandler.Connected)
+                {
+                    appendLine("Not connected to server.");
+                    continue;
+                }
+
+                var packet = new Packet();
+                packet.Write(command);
+                packet.Write(commandArgs.Length);
+
+                foreach (var arg in commandArgs)
+                    packet.Write(arg);
+
+                _netHandler.SendPacket(PacketType.CLIENT_COMMAND, packet, DeliveryMethod.ReliableOrdered);
+            }
+
+            return clearRequested;
         }
     }
 }
