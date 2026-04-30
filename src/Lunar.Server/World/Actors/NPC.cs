@@ -345,6 +345,9 @@ namespace Lunar.Server.World.Actors
                 case Direction.Down:
                     destCollisionArea = new Rect(this.CollisionBody.CollisionArea.X, this.CollisionBody.CollisionArea.Y + delta, this.CollisionBounds.Width, this.CollisionBounds.Height);
                     break;
+
+                default:
+                    throw new System.InvalidOperationException($"Unhandled direction: {this.Direction}");
             }
 
             return !(this.Layer.CheckCollision(destCollisionArea));

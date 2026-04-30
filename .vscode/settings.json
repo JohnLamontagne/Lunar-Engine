@@ -1,0 +1,7 @@
+{
+  "dotnet.defaultSolution": "src/Lunar Engine.sln",
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  }
+}

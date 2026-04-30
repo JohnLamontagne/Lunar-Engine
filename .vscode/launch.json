@@ -1,0 +1,34 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Server",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Lunar.Server/bin/Debug/net9.0/Lunar.Server.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Lunar.Server",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Run Client",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Lunar.Client/bin/Debug/net9.0/Lunar.Client.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Lunar.Client",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Server + Client",
+      "configurations": ["Run Server", "Run Client"],
+      "stopAll": true
+    }
+  ]
+}

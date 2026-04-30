@@ -1,142 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7DC32392-0F22-4082-A9F9-208F598DD170}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
     <RootNamespace>Lunar.Core</RootNamespace>
     <AssemblyName>Lunar.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Authors>John Lamontagne</Authors>
+    <Product>Lunar.Core</Product>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Lidgren.Network, Version=2012.1.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lidgren.Network.1.0.2\lib\net451\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" />
+    <PackageReference Include="AscensionGameDev.Lidgren.Network" Version="1.8.0.13" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ChatMessageType.cs" />
-    <Compile Include="Content\Graphics\IAnimation.cs" />
-    <Compile Include="Content\Graphics\IAnimationLayer.cs" />
-    <Compile Include="Content\Graphics\BaseAnimation.cs" />
-    <Compile Include="Content\Graphics\Color.cs" />
-    <Compile Include="Content\Graphics\SpriteInfo.cs" />
-    <Compile Include="Content\Graphics\SpriteSheet.cs" />
-    <Compile Include="Content\Graphics\Transform.cs" />
-    <Compile Include="Engine.cs" />
-    <Compile Include="EngineConstants.cs" />
-    <Compile Include="Utilities\Data\FileSystem\AnimationFSDataManager.cs" />
-    <Compile Include="Utilities\Data\FileSystem\ContentFileDataLoaderArguments.cs" />
-    <Compile Include="Utilities\Data\FileSystem\FSDataFactory.cs" />
-    <Compile Include="Utilities\Data\FileSystem\FSDataFactoryArguments.cs" />
-    <Compile Include="Utilities\Data\FileSystem\FSDataManager.cs" />
-    <Compile Include="Utilities\Data\FileSystem\ItemFSDataManager.cs" />
-    <Compile Include="Utilities\Data\FileSystem\MapFSDataManager.cs" />
-    <Compile Include="Utilities\Data\FileSystem\NPCFSDataManager.cs" />
-    <Compile Include="Utilities\Data\FileSystem\PlayerFSDataManager.cs" />
-    <Compile Include="Utilities\Data\FileSystem\SpellFSDataManager.cs" />
-    <Compile Include="Utilities\Data\FlexibleStack.cs" />
-    <Compile Include="Utilities\Data\Management\IDataFactoryArguments.cs" />
-    <Compile Include="Utilities\Data\Management\IDataManagerArguments.cs" />
-    <Compile Include="Utilities\Data\Management\IDataManagerFactory.cs" />
-    <Compile Include="Utilities\Data\Management\IContentDescriptor.cs" />
-    <Compile Include="Utilities\Data\Management\IDataManager.cs" />
-    <Compile Include="Utilities\Data\FileSystem\PlayerDataLoaderArguments.cs" />
-    <Compile Include="Utilities\IService.cs" />
-    <Compile Include="Net\ChannelType.cs" />
-    <Compile Include="Net\LidgrenExtensions.cs" />
-    <Compile Include="Net\PacketType.cs" />
-    <Compile Include="Utilities\Logger.cs" />
-    <Compile Include="Utilities\Role.cs" />
-    <Compile Include="Utilities\SecurePasswordHasher.cs" />
-    <Compile Include="Utilities\ServiceLocator.cs" />
-    <Compile Include="Utilities\Data\Vector.cs" />
-    <Compile Include="Utilities\Data\Rect.cs" />
-    <Compile Include="Utilities\Data\Vector2.cs" />
-    <Compile Include="Utilities\ISubject.cs" />
-    <Compile Include="Utilities\Logic\Helpers.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\SubjectEventArgs.cs" />
-    <Compile Include="World\Actor\ActorStates.cs" />
-    <Compile Include="World\Actor\ClassInformation.cs" />
-    <Compile Include="World\Actor\Descriptors\IActorModel.cs" />
-    <Compile Include="World\Actor\Descriptors\NPCModel.cs" />
-    <Compile Include="World\Actor\Descriptors\PlayerModel.cs" />
-    <Compile Include="World\Actor\Stats.cs" />
-    <Compile Include="World\Direction.cs" />
-    <Compile Include="World\EquipmentSlots.cs" />
-    <Compile Include="World\ItemModel.cs" />
-    <Compile Include="World\ItemTypes.cs" />
-    <Compile Include="World\SpellModel.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttributeArgs.cs" />
-    <Compile Include="World\Structure\Attribute\PlayerSpawnTileAttribute.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttribute.cs" />
-    <Compile Include="World\Structure\LayerModel.cs" />
-    <Compile Include="World\Structure\ILayerModel.cs" />
-    <Compile Include="World\Structure\IMapModel.cs" />
-    <Compile Include="World\Structure\ITileModel.cs" />
-    <Compile Include="World\Structure\LightInformation.cs" />
-    <Compile Include="World\Structure\MapModel.cs" />
-    <Compile Include="World\Structure\MapObjectModel.cs" />
-    <Compile Include="World\Structure\Attribute\BlockedTileAttribute.cs" />
-    <Compile Include="World\Structure\Attribute\NPCSpawnTileAttribute.cs" />
-    <Compile Include="World\Structure\Attribute\StartDialogueTileAttribute.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttributeActionHandler.cs" />
-    <Compile Include="World\Structure\TileModel.cs" />
-    <Compile Include="World\Structure\Attribute\WarpTileAttribute.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Lunar.Core.licenseheader" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets" Condition="Exists('..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\build\MonoGame.Framework.DesktopGL.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

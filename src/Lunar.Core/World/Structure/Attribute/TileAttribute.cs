@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -12,42 +12,46 @@
 */
 
 using Lunar.Core.Content.Graphics;
-using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Lunar.Core.World.Structure.Attribute
 {
-    [Serializable]
     public abstract class TileAttribute
     {
-        [NonSerialized]
-        private ITileAttributeActionHandler _actionHandler;
-
-        /// <summary>
-        /// Handles incoming actions from the tile in which the attribute lives.
-        /// Setting to null indicates no processing needed.
-        /// </summary>
-        public ITileAttributeActionHandler ActionHandler { get => _actionHandler; set => _actionHandler = value; }
+        public ITileAttributeActionHandler ActionHandler { get; set; }
 
         /// <summary>
         /// Used for marking on map when attribute overlay is enabled.
         /// </summary>
         public abstract Color Color { get; }
 
-        public virtual byte[] Serialize()
+        protected abstract byte TypeId { get; }
+
+        protected abstract void WriteData(BinaryWriter writer);
+
+        public byte[] Serialize()
         {
-            MemoryStream memoryStream = new MemoryStream();
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(memoryStream, this);
+            using var memoryStream = new MemoryStream();
+            using var writer = new BinaryWriter(memoryStream);
+            writer.Write(TypeId);
+            WriteData(writer);
             return memoryStream.ToArray();
         }
 
         public static TileAttribute Deserialize(byte[] data)
         {
-            MemoryStream memoryStream = new MemoryStream(data);
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            return (TileAttribute)binaryFormatter.Deserialize(memoryStream);
+            using var memoryStream = new MemoryStream(data);
+            using var reader = new BinaryReader(memoryStream);
+            var typeId = reader.ReadByte();
+            return typeId switch
+            {
+                BlockedTileAttribute.TYPE_ID => BlockedTileAttribute.ReadData(reader),
+                WarpTileAttribute.TYPE_ID => WarpTileAttribute.ReadData(reader),
+                NPCSpawnTileAttribute.TYPE_ID => NPCSpawnTileAttribute.ReadData(reader),
+                PlayerSpawnTileAttribute.TYPE_ID => PlayerSpawnTileAttribute.ReadData(reader),
+                StartDialogueTileAttribute.TYPE_ID => StartDialogueTileAttribute.ReadData(reader),
+                _ => throw new InvalidDataException($"Unknown tile attribute type id: {typeId}")
+            };
         }
     }
 }

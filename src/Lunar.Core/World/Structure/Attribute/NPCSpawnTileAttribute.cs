@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,15 +11,15 @@
 	limitations under the License.
 */
 
-using System;
 using Lunar.Core.Content.Graphics;
-using Lunar.Core.World.Actor.Descriptors;
+using System.IO;
 
 namespace Lunar.Core.World.Structure.Attribute
 {
-    [Serializable]
     public class NPCSpawnTileAttribute : TileAttribute
     {
+        internal const byte TYPE_ID = 3;
+
         public override Color Color => new Color(Color.Blue, 100);
 
         public string NPCID { get; set; }
@@ -33,6 +33,23 @@ namespace Lunar.Core.World.Structure.Attribute
             this.NPCID = npcID;
             this.RespawnTime = respawnTime;
             this.MaxSpawns = maxSpawns;
+        }
+
+        protected override byte TypeId => TYPE_ID;
+
+        protected override void WriteData(BinaryWriter writer)
+        {
+            writer.Write(NPCID ?? string.Empty);
+            writer.Write(RespawnTime);
+            writer.Write(MaxSpawns);
+        }
+
+        internal static NPCSpawnTileAttribute ReadData(BinaryReader reader)
+        {
+            var npcId = reader.ReadString();
+            var respawnTime = reader.ReadInt32();
+            var maxSpawns = reader.ReadInt32();
+            return new NPCSpawnTileAttribute(npcId, respawnTime, maxSpawns);
         }
     }
 }

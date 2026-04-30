@@ -1,239 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7FD9C949-9921-44D4-8DD8-0C59A3171849}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
     <RootNamespace>Lunar.Server</RootNamespace>
     <AssemblyName>Lunar.Server</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <Authors>John Lamontagne</Authors>
+    <Product>Lunar.Server</Product>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="IronPython, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython.Modules, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.Modules.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython.SQLite, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython.Wpf, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="Lidgren.Network, Version=2012.1.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lidgren.Network.1.0.2\lib\net451\Lidgren.Network.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Dynamic, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Dynamic.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting.Metadata, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.Metadata.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="AscensionGameDev.Lidgren.Network" Version="1.8.0.13" />
+    <PackageReference Include="IronPython" Version="3.4.2" />
+    <PackageReference Include="IronPython.StdLib" Version="3.4.2" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Net\NetHandler.cs" />
-    <Compile Include="Net\ConnectionEventArgs.cs" />
-    <Compile Include="Net\Packet.cs" />
-    <Compile Include="Net\PacketReceivedEventArgs.cs" />
-    <Compile Include="Net\PlayerConnection.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="ServerHeartbeat.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Utilities\Commands\CommandArgs.cs" />
-    <Compile Include="Utilities\Commands\CommandHandler.cs" />
-    <Compile Include="Utilities\Events\GameEventArgs.cs" />
-    <Compile Include="Utilities\Events\GameEventListener.cs" />
-    <Compile Include="Utilities\Events\GameEventSource.cs" />
-    <Compile Include="Utilities\GameTime.cs" />
-    <Compile Include="Utilities\GameTimer.cs" />
-    <Compile Include="Utilities\GameTimerManager.cs" />
-    <Compile Include="Utilities\Plugin\Plugin.cs" />
-    <Compile Include="Utilities\Pathfinding\Pathfinder.cs" />
-    <Compile Include="Utilities\Pathfinding\SearchNode.cs" />
-    <Compile Include="Utilities\Plugin\PluginManager.cs" />
-    <Compile Include="Utilities\Scripting\Script.cs" />
-    <Compile Include="Utilities\Scripting\ScriptArgs.cs" />
-    <Compile Include="Utilities\Scripting\ScriptManager.cs" />
-    <Compile Include="Utilities\Scripting\ScriptUtilities.cs" />
-    <Compile Include="Net\WebCommunicator.cs" />
-    <Compile Include="Utilities\TimerHelper.cs" />
-    <Compile Include="Utilities\WorldDictionary.cs" />
-    <Compile Include="World\Actors\Actions\IAction.cs" />
-    <Compile Include="World\Actors\Actions\Player\PlayerDropItemAction.cs" />
-    <Compile Include="World\Actors\Actions\Player\PlayerInteractAction.cs" />
-    <Compile Include="World\Actors\Actions\Player\PlayerPickupItemAction.cs" />
-    <Compile Include="World\Actors\Actions\Player\PlayerUnequipItemAction.cs" />
-    <Compile Include="World\Actors\Actions\Player\PlayerUseItemAction.cs" />
-    <Compile Include="World\Actors\ActorStateMachine.cs" />
-    <Compile Include="World\Actors\ClassManager.cs" />
-    <Compile Include="World\Actors\Components\ActionProcessor.cs" />
-    <Compile Include="World\Actors\Components\Equipment.cs" />
-    <Compile Include="World\Actors\Components\Inventory.cs" />
-    <Compile Include="World\Actors\IActorState.cs" />
-    <Compile Include="World\Actors\PacketHandlers\PlayerPacketHandler.cs" />
-    <Compile Include="World\Actors\Components\PlayerNetworkComponent.cs" />
-    <Compile Include="World\AnimationManager.cs" />
-    <Compile Include="World\BehaviorDefinition\ItemBehaviorDefinition.cs" />
-    <Compile Include="World\Conversation\Dialogue.cs" />
-    <Compile Include="World\Actors\IActor.cs" />
-    <Compile Include="World\BehaviorDefinition\ActorBehaviorDefinition.cs" />
-    <Compile Include="World\Actors\NPC.cs" />
-    <Compile Include="World\Actors\NPCManager.cs" />
-    <Compile Include="World\Actors\Player.cs" />
-    <Compile Include="World\Actors\PlayerManager.cs" />
-    <Compile Include="World\Conversation\DialogueBranch.cs" />
-    <Compile Include="World\Conversation\DialogueFactory.cs" />
-    <Compile Include="World\Conversation\DialogueManager.cs" />
-    <Compile Include="World\Conversation\DialogueArgs.cs" />
-    <Compile Include="World\ItemArgs.cs" />
-    <Compile Include="World\ItemInteractionArgs.cs" />
-    <Compile Include="World\Structure\Attribute\DialogueAttributeActionHandler.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttributeActionHandler.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttributeArgs.cs" />
-    <Compile Include="World\Structure\CollisionDescriptor.cs" />
-    <Compile Include="World\Structure\LightInformation.cs" />
-    <Compile Include="World\Structure\MapItem.cs" />
-    <Compile Include="World\Structure\MapObject.cs" />
-    <Compile Include="World\InventorySlot.cs" />
-    <Compile Include="World\Item.cs" />
-    <Compile Include="World\ItemManager.cs" />
-    <Compile Include="World\Structure\Layer.cs" />
-    <Compile Include="World\Structure\Map.cs" />
-    <Compile Include="World\Structure\MapManager.cs" />
-    <Compile Include="World\Structure\MapObjectBehaviorDefinition.cs" />
-    <Compile Include="World\Actors\NPCHeartbeatListener.cs" />
-    <Compile Include="World\Structure\Tile.cs" />
-    <Compile Include="World\Structure\Attribute\NPCSpawnAttributeActionHandler.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttributeActionHandlerFactory.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttributePlayerArgs.cs" />
-    <Compile Include="World\Structure\Attribute\TileAttributeUpdateArgs.cs" />
-    <Compile Include="World\Structure\Attribute\WarpTileAttributeActionHandler.cs" />
-    <Compile Include="World\Structure\TorchMapObject.cs" />
-    <Compile Include="World\WorldManager.cs" />
+    <ProjectReference Include="..\Lunar.Core\Lunar.Core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-    <None Include="Server Data\internal\.scriptmap" />
-    <None Include="Server Data\World\Accounts\1.acc" />
-    <None Include="Server Data\World\Accounts\11.acc" />
-    <None Include="Server Data\World\Accounts\admin.acc" />
-    <None Include="Server Data\World\Npcs\sadfasdf.ndat" />
-    <None Include="Server Data\World\Npcs\test.ndat" />
-    <None Include="Server.licenseheader" />
+    <None Update="Server Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Lunar.Core\Lunar.Core.csproj">
-      <Project>{7dc32392-0f22-4082-a9f9-208f598dd170}</Project>
-      <Name>Lunar.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Server Data\internal\iron_python2.7_libs\" />
-    <Folder Include="Server Data\World\Animations\" />
-    <Folder Include="Server Data\World\Items\" />
-    <Folder Include="Server Data\World\Maps\" />
-    <Folder Include="Server Data\World\Plugins\" />
-    <Folder Include="Utilities\Language\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Server Data\config.xml" />
-    <Content Include="Server Data\experience.conf" />
-    <Content Include="Server Data\Logs\Error.txt" />
-    <Content Include="Server Data\user_permissions.xml" />
-    <Content Include="Server Data\World\Logs\Error.txt" />
-    <Content Include="Server Data\World\Npcs\scripts\sdafasdfasdf.py" />
-    <Content Include="Server Data\World\Scripts\aggressive_npc.py" />
-    <Content Include="Server Data\World\Scripts\command_handler.py" />
-    <Content Include="Server Data\World\Scripts\NPCs\test1_test.ndat.py" />
-    <Content Include="Server Data\World\Scripts\npc_common.py" />
-    <Content Include="Server Data\World\Scripts\player.py" />
-    <Content Include="Server Data\World\Scripts\test.py" />
-    <Compile Include="World\Conversation\DialogueResponse.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
