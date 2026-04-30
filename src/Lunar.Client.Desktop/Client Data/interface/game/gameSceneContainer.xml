@@ -1,138 +1,38 @@
-<Widgets>
-	<button name="btnInventory">
-		<texture>gfx/Interface/menuButton.png</texture>
-		<font>chatFont</font>
-		<text>Inventory</text>
-		<position>
-			<x>65%</x>
-			<y>93%</y>
-		</position>
-	</button>
+<widgets>
+  <button name="btnInventory" texture="gfx/Interface/menuButton.png"
+          font="chatFont" text="Inventory" x="65%" y="93%" />
 
-	<button name="btnLogout">
-		<texture>gfx/Interface/menuButton.png</texture>
-		<font>chatFont</font>
-		<text>Logout</text>
-		<position>
-			<x>88%</x>
-			<y>93%</y>
-		</position>
-	</button>
+  <button name="btnLogout" texture="gfx/Interface/menuButton.png"
+          font="chatFont" text="Logout" x="88%" y="93%" />
 
-	<button name="btnCharacter">
-		<texture>gfx/Interface/menuButton.png</texture>
-		<font>chatFont</font>
-		<text>Character</text>
-		<position>
-			<x>76.50%</x>
-			<y>93%</y>
-		</position>
-	</button>
+  <button name="btnCharacter" texture="gfx/Interface/menuButton.png"
+          font="chatFont" text="Character" x="76.50%" y="93%" />
 
-	<chatbox name="chatbox">
-		<texture>gfx/Interface/chat.png</texture>
-		<font>chatFont</font>
-		<position>
-			<x>0.5%</x>
-			<y>62%</y>
-		</position>
-		<maxlines>12</maxlines>
-		<visible>true</visible>
-		<padding>
-			<x>30</x>
-			<y>223</y>
-		</padding>
-		<draggable>true</draggable>
-		<Widgets>
-			<textbox name="messageEntry">
-				<texture>gfx/Interface/textboxNormal.png</texture>
-				<font>chatFont</font>
-				<position>
-					<x>17</x>
-					<y>100%</y>
-				</position>
-				<scale>
-					<x>1.6</x>
-					<y>1</y>
-				</scale>
-				<padding>
-					<x>12</x>
-					<y>0</y>
-				</padding>
-			</textbox>
-		</Widgets>
-	</chatbox>
+  <chatbox name="chatbox" texture="gfx/Interface/chat.png" font="chatFont"
+           x="0.5%" y="62%" maxlines="12" pad-x="30" pad-y="223"
+           visible="true" draggable="true">
+    <textbox name="messageEntry" texture="gfx/Interface/textboxNormal.png"
+             font="chatFont" x="17" y="100%" scale-x="1.6" scale-y="1"
+             pad-x="12" pad-y="0" />
+  </chatbox>
 
-	<statusbar name="healthStatusBar">
-		<font>interfaceFont</font>
-		<backSprite>gfx/Interface/statusBar.png</backSprite>
-		<fillSprite>gfx/Interface/healthFillSprite.png</fillSprite>
-		<color>Black</color>
-		<position>
-			<x>23%</x>
-			<y>3%</y>
-		</position>
-		<fillPosition>
-			<x>7</x>
-			<y>7</y>
-		</fillPosition>
-		<padding>
-			<x>7</x>
-			<y>7</y>
-		</padding>
+  <statusbar name="healthStatusBar" font="interfaceFont"
+             back-sprite="gfx/Interface/statusBar.png"
+             fill-sprite="gfx/Interface/healthFillSprite.png"
+             color="Black" x="23%" y="3%" fill-x="7" fill-y="7"
+             pad-x="7" pad-y="7" text="" />
 
-		<text></text>
-	</statusbar>
+  <statusbar name="manaStatusBar" font="interfaceFont"
+             back-sprite="gfx/Interface/statusBar.png"
+             fill-sprite="gfx/Interface/manaFillSprite.png"
+             color="Black" x="45%" y="3%" fill-x="7" fill-y="7"
+             pad-x="7" pad-y="7" text="" />
 
-	<statusbar name="manaStatusBar">
-		<font>interfaceFont</font>
-		<backSprite>gfx/Interface/statusBar.png</backSprite>
-		<fillSprite>gfx/Interface/manaFillSprite.png</fillSprite>
-		<color>Black</color>
-		<position>
-			<x>45%</x>
-			<y>3%</y>
-		</position>
-		<padding>
-			<x>7</x>
-			<y>7</y>
-		</padding>
-		<fillPosition>
-			<x>7</x>
-			<y>7</y>
-		</fillPosition>
-		<text></text>
-		<padding>
-			<x>7</x>
-			<y>7</y>
-		</padding>
+  <statusbar name="experienceBar" font="interfaceFont"
+             back-sprite="gfx/Interface/experienceBar.png"
+             fill-sprite="gfx/Interface/experiencePool.png"
+             color="White" x="25%" y="0%" fill-x="8" fill-y="31" text="" />
 
-	</statusbar>
-
-	<statusbar name="experienceBar">
-		<font>interfaceFont</font>
-		<backSprite>gfx/Interface/experienceBar.png</backSprite>
-		<fillSprite>gfx/Interface/experiencePool.png</fillSprite>
-		<color>White</color>
-		<position>
-			<x>25%</x>
-			<y>0%</y>
-		</position>
-		<fillPosition>
-			<x>8</x>
-			<y>31</y>
-		</fillPosition>
-		<text></text>
-	</statusbar>
-
-	<label name="lblExperience">
-		<position>
-			<x>40%</x>
-			<y>2.5%</y>
-		</position>
-		<text>0000/0000</text>
-		<color>White</color>
-		<font>experienceFont</font>
-		<zorder>2</zorder>
-	</label>
-</Widgets>
+  <label name="lblExperience" font="experienceFont" text="0000/0000"
+         color="White" x="40%" y="2.5%" zorder="2" />
+</widgets>

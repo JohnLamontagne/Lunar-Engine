@@ -1,41 +1,13 @@
-<Widgets>
-		<picture name="portraitGraphic">
-			<texture>gfx/Interface/portrait.png</texture>
-			<position>
-				<x>0</x>
-				<y>0</y>
-			</position>
-			<visible>true</visible>
-		</picture>
-		
-		<statusbar name="targetHealthBar">
-			<font>interfaceFont</font>
-			<backSprite>gfx/Interface/statusBar.png</backSprite>
-			<fillSprite>gfx/Interface/healthFillSprite.png</fillSprite>
-			<color>Black</color>
-			<position>
-				<x>75</x>
-				<y>25</y>
-			</position>
-			<fillPosition>
-				<x>7</x>
-				<y>7</y>
-			</fillPosition>
-			<text>HP: 100/Test</text>
-			<value>100</value>
-		</statusbar>
-		
-		<picture name="enemyIndicator">
-			<texture>gfx/Interface/enemyIndicator.png</texture>
-			<position>
-				<x>50</x>
-				<y>25</y>
-			</position>
-			<visible>true</visible>
-		</picture>
-		
-	
-	
-	
+<widgets>
+  <picture name="portraitGraphic" texture="gfx/Interface/portrait.png"
+           x="0" y="0" visible="true" />
 
-</Widgets>
+  <statusbar name="targetHealthBar" font="interfaceFont"
+             back-sprite="gfx/Interface/statusBar.png"
+             fill-sprite="gfx/Interface/healthFillSprite.png"
+             color="Black" x="75" y="25" fill-x="7" fill-y="7"
+             text="HP: 100/Test" value="100" />
+
+  <picture name="enemyIndicator" texture="gfx/Interface/enemyIndicator.png"
+           x="50" y="25" visible="true" />
+</widgets>

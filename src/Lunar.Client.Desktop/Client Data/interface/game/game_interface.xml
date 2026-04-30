@@ -1,48 +1,25 @@
-<GUI>
-	<Fonts>
-		<font name="interfaceFont">gfx/Fonts/interfaceFont</font>
-		<font name="chatFont">gfx/Fonts/chatFont</font>
-		<font name="experienceFont">gfx/Fonts/experienceFont</font>
-	</Fonts>
-	<Widgets>
-			<import file="interface/game/gameSceneContainer.xml" />
+<gui>
+  <fonts>
+    <font name="interfaceFont" path="gfx/Fonts/interfaceFont" />
+    <font name="chatFont" path="gfx/Fonts/chatFont" />
+    <font name="experienceFont" path="gfx/Fonts/experienceFont" />
+  </fonts>
 
-			<import file="interface/game/gameInvContainer.xml" />
+  <import file="interface/game/gameSceneContainer.xml" />
+  <import file="interface/game/gameInvContainer.xml" />
 
-			<container name="characterWindow">
-				<position>
-					<x>50%</x>
-					<y>25%</y>
-				</position>
+  <container name="characterWindow" texture="gfx/Interface/statScreen.png"
+             x="50%" y="25%" visible="false" draggable="true">
+    <import file="interface/game/gameCharContainer.xml" />
+  </container>
 
-				<visible>false</visible>
-				<draggable>true</draggable>
+  <container name="targetPortraitContainer" visible="false">
+    <import file="interface/game/targetContainer.xml" />
+  </container>
 
-				<Widgets>
-					<import file="interface/game/gameCharContainer.xml" />
-				</Widgets>
-				<texture>gfx/Interface/statScreen.png</texture>
-			</container>		
-			
-			<container name="targetPortraitContainer">
-				<visible>false</visible>
-				<Widgets>
-					<import file="interface/game/targetContainer.xml" />
-				</Widgets>
-			</container>
-			
-			<container name="dialogueWindow">
-				<visible>false</visible>
-				<texture>gfx/Interface/windowback.png</texture>
-				<size><y>200</y></size>
-				<draggable>true</draggable>
-			</container>
+  <container name="dialogueWindow" texture="gfx/Interface/windowback.png"
+             height="200" visible="false" draggable="true" />
 
-			<container name="hotbar">
-				<visible>true</visible>
-				<texture>gfx/Interface/hotbar.png</texture>
-				<position><x>70%</x><y>0</y></position>
-				<size><x>250</x><y>70</y></size>
-			</container>
-	</Widgets>
-</GUI>
+  <container name="hotbar" texture="gfx/Interface/hotbar.png"
+             x="70%" y="0" width="250" height="70" visible="true" />
+</gui>

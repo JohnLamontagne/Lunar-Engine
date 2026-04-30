@@ -1,100 +1,28 @@
+<widgets>
+  <picture name="charBackdrop" texture="gfx/Interface/game/statScreen.png"
+           x="50%" y="25%" visible="true" />
 
-	<Widgets>
-		
-		<picture name="charBackdrop">
-			<texture>gfx/Interface/game/statScreen.png</texture>
-			<position>
-					<x>50%</x>
-					<y>25%</y>
-				</position>
-			<visible>true</visible>
-		</picture>
-		
-		<label name="charWindowNameLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>175</x>
-				<y>65</y>
-			</position>
-			<text>Player Name</text>
-			<color>White</color>
-			<zorder>1</zorder>
-		</label>
-		
-		<label name="charStatsHeaderLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>400</x>
-				<y>100</y>
-			</position>
-			<text>Character Stats:</text>
-			<color>White</color>
-			<zorder>1</zorder>
-		</label>
-		
-		<label name="charHealthLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>400</x>
-				<y>145</y>
-			</position>
-			<text>Health: 0/0</text>
-			<color>White</color>
-			<zorder>1</zorder>
-		</label>
-		<label name="charStrengthLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>400</x>
-				<y>170</y>
-			</position>
-			<text>Strength:0/0</text>
-			<color>White</color>
-			<zorder>1</zorder>
-		</label>
-		<label name="charIntLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>400</x>
-				<y>195</y>
-			</position>
-			<text>Intelligence: 0/0</text>
-			<color>White</color>
-			<zorder>1</zorder>
-		</label>
-	
-		
-		<label name="charDefLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>400</x>
-				<y>220</y>
-			</position>
-			<text>Defense: 0/0</text>
-			<color>White</color>
-			<zorder>1</zorder>
-		</label>
-		
-		<label name="charDexLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>400</x>
-				<y>245</y>
-			</position>
-			<text>Dexterity: 0/0</text>
-			<zorder>1</zorder>
-			<color>White</color>
-		</label>
+  <label name="charWindowNameLabel" font="interfaceFont" text="Player Name"
+         color="White" x="175" y="65" zorder="1" />
 
-		<label name="charLevelLabel">
-			<font>interfaceFont</font>
-			<position>
-				<x>400</x>
-				<y>270</y>
-			</position>
-			<text>Level: 0</text>
-			<zorder>1</zorder>
-			<color>White</color>
-		</label>
-		
-	</Widgets>
+  <label name="charStatsHeaderLabel" font="interfaceFont" text="Character Stats:"
+         color="White" x="400" y="100" zorder="1" />
+
+  <label name="charHealthLabel" font="interfaceFont" text="Health: 0/0"
+         color="White" x="400" y="145" zorder="1" />
+
+  <label name="charStrengthLabel" font="interfaceFont" text="Strength: 0/0"
+         color="White" x="400" y="170" zorder="1" />
+
+  <label name="charIntLabel" font="interfaceFont" text="Intelligence: 0/0"
+         color="White" x="400" y="195" zorder="1" />
+
+  <label name="charDefLabel" font="interfaceFont" text="Defense: 0/0"
+         color="White" x="400" y="220" zorder="1" />
+
+  <label name="charDexLabel" font="interfaceFont" text="Dexterity: 0/0"
+         color="White" x="400" y="245" zorder="1" />
+
+  <label name="charLevelLabel" font="interfaceFont" text="Level: 0"
+         color="White" x="400" y="270" zorder="1" />
+</widgets>

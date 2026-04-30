@@ -1,12 +1,4 @@
-
-	<Widgets>
-		<container name="inventoryWidget">
-			<texture>gfx/Interface/inventory.png</texture>
-			<position>
-				<x>63%</x>
-				<y>35%</y>
-			</position>
-			<visible>true</visible>
-			<draggable>true</draggable>
-		</container>
-	</Widgets>
+<widgets>
+  <container name="inventoryWidget" texture="gfx/Interface/inventory.png"
+             x="63%" y="35%" visible="true" draggable="true" />
+</widgets>
