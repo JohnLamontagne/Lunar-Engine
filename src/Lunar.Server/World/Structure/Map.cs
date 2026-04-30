@@ -14,13 +14,16 @@
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Pathfinding;
+using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
+using Lunar.Server.World.Structure.Attribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities.Data;
+using Lunar.Core.World;
 using Lunar.Core.World.Structure;
 using Lunar.Core.Utilities;
 using Lunar.Core.World.Structure.Attribute;
@@ -39,13 +42,22 @@ namespace Lunar.Server.World.Structure
 
         public List<Player> Players => this.GetActors<Player>().ToList();
 
-        public Map(MapModel<LayerModel<TileModel<SpriteInfo>>> descriptor)
+        private readonly Logger _logger;
+
+        public TileAttributeActionHandlerFactory AttributeHandlerFactory { get; }
+        public ScriptManager ScriptManager { get; }
+
+        public Map(MapModel<LayerModel<TileModel<SpriteInfo>>> descriptor, TileAttributeActionHandlerFactory attributeHandlerFactory, ScriptManager scriptManager, Logger logger)
         {
             _actors = new WorldDictionary<string, IActor>();
             _actorCollidingObjects = new WorldDictionary<IActor, List<MapObject>>();
             _playerSpawnAreas = new List<Tuple<Vector, Layer>>();
             _pathFinders = new Dictionary<Layer, Pathfinder>();
             _mapItems = new List<MapItem>();
+            _logger = logger;
+
+            this.AttributeHandlerFactory = attributeHandlerFactory;
+            this.ScriptManager = scriptManager;
 
             this.Name = descriptor.Name;
             this.Bounds = descriptor.Bounds;
@@ -126,7 +138,7 @@ namespace Lunar.Server.World.Structure
             }
             else
             {
-                Engine.Services.Get<Logger>().LogEvent($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}", LogTypes.ERROR, new Exception($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}"));
+                _logger.LogEvent($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}", LogTypes.ERROR, new Exception($"Specified item does not exist on map; cannot remove: {item.Descriptor.Name}"));
             }
         }
 
@@ -266,7 +278,7 @@ namespace Lunar.Server.World.Structure
         {
             if (!_actors.ContainsKey(actorID))
             {
-                Engine.Services.Get<Logger>().LogEvent($"Actor {actorID} does not exist in map!", LogTypes.ERROR, new Exception($"Actor {actorID} does not exist in map!"));
+                _logger.LogEvent($"Actor {actorID} does not exist in map!", LogTypes.ERROR, new Exception($"Actor {actorID} does not exist in map!"));
                 return; ;
             }
 

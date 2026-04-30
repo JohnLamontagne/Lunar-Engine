@@ -175,7 +175,7 @@ namespace Lunar.Server.World.Structure
             string scriptPath = bR.ReadString();
             if (!string.IsNullOrEmpty(scriptPath))
             {
-                var script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
+                var script = layer.Map.ScriptManager.CreateScript(Constants.FILEPATH_DATA + scriptPath);
                 //mapObject.MapObjectBehaviorDefinition = script.Invoke<MapObjectBehaviorDefinition>("get_behavior_def", new ServerArgs(null));
             }
 

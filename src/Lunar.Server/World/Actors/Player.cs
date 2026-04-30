@@ -110,11 +110,14 @@ namespace Lunar.Server.World.Actors
 
         public CollisionBody CollisionBody { get; }
 
-        public Player(PlayerModel descriptor, PlayerConnection connection)
+        private readonly Logger _logger;
+
+        public Player(PlayerModel descriptor, PlayerConnection connection, ScriptManager scriptManager, CommandHandler commandHandler, Logger logger)
         {
             _descriptor = descriptor;
             _connection = connection;
             _connection.Player = this;
+            _logger = logger;
             this.State = ActorStates.Idle;
 
             this.Descriptor.CollisionBounds = new Rect(16, 52, 16, 20);
@@ -123,13 +126,13 @@ namespace Lunar.Server.World.Actors
 
             _inventory = new Inventory(this);
             _equipment = new Equipment(this);
-            _networkComponent = new PlayerNetworkComponent(this, connection);
-            _packetHandler = new PlayerPacketHandler(this);
+            _networkComponent = new PlayerNetworkComponent(this, connection, commandHandler);
+            _packetHandler = new PlayerPacketHandler(this, logger);
             _actionProcessor = new ActionProcessor<Player>(this);
 
             _eventHandlers = new Dictionary<string, List<Action<EventArgs>>>();
 
-            Script script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "player.py");
+            Script script = scriptManager.CreateScript(Constants.FILEPATH_SCRIPTS + "player.py");
             _script = script;
 
             try
@@ -140,7 +143,7 @@ namespace Lunar.Server.World.Actors
 
             if (this.Behavior == null)
             {
-                Engine.Services.Get<Logger>().LogEvent("Error hooking player behavior definition.", LogTypes.ERROR, new Exception("Error hooking player behavior definition."));
+                _logger.LogEvent("Error hooking player behavior definition.", LogTypes.ERROR, new Exception("Error hooking player behavior definition."));
             }
             else
             {
@@ -167,7 +170,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent("Error in OnDeath handling: " + ex.Message, LogTypes.ERROR, ex);
+                _logger.LogEvent("Error in OnDeath handling: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
 

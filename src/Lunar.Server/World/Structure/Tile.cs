@@ -48,7 +48,7 @@ namespace Lunar.Server.World.Structure
             this.Layer = layer;
 
             if (this.Attribute != null)
-                this.Attribute.ActionHandler = TileAttributeActionHandlerFactory.Create(this.Attribute);
+                this.Attribute.ActionHandler = layer.Map.AttributeHandlerFactory.Create(this.Attribute);
 
             if (this.Sprite != null)
                 _collisionArea = new Rect(this.Sprite.Transform.Position.X, this.Sprite.Transform.Position.Y, Settings.TileSize, Settings.TileSize);

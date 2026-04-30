@@ -29,6 +29,7 @@ using Lunar.Server.Utilities.Events;
 using Lunar.Server.Utilities.Plugin;
 using System.Diagnostics;
 using Lunar.Server.World.Conversation;
+using Lunar.Server.World.Structure.Attribute;
 using Lunar.Core.Utilities.Data.Management;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -62,15 +63,15 @@ namespace Lunar.Server
 
             Console.WriteLine("Initalizing server...");
 
-            Console.WriteLine("Loading server settings...");
-            Settings.Initalize();
-
-            // Configure logger before composing the rest of the graph so
-            // services constructed below can log at startup.
+            // Configure logger before settings so the latter can log validation errors at startup.
             var bootstrapLogger = Engine.Services.Get<Logger>();
-            bootstrapLogger.SuppressErrors = Settings.SuppressErrors;
             bootstrapLogger.LogPath = Constants.FILEPATH_LOGS;
             bootstrapLogger.Start();
+
+            Console.WriteLine("Loading server settings...");
+            Settings.Initalize(bootstrapLogger);
+
+            bootstrapLogger.SuppressErrors = Settings.SuppressErrors;
 
             Console.WriteLine($"Log output set to: {bootstrapLogger.LogPath} with error suppression {(bootstrapLogger.SuppressErrors ? "on" : "off")}.");
 
@@ -82,7 +83,8 @@ namespace Lunar.Server
             var services = new ServiceCollection();
 
             services.AddSingleton(bootstrapLogger);
-            services.AddSingleton<NetHandler>(_ => new NetHandler(Settings.GameName, Settings.ServerPort));
+            services.AddSingleton<NetHandler>(sp => new NetHandler(Settings.GameName, Settings.ServerPort, sp.GetRequiredService<Logger>()));
+            services.AddSingleton<TileAttributeActionHandlerFactory>();
             services.AddSingleton<IDataManagerFactory, FSDataFactory>();
             services.AddSingleton<ItemManager>();
             services.AddSingleton<ClassManager>();
@@ -97,6 +99,10 @@ namespace Lunar.Server
             services.AddSingleton<CommandHandler>();
             services.AddSingleton<ScriptManager>(sp =>
                 new ScriptManager(Constants.FILEPATH_SCRIPTS, Settings.IronPythonLibsDirectory, sp.GetRequiredService<Logger>()));
+
+            // Need to register the action-handler types so ActivatorUtilities can resolve them
+            // when the TileAttributeActionHandlerFactory builds them per-attribute. They are
+            // not singletons since each tile gets its own handler instance.
 
             _services = services.BuildServiceProvider();
 

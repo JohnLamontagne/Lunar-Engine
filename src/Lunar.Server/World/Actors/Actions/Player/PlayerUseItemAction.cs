@@ -22,10 +22,12 @@ namespace Lunar.Server.World.Actors.Actions.Player
     internal class PlayerUseItemAction : IAction<Actors.Player>
     {
         private readonly int _slotNum;
+        private readonly Logger _logger;
 
-        public PlayerUseItemAction(int slotNum)
+        public PlayerUseItemAction(int slotNum, Logger logger)
         {
             _slotNum = slotNum;
+            _logger = logger;
         }
 
         public void Execute(Actors.Player player)
@@ -33,8 +35,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             // Sanity check: is there actually an item in this slot?
             if (player.Inventory.GetSlot(_slotNum) == null)
             {
-                // Log it!
-                Engine.Services.Get<Logger>().LogEvent($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, new Exception($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}."));
+                _logger.LogEvent($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME, new Exception($"Player attempted to equip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}."));
 
                 return;
             }

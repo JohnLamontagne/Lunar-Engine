@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using Lunar.Core;
 using Lunar.Core.Net;
+using Lunar.Core.Utilities;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor;
 using Lunar.Server.Net;
@@ -27,10 +28,12 @@ namespace Lunar.Server.World.Actors.PacketHandlers
     public class PlayerPacketHandler
     {
         private readonly Player _player;
+        private readonly Logger _logger;
 
-        public PlayerPacketHandler(Player player)
+        public PlayerPacketHandler(Player player, Logger logger)
         {
             _player = player;
+            _logger = logger;
 
             player.NetworkComponent.Connection.AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
             player.NetworkComponent.Connection.AddPacketHandler(PacketType.DROP_ITEM, this.Handle_DropItem);
@@ -93,7 +96,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
         {
             int slotNum = args.Packet.ReadInt32();
 
-            _player.ActionProcessor.Process(new PlayerUseItemAction(slotNum));
+            _player.ActionProcessor.Process(new PlayerUseItemAction(slotNum, _logger));
         }
 
         private void Handle_PlayerMoving(PacketReceivedEventArgs args)
@@ -135,7 +138,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
         {
             int slotNum = args.Packet.ReadInt32();
 
-            _player.ActionProcessor.Process(new PlayerUnequipItemAction(slotNum));
+            _player.ActionProcessor.Process(new PlayerUnequipItemAction(slotNum, _logger));
         }
     }
 }

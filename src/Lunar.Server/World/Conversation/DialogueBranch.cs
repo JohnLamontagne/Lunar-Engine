@@ -20,9 +20,12 @@ namespace Lunar.Server.World.Conversation
 
         public List<DialogueResponse> Responses => _responses.Values.ToList();
 
-        public DialogueBranch(Dialogue dialogue, string name, string text)
+        private readonly Logger _logger;
+
+        public DialogueBranch(Dialogue dialogue, string name, string text, Logger logger)
         {
             _responses = new Dictionary<string, DialogueResponse>();
+            _logger = logger;
 
             this.Name = name;
             this.Text = text;
@@ -83,7 +86,7 @@ namespace Lunar.Server.World.Conversation
 
                     if (!displayable.HasValue)
                     {
-                        Engine.Services.Get<Logger>().LogEvent($"Script for response {response.Text} in dialogue {this.Dialogue.Name} invalid!", LogTypes.ERROR);
+                        _logger.LogEvent($"Script for response {response.Text} in dialogue {this.Dialogue.Name} invalid!", LogTypes.ERROR);
                     }
                     else if (displayable.Value)
                     {

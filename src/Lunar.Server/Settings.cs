@@ -61,8 +61,11 @@ namespace Lunar.Server
 
         public static bool SuppressErrors { get; private set; }
 
-        public static void Initalize()
+        private static Logger _logger;
+
+        public static void Initalize(Logger logger)
         {
+            _logger = logger;
             LoadConfig();
             LoadExperienceChart();
             LoadUserPermissions();
@@ -164,7 +167,7 @@ namespace Lunar.Server
 
             if (!File.Exists(_filePathUserPermissions))
             {
-                Engine.Services.Get<Logger>().LogEvent($"Could not load user permissions: file does not exist at {_filePathUserPermissions}!", LogTypes.ERROR);
+                _logger.LogEvent($"Could not load user permissions: file does not exist at {_filePathUserPermissions}!", LogTypes.ERROR);
                 return;
             }
 
@@ -187,7 +190,7 @@ namespace Lunar.Server
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Could not load user permissions: {ex.Message}", LogTypes.ERROR, ex);
+                _logger.LogEvent($"Could not load user permissions: {ex.Message}", LogTypes.ERROR, ex);
             }
         }
 
@@ -202,7 +205,7 @@ namespace Lunar.Server
             {
                 if (i >= Settings.ExperienceThreshhold.Length)
                 {
-                    Engine.Services.Get<Logger>().LogEvent("Experience chart exceeds maximum level!", LogTypes.ERROR, new Exception("Experience chart exceeds maximum level!"));
+                    _logger.LogEvent("Experience chart exceeds maximum level!", LogTypes.ERROR, new Exception("Experience chart exceeds maximum level!"));
                     return;
                 }
 

@@ -34,10 +34,13 @@ namespace Lunar.Server.Net
 
         public Player Player { get; set; }
 
-        public PlayerConnection(NetPeer peer, NetHandler netHandler)
+        private readonly Logger _logger;
+
+        public PlayerConnection(NetPeer peer, NetHandler netHandler, Logger logger)
         {
             _peer = peer;
             _netHandler = netHandler;
+            _logger = logger;
             _handlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
             _handlerFilters = new Dictionary<Action<PacketReceivedEventArgs>, Action<PacketReceivedEventArgs>>();
         }
@@ -76,7 +79,7 @@ namespace Lunar.Server.Net
         {
             if (_peer == null || _peer.ConnectionState != ConnectionState.Connected)
             {
-                Engine.Services.Get<Logger>().LogEvent("Invalid player connection socket.", LogTypes.ERROR, new Exception("Invalid player connection socket."));
+                _logger.LogEvent("Invalid player connection socket.", LogTypes.ERROR, new Exception("Invalid player connection socket."));
                 return;
             }
             NetHandler.SendOnPeer(_peer, packetType, packet, deliveryMethod);
@@ -86,7 +89,7 @@ namespace Lunar.Server.Net
         {
             if (_peer == null)
             {
-                Engine.Services.Get<Logger>().LogEvent("Invalid player connection socket.", LogTypes.ERROR, new Exception("Invalid player connection socket."));
+                _logger.LogEvent("Invalid player connection socket.", LogTypes.ERROR, new Exception("Invalid player connection socket."));
                 return;
             }
             _peer.Disconnect();

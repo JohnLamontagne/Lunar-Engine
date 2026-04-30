@@ -12,6 +12,9 @@
 */
 
 using Lunar.Server.Net;
+using Lunar.Server.Utilities;
+using Lunar.Server.Utilities.Commands;
+using Lunar.Server.Utilities.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +24,7 @@ using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lunar.Server.World.Actors
 {
@@ -30,11 +34,24 @@ namespace Lunar.Server.World.Actors
 
         private IDataManager<PlayerModel> _playerDataManager;
 
-        public PlayerManager(IDataManagerFactory dataManagerFactory)
+        private readonly IServiceProvider _services;
+
+        public PlayerManager(IDataManagerFactory dataManagerFactory, IServiceProvider services)
         {
             _players = new Dictionary<string, Player>();
+            _services = services;
 
             _playerDataManager = dataManagerFactory.Create<PlayerModel>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
+        }
+
+        private Player CreatePlayer(PlayerModel descriptor, PlayerConnection connection)
+        {
+            return new Player(
+                descriptor,
+                connection,
+                _services.GetRequiredService<ScriptManager>(),
+                _services.GetRequiredService<CommandHandler>(),
+                _services.GetRequiredService<Logger>());
         }
 
         private void AddPlayer(Player player)
@@ -107,7 +124,7 @@ namespace Lunar.Server.World.Actors
                 // Let's go ahead and grant them access.
 
                 // First, we'll add them to the list of online players.
-                var player = new Player(playerDescriptor, connection);
+                var player = this.CreatePlayer(playerDescriptor, connection);
                 this.AddPlayer(player);
 
                 if (Settings.UserPermissions.ContainsKey(player.Descriptor.Name))
@@ -151,7 +168,7 @@ namespace Lunar.Server.World.Actors
             var descriptor = PlayerModel.Create(username, password);
             descriptor.MapID = Settings.StartingMap;
             descriptor.Role = Settings.DefaultRole;
-            var player = new Player(descriptor, connection);
+            var player = this.CreatePlayer(descriptor, connection);
             _playerDataManager.Save(player.Descriptor, null);
 
             this.AddPlayer(player);

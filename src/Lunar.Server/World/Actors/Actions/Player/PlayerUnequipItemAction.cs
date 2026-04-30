@@ -22,10 +22,12 @@ namespace Lunar.Server.World.Actors.Actions.Player
     public class PlayerUnequipItemAction : IAction<Actors.Player>
     {
         private readonly int _slotNum;
+        private readonly Logger _logger;
 
-        public PlayerUnequipItemAction(int slotNum)
+        public PlayerUnequipItemAction(int slotNum, Logger logger)
         {
             _slotNum = slotNum;
+            _logger = logger;
         }
 
         public void Execute(Actors.Player player)
@@ -33,8 +35,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
             // Sanity check: is there actually an item in this slot?
             if (player.Equipment.GetSlot(_slotNum) == null)
             {
-                // Log it!
-                Engine.Services.Get<Logger>().LogEvent($"Player attempted to unequip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
+                _logger.LogEvent($"Player attempted to unequip bad item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
 
                 return;
             }
@@ -43,8 +44,7 @@ namespace Lunar.Server.World.Actors.Actions.Player
 
             if (item.Descriptor.ItemType != ItemTypes.Equipment || item.Descriptor.SlotType == EquipmentSlots.NE)
             {
-                // Log it!
-                Engine.Services.Get<Logger>().LogEvent($"Player attempted to unequip unequippable item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
+                _logger.LogEvent($"Player attempted to unequip unequippable item! User: {player.Descriptor.Name} SlotNum: {_slotNum}.", LogTypes.GAME);
 
                 return;
             }

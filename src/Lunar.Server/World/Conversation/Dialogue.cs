@@ -25,7 +25,8 @@ namespace Lunar.Server.World.Conversation
 {
     public class Dialogue
     {
-        private Dictionary<string, DialogueBranch> _branches;
+        private readonly Dictionary<string, DialogueBranch> _branches;
+        private readonly Logger _logger;
         private string _scriptPath;
 
         public string Name { get; }
@@ -50,13 +51,14 @@ namespace Lunar.Server.World.Conversation
 
         public event EventHandler Ended;
 
-        public Dialogue(string name)
+        public Dialogue(string name, NetHandler netHandler, Logger logger)
         {
             this.Name = name;
+            _logger = logger;
 
             _branches = new Dictionary<string, DialogueBranch>();
 
-            Engine.Services?.Get<NetHandler>().AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
+            netHandler?.AddPacketHandler(PacketType.DIALOGUE_RESP, this.Handle_DialogueResponse);
         }
 
         private void Handle_DialogueResponse(PacketReceivedEventArgs args)
@@ -79,14 +81,14 @@ namespace Lunar.Server.World.Conversation
         {
             if (string.IsNullOrEmpty(branch.Name))
             {
-                Engine.Services.Get<Logger>().LogEvent($"Unable to add branch to " +
+                _logger.LogEvent($"Unable to add branch to " +
                                     $"dialogue named {this.Name}: branch is not named!", LogTypes.ERROR);
                 return;
             }
 
             if (_branches.ContainsKey(branch.Name))
             {
-                Engine.Services.Get<Logger>().LogEvent($"Unable to add branch {branch.Name} to " +
+                _logger.LogEvent($"Unable to add branch {branch.Name} to " +
                                     $"dialogue named {this.Name}: branch already exists!", LogTypes.ERROR);
                 return;
             }
@@ -120,7 +122,7 @@ namespace Lunar.Server.World.Conversation
         public void Play(string branchName, Player player)
         {
             if (!_branches.ContainsKey(branchName))
-                Engine.Services.Get<Logger>().LogEvent($"Invalid dialogue branch {branchName}.", LogTypes.ERROR);
+                _logger.LogEvent($"Invalid dialogue branch {branchName}.", LogTypes.ERROR);
 
             _branches[branchName].Begin(player);
         }

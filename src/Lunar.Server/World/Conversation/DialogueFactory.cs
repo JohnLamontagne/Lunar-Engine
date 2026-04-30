@@ -1,4 +1,7 @@
 ﻿using Lunar.Core;
+using Lunar.Core.Utilities;
+using Lunar.Server.Net;
+using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
 using System.Collections.Generic;
 using System.IO;
@@ -9,17 +12,23 @@ namespace Lunar.Server.World.Conversation
     public class DialogueFactory
     {
         private readonly ScriptManager _scriptManager;
+        private readonly NetHandler _netHandler;
+        private readonly Logger _logger;
 
-        public DialogueFactory(ScriptManager scriptManager)
+        public DialogueFactory(ScriptManager scriptManager, NetHandler netHandler, Logger logger)
         {
             _scriptManager = scriptManager;
+            _netHandler = netHandler;
+            _logger = logger;
         }
+
+        private Dialogue NewDialogue(string name) => new Dialogue(name, _netHandler, _logger);
 
         public Dialogue Create(string filePath)
         {
-            var dialogue = new Dialogue(Path.GetFileNameWithoutExtension(filePath));
+            var dialogue = this.NewDialogue(Path.GetFileNameWithoutExtension(filePath));
 
-            dialogue.AddBranch(new DialogueBranch(dialogue, "Branch1", "Enter your branch dialogue text here..."));
+            dialogue.AddBranch(new DialogueBranch(dialogue, "Branch1", "Enter your branch dialogue text here...", _logger));
             dialogue.Branches[0].AddResponse(new DialogueResponse() { Text = "Enter your response text here... " });
 
             this.Save(dialogue, filePath);
@@ -72,7 +81,7 @@ namespace Lunar.Server.World.Conversation
             var dialogueNode = doc.Element("Dialogue");
             string dialogueName = dialogueNode.Attribute("name").Value.ToString();
 
-            Dialogue dialogue = new Dialogue(Path.GetFileNameWithoutExtension(filePath));
+            Dialogue dialogue = this.NewDialogue(Path.GetFileNameWithoutExtension(filePath));
 
             string scriptPath = dialogueNode.Element("Script")?.Value;
             dialogue.ScriptPath = scriptPath;
@@ -88,7 +97,7 @@ namespace Lunar.Server.World.Conversation
             {
                 string text = branchNode.Element("Text").Value;
                 string branchName = branchNode.Attribute("name")?.Value;
-                var branch = new DialogueBranch(dialogue, branchName, text);
+                var branch = new DialogueBranch(dialogue, branchName, text, _logger);
 
                 var responseNodes = branchNode.Elements("Response");
 

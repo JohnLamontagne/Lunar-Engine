@@ -59,7 +59,7 @@ namespace Lunar.Server.Utilities.Scripting
                 return _scripts[scriptPath];
 
             ScriptSource compiledScript = _scriptEngine.CreateScriptSourceFromFile(scriptPath);
-            Script script = new Script(_scriptEngine, compiledScript);
+            Script script = new Script(_scriptEngine, compiledScript, _logger);
             _scripts.Add(scriptPath, script);
 
             return script;
@@ -73,7 +73,7 @@ namespace Lunar.Server.Utilities.Scripting
                 return _scripts[key];
 
             ScriptSource compiledScript = _scriptEngine.CreateScriptSourceFromString(source);
-            Script script = new Script(_scriptEngine, compiledScript);
+            Script script = new Script(_scriptEngine, compiledScript, _logger);
             _scripts.Add(key, script);
 
             return script;

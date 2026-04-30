@@ -1,7 +1,8 @@
-﻿using Lunar.Core;
-using Lunar.Core.Utilities;
+﻿using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Structure.Attribute;
+using Lunar.Server.Utilities;
+using Lunar.Server.World;
 using System;
 using System.Linq;
 
@@ -9,6 +10,15 @@ namespace Lunar.Server.World.Structure.Attribute
 {
     public class WarpTileAttributeActionHandler : TileAttributeActionHandler
     {
+        private readonly WorldManager _worldManager;
+        private readonly Logger _logger;
+
+        public WarpTileAttributeActionHandler(WorldManager worldManager, Logger logger)
+        {
+            _worldManager = worldManager;
+            _logger = logger;
+        }
+
         public override void OnInitalize(ITileAttributeArgs args)
         {
         }
@@ -25,7 +35,7 @@ namespace Lunar.Server.World.Structure.Attribute
 
             if (player.MapID != attribute.WarpMap)
             {
-                var map = Engine.Services.Get<WorldManager>().GetMap(attribute.WarpMap);
+                var map = _worldManager.GetMap(attribute.WarpMap);
 
                 if (map != null)
                 {
@@ -40,7 +50,7 @@ namespace Lunar.Server.World.Structure.Attribute
                 }
                 else
                 {
-                    Engine.Services.Get<Logger>().LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR,
+                    _logger.LogEvent($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!", LogTypes.ERROR,
                         new Exception($"Player {player.Descriptor.Name} stepped on warp tile where destination does not exist!"));
 
                     return;

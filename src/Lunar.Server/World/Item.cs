@@ -27,15 +27,19 @@ namespace Lunar.Server.World
 {
     public class Item
     {
+        private readonly ScriptManager _scriptManager;
+
         public ItemModel Descriptor { get; }
 
         public ItemBehaviorDefinition BehaviorDefinition { get; set; }
 
-        public Item(ItemModel descriptor)
+        public Item(ItemModel descriptor, ScriptManager scriptManager, Logger logger)
         {
+            _scriptManager = scriptManager;
+
             if (descriptor == null)
             {
-                Engine.Services.Get<Logger>().LogEvent("Null item!", LogTypes.ERROR, new Exception("Null item"));
+                logger.LogEvent("Null item!", LogTypes.ERROR, new Exception("Null item"));
 
                 Descriptor = new ItemModel()
                 {
@@ -59,7 +63,7 @@ namespace Lunar.Server.World
                 string scriptActionHook = pair.Key;
                 string scriptContent = pair.Value;
 
-                Script script = Engine.Services.Get<ScriptManager>().CreateScriptFromSource(scriptContent);
+                Script script = _scriptManager.CreateScriptFromSource(scriptContent);
 
                 switch (scriptActionHook)
                 {

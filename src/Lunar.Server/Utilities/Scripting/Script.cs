@@ -34,8 +34,11 @@ namespace Lunar.Server.Utilities.Scripting
 
         public event EventHandler<EventArgs> ScriptChanged;
 
-        public Script(ScriptEngine scriptEngine, ScriptSource compiledScript)
+        private readonly Logger _logger;
+
+        public Script(ScriptEngine scriptEngine, ScriptSource compiledScript, Logger logger)
         {
+            _logger = logger;
             try
             {
                 _scriptEngine = scriptEngine;
@@ -49,11 +52,11 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Microsoft.Scripting.SyntaxErrorException ex)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
+                _logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
             catch (MissingMemberException ex)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
+                _logger.LogEvent($"Script Error: {ex.Message} in {compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
         }
 
@@ -105,7 +108,7 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex);
+                _logger.LogEvent($"Script Error: {ex.Message} in {this._compiledScript.Path}: ", LogTypes.ERROR, ex);
                 return default;
             }
         }
@@ -132,11 +135,11 @@ namespace Lunar.Server.Utilities.Scripting
             }
             catch (Microsoft.Scripting.SyntaxErrorException ex)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
+                _logger.LogEvent($"Script Error on line {ex.Line}: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Script Error: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
+                _logger.LogEvent($"Script Error: {ex.Message} in {_compiledScript.Path}: ", LogTypes.ERROR, ex);
             }
         }
 

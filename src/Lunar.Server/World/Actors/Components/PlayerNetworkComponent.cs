@@ -23,19 +23,21 @@ namespace Lunar.Server.World.Actors.Components
     public class PlayerNetworkComponent
     {
         private readonly Player _player;
+        private readonly CommandHandler _commandHandler;
 
         public PlayerConnection Connection { get; }
 
-        public PlayerNetworkComponent(Player player, PlayerConnection connection)
+        public PlayerNetworkComponent(Player player, PlayerConnection connection, CommandHandler commandHandler)
         {
             _player = player;
+            _commandHandler = commandHandler;
             this.Connection = connection;
         }
 
         public void SendAvailableCommands()
         {
             var packet = new Packet();
-            packet.Write(Engine.Services.Get<CommandHandler>().Pack());
+            packet.Write(_commandHandler.Pack());
             this.SendPacket(PacketType.AVAILABLE_COMMANDS, packet, DeliveryMethod.ReliableOrdered);
         }
 

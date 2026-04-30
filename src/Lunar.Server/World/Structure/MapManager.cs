@@ -21,6 +21,9 @@ using Lunar.Core.Utilities.Data;
 using Lunar.Core.Utilities.Data.FileSystem;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Structure;
+using Lunar.Server.Utilities;
+using Lunar.Server.Utilities.Scripting;
+using Lunar.Server.World.Structure.Attribute;
 
 namespace Lunar.Server.World.Structure
 {
@@ -29,9 +32,16 @@ namespace Lunar.Server.World.Structure
         private Dictionary<string, Map> _maps;
         private IDataManager<MapModel<LayerModel<TileModel<SpriteInfo>>>> _mapDataLoader;
 
-        public MapManager(IDataManagerFactory dataManagerFactory)
+        private readonly TileAttributeActionHandlerFactory _attributeHandlerFactory;
+        private readonly ScriptManager _scriptManager;
+        private readonly Logger _logger;
+
+        public MapManager(IDataManagerFactory dataManagerFactory, TileAttributeActionHandlerFactory attributeHandlerFactory, ScriptManager scriptManager, Logger logger)
         {
             _maps = new Dictionary<string, Map>();
+            _attributeHandlerFactory = attributeHandlerFactory;
+            _scriptManager = scriptManager;
+            _logger = logger;
 
             _mapDataLoader = dataManagerFactory.Create<MapModel<LayerModel<TileModel<SpriteInfo>>>>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
         }
@@ -45,7 +55,11 @@ namespace Lunar.Server.World.Structure
 
             foreach (var file in files)
             {
-                Map map = new Map(_mapDataLoader.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(file.FullName))));
+                Map map = new Map(
+                    _mapDataLoader.Load(new ContentFileDataLoaderArguments(Path.GetFileNameWithoutExtension(file.FullName))),
+                    _attributeHandlerFactory,
+                    _scriptManager,
+                    _logger);
 
                 map.ConstructPathfinder();
                 _maps.Add(map.Name, map);

@@ -38,6 +38,9 @@ namespace Lunar.Server.World.Actors
         private long _nextMoveTime;
         private List<Script> _scripts;
 
+        private readonly Logger _logger;
+        private readonly ScriptManager _scriptManager;
+
         private float _avgMoveSpeedX = 0;
         private float _avgMoveSpeedY = 0;
 
@@ -69,9 +72,11 @@ namespace Lunar.Server.World.Actors
 
         public new Dialogue Dialogue { get; }
 
-        protected NPC(NPCModel descriptor)
+        private NPC(NPCModel descriptor, ScriptManager scriptManager, Logger logger, DialogueManager dialogueManager)
         {
             _scripts = new List<Script>();
+            _scriptManager = scriptManager;
+            _logger = logger;
 
             this.Name = descriptor.Name;
             this.Level = descriptor.Level;
@@ -96,21 +101,21 @@ namespace Lunar.Server.World.Actors
 
             if (!string.IsNullOrEmpty(descriptor.Dialogue))
             {
-                this.Dialogue = Engine.Services.Get<DialogueManager>().Get(descriptor.Dialogue);
+                this.Dialogue = dialogueManager.Get(descriptor.Dialogue);
                 this.DialogueBranch = descriptor.DialogueBranch;
             }
         }
 
-        public NPC(NPCModel descriptor, Map map)
-            : this(descriptor)
+        public NPC(NPCModel descriptor, Map map, ScriptManager scriptManager, Logger logger, DialogueManager dialogueManager)
+            : this(descriptor, scriptManager, logger, dialogueManager)
         {
             if (descriptor == null)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Null npc spawned on map {map.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Name}!"));
+                _logger.LogEvent($"Null npc spawned on map {map.Name}!", LogTypes.ERROR, new Exception($"Null npc spawned on map {map.Name}!"));
             }
 
             this.GameTimers = new GameTimerManager();
-            this.StateMachine = new ActorStateMachine<NPC>(this);
+            this.StateMachine = new ActorStateMachine<NPC>(this, _logger);
 
             this.CollisionBody = new CollisionBody(this);
 
@@ -135,7 +140,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex);
+                _logger.LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
 
@@ -143,7 +148,7 @@ namespace Lunar.Server.World.Actors
         {
             foreach (var scriptPath in scriptPaths)
             {
-                Script script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + scriptPath);
+                Script script = _scriptManager.CreateScript(Constants.FILEPATH_DATA + scriptPath);
                 ActorBehaviorDefinition behaviorDefinition = script?.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
 
                 if (behaviorDefinition != null)
@@ -161,7 +166,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex);
+                _logger.LogEvent("Error handling OnAttacked: " + ex.Message, LogTypes.ERROR, ex);
             }
         }
 
@@ -177,7 +182,7 @@ namespace Lunar.Server.World.Actors
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex);
+                _logger.LogEvent("Error handling Update: " + ex.Message, LogTypes.ERROR, ex);
             }
 
             this.StateMachine.Update(gameTime);

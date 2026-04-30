@@ -34,10 +34,13 @@ namespace Lunar.Server.Net
         public event EventHandler<ConnectionEventArgs> ConnectionReceived;
         public event EventHandler<ConnectionEventArgs> ConnectionLost;
 
-        public NetHandler(string gameName, int port)
+        private readonly Logger _logger;
+
+        public NetHandler(string gameName, int port, Logger logger)
         {
             _connectionKey = gameName;
             _port = port;
+            _logger = logger;
             _packetHandlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
             _connections = new Dictionary<int, PlayerConnection>();
 
@@ -132,7 +135,7 @@ namespace Lunar.Server.Net
         private void OnPeerConnected(NetPeer peer)
         {
             Console.WriteLine("Established connection with: {0}.", peer);
-            var connection = new PlayerConnection(peer, this);
+            var connection = new PlayerConnection(peer, this, _logger);
             _connections[peer.Id] = connection;
             this.ConnectionReceived?.Invoke(this, new ConnectionEventArgs(connection));
         }
