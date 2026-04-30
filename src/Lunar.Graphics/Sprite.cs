@@ -41,9 +41,9 @@ namespace Lunar.Graphics
             _texture = texture;
             this.Effects = SpriteEffects.None;
 
-            this.Transform.Color = Microsoft.Xna.Framework.Color.White;
-            this.Transform.Rect = this.Texture.Bounds;
-            this.Transform.Position = Vector2.Zero;
+            this.Transform.Color = Microsoft.Xna.Framework.Color.White.ToLunar();
+            this.Transform.Rect = this.Texture.Bounds.ToLunar();
+            this.Transform.Position = Vector2.Zero.ToLunar();
             this.Transform.Rotation = 0f;
             this.Transform.Scale = 1f;
             this.Transform.LayerDepth = 0f;

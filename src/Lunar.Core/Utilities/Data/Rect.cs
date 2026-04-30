@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,69 +11,47 @@
 	limitations under the License.
 */
 
-using Microsoft.Xna.Framework;
-using XNARectangle = Microsoft.Xna.Framework.Rectangle;
-
 namespace Lunar.Core.Utilities.Data
 {
-    /// <summary>
-    /// Exposes functionality of XNA Rectangle to the server while minimizing exposure of other unneeded bloat
-    /// </summary>
     public struct Rect
     {
-        private XNARectangle _rectangle;
+        public int X { get; }
 
-        public int X => _rectangle.Left;
+        public int Y { get; }
 
-        public int Y => _rectangle.Top;
+        public int Width { get; }
 
-        public int Width => _rectangle.Width;
+        public int Height { get; }
 
-        public int Height => _rectangle.Height;
+        public int Left => X;
+        public int Top => Y;
+        public int Right => X + Width;
+        public int Bottom => Y + Height;
 
-        public Rect(int left, int top, int width, int height)
+        public Rect(int x, int y, int width, int height)
         {
-            _rectangle = new XNARectangle(left, top, width, height);
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
         }
 
-        public Rect(float left, float top, float width, float height)
-        {
-            _rectangle = new XNARectangle((int)left, (int)top, (int)width, (int)height);
-        }
-
-        public override string ToString()
-        {
-            return $"[{this.X}, {this.Y}, {this.Width}, {this.Height}]";
-        }
+        public Rect(float x, float y, float width, float height)
+            : this((int)x, (int)y, (int)width, (int)height) { }
 
         public bool Contains(Vector point)
-        {
-            return _rectangle.Contains(point.X, point.Y);
-        }
+            => point.X >= X && point.X <= Right && point.Y >= Y && point.Y <= Bottom;
 
-        public bool Intersects(Rect rect)
-        {
-            return _rectangle.Intersects(rect);
-        }
+        public bool Contains(float pointX, float pointY)
+            => pointX >= X && pointX <= Right && pointY >= Y && pointY <= Bottom;
 
-        public Rect Move(float dX, float dY)
-        {
-            return new Rect(this.X + dX, this.Y + dY, this.Width, this.Height);
-        }
+        public bool Intersects(Rect other)
+            => Left < other.Right && Right > other.Left && Top < other.Bottom && Bottom > other.Top;
 
-        public Rect MoveTo(float x, float y)
-        {
-            return new Rect(x, y, this.Width, this.Height);
-        }
+        public Rect Move(float dX, float dY) => new Rect(X + dX, Y + dY, Width, Height);
 
-        public static implicit operator Rect(XNARectangle rect)
-        {
-            return new Rect(rect.X, rect.Y, rect.Width, rect.Height);
-        }
+        public Rect MoveTo(float x, float y) => new Rect(x, y, Width, Height);
 
-        public static implicit operator XNARectangle(Rect rect)
-        {
-            return new XNARectangle(rect.X, rect.Y, rect.Width, rect.Height);
-        }
+        public override string ToString() => $"[{X}, {Y}, {Width}, {Height}]";
     }
 }

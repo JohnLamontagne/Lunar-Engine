@@ -85,7 +85,7 @@ namespace Lunar.Graphics
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.Sprite.Texture, _destionationRect, _frameRectangle, this.Sprite.Transform.Color, this.Sprite.Transform.Rotation, Vector2.Zero, this.Sprite.Effects, this.Sprite.Transform.LayerDepth);
+            spriteBatch.Draw(this.Sprite.Texture, _destionationRect, _frameRectangle, this.Sprite.Transform.Color.ToXna(), this.Sprite.Transform.Rotation, Vector2.Zero, this.Sprite.Effects, this.Sprite.Transform.LayerDepth);
         }
     }
 }

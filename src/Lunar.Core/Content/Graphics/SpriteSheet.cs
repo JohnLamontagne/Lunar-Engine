@@ -11,7 +11,7 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
+using Lunar.Core.Net;
 
 namespace Lunar.Core.Content.Graphics
 {
@@ -34,13 +34,13 @@ namespace Lunar.Core.Content.Graphics
             this.FrameHeight = frameHeight;
         }
 
-        public NetBuffer Pack()
+        public Packet Pack()
         {
-            var netBuffer = new NetBuffer();
-            netBuffer.Write(this.Sprite.TextureName);
-            netBuffer.Write(this.FrameWidth);
-            netBuffer.Write(this.FrameHeight);
-            return netBuffer;
+            var packet = new Packet();
+            packet.Write(this.Sprite.TextureName);
+            packet.Write(this.FrameWidth);
+            packet.Write(this.FrameHeight);
+            return packet;
         }
     }
 }

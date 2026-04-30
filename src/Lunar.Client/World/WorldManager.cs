@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Net;
+using Lunar.Graphics;
 using Lunar.Client.Utilities;
 using Lunar.Client.World.Actors;
 using Lunar.Core;
@@ -65,60 +66,60 @@ namespace Lunar.Client.World
 
         private void Handle_PositionUpdate(PacketReceivedEventArgs args)
         {
-            string unqiueID = args.Message.ReadString();
+            string unqiueID = args.Packet.ReadString();
             var player = _map.GetEntity<Player>(unqiueID);
 
             if (player != null)
             {
-                string layerName = args.Message.ReadString();
+                string layerName = args.Packet.ReadString();
                 player.Layer = _map.GetLayer(layerName);
-                player.Position = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
+                player.Position = new Vector2(args.Packet.ReadFloat(), args.Packet.ReadFloat());
             }
         }
 
         private void Handle_PlayerLeft(PacketReceivedEventArgs args)
         {
-            string uniqueID = args.Message.ReadString();
+            string uniqueID = args.Packet.ReadString();
             _map.RemoveEntity(uniqueID);
         }
 
         private void Handle_NPCData(PacketReceivedEventArgs args)
         {
-            string uniqueID = args.Message.ReadString();
+            string uniqueID = args.Packet.ReadString();
 
             if (!_map.EntityExists(uniqueID))
             {
                 var npc = new NPC(uniqueID);
-                npc.Unpack(args.Message, _contentManager);
+                npc.Unpack(args.Packet, _contentManager);
                 _map.AddEntity(uniqueID, npc);
             }
             else
             {
-                _map.GetEntity<NPC>(uniqueID).Unpack(args.Message, _contentManager);
+                _map.GetEntity<NPC>(uniqueID).Unpack(args.Packet, _contentManager);
             }
         }
 
         private void Handle_PlayerData(PacketReceivedEventArgs args)
         {
-            string uniqueID = args.Message.ReadString();
+            string uniqueID = args.Packet.ReadString();
 
             if (uniqueID == Engine.Services.Get<NetHandler>().UniqueID)
             {
-                _player.Unpack(args.Message, _contentManager);
+                _player.Unpack(args.Packet, _contentManager);
             }
             else
             {
                 Player player = _map?.GetEntity<Player>(uniqueID);
                 if (player != null)
                 {
-                    player.Unpack(args.Message, _contentManager);
+                    player.Unpack(args.Packet, _contentManager);
                 }
             }
         }
 
         private void Handle_PlayerJoined(PacketReceivedEventArgs args)
         {
-            var uniqueID = args.Message.ReadString();
+            var uniqueID = args.Packet.ReadString();
 
             Player player;
 
@@ -139,7 +140,7 @@ namespace Lunar.Client.World
                 this.PlayerJoined?.Invoke(this, new PlayerJoinedEventArgs(player));
             }
 
-            player.Unpack(args.Message, _contentManager);
+            player.Unpack(args.Packet, _contentManager);
 
             _map?.AddEntity(uniqueID, player);
         }
@@ -154,13 +155,13 @@ namespace Lunar.Client.World
             if (_player != null)
                 _player.State = ActorStates.Idle;
 
-            var name = args.Message.ReadString();
-            var dimensions = args.Message.ReadVector();
+            var name = args.Packet.ReadString();
+            var dimensions = args.Packet.ReadVector();
 
             _map?.Unload(); // unload the previous map if it existed.
 
-            _map = new Map(dimensions, name);
-            _map.Unpack(args.Message);
+            _map = new Map(dimensions.ToXna(), name);
+            _map.Unpack(args.Packet);
 
             _mapLoaded = true;
 

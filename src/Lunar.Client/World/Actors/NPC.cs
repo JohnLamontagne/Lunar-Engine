@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
 using Lunar.Core;
@@ -109,7 +108,7 @@ namespace Lunar.Client.World.Actors
                 _direction = value;
 
                 if (this.SpriteSheet != null)
-                    this.SpriteSheet.Sprite.Transform.Rect = new Rectangle(this.SpriteSheet.Sprite.Transform.Rect.X, (int)_direction * (int)_frameSize.Y, (int)_frameSize.X, (int)_frameSize.Y);
+                    this.SpriteSheet.Sprite.Transform.Rect = new Rectangle(this.SpriteSheet.Sprite.Transform.Rect.X, (int)_direction * (int)_frameSize.Y, (int)_frameSize.X, (int)_frameSize.Y).ToLunar();
             }
         }
 
@@ -128,18 +127,18 @@ namespace Lunar.Client.World.Actors
 
         private void Handle_NPCMoving(PacketReceivedEventArgs args)
         {
-            string uniqueID = args.Message.ReadString();
+            string uniqueID = args.Packet.ReadString();
 
             if (_uniqueID != uniqueID)
                 return;
 
-            if (!args.Message.ReadBoolean())
+            if (!args.Packet.ReadBoolean())
             {
                 Console.WriteLine("Our final pos: " + this.Position.ToString());
 
                 Console.WriteLine("Avg Update: " + new Vector((float)_avgMoveSpeedX, (float)_avgMoveSpeedY).ToString());
 
-                var newPos = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
+                var newPos = new Vector2(args.Packet.ReadFloat(), args.Packet.ReadFloat());
                 Console.WriteLine("Server final pos: " + newPos.ToString());
 
                 _serverPos = newPos;
@@ -150,13 +149,13 @@ namespace Lunar.Client.World.Actors
                 return;
             }
 
-            this.Direction = (Direction)args.Message.ReadInt32();
+            this.Direction = (Direction)args.Packet.ReadInt32();
 
-            int pathCount = args.Message.ReadInt32();
+            int pathCount = args.Packet.ReadInt32();
 
             for (int i = 0; i < pathCount; i++)
             {
-                _targetPath.Enqueue(new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat()));
+                _targetPath.Enqueue(new Vector2(args.Packet.ReadFloat(), args.Packet.ReadFloat()));
             }
 
             Engine.Services.Get<WorldManager>().Map.Path = new List<Vector2>(_targetPath.ToArray());
@@ -284,7 +283,7 @@ namespace Lunar.Client.World.Actors
             }
         }
 
-        public void Unpack(NetBuffer buffer, ContentManager contentManager)
+        public void Unpack(Packet buffer, ContentManager contentManager)
         {
             _name = buffer.ReadString();
             string texturePath = buffer.ReadString();

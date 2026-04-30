@@ -11,8 +11,6 @@
 	limitations under the License.
 */
 
-using XNAColor = Microsoft.Xna.Framework.Color;
-
 namespace Lunar.Core.Content.Graphics
 {
     public struct Color
@@ -103,15 +101,5 @@ namespace Lunar.Core.Content.Graphics
         public static Color Blue => new Color(0, 0, 255);
 
         public static Color Black => new Color(0, 0, 0);
-
-        public static implicit operator Color(XNAColor color)
-        {
-            return new Color(color.R, color.G, color.B, color.A);
-        }
-
-        public static implicit operator XNAColor(Color color)
-        {
-            return new XNAColor(color.R, color.G, color.B, color.A);
-        }
     }
 }

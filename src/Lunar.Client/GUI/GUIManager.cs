@@ -727,7 +727,7 @@ namespace Lunar.Client.GUI
             }
         }
 
-        protected virtual Vector ParseSize(string sizeX, string sizeY, Texture2D texture)
+        protected virtual Vector2 ParseSize(string sizeX, string sizeY, Texture2D texture)
         {
             float x = 0;
             float y = 0;

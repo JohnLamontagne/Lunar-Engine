@@ -11,8 +11,8 @@
 	limitations under the License.
 */
 
+using Lunar.Core.Net;
 using System.IO;
-using Lidgren.Network;
 using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -61,7 +61,7 @@ namespace Lunar.Client.World
             spriteBatch.Draw(this.Sprite);
         }
 
-        public static MapObject Unpack(NetBuffer netBuffer)
+        public static MapObject Unpack(Packet netBuffer)
         {
             // can we view it?
             if (!netBuffer.ReadBoolean())
@@ -78,9 +78,9 @@ namespace Lunar.Client.World
             var sprite = new AnimatedSprite(Client.ServiceLocator.Get<ContentManagerService>().ContentManager
                 .LoadTexture2D(Constants.FILEPATH_DATA + textureName));
 
-            sprite.Transform.Rect = sourceRectangle;
-            sprite.Transform.Color = color;
-            sprite.Transform.Position = position;
+            sprite.Transform.Rect = sourceRectangle.ToLunar();
+            sprite.Transform.Color = color.ToLunar();
+            sprite.Transform.Position = position.ToLunar();
             sprite.Transform.LayerDepth = zIndex;
 
             var mapObject = new MapObject(sprite, animated) { FrameTime = frameTime };

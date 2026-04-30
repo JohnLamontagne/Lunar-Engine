@@ -11,7 +11,7 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
+using Lunar.Core.Net;
 using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -33,13 +33,13 @@ namespace Lunar.Client.World
 
         public Sprite Sprite => _sprite;
 
-        public Vector2 Position => _sprite.Transform.Position;
+        public Vector2 Position => _sprite.Transform.Position.ToXna();
 
         public MapItem()
         {
         }
 
-        public void Unpack(NetBuffer netBuffer, Layer layer)
+        public void Unpack(Packet netBuffer, Layer layer)
         {
             var position = new Vector2(netBuffer.ReadFloat(), netBuffer.ReadFloat());
             _name = netBuffer.ReadString();
@@ -48,7 +48,7 @@ namespace Lunar.Client.World
             _sprite = new Sprite(Client.ServiceLocator.Get<ContentManagerService>()
                 .ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName));
 
-            _sprite.Transform.Position = position;
+            _sprite.Transform.Position = position.ToLunar();
             _sprite.Transform.LayerDepth = layer.ZIndex + .001f; // the .001f makes it so that the item spawns above the map layer, but just below actors
         }
 

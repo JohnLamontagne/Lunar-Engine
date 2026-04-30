@@ -12,7 +12,6 @@
 */
 using System;
 using Lunar.Core.Utilities.Logic;
-using Microsoft.Xna.Framework;
 
 namespace Lunar.Core.Utilities.Data
 {
@@ -150,19 +149,6 @@ namespace Lunar.Core.Utilities.Data
         public static bool operator !=(Vector vecOne, Vector vecTwo)
         {
             return !(vecOne == vecTwo);
-        }
-
-        
-
-        public static implicit operator Vector(Vector2 vector)
-        {
-            return new Vector(vector.X, vector.Y);
-        }
-
-
-        public static implicit operator Vector2(Vector vector)
-        {
-            return new Vector2(vector.X, vector.Y);
         }
 
         public static Vector Normalize(Vector A)
