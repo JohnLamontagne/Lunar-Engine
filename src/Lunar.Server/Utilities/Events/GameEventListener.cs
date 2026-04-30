@@ -16,7 +16,7 @@ using Lunar.Core.Utilities;
 
 namespace Lunar.Server.Utilities.Events
 {
-    public class GameEventListener : IGameEventSource, IService
+    public class GameEventListener : IGameEventSource
     {
         private List<IGameEventSource> _eventSources;
 

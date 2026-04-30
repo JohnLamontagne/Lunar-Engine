@@ -9,6 +9,13 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 {
     public class NPCFSDataManager : FSDataManager<NPCModel>
     {
+        private readonly Logger _logger;
+
+        public NPCFSDataManager(Logger logger)
+        {
+            _logger = logger;
+        }
+
         public override bool Exists(IDataManagerArguments arguments)
         {
             return File.Exists(this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.NPC_FILE_EXT);
@@ -89,7 +96,7 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             }
             catch (IOException exception)
             {
-                Engine.Services.Get<Logger>().LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception);
+                _logger.LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception);
                 return null;
             }
         }

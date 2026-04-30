@@ -28,7 +28,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Lunar.Server.World.Actors
 {
-    public class PlayerManager : ISubject, IService
+    public class PlayerManager : ISubject
     {
         private readonly Dictionary<string, Player> _players;
 

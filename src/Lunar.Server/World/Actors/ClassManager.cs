@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace Lunar.Server.World.Actors
 {
-    internal class ClassManager : IService
+    internal class ClassManager
     {
         private Dictionary<string, ClassInformation> _classes;
 

@@ -22,7 +22,7 @@ using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.Utilities.Commands
 {
-    public class CommandHandler : IService
+    public class CommandHandler
     {
         private readonly Dictionary<string, List<dynamic>> _scriptedCommandHandlers;
         private readonly ScriptManager _scriptManager;

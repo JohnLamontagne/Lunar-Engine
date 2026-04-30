@@ -21,7 +21,7 @@ using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World
 {
-    public class WorldManager : IService
+    public class WorldManager
     {
         private readonly WorldDictionary<string, Map> _maps;
         private readonly PlayerManager _playerManager;

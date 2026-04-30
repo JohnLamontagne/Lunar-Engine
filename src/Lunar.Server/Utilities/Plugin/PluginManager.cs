@@ -20,7 +20,7 @@ using Lunar.Core.Utilities;
 
 namespace Lunar.Server.Utilities.Plugin
 {
-    public class PluginManager : IService
+    public class PluginManager
     {
         private readonly List<Plugin> _plugins;
         private readonly Logger _logger;

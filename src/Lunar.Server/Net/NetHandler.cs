@@ -22,7 +22,7 @@ using DeliveryMethod = Lunar.Core.Net.DeliveryMethod;
 
 namespace Lunar.Server.Net
 {
-    public class NetHandler : IService
+    public class NetHandler
     {
         private readonly string _connectionKey;
         private readonly int _port;

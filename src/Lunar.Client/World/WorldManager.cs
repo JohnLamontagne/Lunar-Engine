@@ -28,7 +28,7 @@ using Lunar.Core.World.Actor;
 
 namespace Lunar.Client.World
 {
-    public class WorldManager : IService
+    public class WorldManager
     {
         private Map _map;
 

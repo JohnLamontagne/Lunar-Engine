@@ -22,7 +22,7 @@ using Lunar.Core.World.Actor.Descriptors;
 
 namespace Lunar.Server.World.Actors
 {
-    public class NPCManager : IService
+    public class NPCManager
     {
         private Dictionary<string, NPCModel> _npcs;
 

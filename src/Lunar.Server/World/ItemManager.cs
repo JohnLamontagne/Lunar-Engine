@@ -23,7 +23,7 @@ using Lunar.Server.Utilities;
 
 namespace Lunar.Server.World
 {
-    public class ItemManager : IService
+    public class ItemManager
     {
         private readonly Dictionary<string, ItemModel> _items;
         private readonly IDataManager<ItemModel> _dataManager;

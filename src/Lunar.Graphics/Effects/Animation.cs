@@ -30,14 +30,14 @@ namespace Lunar.Graphics.Effects
             set => _position = value;
         }
 
-        public Animation(BaseAnimation<IAnimationLayer<SpriteInfo>> description)
+        public Animation(BaseAnimation<IAnimationLayer<SpriteInfo>> description, ContentManagerService contentManagerService)
             : base(description.Name)
         {
             if (description.SurfaceAnimation != null)
-                this.SurfaceAnimation = new AnimationLayer(description.SurfaceAnimation);
+                this.SurfaceAnimation = new AnimationLayer(description.SurfaceAnimation, contentManagerService);
 
             if (description.SubSurfaceAnimation != null)
-                this.SubSurfaceAnimation = new AnimationLayer(description.SubSurfaceAnimation);
+                this.SubSurfaceAnimation = new AnimationLayer(description.SubSurfaceAnimation, contentManagerService);
         }
 
         public virtual void Play()
@@ -93,7 +93,7 @@ namespace Lunar.Graphics.Effects
 
         public new static Animation Create()
         {
-            var animation = new Animation(BaseAnimation<IAnimationLayer<SpriteInfo>>.Create());
+            var animation = new Animation(BaseAnimation<IAnimationLayer<SpriteInfo>>.Create(), null);
             animation.SubSurfaceAnimation = new AnimationLayer();
             animation.SubSurfaceAnimation.TexturePath = "";
             animation.SurfaceAnimation = new AnimationLayer();

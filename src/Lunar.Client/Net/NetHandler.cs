@@ -22,7 +22,7 @@ using DeliveryMethod = Lunar.Core.Net.DeliveryMethod;
 
 namespace Lunar.Client.Net
 {
-    public class NetHandler : ISubject, IService
+    public class NetHandler : ISubject
     {
         private readonly NetManager _netManager;
         private readonly EventBasedNetListener _listener;

@@ -22,14 +22,14 @@ namespace Lunar.Graphics.Effects
         {
         }
 
-        public AnimationLayer(IAnimationLayer<SpriteInfo> descriptor)
+        public AnimationLayer(IAnimationLayer<SpriteInfo> descriptor, ContentManagerService contentManagerService)
         {
             this.FrameWidth = descriptor.FrameWidth;
             this.FrameHeight = descriptor.FrameHeight;
             this.FrameTime = descriptor.FrameTime;
             this.LoopCount = descriptor.LoopCount;
 
-            this.Sprite = new Sprite(Engine.Services.Get<ContentManagerService>().ContentManager
+            this.Sprite = new Sprite(contentManagerService.ContentManager
                 .LoadTexture2D(Engine.ROOT_PATH + descriptor.TexturePath));
         }
 

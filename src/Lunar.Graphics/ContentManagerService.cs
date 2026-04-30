@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Lunar.Graphics
 {
-    public class ContentManagerService : IService
+    public class ContentManagerService
     {
         public ContentManager ContentManager { get; }
 

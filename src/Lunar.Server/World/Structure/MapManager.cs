@@ -27,7 +27,7 @@ using Lunar.Server.World.Structure.Attribute;
 
 namespace Lunar.Server.World.Structure
 {
-    public class MapManager : IService
+    public class MapManager
     {
         private Dictionary<string, Map> _maps;
         private IDataManager<MapModel<LayerModel<TileModel<SpriteInfo>>>> _mapDataLoader;

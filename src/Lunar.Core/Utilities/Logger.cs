@@ -21,7 +21,7 @@ using Lunar.Core;
 
 namespace Lunar.Core.Utilities
 {
-    public class Logger : IService
+    public class Logger
     {
         private BackgroundWorker _loggerWorker;
         private bool _shuttingDown;
@@ -72,9 +72,9 @@ namespace Lunar.Core.Utilities
                         _previousConsoleLog = newConsoleLog;
                     }
 
-                    TextLog($"Error: {eventDetails}.", exception.StackTrace, Engine.Services.Get<Logger>().LogPath + "Error.txt");
+                    TextLog($"Error: {eventDetails}.", exception.StackTrace, this.LogPath + "Error.txt");
 
-                    if (!Engine.Services.Get<Logger>().SuppressErrors)
+                    if (!this.SuppressErrors)
                     {
                         if (exception.InnerException != null)
                             ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
@@ -85,11 +85,11 @@ namespace Lunar.Core.Utilities
                     break;
 
                 case LogTypes.GAME:
-                    TextLog($"Game event: {eventDetails}", exception?.StackTrace, Engine.Services.Get<Logger>().LogPath + "Game_Event.txt");
+                    TextLog($"Game event: {eventDetails}", exception?.StackTrace, this.LogPath + "Game_Event.txt");
                     break;
 
                 case LogTypes.GEN_SERVER:
-                    TextLog($"Event: {eventDetails}", exception?.StackTrace, Engine.Services.Get<Logger>().LogPath + "General_Server.txt");
+                    TextLog($"Event: {eventDetails}", exception?.StackTrace, this.LogPath + "General_Server.txt");
                     break;
             }
         }

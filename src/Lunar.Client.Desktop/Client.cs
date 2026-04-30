@@ -72,10 +72,6 @@ namespace Lunar.Client
             var lightManager = services.GetRequiredService<LightManagerService>();
             lightManager.Component.Initialize();
 
-            // Register LightManagerService into the legacy locator too because Lunar.Client
-            // leaves still resolve it from there. Will be cleaned up in Pass 4.
-            Engine.Services.RegisterAs(lightManager, typeof(LightManagerService));
-
             _consoleComponent = new ConsoleComponent(this);
             _consoleComponent.FontColor = Color.Wheat;
             this.Components.Add(_consoleComponent);

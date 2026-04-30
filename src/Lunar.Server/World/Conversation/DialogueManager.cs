@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Lunar.Server.World.Conversation
 {
-    public class DialogueManager : IService
+    public class DialogueManager
     {
         private readonly Dictionary<string, Dialogue> _dialogues;
         private readonly DialogueFactory _dialogueFactory;

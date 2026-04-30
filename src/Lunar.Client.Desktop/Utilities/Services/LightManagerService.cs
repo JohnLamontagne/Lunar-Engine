@@ -16,7 +16,7 @@ using Penumbra;
 
 namespace Lunar.Client.Utilities.Services
 {
-    public class LightManagerService : IService
+    public class LightManagerService
     {
         private PenumbraComponent _component;
 

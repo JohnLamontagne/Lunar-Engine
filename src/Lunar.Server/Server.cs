@@ -64,7 +64,7 @@ namespace Lunar.Server
             Console.WriteLine("Initalizing server...");
 
             // Configure logger before settings so the latter can log validation errors at startup.
-            var bootstrapLogger = Engine.Services.Get<Logger>();
+            var bootstrapLogger = new Logger();
             bootstrapLogger.LogPath = Constants.FILEPATH_LOGS;
             bootstrapLogger.Start();
 
@@ -100,20 +100,10 @@ namespace Lunar.Server
             services.AddSingleton<ScriptManager>(sp =>
                 new ScriptManager(Constants.FILEPATH_SCRIPTS, Settings.IronPythonLibsDirectory, sp.GetRequiredService<Logger>()));
 
-            // Need to register the action-handler types so ActivatorUtilities can resolve them
-            // when the TileAttributeActionHandlerFactory builds them per-attribute. They are
-            // not singletons since each tile gets its own handler instance.
+            // Action handlers (per-tile) are constructed by the factory via
+            // ActivatorUtilities; they don't need explicit registration.
 
             _services = services.BuildServiceProvider();
-
-            // Bridge resolved instances into the legacy ServiceLocator so leaf
-            // classes (NPC, Player, Map, Item, Dialogue, etc.) that still use
-            // Engine.Services keep working until Pass 2 migrates them.
-            BridgeToEngineServices(_services, typeof(NetHandler), typeof(IDataManagerFactory),
-                typeof(ItemManager), typeof(ClassManager), typeof(NPCManager), typeof(MapManager),
-                typeof(PlayerManager), typeof(WorldManager), typeof(DialogueManager),
-                typeof(GameEventListener), typeof(PluginManager), typeof(CommandHandler),
-                typeof(ScriptManager));
 
             // Initalize order matters: data factory first, then content managers
             // (which load their data via the factory), then connections.
@@ -131,15 +121,6 @@ namespace Lunar.Server
             _services.GetRequiredService<CommandHandler>().Initalize();
 
             _webCommunicator = new WebCommunicator();
-        }
-
-        private static void BridgeToEngineServices(IServiceProvider provider, params Type[] types)
-        {
-            foreach (var type in types)
-            {
-                var instance = (IService)provider.GetRequiredService(type);
-                Engine.Services.RegisterAs(instance, type);
-            }
         }
 
         public void Start()

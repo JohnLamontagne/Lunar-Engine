@@ -22,7 +22,7 @@ using System.Reflection;
 
 namespace Lunar.Server.Utilities.Scripting
 {
-    public class ScriptManager : IService
+    public class ScriptManager
     {
         private readonly Dictionary<string, Script> _scripts;
         private readonly ScriptEngine _scriptEngine;

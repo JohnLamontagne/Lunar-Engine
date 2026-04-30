@@ -17,7 +17,7 @@ using System;
 
 namespace Lunar.Client.Utilities.Services
 {
-    public class GraphicsDeviceService : IService
+    public class GraphicsDeviceService
     {
         private GraphicsDevice _graphicsDevice;
 

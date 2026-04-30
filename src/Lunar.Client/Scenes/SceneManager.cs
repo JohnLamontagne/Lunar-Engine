@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace Lunar.Client.Scenes
 {
-    public class SceneManager : ISubject, IService
+    public class SceneManager : ISubject
     {
         private readonly Dictionary<string, Scene> _scenes;
         private Scene _activeScreen;

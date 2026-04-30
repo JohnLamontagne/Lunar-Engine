@@ -16,6 +16,7 @@ using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Core.World.Structure;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 
@@ -23,18 +24,20 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 {
     public class FSDataFactory : IDataManagerFactory
     {
-        private Dictionary<Type, Type> _lookupTable;
+        private readonly Dictionary<Type, Type> _lookupTable;
+        private readonly IServiceProvider _services;
 
-        public FSDataFactory()
+        public FSDataFactory(IServiceProvider services)
         {
             _lookupTable = new Dictionary<Type, Type>();
+            _services = services;
         }
 
         public IDataManager<T> Create<T>(IDataFactoryArguments args) where T : IContentModel
         {
             if (_lookupTable.ContainsKey(typeof(T)))
             {
-                var dataManager = (FSDataManager<T>)Activator.CreateInstance(_lookupTable[typeof(T)]);
+                var dataManager = (FSDataManager<T>)ActivatorUtilities.CreateInstance(_services, _lookupTable[typeof(T)]);
                 dataManager.RootPath = (args as FSDataFactoryArguments).RootPath;
                 return (IDataManager<T>)dataManager;
             }

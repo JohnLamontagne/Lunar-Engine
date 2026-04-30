@@ -48,7 +48,7 @@ namespace Lunar.Client
             services.AddSingleton(this.GraphicsDevice);
             services.AddSingleton(this.Content);
             services.AddSingleton(this.Window);
-            services.AddSingleton(Engine.Services.Get<Logger>());
+            services.AddSingleton<Logger>();
             services.AddSingleton(new GraphicsDeviceService(this.GraphicsDevice));
             services.AddSingleton(new ContentManagerService(this.Content));
             services.AddSingleton(new Camera(new Rectangle(0, 0, Settings.ResolutionX, Settings.ResolutionY)));
@@ -65,14 +65,6 @@ namespace Lunar.Client
             this.ConfigureServices(services);
 
             Services = services.BuildServiceProvider();
-
-            // Bridge resolved instances into the legacy locator until Pass 4 deletes it.
-            BridgeToEngineServices(Services,
-                typeof(GraphicsDeviceService),
-                typeof(ContentManagerService),
-                typeof(NetHandler),
-                typeof(SceneManager),
-                typeof(WorldManager));
 
             _camera = Services.GetRequiredService<Camera>();
             _netHandler = Services.GetRequiredService<NetHandler>();
@@ -105,15 +97,6 @@ namespace Lunar.Client
             _sceneManager.AddScene(gameScene, "gameScene");
             _sceneManager.AddScene(loadingScene, "loadingScene");
             _sceneManager.SetActiveScene("menuScene");
-        }
-
-        private static void BridgeToEngineServices(IServiceProvider provider, params Type[] types)
-        {
-            foreach (var type in types)
-            {
-                var instance = (IService)provider.GetRequiredService(type);
-                Engine.Services.RegisterAs(instance, type);
-            }
         }
 
         protected override void LoadContent()
