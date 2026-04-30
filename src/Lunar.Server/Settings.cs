@@ -14,8 +14,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading;
-using System.Xml.Linq;
 using Lunar.Core;
 using Lunar.Core.Utilities;
 
@@ -23,9 +23,9 @@ namespace Lunar.Server
 {
     public static class Settings
     {
-        private static readonly string _filePathConfig = Constants.FILEPATH_DATA + "config.xml";
+        private static readonly string _filePathConfig = Constants.FILEPATH_DATA + "config.json";
         private static readonly string _filePathExperience = Constants.FILEPATH_DATA + "experience.conf";
-        private static readonly string _filePathUserPermissions = Constants.FILEPATH_DATA + "user_permissions.xml";
+        private static readonly string _filePathUserPermissions = Constants.FILEPATH_DATA + "user_permissions.json";
 
         public static string GameName { get; private set; }
 
@@ -73,33 +73,41 @@ namespace Lunar.Server
 
         private static void CreateConfig()
         {
-            var xml = new XElement("Config",
-                new XElement("General",
-                    new XElement("Port", 25566),
-                    new XElement("Game_Name", "Lunar Engine"),
-                    new XElement("Welcome_Message", "Welcome to Lunar Engine!")
-                ),
-                new XElement("Gameplay",
-                    new XElement("Starting_Map", "default"),
-                    new XElement("Max_Inventory_Slots", 30),
-                    new XElement("NPC_Rest_Period", 400),
-                    new XElement("Max_Level", 100)
-                ),
-                new XElement("Advanced",
-                    new XElement("Tick_Rate", 60),
-                    new XElement("Tile_Size", 32),
-                    new XElement("Map_Item_Width", 32),
-                    new XElement("Map_Item_Height", 32),
-                    new XElement("Iron_Python_Libs_Dir", "C:/Program Files/IronPython 2.7/Lib"),
-                    new XElement("Suppress_Errors", "true")
-                ),
-                new XElement("Roles",
-                    new XElement("User", 0),
-                    new XElement("Admin", 1)
-                ),
-                new XElement("Default_Role", "User")
-            );
-            xml.Save(_filePathConfig);
+            var json = new
+            {
+                general = new
+                {
+                    port = 25566,
+                    gameName = "Lunar Engine",
+                    welcomeMessage = "Welcome to Lunar Engine!"
+                },
+                gameplay = new
+                {
+                    startingMap = "default",
+                    maxInventorySlots = 30,
+                    npcRestPeriod = 400,
+                    maxLevel = 100
+                },
+                advanced = new
+                {
+                    tickRate = 60,
+                    tileSize = 32,
+                    mapItemWidth = 32,
+                    mapItemHeight = 32,
+                    ironPythonLibsDir = "C:/Program Files/IronPython 2.7/Lib",
+                    suppressErrors = true
+                },
+                roles = new
+                {
+                    user = 0,
+                    admin = 1
+                },
+                defaultRole = "user"
+            };
+
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var jsonString = JsonSerializer.Serialize(json, options);
+            File.WriteAllText(_filePathConfig, jsonString);
         }
 
         private static void LoadConfig()
@@ -109,40 +117,40 @@ namespace Lunar.Server
 
             try
             {
-                var doc = XDocument.Load(_filePathConfig);
+                var jsonString = File.ReadAllText(_filePathConfig);
+                using var doc = JsonDocument.Parse(jsonString);
+                var root = doc.RootElement;
 
-                var generalSettings = doc.Element("Config").Element("General");
-                Settings.ServerPort = int.Parse(generalSettings.Element("Port").Value);
-                Settings.GameName = generalSettings.Element("Game_Name").Value;
-                Settings.WelcomeMessage = generalSettings.Element("Welcome_Message").Value;
+                var generalSettings = root.GetProperty("general");
+                Settings.ServerPort = generalSettings.GetProperty("port").GetInt32();
+                Settings.GameName = generalSettings.GetProperty("gameName").GetString();
+                Settings.WelcomeMessage = generalSettings.GetProperty("welcomeMessage").GetString();
 
-                var gameplaySettings = doc.Element("Config").Element("Gameplay");
-                Settings.StartingMap = gameplaySettings.Element("Starting_Map").Value;
-                Settings.MaxInventoryItems = int.Parse(gameplaySettings.Element("Max_Inventory_Slots").Value);
-                Settings.NPCRestPeriod = int.Parse(gameplaySettings.Element("NPC_Rest_Period").Value);
-                Settings.MaxLevel = int.Parse(gameplaySettings.Element("Max_Level").Value);
+                var gameplaySettings = root.GetProperty("gameplay");
+                Settings.StartingMap = gameplaySettings.GetProperty("startingMap").GetString();
+                Settings.MaxInventoryItems = gameplaySettings.GetProperty("maxInventorySlots").GetInt32();
+                Settings.NPCRestPeriod = gameplaySettings.GetProperty("npcRestPeriod").GetInt32();
+                Settings.MaxLevel = gameplaySettings.GetProperty("maxLevel").GetInt32();
 
-                var advancedSettings = doc.Element("Config").Element("Advanced");
-                Settings.TickRate = int.Parse(advancedSettings.Element("Tick_Rate").Value);
-                Settings.TileSize = int.Parse(advancedSettings.Element("Tile_Size").Value);
-                Settings.MapItemWidth = int.Parse(advancedSettings.Element("Map_Item_Width").Value);
-                Settings.MapItemHeight = int.Parse(advancedSettings.Element("Map_Item_Height").Value);
-                Settings.IronPythonLibsDirectory = advancedSettings.Element("Iron_Python_Libs_Dir").Value;
-                Settings.SuppressErrors = bool.Parse(advancedSettings.Element("Suppress_Errors").Value);
+                var advancedSettings = root.GetProperty("advanced");
+                Settings.TickRate = advancedSettings.GetProperty("tickRate").GetInt32();
+                Settings.TileSize = advancedSettings.GetProperty("tileSize").GetInt32();
+                Settings.MapItemWidth = advancedSettings.GetProperty("mapItemWidth").GetInt32();
+                Settings.MapItemHeight = advancedSettings.GetProperty("mapItemHeight").GetInt32();
+                Settings.IronPythonLibsDirectory = advancedSettings.GetProperty("ironPythonLibsDir").GetString();
+                Settings.SuppressErrors = advancedSettings.GetProperty("suppressErrors").GetBoolean();
 
-                // Get the roles
                 Settings.Roles = new Dictionary<string, Role>();
-                var roleSettings = doc.Element("Config").Element("Roles");
-                foreach (var role in roleSettings.Elements())
+                var rolesSettings = root.GetProperty("roles");
+                foreach (var roleProp in rolesSettings.EnumerateObject())
                 {
-                    Settings.Roles.Add(role.Name.ToString(), new Role(role.Name.ToString(), int.Parse(role.Value)));
+                    Settings.Roles.Add(roleProp.Name, new Role(roleProp.Name, roleProp.Value.GetInt32()));
                 }
 
-                string defaultRole = doc.Element("Config").Element("Default_Role").Value.ToString();
-
+                string defaultRole = root.GetProperty("defaultRole").GetString();
                 Settings.DefaultRole = Settings.Roles[defaultRole] ?? Role.Default;
             }
-            catch (Exception ex) when (ex is IndexOutOfRangeException || ex is NullReferenceException)
+            catch (Exception ex) when (ex is IndexOutOfRangeException || ex is NullReferenceException || ex is JsonException)
             {
                 Console.WriteLine("The server config file appears to be corrupted!");
                 Console.Write("Would you like to restore the configuration to its original state? [y/n]");
@@ -173,12 +181,14 @@ namespace Lunar.Server
 
             try
             {
-                var doc = XDocument.Load(_filePathUserPermissions);
+                var jsonString = File.ReadAllText(_filePathUserPermissions);
+                using var doc = JsonDocument.Parse(jsonString);
+                var root = doc.RootElement;
 
-                foreach (var element in doc.Elements("Permissions").Elements())
+                foreach (var permission in root.GetProperty("permissions").EnumerateArray())
                 {
-                    string userName = element.Attribute("name").Value;
-                    string roleName = element.Attribute("role").Value;
+                    string userName = permission.GetProperty("name").GetString();
+                    string roleName = permission.GetProperty("role").GetString();
 
                     Role role = Settings.Roles[roleName] ?? Role.Default;
 

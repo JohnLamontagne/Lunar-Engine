@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Lunar.Server.World.Actors
 {
@@ -24,26 +24,26 @@ namespace Lunar.Server.World.Actors
         {
             Console.WriteLine("Loading class information...");
 
-            var doc = XDocument.Load(filePath);
+            var jsonString = System.IO.File.ReadAllText(filePath);
+            using var doc = JsonDocument.Parse(jsonString);
+            var root = doc.RootElement;
 
-            var classNodes = doc.Element("Classes").Elements("Class");
-
-            foreach (var classNode in classNodes)
+            foreach (var classElement in root.GetProperty("classes").EnumerateArray())
             {
-                string className = classNode.Attribute("name").Value.ToString();
+                string className = classElement.GetProperty("name").GetString();
+                string texturePath = classElement.GetProperty("texture").GetString();
 
-                string texturePath = classNode.Element("Texture")?.Value;
-
+                var statsJson = classElement.GetProperty("stats");
                 Stats stats = new Stats()
                 {
-                    Vitality = int.Parse(classNode.Element("Health")?.Value),
-                    Strength = int.Parse(classNode.Element("Strength")?.Value),
-                    Intelligence = int.Parse(classNode.Element("Intelligence")?.Value),
-                    Defense = int.Parse(classNode.Element("Defense")?.Value),
-                    Dexterity = int.Parse(classNode.Element("Dexterity")?.Value)
+                    Vitality = statsJson.GetProperty("health").GetInt32(),
+                    Strength = statsJson.GetProperty("strength").GetInt32(),
+                    Intelligence = statsJson.GetProperty("intelligence").GetInt32(),
+                    Defense = statsJson.GetProperty("defense").GetInt32(),
+                    Dexterity = statsJson.GetProperty("dexterity").GetInt32()
                 };
 
-                string startMap = classNode.Element("Start_Map")?.Value;
+                string startMap = classElement.GetProperty("startMap").GetString();
 
                 ClassInformation classInfo = new ClassInformation(className, texturePath, stats, startMap);
                 _classes.Add(classInfo.Name, classInfo);
@@ -54,7 +54,7 @@ namespace Lunar.Server.World.Actors
 
         public void Initalize()
         {
-            this.LoadClasses(Constants.FILEPATH_DATA + "classes.xml");
+            this.LoadClasses(Constants.FILEPATH_DATA + "classes.json");
         }
     }
 }

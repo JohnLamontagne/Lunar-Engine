@@ -1,0 +1,145 @@
+{
+  "widgets": [
+    {
+      "type": "button",
+      "name": "btnInventory",
+      "texture": "gfx/Interface/menuButton.png",
+      "font": "chatFont",
+      "text": "Inventory",
+      "position": {
+        "x": "65%",
+        "y": "93%"
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnLogout",
+      "texture": "gfx/Interface/menuButton.png",
+      "font": "chatFont",
+      "text": "Logout",
+      "position": {
+        "x": "88%",
+        "y": "93%"
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnCharacter",
+      "texture": "gfx/Interface/menuButton.png",
+      "font": "chatFont",
+      "text": "Character",
+      "position": {
+        "x": "76.50%",
+        "y": "93%"
+      }
+    },
+    {
+      "type": "chatbox",
+      "name": "chatbox",
+      "texture": "gfx/Interface/chat.png",
+      "font": "chatFont",
+      "position": {
+        "x": "0.5%",
+        "y": "62%"
+      },
+      "maxlines": 12,
+      "visible": true,
+      "padding": {
+        "x": 30,
+        "y": 223
+      },
+      "draggable": true,
+      "widgets": [
+        {
+          "type": "textbox",
+          "name": "messageEntry",
+          "texture": "gfx/Interface/textboxNormal.png",
+          "font": "chatFont",
+          "position": {
+            "x": 17,
+            "y": "100%"
+          },
+          "scale": {
+            "x": 1.6,
+            "y": 1
+          },
+          "padding": {
+            "x": 12,
+            "y": 0
+          }
+        }
+      ]
+    },
+    {
+      "type": "statusbar",
+      "name": "healthStatusBar",
+      "font": "interfaceFont",
+      "backSprite": "gfx/Interface/statusBar.png",
+      "fillSprite": "gfx/Interface/healthFillSprite.png",
+      "color": "Black",
+      "position": {
+        "x": "23%",
+        "y": "3%"
+      },
+      "fillPosition": {
+        "x": 7,
+        "y": 7
+      },
+      "padding": {
+        "x": 7,
+        "y": 7
+      },
+      "text": ""
+    },
+    {
+      "type": "statusbar",
+      "name": "manaStatusBar",
+      "font": "interfaceFont",
+      "backSprite": "gfx/Interface/statusBar.png",
+      "fillSprite": "gfx/Interface/manaFillSprite.png",
+      "color": "Black",
+      "position": {
+        "x": "45%",
+        "y": "3%"
+      },
+      "padding": {
+        "x": 7,
+        "y": 7
+      },
+      "fillPosition": {
+        "x": 7,
+        "y": 7
+      },
+      "text": ""
+    },
+    {
+      "type": "statusbar",
+      "name": "experienceBar",
+      "font": "interfaceFont",
+      "backSprite": "gfx/Interface/experienceBar.png",
+      "fillSprite": "gfx/Interface/experiencePool.png",
+      "color": "White",
+      "position": {
+        "x": "25%",
+        "y": "0%"
+      },
+      "fillPosition": {
+        "x": 8,
+        "y": 31
+      },
+      "text": ""
+    },
+    {
+      "type": "label",
+      "name": "lblExperience",
+      "position": {
+        "x": "40%",
+        "y": "2.5%"
+      },
+      "text": "0000/0000",
+      "color": "White",
+      "font": "experienceFont",
+      "zorder": 2
+    }
+  ]
+}

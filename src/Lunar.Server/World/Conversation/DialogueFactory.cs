@@ -5,7 +5,8 @@ using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Lunar.Server.World.Conversation
 {
@@ -38,52 +39,61 @@ namespace Lunar.Server.World.Conversation
 
         public void Save(Dialogue dialogue, string filePath)
         {
-            List<XElement> branches = new List<XElement>();
+            var branches = new List<object>();
             foreach (var branch in dialogue.Branches)
             {
-                List<XElement> responses = new List<XElement>();
+                var responses = new List<object>();
                 foreach (var response in branch.Responses)
                 {
-                    XElement rElement = new XElement("Response", response.Text);
+                    var responseObj = new Dictionary<string, object>
+                    {
+                        { "text", response.Text }
+                    };
 
                     if (!string.IsNullOrEmpty(response.Function))
-                        rElement.SetAttributeValue("function", response.Function);
+                        responseObj["function"] = response.Function;
 
                     if (!string.IsNullOrEmpty(response.Next))
-                        rElement.SetAttributeValue("next", response.Next);
+                        responseObj["next"] = response.Next;
 
                     if (!string.IsNullOrEmpty(response.Condition))
-                        rElement.SetAttributeValue("condition", response.Condition);
+                        responseObj["condition"] = response.Condition;
 
-                    responses.Add(rElement);
+                    responses.Add(responseObj);
                 }
 
-                branches.Add(new XElement("Branch",
-                                new XAttribute("name", branch.Name),
-                                new XElement("Text", branch.Text),
-                                responses.ToArray()
-                    )
-                );
+                var branchObj = new Dictionary<string, object>
+                {
+                    { "name", branch.Name },
+                    { "text", branch.Text },
+                    { "responses", responses }
+                };
+
+                branches.Add(branchObj);
             }
 
-            var xml = new XElement("Dialogue",
-                new XAttribute("name", dialogue.Name),
-                new XElement("Script", dialogue.ScriptPath),
-                branches.ToArray()
-            );
-            xml.Save(filePath);
+            var json = new Dictionary<string, object>
+            {
+                { "name", dialogue.Name },
+                { "script", dialogue.ScriptPath },
+                { "branches", branches }
+            };
+
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var jsonString = JsonSerializer.Serialize(json, options);
+            File.WriteAllText(filePath, jsonString);
         }
 
         public Dialogue LoadDialogue(string filePath)
         {
-            var doc = XDocument.Load(filePath);
+            var jsonString = File.ReadAllText(filePath);
+            using var doc = JsonDocument.Parse(jsonString);
+            var root = doc.RootElement;
 
-            var dialogueNode = doc.Element("Dialogue");
-            string dialogueName = dialogueNode.Attribute("name").Value.ToString();
-
+            string dialogueName = root.GetProperty("name").GetString();
             Dialogue dialogue = this.NewDialogue(Path.GetFileNameWithoutExtension(filePath));
 
-            string scriptPath = dialogueNode.Element("Script")?.Value;
+            string scriptPath = root.GetProperty("script").GetString();
             dialogue.ScriptPath = scriptPath;
 
             if (File.Exists(Constants.FILEPATH_DATA + "/" + scriptPath))
@@ -91,24 +101,26 @@ namespace Lunar.Server.World.Conversation
                 dialogue.Script = _scriptManager.CreateScript(Constants.FILEPATH_DATA + "/" + scriptPath);
             }
 
-            var branchNodes = dialogueNode.Elements("Branch");
-
-            foreach (var branchNode in branchNodes)
+            foreach (var branchElement in root.GetProperty("branches").EnumerateArray())
             {
-                string text = branchNode.Element("Text").Value;
-                string branchName = branchNode.Attribute("name")?.Value;
+                string text = branchElement.GetProperty("text").GetString();
+                string branchName = branchElement.GetProperty("name").GetString();
                 var branch = new DialogueBranch(dialogue, branchName, text, _logger);
 
-                var responseNodes = branchNode.Elements("Response");
-
-                foreach (var responseNode in responseNodes)
+                foreach (var responseElement in branchElement.GetProperty("responses").EnumerateArray())
                 {
                     var response = new DialogueResponse();
 
-                    response.Text = responseNode.Value;
-                    response.Next = responseNode.Attribute("next")?.Value;
-                    response.Function = responseNode.Attribute("function")?.Value;
-                    response.Condition = responseNode.Attribute("condition")?.Value;
+                    response.Text = responseElement.GetProperty("text").GetString();
+
+                    if (responseElement.TryGetProperty("next", out var nextProp))
+                        response.Next = nextProp.GetString();
+
+                    if (responseElement.TryGetProperty("function", out var funcProp))
+                        response.Function = funcProp.GetString();
+
+                    if (responseElement.TryGetProperty("condition", out var condProp))
+                        response.Condition = condProp.GetString();
 
                     branch.AddResponse(response);
                 }

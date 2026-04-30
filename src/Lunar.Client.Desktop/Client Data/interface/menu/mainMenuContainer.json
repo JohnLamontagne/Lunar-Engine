@@ -1,0 +1,86 @@
+{
+  "widgets": [
+    {
+      "type": "label",
+      "name": "lblMenuTitle",
+      "text": "Main Menu",
+      "position": {
+        "x": -160,
+        "y": -120
+      },
+      "font": "interfaceFont"
+    },
+    {
+      "type": "label",
+      "name": "lblStatus",
+      "position": {
+        "x": 0,
+        "y": -100
+      },
+      "color": "Red",
+      "font": "interfaceFont"
+    },
+    {
+      "type": "button",
+      "name": "btnLogin",
+      "texture": "gfx/Interface/menuButton.png",
+      "font": "interfaceFont",
+      "text": "Login",
+      "position": {
+        "x": -175,
+        "y": 75
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnRegister",
+      "texture": "gfx/Interface/menuButton.png",
+      "font": "interfaceFont",
+      "text": "Register",
+      "position": {
+        "x": 60,
+        "y": 75
+      }
+    },
+    {
+      "type": "button",
+      "name": "btnWebsite",
+      "texture": "gfx/Interface/menuButton.png",
+      "font": "interfaceFont",
+      "text": "Support",
+      "position": {
+        "x": -58,
+        "y": 75
+      }
+    },
+    {
+      "type": "textbox",
+      "name": "userLoginTextbox",
+      "texture": "gfx/Interface/textUser.png",
+      "font": "interfaceFont",
+      "position": {
+        "x": -125,
+        "y": -75
+      },
+      "padding": {
+        "x": 12,
+        "y": 8
+      }
+    },
+    {
+      "type": "textbox",
+      "name": "userPasswordTextbox",
+      "texture": "gfx/Interface/textPass.png",
+      "font": "interfaceFont",
+      "mask": "*",
+      "position": {
+        "x": -125,
+        "y": 0
+      },
+      "padding": {
+        "x": 12,
+        "y": 8
+      }
+    }
+  ]
+}

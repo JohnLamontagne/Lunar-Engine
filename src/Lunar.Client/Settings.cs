@@ -13,9 +13,8 @@
 
 using System;
 using System.IO;
-using System.Linq;
+using System.Text.Json;
 using System.Threading;
-using System.Xml.Linq;
 
 namespace Lunar.Client
 {
@@ -40,47 +39,56 @@ namespace Lunar.Client
 
         private static void CreateConfig()
         {
-            var xml = new XElement("Config",
-                new XElement("General",
-                    new XElement("Game_Name", "Lunar Engine"),
-                    new XElement("IP", "127.0.0.1"),
-                    new XElement("Port", 25566),
-                    new XElement("Website", "https://www.rpgorigin.com")
-                ),
-                new XElement("Display",
-                    new XElement("Resolution_X", 1600),
-                    new XElement("Resolution_Y", 900)
-                ),
-                new XElement("Advanced",
-                    new XElement("DisplayNetworkMessages", true)
-                )
-            );
-             xml.Save(Constants.FILEPATH_DATA + "config.xml");
+            var json = new
+            {
+                general = new
+                {
+                    gameName = "Lunar Engine",
+                    ip = "127.0.0.1",
+                    port = 25566,
+                    website = "https://www.rpgorigin.com"
+                },
+                display = new
+                {
+                    resolutionX = 1600,
+                    resolutionY = 900
+                },
+                advanced = new
+                {
+                    displayNetworkMessages = true
+                }
+            };
+
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var jsonString = JsonSerializer.Serialize(json, options);
+            File.WriteAllText(Constants.FILEPATH_DATA + "config.json", jsonString);
         }
 
         private static void LoadConfig()
         {
-            if (!File.Exists(Constants.FILEPATH_DATA + "config.xml"))
+            if (!File.Exists(Constants.FILEPATH_DATA + "config.json"))
                 CreateConfig();
 
             try
             {
-                var doc = XDocument.Load(Constants.FILEPATH_DATA + "config.xml");
+                var jsonString = File.ReadAllText(Constants.FILEPATH_DATA + "config.json");
+                using var doc = JsonDocument.Parse(jsonString);
+                var root = doc.RootElement;
 
-                var generalSettings = doc.Elements("Config").Elements("General");
-                Settings.GameName = generalSettings.Elements("Game_Name").FirstOrDefault().Value;
-                Settings.Website = generalSettings.Elements("Website").FirstOrDefault().Value;
-                Settings.Port = int.Parse(generalSettings.Elements("Port").FirstOrDefault().Value);
-                Settings.IP = generalSettings.Elements("IP").FirstOrDefault().Value;
+                var generalSettings = root.GetProperty("general");
+                Settings.GameName = generalSettings.GetProperty("gameName").GetString();
+                Settings.Website = generalSettings.GetProperty("website").GetString();
+                Settings.Port = generalSettings.GetProperty("port").GetInt32();
+                Settings.IP = generalSettings.GetProperty("ip").GetString();
 
-                var displaySettings = doc.Elements("Config").Elements("Display");
-                Settings.ResolutionX = int.Parse(displaySettings.Elements("Resolution_X").FirstOrDefault().Value);
-                Settings.ResolutionY = int.Parse(displaySettings.Elements("Resolution_Y").FirstOrDefault().Value);
+                var displaySettings = root.GetProperty("display");
+                Settings.ResolutionX = displaySettings.GetProperty("resolutionX").GetInt32();
+                Settings.ResolutionY = displaySettings.GetProperty("resolutionY").GetInt32();
 
-                var advancedSettings = doc.Elements("Config").Elements("Advanced");
-                Settings.DisplayNetworkMessages = bool.Parse(advancedSettings.Elements("DisplayNetworkMessages").FirstOrDefault().Value);
+                var advancedSettings = root.GetProperty("advanced");
+                Settings.DisplayNetworkMessages = advancedSettings.GetProperty("displayNetworkMessages").GetBoolean();
             }
-            catch (IndexOutOfRangeException ex)
+            catch (Exception ex) when (ex is IndexOutOfRangeException || ex is JsonException)
             {
                 Console.WriteLine("The client config file appears to be corrupted!");
                 Console.Write("Would you like to restore the configuration to its original state? [y/n]");

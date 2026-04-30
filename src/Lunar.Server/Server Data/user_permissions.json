@@ -1,0 +1,12 @@
+{
+  "permissions": [
+    {
+      "name": "admin",
+      "role": "Admin"
+    },
+    {
+      "name": "1",
+      "role": "Admin"
+    }
+  ]
+}

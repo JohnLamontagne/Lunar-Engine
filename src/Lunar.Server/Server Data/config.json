@@ -1,0 +1,26 @@
+{
+  "general": {
+    "port": 25566,
+    "gameName": "Lunar Engine",
+    "welcomeMessage": "Welcome to Lunar Engine!"
+  },
+  "gameplay": {
+    "startingMap": "default",
+    "maxInventorySlots": 30,
+    "npcRestPeriod": 400,
+    "maxLevel": 100
+  },
+  "advanced": {
+    "tickRate": 60,
+    "tileSize": 32,
+    "mapItemWidth": 32,
+    "mapItemHeight": 32,
+    "ironPythonLibsDir": "C:/Program Files/IronPython 2.7/Lib",
+    "suppressErrors": true
+  },
+  "roles": {
+    "user": 0,
+    "admin": 1
+  },
+  "defaultRole": "user"
+}

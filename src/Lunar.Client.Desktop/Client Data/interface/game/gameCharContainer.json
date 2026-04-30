@@ -1,0 +1,110 @@
+{
+  "widgets": [
+    {
+      "type": "picture",
+      "name": "charBackdrop",
+      "texture": "gfx/Interface/game/statScreen.png",
+      "position": {
+        "x": "50%",
+        "y": "25%"
+      },
+      "visible": true
+    },
+    {
+      "type": "label",
+      "name": "charWindowNameLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 175,
+        "y": 65
+      },
+      "text": "Player Name",
+      "color": "White",
+      "zorder": 1
+    },
+    {
+      "type": "label",
+      "name": "charStatsHeaderLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 400,
+        "y": 100
+      },
+      "text": "Character Stats:",
+      "color": "White",
+      "zorder": 1
+    },
+    {
+      "type": "label",
+      "name": "charHealthLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 400,
+        "y": 145
+      },
+      "text": "Health: 0/0",
+      "color": "White",
+      "zorder": 1
+    },
+    {
+      "type": "label",
+      "name": "charStrengthLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 400,
+        "y": 170
+      },
+      "text": "Strength:0/0",
+      "color": "White",
+      "zorder": 1
+    },
+    {
+      "type": "label",
+      "name": "charIntLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 400,
+        "y": 195
+      },
+      "text": "Intelligence: 0/0",
+      "color": "White",
+      "zorder": 1
+    },
+    {
+      "type": "label",
+      "name": "charDefLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 400,
+        "y": 220
+      },
+      "text": "Defense: 0/0",
+      "color": "White",
+      "zorder": 1
+    },
+    {
+      "type": "label",
+      "name": "charDexLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 400,
+        "y": 245
+      },
+      "text": "Dexterity: 0/0",
+      "zorder": 1,
+      "color": "White"
+    },
+    {
+      "type": "label",
+      "name": "charLevelLabel",
+      "font": "interfaceFont",
+      "position": {
+        "x": 400,
+        "y": 270
+      },
+      "text": "Level: 0",
+      "zorder": 1,
+      "color": "White"
+    }
+  ]
+}

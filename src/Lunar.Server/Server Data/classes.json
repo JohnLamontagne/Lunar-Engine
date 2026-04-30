@@ -1,0 +1,16 @@
+{
+  "classes": [
+    {
+      "name": "Warrior",
+      "texture": "/gfx/Characters/soldier.png",
+      "stats": {
+        "strength": 5,
+        "intelligence": 2,
+        "health": 10,
+        "defense": 4,
+        "dexterity": 1
+      },
+      "startMap": "Misty Forest"
+    }
+  ]
+}

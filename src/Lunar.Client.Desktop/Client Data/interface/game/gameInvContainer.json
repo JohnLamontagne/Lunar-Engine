@@ -1,0 +1,15 @@
+{
+  "widgets": [
+    {
+      "type": "container",
+      "name": "inventoryWidget",
+      "texture": "gfx/Interface/inventory.png",
+      "position": {
+        "x": "63%",
+        "y": "35%"
+      },
+      "visible": true,
+      "draggable": true
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "fonts": [
+    {
+      "name": "interfaceFont",
+      "path": "gfx/Fonts/interfaceFont"
+    },
+    {
+      "name": "chatFont",
+      "path": "gfx/Fonts/chatFont"
+    },
+    {
+      "name": "experienceFont",
+      "path": "gfx/Fonts/experienceFont"
+    }
+  ],
+  "widgets": [
+    {
+      "type": "import",
+      "file": "interface/game/gameSceneContainer.json"
+    },
+    {
+      "type": "import",
+      "file": "interface/game/gameInvContainer.json"
+    },
+    {
+      "type": "container",
+      "name": "characterWindow",
+      "position": {
+        "x": "50%",
+        "y": "25%"
+      },
+      "visible": false,
+      "draggable": true,
+      "widgets": [
+        {
+          "type": "import",
+          "file": "interface/game/gameCharContainer.json"
+        }
+      ],
+      "texture": "gfx/Interface/statScreen.png"
+    },
+    {
+      "type": "container",
+      "name": "targetPortraitContainer",
+      "visible": false,
+      "widgets": [
+        {
+          "type": "import",
+          "file": "interface/game/targetContainer.json"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "name": "dialogueWindow",
+      "visible": false,
+      "texture": "gfx/Interface/windowback.png",
+      "size": {
+        "y": 200
+      },
+      "draggable": true
+    },
+    {
+      "type": "container",
+      "name": "hotbar",
+      "visible": true,
+      "texture": "gfx/Interface/hotbar.png",
+      "position": {
+        "x": "70%",
+        "y": "0"
+      },
+      "size": {
+        "x": 250,
+        "y": 70
+      }
+    }
+  ]
+}
