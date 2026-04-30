@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lunar.Client.Utilities.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,7 +19,7 @@ using System.Linq;
 
 namespace Lunar.Client.GUI.Widgets
 {
-    public class WidgetContainer : GUIManager, IWidget
+    public class WidgetContainer : WidgetCollection, IWidget
     {
         private Rectangle _area;
         private Texture2D _backSprite;
@@ -133,8 +132,7 @@ namespace Lunar.Client.GUI.Widgets
 
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
-        public WidgetContainer(Texture2D backSprite, GraphicsDeviceService graphicsDeviceService)
-            : base(graphicsDeviceService)
+        public WidgetContainer(Texture2D backSprite)
         {
             _backSprite = backSprite;
 
@@ -146,8 +144,7 @@ namespace Lunar.Client.GUI.Widgets
             this.Origin = Vector2.Zero;
         }
 
-        public WidgetContainer(Vector2 size, GraphicsDeviceService graphicsDeviceService)
-            : base(graphicsDeviceService)
+        public WidgetContainer(Vector2 size)
         {
             this.Size = size;
             this.Selectable = true;
@@ -235,7 +232,7 @@ namespace Lunar.Client.GUI.Widgets
             this.End(spriteBatch);
         }
 
-        protected override Vector2 ParsePosition(string posX, string posY)
+        public override Vector2 ParsePosition(string posX, string posY)
         {
             float x = 0;
             float y = 0;

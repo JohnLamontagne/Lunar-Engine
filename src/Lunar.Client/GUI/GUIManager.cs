@@ -12,14 +12,11 @@
 */
 
 using Lunar.Client.GUI.Widgets;
-using Lunar.Client.Utilities.Services;
 using Lunar.Core;
-using Lunar.Core.Utilities.Data;
 using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,219 +25,8 @@ using System.Xml.Linq;
 
 namespace Lunar.Client.GUI
 {
-    public class GUIManager
+    public class GUIManager : WidgetCollection
     {
-        private FlexibleStack<IWidget> _orderedWidgets;
-
-        protected Dictionary<string, IWidget> _widgets;
-
-        private readonly RenderTarget2D _renderTarget;
-
-        public IWidget ActiveWidget
-        {
-            get
-            {
-                var topWidget = _orderedWidgets.Peek();
-
-                if (topWidget.Active)
-                    return topWidget;
-                else
-                    return null;
-            }
-        }
-
-        private readonly GraphicsDeviceService _graphicsDeviceService;
-
-        public GUIManager(GraphicsDeviceService graphicsDeviceService)
-        {
-            _widgets = new Dictionary<string, IWidget>();
-            _orderedWidgets = new FlexibleStack<IWidget>();
-            _graphicsDeviceService = graphicsDeviceService;
-
-            var graphicsDevice = graphicsDeviceService.GraphicsDevice;
-
-            var pp = graphicsDevice.PresentationParameters;
-            _renderTarget = new RenderTarget2D(graphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
-                false, pp.BackBufferFormat, pp.DepthStencilFormat, 0, RenderTargetUsage.PreserveContents);
-        }
-
-        public virtual void AddWidget(IWidget widget, string name)
-        {
-            widget.NameChanged += (w, a) =>
-            {
-                var changedWidget = w as IWidget;
-                _widgets.Remove(a.OldName);
-                _widgets.Add(changedWidget.Name, changedWidget);
-            };
-
-            widget.Activated += (w, a) =>
-            {
-                // Only one widget may be active at a time, so disable the
-                // previously active one if one existed.
-                if (this.ActiveWidget != null && widget != this.ActiveWidget)
-                {
-                    Console.WriteLine("Widget {0} no longer active!", this.ActiveWidget.Name);
-                    this.ActiveWidget.Active = false;
-                }
-
-                _orderedWidgets.Remove(widget);
-                _orderedWidgets.Push(widget);
-
-                Console.WriteLine("Widget {0} now active!", widget.Name);
-            };
-
-            widget.Name = name;
-            _widgets.Add(name, widget);
-            _orderedWidgets.Push(widget);
-        }
-
-        public virtual void RemoveWidgets<T>() where T : IWidget
-        {
-            // Create a new dictionary without the specified elements.
-            _widgets = (from pair in _widgets
-                        where !(pair.Value is T)
-                        select pair).ToDictionary(pair => pair.Key,
-                                               pair => pair.Value);
-            _orderedWidgets.Clear();
-            _orderedWidgets.Add(_widgets.Values);
-        }
-
-        public T GetWidget<T>(string id) where T : IWidget
-        {
-            _widgets.TryGetValue(id, out IWidget value);
-
-            if (value != null && value.GetType() == typeof(T))
-            {
-                return (T)value;
-            }
-
-            return default(T);
-        }
-
-        public bool WidgetExists(string id)
-        {
-            return _widgets.TryGetValue(id, out IWidget entry);
-        }
-
-        public IEnumerable<T> GetWidgets<T>() where T : IWidget
-        {
-            return from widget in _widgets.Values
-                   where widget is T
-                   select (T)widget;
-        }
-
-        public Dictionary<string, IWidget> GetWidgetEntries()
-        {
-            return _widgets;
-        }
-
-        public void RemoveWidget(string id)
-        {
-            _orderedWidgets.Remove(_widgets[id]);
-            _widgets.Remove(id);
-        }
-
-        public void RemoveWidget(IWidget widget)
-        {
-            string key = _widgets.FirstOrDefault(e => e.Value == widget).Key;
-            _orderedWidgets.Remove(_widgets[key]);
-            _widgets.Remove(key);
-        }
-
-        public void ClearWidgets()
-        {
-            _widgets.Clear();
-            _orderedWidgets.Clear();
-        }
-
-        public virtual void Update(GameTime gameTime)
-        {
-            var mouseState = Mouse.GetState();
-
-            for (int i = 0; i < _orderedWidgets.Count; i++)
-            {
-                var widget = _orderedWidgets[i];
-
-                if (!widget.Visible)
-                    continue;
-
-                if (mouseState.LeftButton == ButtonState.Pressed)
-                {
-                    if (widget.Contains(mouseState.Position))
-                    {
-                        widget.OnLeftMouseDown(mouseState);
-
-                        if (widget == this.ActiveWidget)
-                        {
-                            // If our mouse is within the active widget and we are clicking,
-                            // there's no reason to process widgets behind this one for selection
-                            // so we'll just break out.
-                            break;
-                        }
-                        else
-                        {
-                            if (widget.Selectable)
-                            {
-                                widget.Active = true;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (this.ActiveWidget == widget)
-                        {
-                            widget.Active = false;
-                            Console.WriteLine("Widget {0} no longer active!", widget.Name);
-                        }
-                    }
-                }
-                else if (mouseState.RightButton == ButtonState.Pressed)
-                {
-                    if (widget.Contains(mouseState.Position) && (this.ActiveWidget == null || !this.ActiveWidget.Contains(mouseState.Position)))
-                    {
-                        widget.OnRightMouseDown(mouseState);
-                    }
-                }
-
-                if (widget.Contains(mouseState.Position) && (this.ActiveWidget == null || !this.ActiveWidget.Contains(mouseState.Position)))
-                {
-                    widget.OnMouseHover(mouseState);
-                }
-            }
-
-            for (int i = 0; i < _orderedWidgets.Count; i++)
-            {
-                _orderedWidgets[i].Update(gameTime);
-            }
-        }
-
-        public virtual void Begin(SpriteBatch spriteBatch)
-        {
-            spriteBatch.End();
-
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-        }
-
-        public virtual void End(SpriteBatch spriteBatch)
-        {
-            spriteBatch.End();
-
-            _graphicsDeviceService.GraphicsDevice.SetRenderTarget(null);
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-            spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
-        }
-
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var widget in _orderedWidgets.Values.Reverse())
-            {
-                widget.Draw(spriteBatch, _widgets.Count);
-            }
-        }
-
         public void LoadFromFile(string filePath, ContentManager content)
         {
             var doc = XDocument.Load(filePath);
@@ -261,7 +47,7 @@ namespace Lunar.Client.GUI
         }
 
         private void LoadWidgetsFromFileImport(string filePath, Dictionary<string, SpriteFont> fonts,
-            ContentManager content, GUIManager parent)
+            ContentManager content, WidgetCollection parent)
         {
             var doc = XDocument.Load(filePath);
 
@@ -270,7 +56,7 @@ namespace Lunar.Client.GUI
             this.LoadWidgets(widgetEntries, fonts, content, parent);
         }
 
-        private void LoadWidgets(XElement widgetEntries, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        private void LoadWidgets(XElement widgetEntries, Dictionary<string, SpriteFont> fonts, ContentManager content, WidgetCollection parent)
         {
             if (widgetEntries == null)
                 return;
@@ -326,7 +112,7 @@ namespace Lunar.Client.GUI
             }
         }
 
-        private void LoadSliderFromXML(XElement sliderElement, ContentManager content, GUIManager parent)
+        private void LoadSliderFromXML(XElement sliderElement, ContentManager content, WidgetCollection parent)
         {
             string sliderName = sliderElement.Attribute("name")?.Value.ToString();
 
@@ -365,7 +151,7 @@ namespace Lunar.Client.GUI
             parent.AddWidget(slider, sliderName);
         }
 
-        private void LoadChatboxFromXML(XElement chatboxElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        private void LoadChatboxFromXML(XElement chatboxElement, Dictionary<string, SpriteFont> fonts, ContentManager content, WidgetCollection parent)
         {
             string chatboxName = chatboxElement.Attribute("name")?.Value.ToString();
 
@@ -392,7 +178,7 @@ namespace Lunar.Client.GUI
             }
 
             SpriteFont font = fonts[fontName];
-            var chatBox = new Chatbox(texture, font, maxLines, _graphicsDeviceService)
+            var chatBox = new Chatbox(texture, font, maxLines)
             {
                 Position = position,
                 ChatOffset = new Vector2(offX, offY),
@@ -407,7 +193,7 @@ namespace Lunar.Client.GUI
             parent.AddWidget(chatBox, chatboxName);
         }
 
-        private void LoadStatusBarFromXML(XElement sbElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        private void LoadStatusBarFromXML(XElement sbElement, Dictionary<string, SpriteFont> fonts, ContentManager content, WidgetCollection parent)
         {
             string sbName = sbElement.Attribute("name")?.Value.ToString();
 
@@ -454,7 +240,7 @@ namespace Lunar.Client.GUI
         }
 
         private void LoadTextboxFromXML(XElement textboxElement, Dictionary<string, SpriteFont> fonts,
-            ContentManager content, GUIManager parent)
+            ContentManager content, WidgetCollection parent)
         {
             string textboxName = textboxElement.Attribute("name")?.Value.ToString();
 
@@ -514,7 +300,7 @@ namespace Lunar.Client.GUI
             parent.AddWidget(textBox, textboxName);
         }
 
-        private void LoadWidgetContainerFromXML(XElement containerElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        private void LoadWidgetContainerFromXML(XElement containerElement, Dictionary<string, SpriteFont> fonts, ContentManager content, WidgetCollection parent)
         {
             string containerName = containerElement.Attribute("name")?.Value.ToString();
 
@@ -541,7 +327,7 @@ namespace Lunar.Client.GUI
                 visible = true;
             }
 
-            var container = new WidgetContainer(texture, _graphicsDeviceService)
+            var container = new WidgetContainer(texture)
             {
                 Position = position,
                 Origin = origin,
@@ -557,7 +343,7 @@ namespace Lunar.Client.GUI
             parent.AddWidget(container, containerName);
         }
 
-        private void LoadPictureFromXML(XElement picElement, ContentManager content, GUIManager parent)
+        private void LoadPictureFromXML(XElement picElement, ContentManager content, WidgetCollection parent)
         {
             string picName = picElement.Attribute("name")?.Value.ToString();
 
@@ -607,7 +393,7 @@ namespace Lunar.Client.GUI
             parent.AddWidget(pic, picName);
         }
 
-        private void LoadCheckboxFromXML(XElement chkElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        private void LoadCheckboxFromXML(XElement chkElement, Dictionary<string, SpriteFont> fonts, ContentManager content, WidgetCollection parent)
         {
             string chkBoxName = chkElement.Attribute("name")?.Value.ToString();
 
@@ -639,7 +425,7 @@ namespace Lunar.Client.GUI
             parent.AddWidget(chkBox, chkBoxName);
         }
 
-        private void LoadLabelFromXML(XElement lblElement, Dictionary<string, SpriteFont> fonts, GUIManager parent)
+        private void LoadLabelFromXML(XElement lblElement, Dictionary<string, SpriteFont> fonts, WidgetCollection parent)
         {
             string lblName = lblElement.Attribute("name")?.Value.ToString();
 
@@ -672,7 +458,7 @@ namespace Lunar.Client.GUI
             parent.AddWidget(label, lblName);
         }
 
-        private void LoadButtonFromXML(XElement buttonElement, Dictionary<string, SpriteFont> fonts, ContentManager content, GUIManager parent)
+        private void LoadButtonFromXML(XElement buttonElement, Dictionary<string, SpriteFont> fonts, ContentManager content, WidgetCollection parent)
         {
             string btnName = buttonElement.Attribute("name")?.Value.ToString();
 
@@ -766,40 +552,5 @@ namespace Lunar.Client.GUI
             return new Vector2(x, y);
         }
 
-        protected virtual Vector2 ParsePosition(string posX, string posY)
-        {
-            float x = 0;
-            float y = 0;
-
-            if (string.IsNullOrEmpty(posX))
-            {
-                x = 0;
-            }
-            else if (posX.Contains("%"))
-            {
-                float.TryParse(posX.Replace("%", ""), out float pX);
-                x = Settings.ResolutionX * (pX / 100f);
-            }
-            else
-            {
-                float.TryParse(posX, out x);
-            }
-
-            if (string.IsNullOrEmpty(posY))
-            {
-                y = 0;
-            }
-            else if (posY.Contains("%"))
-            {
-                float.TryParse(posY.Replace("%", ""), out float pY);
-                y = Settings.ResolutionY * (pY / 100f);
-            }
-            else
-            {
-                float.TryParse(posY, out y);
-            }
-
-            return new Vector2(x, y);
-        }
     }
 }
