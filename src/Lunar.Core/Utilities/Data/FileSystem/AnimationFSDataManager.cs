@@ -1,44 +1,42 @@
-﻿using Lunar.Core.Content.Graphics;
+using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data.Management;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
     internal class AnimationFSDataManager : FSDataManager<BaseAnimation<IAnimationLayer<SpriteInfo>>>
     {
+        private record AnimationLayerDto(int FrameWidth, int FrameHeight, int FrameTime, int LoopCount, string TexturePath);
+        private record AnimationDto(string Name, AnimationLayerDto SubSurface, AnimationLayerDto Surface);
+
+        private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+
         public override bool Exists(IDataManagerArguments arguments)
         {
-            throw new NotImplementedException();
+            return File.Exists(this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.ANIM_FILE_EXT);
         }
 
         public override BaseAnimation<IAnimationLayer<SpriteInfo>> Load(IDataManagerArguments arguments)
         {
-            var animationDescription = new BaseAnimation<IAnimationLayer<SpriteInfo>>();
-            using (FileStream fileStream = File.Open(this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName, FileMode.Open))
-            {
-                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                {
-                    animationDescription.Name = binaryReader.ReadString();
-                    animationDescription.SubSurfaceAnimation.FrameWidth = binaryReader.ReadInt32();
-                    animationDescription.SubSurfaceAnimation.FrameHeight = binaryReader.ReadInt32();
-                    animationDescription.SubSurfaceAnimation.FrameTime = binaryReader.ReadInt32();
-                    animationDescription.SubSurfaceAnimation.LoopCount = binaryReader.ReadInt32();
-                    animationDescription.SubSurfaceAnimation.TexturePath = binaryReader.ReadString();
+            string json = File.ReadAllText(this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.ANIM_FILE_EXT);
+            var dto = JsonSerializer.Deserialize<AnimationDto>(json, JsonOptions);
 
-                    animationDescription.SurfaceAnimation.FrameWidth = binaryReader.ReadInt32();
-                    animationDescription.SurfaceAnimation.FrameHeight = binaryReader.ReadInt32();
-                    animationDescription.SurfaceAnimation.FrameTime = binaryReader.ReadInt32();
-                    animationDescription.SurfaceAnimation.LoopCount = binaryReader.ReadInt32();
-                    animationDescription.SurfaceAnimation.TexturePath = binaryReader.ReadString();
-                }
-            }
+            var animation = new BaseAnimation<IAnimationLayer<SpriteInfo>>();
+            animation.Name = dto.Name;
+            animation.SubSurfaceAnimation.FrameWidth = dto.SubSurface.FrameWidth;
+            animation.SubSurfaceAnimation.FrameHeight = dto.SubSurface.FrameHeight;
+            animation.SubSurfaceAnimation.FrameTime = dto.SubSurface.FrameTime;
+            animation.SubSurfaceAnimation.LoopCount = dto.SubSurface.LoopCount;
+            animation.SubSurfaceAnimation.TexturePath = dto.SubSurface.TexturePath;
+            animation.SurfaceAnimation.FrameWidth = dto.Surface.FrameWidth;
+            animation.SurfaceAnimation.FrameHeight = dto.Surface.FrameHeight;
+            animation.SurfaceAnimation.FrameTime = dto.Surface.FrameTime;
+            animation.SurfaceAnimation.LoopCount = dto.Surface.LoopCount;
+            animation.SurfaceAnimation.TexturePath = dto.Surface.TexturePath;
 
-            return animationDescription;
+            return animation;
         }
 
         public override void Save(IContentModel descriptor, IDataManagerArguments arguments)

@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,8 +11,10 @@
 	limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Structure;
@@ -22,133 +24,83 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 {
     public class MapFSDataManager : FSDataManager<MapModel<LayerModel<TileModel<SpriteInfo>>>>
     {
-        public MapFSDataManager()
-        {
-        }
+        private record VectorDto(float X, float Y);
+        private record RectDto(int X, int Y, int Width, int Height);
+        private record ColorDto(byte R, byte G, byte B, byte A);
+
+        // Null SpriteName means no sprite on this tile; null AttributeData means no attribute.
+        private record TileDto(
+            string AttributeData,
+            bool Animated,
+            bool LightSource,
+            string SpriteName,
+            RectDto SpriteRect,
+            ColorDto SpriteColor,
+            float LayerDepth,
+            int FrameCount
+        );
+
+        private record TileEntryDto(int X, int Y, TileDto Tile);
+
+        private record LayerDto(string Name, int LayerIndex, List<TileEntryDto> Tiles);
+
+        private record MapDto(
+            List<string> TilesetPaths,
+            string Name,
+            VectorDto Dimensions,
+            bool Dark,
+            List<LayerDto> Layers
+        );
+
+        private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
         public override MapModel<LayerModel<TileModel<SpriteInfo>>> Load(IDataManagerArguments arguments)
         {
-            MapModel<LayerModel<TileModel<SpriteInfo>>> map = null;
-
             var mapArguments = (arguments as ContentFileDataLoaderArguments);
+            string json = File.ReadAllText(this.RootPath + mapArguments.FileName + EngineConstants.MAP_FILE_EXT);
+            var dto = JsonSerializer.Deserialize<MapDto>(json, JsonOptions);
 
-            using (var fileStream = new FileStream(this.RootPath + mapArguments.FileName + EngineConstants.MAP_FILE_EXT, FileMode.Open))
+            var dimensions = new Vector(dto.Dimensions.X, dto.Dimensions.Y);
+            var map = new MapModel<LayerModel<TileModel<SpriteInfo>>>(dimensions, dto.Name)
             {
-                using (var bR = new BinaryReader(fileStream))
+                Dark = dto.Dark
+            };
+            map.TilesetPaths.AddRange(dto.TilesetPaths);
+            map.Bounds = new Rect(0, 0, (int)dimensions.X, (int)dimensions.Y);
+
+            foreach (var layerDto in dto.Layers)
+            {
+                var layer = new LayerModel<TileModel<SpriteInfo>>(dimensions, layerDto.Name, layerDto.LayerIndex);
+
+                foreach (var entry in layerDto.Tiles)
                 {
-                    // Load the tileset information
-                    int tilesetCount = bR.ReadInt32();
-                    List<string> tilesetPaths = new List<string>();
-                    for (int i = 0; i < tilesetCount; i++)
+                    var tileDto = entry.Tile;
+                    var tile = new TileModel<SpriteInfo>(new Vector(entry.X * EngineConstants.TILE_SIZE, entry.Y * EngineConstants.TILE_SIZE));
+
+                    if (tileDto.AttributeData != null)
+                        tile.Attribute = TileAttribute.Deserialize(Convert.FromBase64String(tileDto.AttributeData));
+
+                    if (tileDto.SpriteName != null)
                     {
-                        // We can throw this information away as it is used only in the editor suite.
-                        string tilesetPath = bR.ReadString();
-                        tilesetPaths.Add(tilesetPath);
-                    }
-
-                    string name = bR.ReadString();
-                    var dimensions = new Vector(bR.ReadInt32(), bR.ReadInt32());
-
-                    map = new MapModel<LayerModel<TileModel<SpriteInfo>>>(dimensions, name)
-                    {
-                        Dark = bR.ReadBoolean()
-                    };
-                    map.TilesetPaths.AddRange(tilesetPaths);
-
-                    map.Bounds = new Rect(0, 0, (int)map.Dimensions.X, (int)map.Dimensions.Y);
-
-                    int layerCount = bR.ReadInt32();
-                    for (int i = 0; i < layerCount; i++)
-                    {
-                        string layerName = bR.ReadString();
-                        int lIndex = bR.ReadInt32();
-
-                        var layer = new LayerModel<TileModel<SpriteInfo>>(map.Dimensions, layerName, lIndex);
-
-                        for (int x = 0; x < layer.Tiles.GetLength(0); x++)
+                        tile.Animated = tileDto.Animated;
+                        tile.LightSource = tileDto.LightSource;
+                        tile.Sprite = new SpriteInfo(tileDto.SpriteName)
                         {
-                            for (int y = 0; y < layer.Tiles.GetLength(1); y++)
+                            Transform =
                             {
-                                if (bR.ReadBoolean())
-                                {
-                                    layer.Tiles[x, y] = new TileModel<SpriteInfo>(new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE));
-
-                                    if (bR.ReadBoolean()) // Is there a valid attribute saved for this tile?
-                                    {
-                                        int attributeDataLength = bR.ReadInt32();
-                                        byte[] attributeData = bR.ReadBytes(attributeDataLength);
-                                        layer.Tiles[x, y].Attribute = TileAttribute.Deserialize(attributeData);
-                                    }
-
-                                    if (bR.ReadBoolean())
-                                    {
-                                        layer.Tiles[x, y].Animated = bR.ReadBoolean();
-                                        layer.Tiles[x, y].LightSource = bR.ReadBoolean();
-
-                                        string spriteName = bR.ReadString();
-                                        float zIndex = bR.ReadSingle(); // We can throw this away
-
-                                        layer.Tiles[x, y].Sprite = new SpriteInfo(spriteName)
-                                        {
-                                            Transform =
-                                            {
-                                                Position = new Vector(x * EngineConstants.TILE_SIZE, y * EngineConstants.TILE_SIZE),
-                                                Color = new Color(bR.ReadByte(), bR.ReadByte(), bR.ReadByte(), bR.ReadByte()),
-                                                Rect = new Rect(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32()),
-                                                LayerDepth = zIndex
-                                            }
-                                        };
-
-                                        layer.Tiles[x, y].FrameCount = bR.ReadInt32();
-                                    }
-                                }
+                                Position = new Vector(entry.X * EngineConstants.TILE_SIZE, entry.Y * EngineConstants.TILE_SIZE),
+                                Color = new Color(tileDto.SpriteColor.R, tileDto.SpriteColor.G, tileDto.SpriteColor.B, tileDto.SpriteColor.A),
+                                Rect = new Rect(tileDto.SpriteRect.X, tileDto.SpriteRect.Y, tileDto.SpriteRect.Width, tileDto.SpriteRect.Height),
+                                LayerDepth = tileDto.LayerDepth,
                             }
-                        }
-
-                        //int mapObjectCount = bR.ReadInt32();
-                        //for (int mI = 0; mI < mapObjectCount; mI++)
-                        //{
-                        //    var mapObject = new MapObjectDescriptor()
-                        //    {
-                        //        Position = new Vector(bR.ReadSingle(), bR.ReadSingle())
-                        //    };
-
-                        //    if (bR.ReadBoolean())
-                        //    {
-                        //        string texturePath = bR.ReadString();
-                        //        mapObject.Sprite = new SpriteInfo(texturePath)
-                        //        {
-                        //            Transform =
-                        //            {
-                        //                Rect = new Rect(bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32(), bR.ReadInt32())
-                        //            }
-                        //        };
-                        //    }
-
-                        //    mapObject.Animated = bR.ReadBoolean();
-
-                        //    mapObject.FrameTime = bR.ReadInt32();
-
-                        //    string scriptPath = bR.ReadString();
-
-                        //    var lightSource = bR.ReadBoolean();
-                        //    var lightRadius = bR.ReadSingle();
-                        //    var lightColor = new Color(bR.ReadByte(), bR.ReadByte(), bR.ReadByte(), bR.ReadByte());
-
-                        //    if (lightSource)
-                        //    {
-                        //        mapObject.LightInformation = new LightInformation()
-                        //        {
-                        //            Radius = lightRadius,
-                        //            Color = lightColor
-                        //        };
-                        //    }
-
-                        //}
-
-                        map.AddLayer(layerName, layer);
+                        };
+                        tile.FrameCount = tileDto.FrameCount;
                     }
+
+                    layer.Tiles[entry.X, entry.Y] = tile;
                 }
+
+                map.AddLayer(layerDto.Name, layer);
             }
 
             return map;
@@ -157,91 +109,61 @@ namespace Lunar.Core.Utilities.Data.FileSystem
         public override void Save(IContentModel descriptor, IDataManagerArguments arguments)
         {
             var mapDesc = (IMapModel<ILayerModel<ITileModel<SpriteInfo>>>)descriptor;
-
             string filePath = this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.MAP_FILE_EXT;
 
-            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
+            var layerDtos = new List<LayerDto>();
+            foreach (var layer in mapDesc.Layers)
             {
-                using (var bW = new BinaryWriter(fileStream))
+                var tileEntries = new List<TileEntryDto>();
+                for (int x = 0; x < layer.Tiles.GetLength(0); x++)
                 {
-                    bW.Write(mapDesc.TilesetPaths.Count);
-
-                    foreach (var tilesetPath in mapDesc.TilesetPaths)
+                    for (int y = 0; y < layer.Tiles.GetLength(1); y++)
                     {
-                        bW.Write(tilesetPath);
-                    }
+                        var tile = layer.Tiles[x, y];
+                        if (tile == null)
+                            continue;
 
-                    bW.Write(mapDesc.Name);
+                        string attrData = tile.Attribute != null
+                            ? Convert.ToBase64String(tile.Attribute.Serialize())
+                            : null;
 
-                    bW.Write((int)mapDesc.Dimensions.X);
-                    bW.Write((int)mapDesc.Dimensions.Y);
-
-                    bW.Write(mapDesc.Dark);
-
-                    bW.Write(mapDesc.Layers.Count);
-
-                    foreach (var layer in mapDesc.Layers)
-                    {
-                        bW.Write(layer.Name);
-                        bW.Write(layer.LayerIndex);
-
-                        for (int x = 0; x < layer.Tiles.GetLength(0); x++)
+                        TileDto tileDto;
+                        if (tile.Sprite != null)
                         {
-                            for (int y = 0; y < layer.Tiles.GetLength(1); y++)
-                            {
-                                if (layer.Tiles[x, y] != null)
-                                {
-                                    bW.Write(true);
-
-                                    if (layer.Tiles[x, y].Attribute == null)
-                                        bW.Write(false);
-                                    else
-                                    {
-                                        bW.Write(true);
-
-                                        var attributeData = layer.Tiles[x, y].Attribute.Serialize();
-
-                                        bW.Write(attributeData.Length);
-                                        bW.Write(attributeData);
-                                    }
-
-                                    if (layer.Tiles[x, y].Sprite != null)
-                                    {
-                                        bW.Write(true);
-
-                                        bW.Write(layer.Tiles[x, y].Animated);
-                                        bW.Write(layer.Tiles[x, y].LightSource);
-
-                                        bW.Write(layer.Tiles[x, y].Sprite.TextureName);
-
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.LayerDepth);
-
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.R);
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.G);
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.B);
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Color.A);
-
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.X);
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.Y);
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.Width);
-                                        bW.Write(layer.Tiles[x, y].Sprite.Transform.Rect.Height);
-
-                                        bW.Write(layer.Tiles[x, y].FrameCount);
-                                    }
-                                    else
-                                    {
-                                        bW.Write(false);
-                                    }
-                                }
-                                else
-                                {
-                                    bW.Write(false);
-                                }
-                            }
+                            var r = tile.Sprite.Transform.Rect;
+                            var c = tile.Sprite.Transform.Color;
+                            tileDto = new TileDto(
+                                attrData,
+                                tile.Animated,
+                                tile.LightSource,
+                                tile.Sprite.TextureName,
+                                new RectDto(r.X, r.Y, r.Width, r.Height),
+                                new ColorDto(c.R, c.G, c.B, c.A),
+                                tile.Sprite.Transform.LayerDepth,
+                                tile.FrameCount
+                            );
                         }
+                        else
+                        {
+                            tileDto = new TileDto(attrData, false, false, null, null, null, 0f, 0);
+                        }
+
+                        tileEntries.Add(new TileEntryDto(x, y, tileDto));
                     }
                 }
+
+                layerDtos.Add(new LayerDto(layer.Name, layer.LayerIndex, tileEntries));
             }
+
+            var mapDto = new MapDto(
+                new List<string>(mapDesc.TilesetPaths),
+                mapDesc.Name,
+                new VectorDto(mapDesc.Dimensions.X, mapDesc.Dimensions.Y),
+                mapDesc.Dark,
+                layerDtos
+            );
+
+            File.WriteAllText(filePath, JsonSerializer.Serialize(mapDto, JsonOptions));
         }
 
         public override bool Exists(IDataManagerArguments arguments)
