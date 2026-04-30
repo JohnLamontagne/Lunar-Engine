@@ -12,7 +12,6 @@
 */
 
 using System.IO;
-using Lidgren.Network;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities.Data;
@@ -84,29 +83,29 @@ namespace Lunar.Server.World.Structure
             this.Attribute?.ActionHandler?.OnPlayerLeft(new TileAttributePlayerArgs(this.Attribute, this, player));
         }
 
-        public NetBuffer PackData()
+        public Packet PackData()
         {
-            var netBuffer = new NetBuffer();
+            var packet = new Packet();
 
             // Tell the client whether it's a blank tile
-            netBuffer.Write(this.Sprite == null);
+            packet.Write(this.Sprite == null);
 
             // Is this a blank tile (determined based on the existence of a Sprite)
             if (this.Sprite != null)
             {
-                netBuffer.Write(this.LightSource);
-                netBuffer.Write(this.LightRadius);
-                netBuffer.Write(this.LightColor);
-                netBuffer.Write(this.Teleporter);
-                netBuffer.Write(this.Sprite.TextureName);
-                netBuffer.Write(this.Sprite.Transform.Color);
-                netBuffer.Write(this.Sprite.Transform.Rect);
-                netBuffer.Write(this.Sprite.Transform.Position);
-                netBuffer.Write(this.Animated);
-                netBuffer.Write(this.FrameCount);
+                packet.Write(this.LightSource);
+                packet.Write(this.LightRadius);
+                packet.Write(this.LightColor);
+                packet.Write(this.Teleporter);
+                packet.Write(this.Sprite.TextureName);
+                packet.Write(this.Sprite.Transform.Color);
+                packet.Write(this.Sprite.Transform.Rect);
+                packet.Write(this.Sprite.Transform.Position);
+                packet.Write(this.Animated);
+                packet.Write(this.FrameCount);
             }
 
-            return netBuffer;
+            return packet;
         }
 
         public void Load(BinaryReader bR, Vector tilePosition)

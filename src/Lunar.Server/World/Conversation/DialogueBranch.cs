@@ -1,10 +1,8 @@
-﻿using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Server.Net;
 using Lunar.Server.World.Actors;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -71,9 +69,9 @@ namespace Lunar.Server.World.Conversation
 
         public void Begin(Player player)
         {
-            var packet = new Packet(PacketType.DIALOGUE, ChannelType.UNASSIGNED);
-            packet.Message.Write(this.Name);
-            packet.Message.Write(this.Text);
+            var packet = new Packet();
+            packet.Write(this.Name);
+            packet.Write(this.Text);
 
             List<DialogueResponse> displayableResponses = new List<DialogueResponse>();
             // Determine which responses can be displayed by any existing conditions.
@@ -98,23 +96,23 @@ namespace Lunar.Server.World.Conversation
                 }
             }
 
-            packet.Message.Write(displayableResponses.Count);
+            packet.Write(displayableResponses.Count);
 
             if (displayableResponses.Count <= 0)
             {
-                packet.Message.Write("...");
-                packet.Message.Write("");
+                packet.Write("...");
+                packet.Write("");
             }
             else
             {
                 foreach (var response in displayableResponses)
                 {
-                    packet.Message.Write(response.Text);
-                    packet.Message.Write(response.UniqueID.ToString());
+                    packet.Write(response.Text);
+                    packet.Write(response.UniqueID.ToString());
                 }
             }
 
-            player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            player.NetworkComponent.SendPacket(PacketType.DIALOGUE, packet, DeliveryMethod.ReliableOrdered);
         }
     }
 }

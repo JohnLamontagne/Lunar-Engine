@@ -10,7 +10,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using Lidgren.Network;
+using Lunar.Core.Net;
 using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -71,7 +71,7 @@ namespace Lunar.Client.World
             }
         }
 
-        public static Tile Unpack(NetBuffer netBuffer)
+        public static Tile Unpack(Packet netBuffer)
         {
             // check for a null tile
             if (netBuffer.ReadBoolean() == false)

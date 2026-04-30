@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Scripting;
@@ -362,9 +361,9 @@ namespace Lunar.Server.World.Actors
             return default(T);
         }
 
-        public NetBuffer Pack()
+        public Packet Pack()
         {
-            var buffer = new NetBuffer();
+            var buffer = new Packet();
 
             buffer.Write(this.UniqueID);
             buffer.Write(this.Descriptor.Name);

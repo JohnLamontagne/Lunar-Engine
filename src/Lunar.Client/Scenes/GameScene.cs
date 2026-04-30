@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
@@ -139,7 +138,7 @@ namespace Lunar.Client.Scenes
 
         private void Handle_Dialogue(PacketReceivedEventArgs args)
         {
-            _dialogueBranchName = args.Message.ReadString();
+            _dialogueBranchName = args.Packet.ReadString();
 
             // Used to dynamically size the dialogue window.
             float dialogueWindowWidth = 0;
@@ -153,21 +152,21 @@ namespace Lunar.Client.Scenes
 
             var dialogueTextLabel = new Label(font);
             dialogueTextLabel.Position = new Vector2(dialogueWindow.Position.X + 20, dialogueWindow.Position.Y + 30);
-            dialogueTextLabel.Text = '"' + args.Message.ReadString() + '"';
+            dialogueTextLabel.Text = '"' + args.Packet.ReadString() + '"';
             dialogueTextLabel.WrapText(dialogueWindow.Size.X - 20);
             dialogueTextLabel.Visible = true;
 
             dialogueWindow.AddWidget(dialogueTextLabel, "dialogueText");
 
-            int responseCount = args.Message.ReadInt32();
+            int responseCount = args.Packet.ReadInt32();
             var responseLabels = new Label[responseCount];
             for (int i = 0; i < responseCount; i++)
             {
                 var responseLabel = new Label(font)
                 {
-                    Text = args.Message.ReadString(),
+                    Text = args.Packet.ReadString(),
                     Visible = true,
-                    Tag = args.Message.ReadString()
+                    Tag = args.Packet.ReadString()
                 };
                 responseLabel.Clicked += ResponseLabel_Clicked;
                 responseLabel.Mouse_Hover += ResponseLabel_Mouse_Hover;
@@ -211,18 +210,18 @@ namespace Lunar.Client.Scenes
 
         private void ResponseLabel_Clicked(object sender, WidgetClickedEventArgs e)
         {
-            var packet = new Packet(PacketType.DIALOGUE_RESP);
-            packet.Message.Write(_dialogueBranchName);
-            packet.Message.Write(((IWidget)sender).Tag.ToString());
-            packet.Message.Write(((Label)sender).Text);
-            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            var packet = new Packet();
+            packet.Write(_dialogueBranchName);
+            packet.Write(((IWidget)sender).Tag.ToString());
+            packet.Write(((Label)sender).Text);
+            Engine.Services.Get<NetHandler>().SendPacket(PacketType.DIALOGUE_RESP, packet, DeliveryMethod.ReliableOrdered);
         }
 
         private void Handle_TargetAcquired(PacketReceivedEventArgs args)
         {
             var enemyPortraitContainer = this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer");
 
-            string uniqueID = args.Message.ReadString();
+            string uniqueID = args.Packet.ReadString();
 
             _target = _worldManager.Map.GetEntity(uniqueID);
 
@@ -265,14 +264,14 @@ namespace Lunar.Client.Scenes
 
             for (int i = 0; i < Enum.GetNames(typeof(EquipmentSlots)).Length; i++)
             {
-                bool hasItem = args.Message.ReadBoolean();
+                bool hasItem = args.Packet.ReadBoolean();
 
                 if (!hasItem)
                     continue;
 
-                var itemName = args.Message.ReadString();
-                var texturePath = args.Message.ReadString();
-                EquipmentSlots slotType = (EquipmentSlots)args.Message.ReadInt32();
+                var itemName = args.Packet.ReadString();
+                var texturePath = args.Packet.ReadString();
+                EquipmentSlots slotType = (EquipmentSlots)args.Packet.ReadInt32();
 
                 Texture2D texture2D = this.ContentManager.LoadTexture2D(Engine.ROOT_PATH + texturePath);
 
@@ -305,14 +304,14 @@ namespace Lunar.Client.Scenes
 
             for (int i = 0; i < Constants.MAX_INVENTORY; i++)
             {
-                bool slotOccupied = args.Message.ReadBoolean();
+                bool slotOccupied = args.Packet.ReadBoolean();
 
                 if (slotOccupied)
                 {
-                    var itemName = args.Message.ReadString();
-                    var texturePath = args.Message.ReadString();
-                    var slotType = args.Message.ReadInt32();
-                    var amount = args.Message.ReadInt32();
+                    var itemName = args.Packet.ReadString();
+                    var texturePath = args.Packet.ReadString();
+                    var slotType = args.Packet.ReadInt32();
+                    var amount = args.Packet.ReadInt32();
 
                     Texture2D texture2D = this.ContentManager.LoadTexture2D(Engine.ROOT_PATH + texturePath);
 
@@ -337,9 +336,9 @@ namespace Lunar.Client.Scenes
                 int slotNum = int.Parse(((Picture)sender).Name);
 
                 // Unequip the item
-                var packet = new Packet(PacketType.REQ_UNEQUIP_ITEM);
-                packet.Message.Write(slotNum);
-                Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                var packet = new Packet();
+                packet.Write(slotNum);
+                Engine.Services.Get<NetHandler>().SendPacket(PacketType.REQ_UNEQUIP_ITEM, packet, DeliveryMethod.ReliableOrdered);
             }
         }
 
@@ -360,16 +359,16 @@ namespace Lunar.Client.Scenes
                 if (Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift))
                 {
                     // Drop the item
-                    var packet = new Packet(PacketType.DROP_ITEM);
-                    packet.Message.Write(slotNum);
-                    Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    var packet = new Packet();
+                    packet.Write(slotNum);
+                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.DROP_ITEM, packet, DeliveryMethod.ReliableOrdered);
                 }
                 else
                 {
                     // Equip the item
-                    var packet = new Packet(PacketType.REQ_USE_ITEM);
-                    packet.Message.Write(slotNum);
-                    Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    var packet = new Packet();
+                    packet.Write(slotNum);
+                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.REQ_USE_ITEM, packet, DeliveryMethod.ReliableOrdered);
                 }
             }
         }
@@ -377,7 +376,7 @@ namespace Lunar.Client.Scenes
         private void Handle_PlayerMessage(PacketReceivedEventArgs args)
         {
             Color color;
-            ChatMessageType messageType = (ChatMessageType)args.Message.ReadByte();
+            ChatMessageType messageType = (ChatMessageType)args.Packet.ReadByte();
             switch (messageType)
             {
                 case ChatMessageType.Regular:
@@ -397,7 +396,7 @@ namespace Lunar.Client.Scenes
                     break;
             }
 
-            this.GuiManager.GetWidget<Chatbox>("chatbox")?.AddEntry("[" + DateTime.Now.ToString("h:mm tt") + "] " + args.Message.ReadString(), color);
+            this.GuiManager.GetWidget<Chatbox>("chatbox")?.AddEntry("[" + DateTime.Now.ToString("h:mm tt") + "] " + args.Packet.ReadString(), color);
         }
 
         public override void Update(GameTime gameTime)
@@ -442,9 +441,9 @@ namespace Lunar.Client.Scenes
 
                     if (entitySpace.Contains(worldPos))
                     {
-                        var selectPacket = new Packet(PacketType.REQ_TARGET);
-                        selectPacket.Message.Write(entity.UniqueID);
-                        Engine.Services.Get<NetHandler>().SendMessage(selectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                        var selectPacket = new Packet();
+                        selectPacket.Write(entity.UniqueID);
+                        Engine.Services.Get<NetHandler>().SendPacket(PacketType.REQ_TARGET, selectPacket, DeliveryMethod.ReliableOrdered);
 
                         foundTarget = true;
                     }
@@ -455,8 +454,8 @@ namespace Lunar.Client.Scenes
                     // If we reached this point there is no valid target. We should deselect the NPC and hide the target portrait.
                     this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer").Visible = false;
 
-                    var deselectPacket = new Packet(PacketType.DESELECT_TARGET);
-                    Engine.Services.Get<NetHandler>().SendMessage(deselectPacket.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    var deselectPacket = new Packet();
+                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.DESELECT_TARGET, deselectPacket, DeliveryMethod.ReliableOrdered);
                 }
             }
         }
@@ -533,8 +532,8 @@ namespace Lunar.Client.Scenes
 
         private void logoutButton_ButtonClicked(object sender, EventArgs e)
         {
-            var packet = new Packet(PacketType.QUIT_GAME);
-            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+            var packet = new Packet();
+            Engine.Services.Get<NetHandler>().SendPacket(PacketType.QUIT_GAME, packet, DeliveryMethod.ReliableOrdered);
         }
 
         private void messageEntry_ReturnPressed(object sender, EventArgs e)
@@ -543,9 +542,9 @@ namespace Lunar.Client.Scenes
 
             if (!string.IsNullOrEmpty(text))
             {
-                var packet = new Packet(PacketType.PLAYER_MSG);
-                packet.Message.Write(text);
-                Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.Unreliable, ChannelType.UNASSIGNED);
+                var packet = new Packet();
+                packet.Write(text);
+                Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MSG, packet, DeliveryMethod.Unreliable);
                 ((Textbox)sender).Text = string.Empty;
                 ((Textbox)sender).Active = false;
             }

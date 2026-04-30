@@ -43,7 +43,7 @@ namespace Lunar.Server.World
 
         private void Player_Connection_Lost(object sender, ConnectionEventArgs e)
         {
-            Player player = Engine.Services.Get<PlayerManager>().GetPlayer(e.Connection.RemoteUniqueIdentifier.ToString());
+            Player player = Engine.Services.Get<PlayerManager>().GetPlayer(e.Connection.UniqueIdentifier.ToString());
 
             if (player == null)
                 return;
@@ -59,7 +59,7 @@ namespace Lunar.Server.World
             // Make sure the sender is online.
             if (player == null) return;
 
-            var message = player.Descriptor.Name + ": " + args.Message.ReadString();
+            var message = player.Descriptor.Name + ": " + args.Packet.ReadString();
 
             player.Map.SendChatMessage(message, ChatMessageType.Regular);
         }
@@ -77,12 +77,12 @@ namespace Lunar.Server.World
         private void Handle_PlayerRegister(PacketReceivedEventArgs args)
         {
             // Get requested username.
-            var username = args.Message.ReadString();
+            var username = args.Packet.ReadString();
 
             // Get specified password hash.
-            var password = args.Message.ReadString();
+            var password = args.Packet.ReadString();
 
-            PlayerConnection senderConn = args.Connection;
+            PlayerConnection senderConn = (PlayerConnection)args.Connection;
 
             bool registerSuccess = Engine.Services.Get<PlayerManager>().RegisterPlayer(username, password, senderConn);
 
@@ -97,12 +97,12 @@ namespace Lunar.Server.World
         private void Handle_PlayerLogin(PacketReceivedEventArgs args)
         {
             // Get requested username.
-            string username = args.Message.ReadString();
+            string username = args.Packet.ReadString();
 
             // Get specified password hash.
-            string password = args.Message.ReadString();
+            string password = args.Packet.ReadString();
 
-            PlayerConnection senderConn = args.Connection;
+            PlayerConnection senderConn = (PlayerConnection)args.Connection;
 
             var loginSuccess = Engine.Services.Get<PlayerManager>().LoginPlayer(username, password, senderConn);
 

@@ -10,7 +10,6 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-using Lidgren.Network;
 using Lunar.Server.Net;
 using Lunar.Server.World.Actors;
 using System.Linq;
@@ -47,10 +46,10 @@ namespace Lunar.Server.World.Structure
                     player.NetworkComponent.SendChatMessage("Ouch -- that burns!", ChatMessageType.Alert);
                     player.InflictDamage(this.PlayerDamage);
 
-                    var playSoundPacket = new Packet(PacketType.PLAY_SOUND, ChannelType.UNASSIGNED);
-                    playSoundPacket.Message.Write("torchburn");
-                    playSoundPacket.Message.Write(100f);
-                    player.NetworkComponent.SendPacket(playSoundPacket, NetDeliveryMethod.ReliableOrdered);
+                    var playSoundPacket = new Packet();
+                    playSoundPacket.Write("torchburn");
+                    playSoundPacket.Write(100f);
+                    player.NetworkComponent.SendPacket(PacketType.PLAY_SOUND, playSoundPacket, DeliveryMethod.ReliableOrdered);
 
                     this.Cooldowns[player] = gameTime.TotalGameTime.TotalMilliseconds + this.EffectCooldown;
                 }

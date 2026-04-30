@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
 */
 
 using System;
-using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.World;
@@ -35,115 +34,110 @@ namespace Lunar.Server.World.Actors.Components
 
         public void SendAvailableCommands()
         {
-            var packet = new Packet(PacketType.AVAILABLE_COMMANDS, ChannelType.UNASSIGNED);
-            packet.Message.Write(Engine.Services.Get<CommandHandler>().Pack());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(Engine.Services.Get<CommandHandler>().Pack());
+            this.SendPacket(PacketType.AVAILABLE_COMMANDS, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void SendPositionUpdate()
         {
-            var packet = new Packet(PacketType.POSITION_UPDATE, ChannelType.UNASSIGNED);
-            packet.Message.Write(_player.UniqueID);
-            packet.Message.Write(_player.Layer.Name);
-            packet.Message.Write(_player.Descriptor.Position);
-            _player.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(_player.UniqueID);
+            packet.Write(_player.Layer.Name);
+            packet.Write(_player.Descriptor.Position);
+            _player.Map.SendPacket(PacketType.POSITION_UPDATE, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void SendPlayerData()
         {
-            var packet = new Packet(PacketType.PLAYER_DATA, ChannelType.UNASSIGNED);
-            packet.Message.Write(_player.Pack());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(_player.Pack());
+            this.SendPacket(PacketType.PLAYER_DATA, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void SendChatMessage(string message, ChatMessageType type)
         {
-            var packet = new Packet(PacketType.PLAYER_MSG, ChannelType.UNASSIGNED);
-
-            packet.Message.Write((byte)type);
-            packet.Message.Write(message);
-
-            this.SendPacket(packet, NetDeliveryMethod.Unreliable);
+            var packet = new Packet();
+            packet.Write((byte)type);
+            packet.Write(message);
+            this.SendPacket(PacketType.PLAYER_MSG, packet, DeliveryMethod.Unreliable);
         }
 
-        public void SendPacket(Packet packet, NetDeliveryMethod method)
+        public void SendPacket(PacketType packetType, Packet packet, DeliveryMethod deliveryMethod)
         {
-            _player.NetworkComponent.Connection.SendPacket(packet, method);
+            this.Connection.SendPacket(packetType, packet, deliveryMethod);
         }
 
         public void SendPlayerStats()
         {
-            var packet = new Packet(PacketType.PLAYER_STATS, ChannelType.UNASSIGNED);
-            packet.Message.Write(_player.UniqueID);
-            packet.Message.Write(_player.Descriptor.Speed);
-            packet.Message.Write(_player.Descriptor.Level);
-            packet.Message.Write(_player.Descriptor.Stats.Vitality);
-            packet.Message.Write(_player.Descriptor.Stats.Vitality);
-            packet.Message.Write(_player.Descriptor.Stats.Strength + _player.Descriptor.StatBoosts.Strength);
-            packet.Message.Write(_player.Descriptor.Stats.Intelligence + _player.Descriptor.StatBoosts.Intelligence);
-            packet.Message.Write(_player.Descriptor.Stats.Dexterity + _player.Descriptor.StatBoosts.Dexterity);
-            packet.Message.Write(_player.Descriptor.Stats.Defense + _player.Descriptor.StatBoosts.Defense);
-            _player.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(_player.UniqueID);
+            packet.Write(_player.Descriptor.Speed);
+            packet.Write(_player.Descriptor.Level);
+            packet.Write(_player.Descriptor.Stats.Vitality);
+            packet.Write(_player.Descriptor.Stats.Vitality);
+            packet.Write(_player.Descriptor.Stats.Strength + _player.Descriptor.StatBoosts.Strength);
+            packet.Write(_player.Descriptor.Stats.Intelligence + _player.Descriptor.StatBoosts.Intelligence);
+            packet.Write(_player.Descriptor.Stats.Dexterity + _player.Descriptor.StatBoosts.Dexterity);
+            packet.Write(_player.Descriptor.Stats.Defense + _player.Descriptor.StatBoosts.Defense);
+            _player.Map.SendPacket(PacketType.PLAYER_STATS, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void SendInventoryUpdate()
         {
-            var packet = new Packet(PacketType.INVENTORY_UPDATE, ChannelType.UNASSIGNED);
+            var packet = new Packet();
 
             for (int i = 0; i < Settings.MaxInventoryItems; i++)
             {
                 if (_player.Inventory.GetSlot(i) != null)
                 {
-                    packet.Message.Write(true); // there is an item in this slot
-
-                    packet.Message.Write(_player.Inventory.GetSlot(i).Item.PackData());
-                    packet.Message.Write(_player.Inventory.GetSlot(i).Amount);
+                    packet.Write(true);
+                    packet.Write(_player.Inventory.GetSlot(i).Item.PackData());
+                    packet.Write(_player.Inventory.GetSlot(i).Amount);
                 }
                 else
                 {
-                    packet.Message.Write(false);
+                    packet.Write(false);
                 }
             }
 
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            this.SendPacket(PacketType.INVENTORY_UPDATE, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void SendMovementPacket()
         {
-            var packet = new Packet(PacketType.PLAYER_MOVING, ChannelType.UNASSIGNED);
-            packet.Message.Write(_player.UniqueID);
-            packet.Message.Write((byte)_player.Direction);
-            packet.Message.Write((byte)_player.State); // true if moving, false if not
-            packet.Message.Write(_player.Descriptor.Position);
-
-            _player.Map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(_player.UniqueID);
+            packet.Write((byte)_player.Direction);
+            packet.Write((byte)_player.State);
+            packet.Write(_player.Descriptor.Position);
+            _player.Map.SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void SendLoadingScreen(bool active = true)
         {
-            var packet = new Packet(PacketType.LOADING_SCREEN, ChannelType.UNASSIGNED);
-            packet.Message.Write(active);
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(active);
+            this.SendPacket(PacketType.LOADING_SCREEN, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void SendEquipmentUpdate()
         {
-            var packet = new Packet(PacketType.EQUIPMENT_UPDATE, ChannelType.UNASSIGNED);
+            var packet = new Packet();
 
             for (int i = 0; i < Enum.GetNames(typeof(EquipmentSlots)).Length; i++)
             {
                 if (_player.Equipment.GetSlot(i) == null)
                 {
-                    // There's nothing in this slot.
-                    packet.Message.Write(false);
+                    packet.Write(false);
                     continue;
                 }
 
-                packet.Message.Write(true);
-                packet.Message.Write(_player.Equipment.GetSlot(i).PackData());
+                packet.Write(true);
+                packet.Write(_player.Equipment.GetSlot(i).PackData());
             }
 
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            this.SendPacket(PacketType.EQUIPMENT_UPDATE, packet, DeliveryMethod.ReliableOrdered);
         }
     }
 }

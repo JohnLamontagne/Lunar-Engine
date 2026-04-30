@@ -12,7 +12,6 @@
 */
 
 using System;
-using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -174,35 +173,35 @@ namespace Lunar.Client.World.Actors
 
         private void Handle_PlayerStats(PacketReceivedEventArgs args)
         {
-            string uniqueID = args.Message.ReadString();
+            string uniqueID = args.Packet.ReadString();
 
             if (this.UniqueID != uniqueID)
                 return;
 
-            _speed = args.Message.ReadFloat();
-            _level = args.Message.ReadInt32();
-            _health = args.Message.ReadInt32();
-            _maximumHealth = args.Message.ReadInt32();
-            _strength = args.Message.ReadInt32();
-            _intelligence = args.Message.ReadInt32();
-            _dexterity = args.Message.ReadInt32();
-            _defence = args.Message.ReadInt32();
+            _speed = args.Packet.ReadFloat();
+            _level = args.Packet.ReadInt32();
+            _health = args.Packet.ReadInt32();
+            _maximumHealth = args.Packet.ReadInt32();
+            _strength = args.Packet.ReadInt32();
+            _intelligence = args.Packet.ReadInt32();
+            _dexterity = args.Packet.ReadInt32();
+            _defence = args.Packet.ReadInt32();
 
             this.DataChanged?.Invoke(this, new EventArgs());
         }
 
         public void Handle_PlayerMoving(PacketReceivedEventArgs args)
         {
-            string uniqueID = args.Message.ReadString();
+            string uniqueID = args.Packet.ReadString();
 
             if (this.UniqueID != uniqueID)
                 return;
 
             _requestMoving = false;
 
-            this.Direction = (Direction)args.Message.ReadByte();
-            this.State = (ActorStates)args.Message.ReadByte();
-            this.Position = new Vector2(args.Message.ReadFloat(), args.Message.ReadFloat());
+            this.Direction = (Direction)args.Packet.ReadByte();
+            this.State = (ActorStates)args.Packet.ReadByte();
+            this.Position = new Vector2(args.Packet.ReadFloat(), args.Packet.ReadFloat());
             this.SpriteSheet.HorizontalFrameIndex = 1;
             this.SpriteSheet.VerticalFrameIndex = (int)this.Direction;
         }
@@ -261,10 +260,10 @@ namespace Lunar.Client.World.Actors
                     {
                         if (this.CanMove(gameTime.ElapsedGameTime.Milliseconds, Direction.Left))
                         {
-                            var packet = new Packet(PacketType.PLAYER_MOVING);
-                            packet.Message.Write((byte)Direction.Left);
-                            packet.Message.Write(true);
-                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            var packet = new Packet();
+                            packet.Write((byte)Direction.Left);
+                            packet.Write(true);
+                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -276,10 +275,10 @@ namespace Lunar.Client.World.Actors
                     {
                         if (this.CanMove(gameTime.ElapsedGameTime.Milliseconds, Direction.Right))
                         {
-                            var packet = new Packet(PacketType.PLAYER_MOVING);
-                            packet.Message.Write((byte)Direction.Right);
-                            packet.Message.Write(true);
-                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            var packet = new Packet();
+                            packet.Write((byte)Direction.Right);
+                            packet.Write(true);
+                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -291,10 +290,10 @@ namespace Lunar.Client.World.Actors
                     {
                         if (this.CanMove(gameTime.ElapsedGameTime.Milliseconds, Direction.Up))
                         {
-                            var packet = new Packet(PacketType.PLAYER_MOVING);
-                            packet.Message.Write((byte)Direction.Up);
-                            packet.Message.Write(true);
-                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            var packet = new Packet();
+                            packet.Write((byte)Direction.Up);
+                            packet.Write(true);
+                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -306,10 +305,10 @@ namespace Lunar.Client.World.Actors
                     {
                         if (this.CanMove(gameTime.ElapsedGameTime.Milliseconds, Direction.Down))
                         {
-                            var packet = new Packet(PacketType.PLAYER_MOVING);
-                            packet.Message.Write((byte)Direction.Down);
-                            packet.Message.Write(true);
-                            Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                            var packet = new Packet();
+                            packet.Write((byte)Direction.Down);
+                            packet.Write(true);
+                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -319,10 +318,10 @@ namespace Lunar.Client.World.Actors
                 {
                     if (this.State == ActorStates.Moving)
                     {
-                        var packet = new Packet(PacketType.PLAYER_MOVING);
-                        packet.Message.Write((byte)_direction);
-                        packet.Message.Write(false);
-                        Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                        var packet = new Packet();
+                        packet.Write((byte)_direction);
+                        packet.Write(false);
+                        Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                         _requestMoving = true;
                     }
@@ -331,8 +330,8 @@ namespace Lunar.Client.World.Actors
 
             if (keyboardState.IsKeyDown(Keys.LeftControl) && _prevKeyboardState.IsKeyUp(Keys.LeftControl))
             {
-                var packet = new Packet(PacketType.PLAYER_INTERACT);
-                Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                var packet = new Packet();
+                Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_INTERACT, packet, DeliveryMethod.ReliableOrdered);
             }
 
             _prevKeyboardState = keyboardState;
@@ -394,7 +393,7 @@ namespace Lunar.Client.World.Actors
             this.Emitter?.Draw(spriteBatch);
         }
 
-        public void Unpack(NetBuffer buffer, ContentManager contentManager)
+        public void Unpack(Packet buffer, ContentManager contentManager)
         {
             _name = buffer.ReadString();
             _speed = buffer.ReadFloat();

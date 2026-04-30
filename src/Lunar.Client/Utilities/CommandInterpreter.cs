@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Client.Net;
 using Lunar.Core;
 using Lunar.Core.Net;
@@ -38,11 +37,11 @@ namespace Lunar.Client.Utilities
 
         private void Handle_AvailableCommands(PacketReceivedEventArgs args)
         {
-            int commandCount = args.Message.ReadInt32();
+            int commandCount = args.Packet.ReadInt32();
 
             for (int i = 0; i < commandCount; i++)
             {
-                string commandName = args.Message.ReadString();
+                string commandName = args.Packet.ReadString();
 
                 _manualInterpreter.RegisterCommand(commandName, (delegate (string[] strings) { }));
             }
@@ -69,14 +68,14 @@ namespace Lunar.Client.Utilities
                     string command = inputSplit[0];
                     string[] commandArgs = inputSplit.Skip(1).ToArray();
 
-                    var packet = new Packet(PacketType.CLIENT_COMMAND);
-                    packet.Message.Write(command);
-                    packet.Message.Write(commandArgs.Length);
+                    var packet = new Packet();
+                    packet.Write(command);
+                    packet.Write(commandArgs.Length);
 
                     foreach (var arg in commandArgs)
-                        packet.Message.Write(arg);
+                        packet.Write(arg);
 
-                    Engine.Services.Get<NetHandler>().SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.CLIENT_COMMAND, packet, DeliveryMethod.ReliableOrdered);
                 }
             }
         }

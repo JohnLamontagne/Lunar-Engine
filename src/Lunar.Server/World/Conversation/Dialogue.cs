@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,16 +11,15 @@
 	limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
-using Lunar.Server.Utilities.Scripting;
-using Lunar.Core.Utilities;
 using System.Linq;
 using Lunar.Core;
-using Lunar.Server.World.Actors;
-using Lunar.Server.Net;
 using Lunar.Core.Net;
-using Lidgren.Network;
-using System;
+using Lunar.Core.Utilities;
+using Lunar.Server.Net;
+using Lunar.Server.Utilities.Scripting;
+using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.World.Conversation
 {
@@ -62,9 +61,9 @@ namespace Lunar.Server.World.Conversation
 
         private void Handle_DialogueResponse(PacketReceivedEventArgs args)
         {
-            string branchName = args.Message.ReadString();
-            string responseID = args.Message.ReadString();
-            var player = args.Connection.Player;
+            string branchName = args.Packet.ReadString();
+            string responseID = args.Packet.ReadString();
+            var player = ((PlayerConnection)args.Connection).Player;
 
             if (this.BranchExists(branchName))
             {
@@ -118,7 +117,6 @@ namespace Lunar.Server.World.Conversation
         /// <summary>
         /// Plays the specified branch of the dialogue.
         /// </summary>
-        /// <param name="branchName"></param>
         public void Play(string branchName, Player player)
         {
             if (!_branches.ContainsKey(branchName))
@@ -129,14 +127,14 @@ namespace Lunar.Server.World.Conversation
 
         public void End(Player player)
         {
-            var packet = new Packet(PacketType.DIALOGUE_END, ChannelType.UNASSIGNED);
-            packet.Message.Write(this.Name);
-            player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(this.Name);
+            player.NetworkComponent.SendPacket(PacketType.DIALOGUE_END, packet, DeliveryMethod.ReliableOrdered);
 
             // This flags that the player is no longer in dialogue.
             player.EngagedDialogue = null;
 
-            this.Ended?.Invoke(this, new EventArgs());
+            this.Ended?.Invoke(this, EventArgs.Empty);
         }
     }
 }

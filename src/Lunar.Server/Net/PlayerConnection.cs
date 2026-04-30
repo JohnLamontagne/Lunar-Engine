@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,34 +11,32 @@
 	limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using Lidgren.Network;
+using LiteNetLib;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Actors;
+using System;
+using System.Collections.Generic;
+using DeliveryMethod = Lunar.Core.Net.DeliveryMethod;
 
 namespace Lunar.Server.Net
 {
-    public class PlayerConnection
+    public class PlayerConnection : IConnection
     {
-        private NetConnection _netConnection;
-        private NetHandler _netHandler;
+        private readonly NetPeer _peer;
+        private readonly NetHandler _netHandler;
+        private readonly Dictionary<Action<PacketReceivedEventArgs>, Action<PacketReceivedEventArgs>> _handlerFilters;
+        private readonly Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _handlers;
 
-        // Used to keep reference to the Actions we create to filter our incoming packets to the correct players.
-        private Dictionary<Action<PacketReceivedEventArgs>, Action<PacketReceivedEventArgs>> _handlerFilters;
-
-        private Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _handlers;
-
-        public long UniqueIdentifier => _netConnection.RemoteUniqueIdentifier;
+        public long UniqueIdentifier => _peer.Id;
 
         public Player Player { get; set; }
 
-        public PlayerConnection(NetConnection netConnection, NetHandler netHandler)
+        public PlayerConnection(NetPeer peer, NetHandler netHandler)
         {
-            _netConnection = netConnection;
+            _peer = peer;
             _netHandler = netHandler;
             _handlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
             _handlerFilters = new Dictionary<Action<PacketReceivedEventArgs>, Action<PacketReceivedEventArgs>>();
@@ -46,52 +44,52 @@ namespace Lunar.Server.Net
 
         public void AddPacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
         {
-            Action<PacketReceivedEventArgs> mHandler = args =>
+            Action<PacketReceivedEventArgs> filtered = args =>
             {
-                if (args.Connection.UniqueIdentifier == _netConnection.RemoteUniqueIdentifier)
-                {
+                if (args.Connection.UniqueIdentifier == this.UniqueIdentifier)
                     handler.Invoke(args);
-                }
             };
 
-            if (!_handlers.ContainsKey(packetType))
-                _handlers.Add(packetType, new List<Action<PacketReceivedEventArgs>>());
+            if (!_handlers.TryGetValue(packetType, out var list))
+            {
+                list = new List<Action<PacketReceivedEventArgs>>();
+                _handlers[packetType] = list;
+            }
+            list.Add(handler);
 
-            _handlers[packetType].Add(handler);
-            _netHandler.AddPacketHandler(packetType, mHandler);
-            if (_handlerFilters.ContainsKey(handler))
-                _handlerFilters[handler] = mHandler;
-            else
-                _handlerFilters.Add(handler, mHandler);
+            _netHandler.AddPacketHandler(packetType, filtered);
+            _handlerFilters[handler] = filtered;
         }
 
         public void RemovePacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
         {
-            _netHandler.RemovePacketHandler(packetType, _handlerFilters[handler]);
-            _handlers.Remove(packetType);
-            _handlerFilters.Remove(handler);
+            if (_handlerFilters.TryGetValue(handler, out var filtered))
+            {
+                _netHandler.RemovePacketHandler(packetType, filtered);
+                _handlerFilters.Remove(handler);
+            }
+            if (_handlers.TryGetValue(packetType, out var list))
+                list.Remove(handler);
         }
 
-        public void SendPacket(Packet packet, NetDeliveryMethod method)
+        public void SendPacket(PacketType packetType, Packet packet, DeliveryMethod deliveryMethod)
         {
-            if (_netConnection == null)
+            if (_peer == null || _peer.ConnectionState != ConnectionState.Connected)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
+                Engine.Services.Get<Logger>().LogEvent("Invalid player connection socket.", LogTypes.ERROR, new Exception("Invalid player connection socket."));
                 return;
             }
-
-            _netConnection.SendMessage(packet.Message, method, (int)packet.Channel);
+            NetHandler.SendOnPeer(_peer, packetType, packet, deliveryMethod);
         }
 
-        public void Disconnect(string byeMessage = "")
+        public void Disconnect(string reason = "")
         {
-            if (_netConnection == null)
+            if (_peer == null)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Invalid player connection socket.", LogTypes.ERROR, new Exception($"Invalid player connection socket."));
+                Engine.Services.Get<Logger>().LogEvent("Invalid player connection socket.", LogTypes.ERROR, new Exception("Invalid player connection socket."));
                 return;
             }
-
-            _netConnection.Disconnect(byeMessage);
+            _peer.Disconnect();
         }
     }
 }

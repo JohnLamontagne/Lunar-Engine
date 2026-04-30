@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,129 +11,162 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
+using LiteNetLib;
+using LiteNetLib.Utils;
+using Lunar.Core.Net;
+using Lunar.Core.Utilities;
+using Lunar.Server.Utilities;
 using System;
 using System.Collections.Generic;
-using Lunar.Core.Net;
-using Lunar.Server.Utilities;
-using Lunar.Core.Utilities;
+using DeliveryMethod = Lunar.Core.Net.DeliveryMethod;
 
 namespace Lunar.Server.Net
 {
     public class NetHandler : IService
     {
-        private readonly NetServer _netServer;
+        private readonly string _connectionKey;
+        private readonly int _port;
+        private readonly NetManager _netManager;
+        private readonly EventBasedNetListener _listener;
         private readonly Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _packetHandlers;
-        private readonly Dictionary<long, PlayerConnection> _connections;
+        private readonly Dictionary<int, PlayerConnection> _connections;
 
         public event EventHandler<ConnectionEventArgs> ConnectionReceived;
-
         public event EventHandler<ConnectionEventArgs> ConnectionLost;
 
         public NetHandler(string gameName, int port)
         {
+            _connectionKey = gameName;
+            _port = port;
             _packetHandlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
-            _connections = new Dictionary<long, PlayerConnection>();
+            _connections = new Dictionary<int, PlayerConnection>();
 
-            var config = new NetPeerConfiguration(gameName) { Port = port };
-            config.DisableMessageType(NetIncomingMessageType.NatIntroductionSuccess);
-            config.DisableMessageType(NetIncomingMessageType.Receipt);
-            config.DisableMessageType(NetIncomingMessageType.UnconnectedData);
-            config.DisableMessageType(NetIncomingMessageType.DiscoveryRequest);
-            config.DisableMessageType(NetIncomingMessageType.DiscoveryResponse);
-            config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
-            config.AcceptIncomingConnections = true;
-
-#if DEBUG
-            config.ConnectionTimeout = 60;
-#else
-            config.ConnectionTimeout = 5;
-#endif
-
-            config.EnableUPnP = false;
-
-            _netServer = new NetServer(config);
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            NetIncomingMessage message;
-            while ((message = _netServer.ReadMessage()) != null)
+            _listener = new EventBasedNetListener();
+            _netManager = new NetManager(_listener)
             {
-                switch (message.MessageType)
-                {
-                    case NetIncomingMessageType.Data:
-                        // Get the packet type.
-                        var packetType = (PacketType)message.ReadInt16();
+                AutoRecycle = true,
+                UnconnectedMessagesEnabled = false,
+                BroadcastReceiveEnabled = false,
+                DisconnectTimeout = 60_000
+            };
 
-                        if (_packetHandlers.ContainsKey(packetType))
-                        {
-                            for (int i = 0; i < _packetHandlers[packetType].Count; i++)
-                            {
-                                _packetHandlers[packetType][i].Invoke(new PacketReceivedEventArgs(message, _connections[message.SenderConnection.RemoteUniqueIdentifier]));
-                                // Reset the read position.
-                                message.Position = 0;
-                                message.ReadInt16();
-                            }
-                        }
-
-                        break;
-
-                    case NetIncomingMessageType.ConnectionApproval:
-                        message.SenderConnection.Approve();
-                        break;
-
-                    case NetIncomingMessageType.StatusChanged:
-                        switch (message.SenderConnection.Status)
-                        {
-                            case NetConnectionStatus.Connected:
-                                Console.WriteLine("Established connection with: {0}.", message.SenderEndPoint.ToString());
-                                _connections.Add(message.SenderConnection.RemoteUniqueIdentifier, new PlayerConnection(message.SenderConnection, this));
-                                this.ConnectionReceived?.Invoke(this, new ConnectionEventArgs(message.SenderConnection));
-                                break;
-
-                            case NetConnectionStatus.Disconnected:
-                                Console.WriteLine("Connection with {0} lost.", message.SenderEndPoint.ToString());
-                                _connections.Remove(message.SenderConnection.RemoteUniqueIdentifier);
-                                this.ConnectionLost?.Invoke(this, new ConnectionEventArgs(message.SenderConnection));
-                                break;
-                        }
-                        break;
-
-                    case NetIncomingMessageType.DebugMessage:
-                        Console.WriteLine(message.ReadString());
-                        break;
-                }
-
-                _netServer.Recycle(message);
-            }
-        }
-
-        public void AddPacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
-        {
-            if (!_packetHandlers.ContainsKey(packetType))
-                _packetHandlers.Add(packetType, new List<Action<PacketReceivedEventArgs>>());
-
-            _packetHandlers[packetType].Add(handler);
-        }
-
-        public void RemovePacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
-        {
-            _packetHandlers[packetType]?.Remove(handler);
-        }
-
-        public NetOutgoingMessage ConstructMessage()
-        {
-            return _netServer.CreateMessage();
+            _listener.ConnectionRequestEvent += OnConnectionRequest;
+            _listener.PeerConnectedEvent += OnPeerConnected;
+            _listener.PeerDisconnectedEvent += OnPeerDisconnected;
+            _listener.NetworkReceiveEvent += OnNetworkReceive;
         }
 
         public void Start()
         {
-            _netServer.Start();
+            _netManager.Start(_port);
+        }
+
+        public void Stop()
+        {
+            _netManager.Stop();
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            _netManager.PollEvents();
+        }
+
+        public void AddPacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
+        {
+            if (!_packetHandlers.TryGetValue(packetType, out var handlers))
+            {
+                handlers = new List<Action<PacketReceivedEventArgs>>();
+                _packetHandlers[packetType] = handlers;
+            }
+            handlers.Add(handler);
+        }
+
+        public void RemovePacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
+        {
+            if (_packetHandlers.TryGetValue(packetType, out var handlers))
+                handlers.Remove(handler);
+        }
+
+        internal static DeliveryMethod ToInternal(LiteNetLib.DeliveryMethod m) => m switch
+        {
+            LiteNetLib.DeliveryMethod.Unreliable => DeliveryMethod.Unreliable,
+            LiteNetLib.DeliveryMethod.ReliableUnordered => DeliveryMethod.ReliableUnordered,
+            LiteNetLib.DeliveryMethod.ReliableOrdered => DeliveryMethod.ReliableOrdered,
+            LiteNetLib.DeliveryMethod.ReliableSequenced => DeliveryMethod.ReliableSequenced,
+            LiteNetLib.DeliveryMethod.Sequenced => DeliveryMethod.Sequenced,
+            _ => DeliveryMethod.ReliableOrdered
+        };
+
+        internal static LiteNetLib.DeliveryMethod ToLiteNet(DeliveryMethod m) => m switch
+        {
+            DeliveryMethod.Unreliable => LiteNetLib.DeliveryMethod.Unreliable,
+            DeliveryMethod.ReliableUnordered => LiteNetLib.DeliveryMethod.ReliableUnordered,
+            DeliveryMethod.ReliableOrdered => LiteNetLib.DeliveryMethod.ReliableOrdered,
+            DeliveryMethod.ReliableSequenced => LiteNetLib.DeliveryMethod.ReliableSequenced,
+            DeliveryMethod.Sequenced => LiteNetLib.DeliveryMethod.Sequenced,
+            _ => LiteNetLib.DeliveryMethod.ReliableOrdered
+        };
+
+        internal static void SendOnPeer(NetPeer peer, PacketType packetType, Packet packet, DeliveryMethod deliveryMethod)
+        {
+            var writer = new NetDataWriter();
+            writer.Put((short)packetType);
+            if (packet != null)
+            {
+                var payload = packet.ToArray();
+                if (payload.Length > 0)
+                    writer.Put(payload);
+            }
+            peer.Send(writer, ToLiteNet(deliveryMethod));
         }
 
         public void Initalize()
         {
+        }
+
+        private void OnConnectionRequest(ConnectionRequest request)
+        {
+            request.AcceptIfKey(_connectionKey);
+        }
+
+        private void OnPeerConnected(NetPeer peer)
+        {
+            Console.WriteLine("Established connection with: {0}.", peer);
+            var connection = new PlayerConnection(peer, this);
+            _connections[peer.Id] = connection;
+            this.ConnectionReceived?.Invoke(this, new ConnectionEventArgs(connection));
+        }
+
+        private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
+        {
+            Console.WriteLine("Connection with {0} lost ({1}).", peer, disconnectInfo.Reason);
+            if (_connections.TryGetValue(peer.Id, out var connection))
+            {
+                _connections.Remove(peer.Id);
+                this.ConnectionLost?.Invoke(this, new ConnectionEventArgs(connection));
+            }
+        }
+
+        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
+        {
+            if (reader.AvailableBytes < sizeof(short))
+                return;
+
+            var packetType = (PacketType)reader.GetShort();
+            var payload = reader.GetRemainingBytes();
+
+            if (!_packetHandlers.TryGetValue(packetType, out var handlers) || handlers.Count == 0)
+                return;
+
+            if (!_connections.TryGetValue(peer.Id, out var connection))
+                return;
+
+            for (int i = 0; i < handlers.Count; i++)
+            {
+                using var packet = new Packet(payload);
+                var args = new PacketReceivedEventArgs(packetType, packet, connection);
+                handlers[i].Invoke(args);
+            }
         }
     }
 }

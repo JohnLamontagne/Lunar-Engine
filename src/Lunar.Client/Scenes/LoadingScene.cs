@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
@@ -45,8 +44,8 @@ namespace Lunar.Client.Scenes
             if (_finishedLoading && gameTime.TotalGameTime.TotalMilliseconds > _minEndTime)
             {
                 Engine.Services.Get<SceneManager>().SetActiveScene("gameScene");
-                var mapLoaded = new Packet(PacketType.MAP_LOADED);
-                Engine.Services.Get<NetHandler>().SendMessage(mapLoaded.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                var mapLoaded = new Packet();
+                Engine.Services.Get<NetHandler>().SendPacket(PacketType.MAP_LOADED, mapLoaded, DeliveryMethod.ReliableOrdered);
             }
 
             base.Update(gameTime);

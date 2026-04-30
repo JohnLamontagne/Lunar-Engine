@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
 using Lunar.Core;
@@ -91,7 +90,7 @@ namespace Lunar.Client.Scenes
             if (!this.Active)
                 return;
 
-            var failMessage = args.Message.ReadString();
+            var failMessage = args.Packet.ReadString();
 
             this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer").GetWidget<Label>("lblStatus").Text =
                 failMessage;
@@ -189,10 +188,10 @@ namespace Lunar.Client.Scenes
 
                 netHandler.Connect();
 
-                var packet = new Packet(PacketType.REGISTER);
-                packet.Message.Write(menuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
-                packet.Message.Write(menuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
-                netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                var packet = new Packet();
+                packet.Write(menuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
+                packet.Write(menuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
+                netHandler.SendPacket(PacketType.REGISTER, packet, DeliveryMethod.ReliableOrdered);
             }
         }
 
@@ -229,10 +228,10 @@ namespace Lunar.Client.Scenes
 
                 netHandler.Connect();
 
-                var packet = new Packet(PacketType.LOGIN);
-                packet.Message.Write(loginMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
-                packet.Message.Write(loginMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
-                netHandler.SendMessage(packet.Message, NetDeliveryMethod.ReliableOrdered, ChannelType.UNASSIGNED);
+                var packet = new Packet();
+                packet.Write(loginMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
+                packet.Write(loginMenuContainer.GetWidget<Textbox>("userPasswordTextbox").Text);
+                netHandler.SendPacket(PacketType.LOGIN, packet, DeliveryMethod.ReliableOrdered);
             }
         }
 

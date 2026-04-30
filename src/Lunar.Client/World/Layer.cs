@@ -10,10 +10,10 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+using Lunar.Core.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Utilities;
@@ -159,7 +159,7 @@ namespace Lunar.Client.World
             _tiles[x, y] = tile;
         }
 
-        public void Unpack(NetBuffer netBuffer)
+        public void Unpack(Packet netBuffer)
         {
 
             for (int x = 0; x < _tiles.GetLength(0); x++)

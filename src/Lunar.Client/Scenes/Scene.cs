@@ -53,8 +53,8 @@ namespace Lunar.Client.Scenes
 
         private void Handle_PlaySound(PacketReceivedEventArgs args)
         {
-            string fileName = args.Message.ReadString();
-            float volume = args.Message.ReadFloat();
+            string fileName = args.Packet.ReadString();
+            float volume = args.Packet.ReadFloat();
 
             SoundEffect soundEffect = _contentManager.Load<SoundEffect>(Constants.FILEPATH_SFX + "/" + fileName);
             soundEffect.Play();
@@ -62,7 +62,7 @@ namespace Lunar.Client.Scenes
 
         private void Handle_PlayMusic(PacketReceivedEventArgs args)
         {
-            string fileName = args.Message.ReadString();
+            string fileName = args.Packet.ReadString();
 
             Song song = _contentManager.Load<Song>(Constants.FILEPATH_MUSIC + "/" + fileName);
             MediaPlayer.Play(song);

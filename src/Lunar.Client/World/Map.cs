@@ -13,7 +13,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Lidgren.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Net;
@@ -68,9 +67,9 @@ namespace Lunar.Client.World
         private void Handle_MapItemSpawn(PacketReceivedEventArgs args)
         {
             MapItem mapItem = new MapItem();
-            string layerName = args.Message.ReadString();
+            string layerName = args.Packet.ReadString();
 
-            mapItem.Unpack(args.Message, this.GetLayer(layerName));
+            mapItem.Unpack(args.Packet, this.GetLayer(layerName));
 
             if (!_mapItems.ContainsKey(mapItem.Position))
                 _mapItems.Add(mapItem.Position, new List<MapItem>());
@@ -137,7 +136,7 @@ namespace Lunar.Client.World
             return _layers[name];
         }
 
-        public void Unpack(NetBuffer netBuffer)
+        public void Unpack(Packet netBuffer)
         {
             Engine.Services.Get<LightManagerService>().Component.Lights.Clear();
 

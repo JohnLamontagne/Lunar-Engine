@@ -13,7 +13,6 @@
 
 using System;
 using System.Linq;
-using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.World;
@@ -56,7 +55,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_ReqTarget(PacketReceivedEventArgs args)
         {
-            var targetUniqueID = args.Message.ReadString();
+            var targetUniqueID = args.Packet.ReadString();
 
             // Make sure we don't target ourselves
             if (targetUniqueID == _player.UniqueID)
@@ -68,9 +67,9 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             {
                 _player.Target = target;
 
-                var packet = new Packet(PacketType.TARGET_ACQ, ChannelType.UNASSIGNED);
-                packet.Message.Write(target.UniqueID);
-                _player.NetworkComponent.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+                var packet = new Packet();
+                packet.Write(target.UniqueID);
+                _player.NetworkComponent.SendPacket(PacketType.TARGET_ACQ, packet, DeliveryMethod.ReliableOrdered);
             }
             else
             {
@@ -85,14 +84,14 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_DropItem(PacketReceivedEventArgs args)
         {
-            int slotNum = args.Message.ReadInt32();
+            int slotNum = args.Packet.ReadInt32();
 
             _player.ActionProcessor.Process(new PlayerDropItemAction(slotNum));
         }
 
         private void Handle_UseItem(PacketReceivedEventArgs args)
         {
-            int slotNum = args.Message.ReadInt32();
+            int slotNum = args.Packet.ReadInt32();
 
             _player.ActionProcessor.Process(new PlayerUseItemAction(slotNum));
         }
@@ -102,8 +101,8 @@ namespace Lunar.Server.World.Actors.PacketHandlers
             if (!_player.MapLoaded)
                 return;
 
-            _player.Direction = (Direction)args.Message.ReadByte();
-            var wantsToMove = args.Message.ReadBoolean();
+            _player.Direction = (Direction)args.Packet.ReadByte();
+            var wantsToMove = args.Packet.ReadBoolean();
 
             if (wantsToMove)
             {
@@ -134,7 +133,7 @@ namespace Lunar.Server.World.Actors.PacketHandlers
 
         private void Handle_UnequipItem(PacketReceivedEventArgs args)
         {
-            int slotNum = args.Message.ReadInt32();
+            int slotNum = args.Packet.ReadInt32();
 
             _player.ActionProcessor.Process(new PlayerUnequipItemAction(slotNum));
         }

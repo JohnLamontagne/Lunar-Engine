@@ -82,7 +82,6 @@ namespace Lunar.Server
             var netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
             Engine.Services.Register(netHandler);
             netHandler.Initalize();
-            Packet.Initalize(netHandler);
 
             // Register the data loader factories
             IDataManagerFactory dataFactory = new FSDataFactory();

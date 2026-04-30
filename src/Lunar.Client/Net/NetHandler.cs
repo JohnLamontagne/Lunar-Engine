@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -11,73 +11,78 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
+using LiteNetLib;
+using LiteNetLib.Utils;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
+using DeliveryMethod = Lunar.Core.Net.DeliveryMethod;
 
 namespace Lunar.Client.Net
 {
     public class NetHandler : ISubject, IService
     {
-        private readonly NetClient _client;
+        private readonly NetManager _netManager;
+        private readonly EventBasedNetListener _listener;
         private readonly Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>> _packetHandlers;
+        private readonly Queue<(PacketType type, Packet packet)> _packetQueue;
+        private readonly Queue<(PacketType type, Packet packet)> _waitingPacketQueue;
+        private readonly List<(PacketType type, Packet packet, DeliveryMethod method)> _packetCache;
 
-        private Thread _incomingMessageThread;
-        private bool _stop;
-
+        private NetPeer _peer;
         private PacketType? _waitingForPacketType;
-
-        /// <summary>
-        /// Used to buffer packets for processing.
-        /// </summary>
-        private readonly Queue<Tuple<PacketType, PacketReceivedEventArgs>> _packetQueue;
-
-        private readonly Queue<Tuple<PacketType, PacketReceivedEventArgs>> _waitingPacketQueue;
-
-        /// <summary>
-        /// Used in the event of the connection not yet being established or connection lost.
-        /// Packets will be sent upon establishment/reestablishment of the client-server connection.
-        /// </summary>
-        private readonly List<Tuple<NetOutgoingMessage, NetDeliveryMethod, ChannelType>> _packetCache;
-
-        public string UniqueID => _client.UniqueIdentifier.ToString();
-
-        public bool Connected => _client.ConnectionStatus == NetConnectionStatus.Connected;
-
-        /// <summary>
-        /// When enabled, packets will be collected and stored but not executed until false again.
-        /// </summary>
         private bool _collectAndWaitFor;
-
         private PacketType? _collectAndWaitPacket;
         private Func<bool> _collectAndWaitFunc;
+
+        public string UniqueID => _peer != null ? _peer.Id.ToString() : string.Empty;
+
+        public bool Connected => _peer != null && _peer.ConnectionState == ConnectionState.Connected;
+
+        public event EventHandler<SubjectEventArgs> EventOccured;
+        public event EventHandler Disconnected;
 
         public NetHandler()
         {
             _packetHandlers = new Dictionary<PacketType, List<Action<PacketReceivedEventArgs>>>();
-            _packetCache = new List<Tuple<NetOutgoingMessage, NetDeliveryMethod, ChannelType>>();
-            _packetQueue = new Queue<Tuple<PacketType, PacketReceivedEventArgs>>();
-            _waitingPacketQueue = new Queue<Tuple<PacketType, PacketReceivedEventArgs>>();
+            _packetQueue = new Queue<(PacketType, Packet)>();
+            _waitingPacketQueue = new Queue<(PacketType, Packet)>();
+            _packetCache = new List<(PacketType, Packet, DeliveryMethod)>();
 
-            NetPeerConfiguration config = new NetPeerConfiguration(Settings.GameName);
-            config.EnableMessageType(NetIncomingMessageType.Data);
-            config.EnableMessageType(NetIncomingMessageType.ConnectionApproval);
-            _client = new NetClient(config);
-            _client.Start();
+            _listener = new EventBasedNetListener();
+            _netManager = new NetManager(_listener)
+            {
+                AutoRecycle = true,
+                UnconnectedMessagesEnabled = false
+            };
 
-            this._collectAndWaitFor = false;
-            _waitingForPacketType = null;
+            _listener.PeerConnectedEvent += peer => _peer = peer;
+            _listener.PeerDisconnectedEvent += OnPeerDisconnected;
+            _listener.NetworkReceiveEvent += OnNetworkReceive;
         }
+
+        public void Connect()
+        {
+            _netManager.Start();
+            string host = Debugger.IsAttached ? "localhost" : Settings.IP;
+            _netManager.Connect(host, Settings.Port, Settings.GameName);
+        }
+
+        public void Disconnect()
+        {
+            _peer?.Disconnect();
+            _netManager.Stop();
+            _peer = null;
+        }
+
+        public void Initalize() { }
 
         /// <summary>
         /// Signals the NetHandler to collect packets and hold them until the specified one packet arrives, at which point
         /// it will process the collected packets in order.
         /// </summary>
-        /// <param name="packetType"></param>
         public void CollectAndWaitFor(PacketType packetType)
         {
             _collectAndWaitFor = true;
@@ -88,59 +93,59 @@ namespace Lunar.Client.Net
         /// Collects packets of the specified type and waits until the specified result() evalutes to true, at which
         /// point it will process the filtered packets in order.
         /// </summary>
-        /// <param name="packetType"></param>
         public void CollectAndWait(PacketType packetType, Func<bool> when)
         {
             _collectAndWaitPacket = packetType;
             _collectAndWaitFunc = when;
         }
 
-        public void Connect()
+        public void AddPacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
         {
-            _client.Connect(Debugger.IsAttached ? "localhost" : Settings.IP, Settings.Port);
-            this.Start();
-        }
-
-        private void Start()
-        {
-            _stop = false;
-
-            if (_incomingMessageThread != null)
-                return;
-
-            _incomingMessageThread = new Thread(() =>
+            if (!_packetHandlers.TryGetValue(packetType, out var handlers))
             {
-                while (!_stop)
-                {
-                    this.Update();
-                }
-
-                _incomingMessageThread = null;
-            });
-
-            _incomingMessageThread.Start();
+                handlers = new List<Action<PacketReceivedEventArgs>>();
+                _packetHandlers[packetType] = handlers;
+            }
+            handlers.Add(handler);
         }
 
-        public void Disconnect()
+        public void RemovePacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
         {
-            _client.Disconnect("cleanLogout");
-            _stop = true;
-            _incomingMessageThread = null;
+            if (_packetHandlers.TryGetValue(packetType, out var handlers))
+                handlers.Remove(handler);
+        }
+
+        public void SendPacket(PacketType packetType, Packet packet, DeliveryMethod deliveryMethod)
+        {
+            if (!Connected)
+            {
+                _packetCache.Add((packetType, packet, deliveryMethod));
+                return;
+            }
+            SendOnPeer(_peer, packetType, packet, deliveryMethod);
         }
 
         public void ProcessPacketQueue()
         {
-            if (_packetQueue.Count <= 0)
+            _netManager.PollEvents();
+
+            if (_packetCache.Count > 0 && Connected)
+            {
+                foreach (var entry in _packetCache)
+                    SendOnPeer(_peer, entry.type, entry.packet, entry.method);
+                _packetCache.Clear();
+            }
+
+            if (_packetQueue.Count == 0)
                 return;
 
             if (_collectAndWaitFor)
             {
-                if (_collectAndWaitPacket != null && _collectAndWaitFunc())
+                if (_collectAndWaitPacket != null && _collectAndWaitFunc != null && _collectAndWaitFunc())
                 {
-                    foreach (var packet in _waitingPacketQueue.ToArray())
-                    {
-                        _packetQueue.Enqueue(packet);
-                    }
+                    foreach (var queued in _waitingPacketQueue.ToArray())
+                        _packetQueue.Enqueue(queued);
+                    _waitingPacketQueue.Clear();
                     _collectAndWaitPacket = null;
                     _collectAndWaitFor = false;
                 }
@@ -150,142 +155,72 @@ namespace Lunar.Client.Net
                 }
             }
 
-            do
+            while (_packetQueue.Count > 0)
             {
-                var packet = _packetQueue.Dequeue();
-                PacketType packetType = packet.Item1;
-                PacketReceivedEventArgs args = packet.Item2;
-
-                if (_packetHandlers.ContainsKey(packetType))
+                var entry = _packetQueue.Dequeue();
+                if (_packetHandlers.TryGetValue(entry.type, out var handlers))
                 {
-                    foreach (var handler in _packetHandlers[packetType])
+                    foreach (var handler in handlers)
                     {
                         if (Settings.DisplayNetworkMessages)
-                            Console.WriteLine("Handling packet {0} by {1}", packetType.ToString(), handler.Method.ToString());
+                            Console.WriteLine("Handling packet {0} by {1}", entry.type, handler.Method);
 
-                        // Reset the read position.
-                        args.Message.Position = 0;
-
-                        handler.Invoke(args);
+                        entry.packet.Position = 0;
+                        handler.Invoke(new PacketReceivedEventArgs(entry.type, entry.packet, null));
                     }
                 }
-
-                this.EventOccured?.Invoke(this, new SubjectEventArgs("packetRec" + packetType.ToString(), new object[] { args.Message }));
-            } while (_packetQueue.Count > 0);
-        }
-
-        private void Update()
-        {
-            NetIncomingMessage message;
-            while ((message = _client.ReadMessage()) != null)
-            {
-                switch (message.MessageType)
-                {
-                    case NetIncomingMessageType.Data:
-                        // Get the packet type.
-                        PacketType packetType = (PacketType)message.ReadInt16();
-
-                        if (_collectAndWaitFor && _waitingForPacketType == packetType)
-                        {
-                            // The packet meets the criteria and we can break out of waiting.
-                            _collectAndWaitFor = false;
-                            _waitingForPacketType = null;
-                        }
-
-                        if (_collectAndWaitPacket == packetType)
-                        {
-                            _waitingPacketQueue.Enqueue(new Tuple<PacketType, PacketReceivedEventArgs>(packetType, new PacketReceivedEventArgs(message)));
-                        }
-                        else
-                        {
-                            _packetQueue.Enqueue(new Tuple<PacketType, PacketReceivedEventArgs>(packetType, new PacketReceivedEventArgs(message)));
-                        }
-
-                        break;
-
-                    case NetIncomingMessageType.DiscoveryResponse:
-                        _client.Connect(message.SenderEndPoint);
-                        break;
-
-                    case NetIncomingMessageType.DebugMessage:
-                        if (Settings.DisplayNetworkMessages)
-                            Console.WriteLine(message.ReadString());
-                        break;
-
-                    case NetIncomingMessageType.WarningMessage:
-                        Console.WriteLine(message.ReadString());
-                        break;
-
-                    case NetIncomingMessageType.StatusChanged:
-                        switch (message.SenderConnection.Status)
-                        {
-                            case NetConnectionStatus.Disconnected:
-                                this.Disconnected?.Invoke(this, new EventArgs());
-                                _stop = true;
-                                break;
-                        }
-
-                        break;
-                }
-
-                _client.Recycle(message);
-            }
-
-            if (_packetCache.Count > 0)
-            {
-                this.SendPacketCache();
+                EventOccured?.Invoke(this, new SubjectEventArgs("packetRec" + entry.type, new object[] { entry.packet }));
             }
         }
 
-        public void SendPacketCache()
+        private void OnPeerDisconnected(NetPeer peer, DisconnectInfo info)
         {
-            if (_client.ConnectionStatus == NetConnectionStatus.Connected)
-            {
-                foreach (var t in _packetCache)
-                {
-                    _client.SendMessage(t.Item1, t.Item2, (int)t.Item3);
-                }
-
-                _packetCache.Clear();
-            }
+            _peer = null;
+            Disconnected?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SendMessage(NetOutgoingMessage message, NetDeliveryMethod method, ChannelType channelType)
+        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channel, LiteNetLib.DeliveryMethod deliveryMethod)
         {
-            if (_client.ConnectionStatus == NetConnectionStatus.Connected)
-                _client.SendMessage(message, method, (int)channelType);
+            if (reader.AvailableBytes < sizeof(short))
+                return;
+
+            var packetType = (PacketType)reader.GetShort();
+            var payload = reader.GetRemainingBytes();
+            var packet = new Packet(payload);
+
+            if (_collectAndWaitFor && _waitingForPacketType == packetType)
+            {
+                _collectAndWaitFor = false;
+                _waitingForPacketType = null;
+            }
+
+            if (_collectAndWaitPacket == packetType)
+                _waitingPacketQueue.Enqueue((packetType, packet));
             else
+                _packetQueue.Enqueue((packetType, packet));
+        }
+
+        private static void SendOnPeer(NetPeer peer, PacketType packetType, Packet packet, DeliveryMethod deliveryMethod)
+        {
+            var writer = new NetDataWriter();
+            writer.Put((short)packetType);
+            if (packet != null)
             {
-                // For some reason, the connection was lost or not established yet. Cache the packet to be sent later.
-                _packetCache.Add(new Tuple<NetOutgoingMessage, NetDeliveryMethod, ChannelType>(message, method, channelType));
+                var payload = packet.ToArray();
+                if (payload.Length > 0)
+                    writer.Put(payload);
             }
+            peer.Send(writer, ToLiteNet(deliveryMethod));
         }
 
-        public void AddPacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
+        private static LiteNetLib.DeliveryMethod ToLiteNet(DeliveryMethod m) => m switch
         {
-            if (!_packetHandlers.ContainsKey(packetType))
-                _packetHandlers.Add(packetType, new List<Action<PacketReceivedEventArgs>>());
-
-            _packetHandlers[packetType].Add(handler);
-        }
-
-        public void RemovePacketHandler(PacketType packetType, Action<PacketReceivedEventArgs> handler)
-        {
-            _packetHandlers[packetType].Remove(handler);
-        }
-
-        public NetOutgoingMessage ConstructMessage()
-        {
-            return _client.CreateMessage();
-        }
-
-        public void Initalize()
-        {
-            throw new NotImplementedException();
-        }
-
-        public event EventHandler<SubjectEventArgs> EventOccured;
-
-        public event EventHandler Disconnected;
+            DeliveryMethod.Unreliable => LiteNetLib.DeliveryMethod.Unreliable,
+            DeliveryMethod.ReliableUnordered => LiteNetLib.DeliveryMethod.ReliableUnordered,
+            DeliveryMethod.ReliableOrdered => LiteNetLib.DeliveryMethod.ReliableOrdered,
+            DeliveryMethod.ReliableSequenced => LiteNetLib.DeliveryMethod.ReliableSequenced,
+            DeliveryMethod.Sequenced => LiteNetLib.DeliveryMethod.Sequenced,
+            _ => LiteNetLib.DeliveryMethod.ReliableOrdered
+        };
     }
 }

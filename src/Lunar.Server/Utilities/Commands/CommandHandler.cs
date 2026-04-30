@@ -13,7 +13,6 @@
 
 using System;
 using System.Collections.Generic;
-using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
@@ -51,15 +50,15 @@ namespace Lunar.Server.Utilities.Commands
 
         private void Handle_ClientCommand(PacketReceivedEventArgs args)
         {
-            string command = args.Message.ReadString();
+            string command = args.Packet.ReadString();
 
-            int cArgsLength = args.Message.ReadInt32();
+            int cArgsLength = args.Packet.ReadInt32();
 
             string[] cArgs = new string[cArgsLength];
 
             for (int i = 0; i < cArgsLength; i++)
             {
-                cArgs[i] = args.Message.ReadString();
+                cArgs[i] = args.Packet.ReadString();
             }
 
             if (_scriptedCommandHandlers.ContainsKey(command))
@@ -87,17 +86,17 @@ namespace Lunar.Server.Utilities.Commands
             this.LoadScript();
         }
 
-        public NetBuffer Pack()
+        public Packet Pack()
         {
-            var netBuffer = new NetBuffer();
+            var packet = new Packet();
 
-            netBuffer.Write(_scriptedCommandHandlers.Keys.Count);
+            packet.Write(_scriptedCommandHandlers.Keys.Count);
             foreach (var commmand in _scriptedCommandHandlers.Keys)
             {
-                netBuffer.Write(commmand);
+                packet.Write(commmand);
             }
 
-            return netBuffer;
+            return packet;
         }
     }
 }

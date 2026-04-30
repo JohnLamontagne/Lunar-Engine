@@ -12,8 +12,8 @@
 */
 
 using System;
-using Lidgren.Network;
 using Lunar.Core.Content.Graphics;
+using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
@@ -116,15 +116,15 @@ namespace Lunar.Server.World
             this.BehaviorDefinition?.OnEquip?.Invoke(new ItemInteractionArgs(this, user));
         }
 
-        public NetBuffer PackData()
+        public Packet PackData()
         {
-            var netBuffer = new NetBuffer();
+            var packet = new Packet();
 
-            netBuffer.Write(this.Descriptor.Name);
-            netBuffer.Write(this.Descriptor.SpriteInfo.TextureName);
-            netBuffer.Write((int)this.Descriptor.SlotType);
+            packet.Write(this.Descriptor.Name);
+            packet.Write(this.Descriptor.SpriteInfo.TextureName);
+            packet.Write((int)this.Descriptor.SlotType);
 
-            return netBuffer;
+            return packet;
         }
     }
 }

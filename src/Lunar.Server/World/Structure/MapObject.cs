@@ -16,7 +16,6 @@ using Lunar.Server.World.Actors;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Lidgren.Network;
 using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
@@ -101,39 +100,39 @@ namespace Lunar.Server.World.Structure
             this.MapObjectBehaviorDefinition?.Update?.Invoke(this, gameTime);
         }
 
-        public NetBuffer Pack()
+        public Packet Pack()
         {
-            NetBuffer netBuffer = new NetBuffer();
+            Packet packet = new Packet();
 
             // Can we even see this mapObject?
             if (this.Sprite == null)
             {
-                netBuffer.Write(false);
-                return netBuffer;
+                packet.Write(false);
+                return packet;
             }
 
-            netBuffer.Write(true); // we can see it
-            netBuffer.Write(this.Sprite.TextureName);
-            netBuffer.Write(this.Sprite.Transform.Rect);
-            netBuffer.Write(this.Sprite.Transform.Color);
-            netBuffer.Write(this.Position);
-            netBuffer.Write(this.Animated);
-            netBuffer.Write(this.Layer.LayerIndex);
-            netBuffer.Write(this.FrameTime);
+            packet.Write(true); // we can see it
+            packet.Write(this.Sprite.TextureName);
+            packet.Write(this.Sprite.Transform.Rect);
+            packet.Write(this.Sprite.Transform.Color);
+            packet.Write(this.Position);
+            packet.Write(this.Animated);
+            packet.Write(this.Layer.LayerIndex);
+            packet.Write(this.FrameTime);
 
             // Is it a light?
             if (this.LightInformation == null)
             {
-                netBuffer.Write(false);
+                packet.Write(false);
             }
             else
             {
-                netBuffer.Write(true);
-                netBuffer.Write(this.LightInformation.Color);
-                netBuffer.Write(this.LightInformation.Radius);
+                packet.Write(true);
+                packet.Write(this.LightInformation.Color);
+                packet.Write(this.LightInformation.Radius);
             }
 
-            return netBuffer;
+            return packet;
         }
 
         public static MapObject Load(BinaryReader bR, Layer layer)

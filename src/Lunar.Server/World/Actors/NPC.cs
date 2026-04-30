@@ -13,7 +13,6 @@
 
 using System;
 using Lunar.Server.Net;
-using Lidgren.Network;
 using System.Collections.Generic;
 using System.Linq;
 using Lunar.Core.Content.Graphics;
@@ -126,9 +125,9 @@ namespace Lunar.Server.World.Actors
 
             _map.AddActor(this);
 
-            var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
-            npcDataPacket.Message.Write(this.Pack());
-            _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
+            var npcDataPacket = new Packet();
+            npcDataPacket.Write(this.Pack());
+            _map.SendPacket(PacketType.NPC_DATA, npcDataPacket, DeliveryMethod.ReliableOrdered);
 
             try
             {
@@ -430,18 +429,18 @@ namespace Lunar.Server.World.Actors
 
         private void SendMovementPacket(List<Vector> targetPath)
         {
-            var packet = new Packet(PacketType.NPC_MOVING, ChannelType.UNASSIGNED);
-            packet.Message.Write(this.UniqueID);
-            packet.Message.Write(true);
-            packet.Message.Write((int)this.Direction);
+            var packet = new Packet();
+            packet.Write(this.UniqueID);
+            packet.Write(true);
+            packet.Write((int)this.Direction);
 
-            packet.Message.Write(targetPath.Count);
+            packet.Write(targetPath.Count);
             foreach (var pos in targetPath)
             {
-                packet.Message.Write(pos);
+                packet.Write(pos);
             }
 
-            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            _map.SendPacket(PacketType.NPC_MOVING, packet, DeliveryMethod.ReliableOrdered);
         }
 
         /// <summary>
@@ -449,43 +448,43 @@ namespace Lunar.Server.World.Actors
         /// </summary>
         private void SendMovementPacket()
         {
-            var packet = new Packet(PacketType.NPC_MOVING, ChannelType.UNASSIGNED);
-            packet.Message.Write(this.UniqueID);
-            packet.Message.Write(false);
-            packet.Message.Write((int)this.Direction);
-            packet.Message.Write(this.Position);
+            var packet = new Packet();
+            packet.Write(this.UniqueID);
+            packet.Write(false);
+            packet.Write((int)this.Direction);
+            packet.Write(this.Position);
 
-            _map.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            _map.SendPacket(PacketType.NPC_MOVING, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void WarpTo(Vector position)
         {
             this.Position = position;
-            var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
-            npcDataPacket.Message.Write(this.Pack());
-            _map.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
+            var npcDataPacket = new Packet();
+            npcDataPacket.Write(this.Pack());
+            _map.SendPacket(PacketType.NPC_DATA, npcDataPacket, DeliveryMethod.ReliableOrdered);
 
             this.EventOccured?.Invoke(this, new SubjectEventArgs("moved", null));
         }
 
-        public NetBuffer Pack()
+        public Packet Pack()
         {
-            var netBuffer = new NetBuffer();
+            var packet = new Packet();
 
-            netBuffer.Write(this.UniqueID);
-            netBuffer.Write(this.Name);
-            netBuffer.Write(this.Sprite.TextureName);
-            netBuffer.Write(this.Speed);
-            netBuffer.Write(this.Stats.Vitality);
-            netBuffer.Write(this.Stats.Vitality);
-            netBuffer.Write(this.Level);
-            netBuffer.Write(this.Position.X);
-            netBuffer.Write(this.Position.Y);
-            netBuffer.Write(this.FrameSize);
-            netBuffer.Write(this.CollisionBounds);
-            netBuffer.Write(this.Layer.Name);
+            packet.Write(this.UniqueID);
+            packet.Write(this.Name);
+            packet.Write(this.Sprite.TextureName);
+            packet.Write(this.Speed);
+            packet.Write(this.Stats.Vitality);
+            packet.Write(this.Stats.Vitality);
+            packet.Write(this.Level);
+            packet.Write(this.Position.X);
+            packet.Write(this.Position.Y);
+            packet.Write(this.FrameSize);
+            packet.Write(this.CollisionBounds);
+            packet.Write(this.Layer.Name);
 
-            return netBuffer;
+            return packet;
         }
 
         public event EventHandler Died;

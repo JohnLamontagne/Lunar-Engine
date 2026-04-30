@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Server.Net;
 using System;
 using System.Collections.Generic;
@@ -78,9 +77,9 @@ namespace Lunar.Server.World.Actors
             // Make sure this player isn't already in game.
             if (_players.Values.Any(player => player.Descriptor.Name == username))
             {
-                var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
-                packet.Message.Write("Account already logged in!");
-                connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
+                var packet = new Packet();
+                packet.Write("Account already logged in!");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
                 connection.Disconnect("byeFelicia");
 
                 return false;
@@ -93,9 +92,9 @@ namespace Lunar.Server.World.Actors
             if (playerDescriptor == null)
             {
                 // The account doesn't exist!
-                var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
-                packet.Message.Write("Account does not exist!");
-                connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
+                var packet = new Packet();
+                packet.Write("Account does not exist!");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
                 connection.Disconnect("byeFelicia");
 
                 return false;
@@ -116,8 +115,8 @@ namespace Lunar.Server.World.Actors
 
                 // Now we'll go ahead and tell their client to make whatever preperations that it needs to.
                 // We'll also tell them their super duper unique id.
-                var packet = new Packet(PacketType.LOGIN_SUCCESS, ChannelType.UNASSIGNED);
-                connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
+                var packet = new Packet();
+                connection.SendPacket(PacketType.LOGIN_SUCCESS, packet, DeliveryMethod.Unreliable);
 
                 this.EventOccured?.Invoke(this, new SubjectEventArgs("playerLogin", new object[] { }));
 
@@ -125,9 +124,9 @@ namespace Lunar.Server.World.Actors
             }
             else
             {
-                var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
-                packet.Message.Write("Incorrect password!");
-                connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
+                var packet = new Packet();
+                packet.Write("Incorrect password!");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
                 connection.Disconnect("byeFelicia");
 
                 return false;
@@ -140,9 +139,9 @@ namespace Lunar.Server.World.Actors
 
             if (_playerDataManager.Exists(new PlayerDataArguments(username)))
             {
-                var packet = new Packet(PacketType.LOGIN_FAIL, ChannelType.UNASSIGNED);
-                packet.Message.Write("Account already exists!");
-                connection.SendPacket(packet, NetDeliveryMethod.Unreliable);
+                var packet = new Packet();
+                packet.Write("Account already exists!");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
                 connection.Disconnect("byeFelicia");
 
                 return false;
@@ -158,8 +157,8 @@ namespace Lunar.Server.World.Actors
             this.AddPlayer(player);
 
             // Notify them that they successfully registered.
-            var successPacket = new Packet(PacketType.REGISTER_SUCCESS, ChannelType.UNASSIGNED);
-            player.NetworkComponent.SendPacket(successPacket, NetDeliveryMethod.Unreliable);
+            var successPacket = new Packet();
+            player.NetworkComponent.SendPacket(PacketType.REGISTER_SUCCESS, successPacket, DeliveryMethod.Unreliable);
 
             return true;
         }

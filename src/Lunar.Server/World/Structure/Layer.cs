@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -277,12 +276,12 @@ namespace Lunar.Server.World.Structure
             return this.CheckCollision(collisionBody.CollisionArea);
         }
 
-        public NetBuffer PackData()
+        public Packet PackData()
         {
-            var netBuffer = new NetBuffer();
+            var packet = new Packet();
 
-            netBuffer.Write(this.Name);
-            netBuffer.Write(this.LayerIndex);
+            packet.Write(this.Name);
+            packet.Write(this.LayerIndex);
 
             for (int x = 0; x < this.Tiles.GetLength(0); x++)
             {
@@ -290,30 +289,30 @@ namespace Lunar.Server.World.Structure
                 {
                     if (this.Tiles[x, y] != null)
                     {
-                        netBuffer.Write(true);
+                        packet.Write(true);
 
-                        netBuffer.Write(this.Tiles[x, y].PackData());
+                        packet.Write(this.Tiles[x, y].PackData());
                     }
                     else
-                        netBuffer.Write(false);
+                        packet.Write(false);
                 }
             }
 
-            netBuffer.Write(_collisionDescriptors.Count);
+            packet.Write(_collisionDescriptors.Count);
             foreach (var collisionDescriptorPair in _collisionDescriptors)
             {
-                netBuffer.Write(collisionDescriptorPair.Key.X);
-                netBuffer.Write(collisionDescriptorPair.Key.Y);
-                netBuffer.Write(collisionDescriptorPair.Value.CollisionArea);
+                packet.Write(collisionDescriptorPair.Key.X);
+                packet.Write(collisionDescriptorPair.Key.Y);
+                packet.Write(collisionDescriptorPair.Value.CollisionArea);
             }
 
-            netBuffer.Write(_mapObjects.Count);
+            packet.Write(_mapObjects.Count);
             foreach (var mapObject in _mapObjects)
             {
-                netBuffer.Write(mapObject.Pack());
+                packet.Write(mapObject.Pack());
             }
 
-            return netBuffer;
+            return packet;
         }
     }
 }

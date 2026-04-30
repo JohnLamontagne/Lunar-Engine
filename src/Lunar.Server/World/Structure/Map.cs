@@ -11,7 +11,6 @@
 	limitations under the License.
 */
 
-using Lidgren.Network;
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Pathfinding;
@@ -105,11 +104,11 @@ namespace Lunar.Server.World.Structure
 
         private void SendMapItem(MapItem mapItem)
         {
-            var packet = new Packet(PacketType.MAP_ITEM_SPAWN, ChannelType.UNASSIGNED);
-            packet.Message.Write(mapItem.Position);
-            packet.Message.Write(mapItem.Layer.Name);
-            packet.Message.Write(mapItem.Item.PackData());
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(mapItem.Position);
+            packet.Write(mapItem.Layer.Name);
+            packet.Write(mapItem.Item.PackData());
+            this.SendPacket(PacketType.MAP_ITEM_SPAWN, packet, DeliveryMethod.ReliableOrdered);
         }
 
         public void RemoveItem(Item item)
@@ -118,10 +117,10 @@ namespace Lunar.Server.World.Structure
 
             if (mapItem != null)
             {
-                var packet = new Packet(PacketType.MAP_ITEM_DESPAWN, ChannelType.UNASSIGNED);
-                packet.Message.Write(mapItem.Position);
-                packet.Message.Write(mapItem.Item.PackData());
-                this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+                var packet = new Packet();
+                packet.Write(mapItem.Position);
+                packet.Write(mapItem.Item.PackData());
+                this.SendPacket(PacketType.MAP_ITEM_DESPAWN, packet, DeliveryMethod.ReliableOrdered);
 
                 _mapItems.Remove(mapItem);
             }
@@ -208,9 +207,9 @@ namespace Lunar.Server.World.Structure
 
         public void OnPlayerQuit(Player player)
         {
-            var packet = new Packet(PacketType.PLAYER_LEFT, ChannelType.UNASSIGNED);
-            packet.Message.Write(player.UniqueID);
-            this.SendPacket(packet, NetDeliveryMethod.ReliableOrdered);
+            var packet = new Packet();
+            packet.Write(player.UniqueID);
+            this.SendPacket(PacketType.PLAYER_LEFT, packet, DeliveryMethod.ReliableOrdered);
 
             // Remove the player.
             this.RemoveActor(player.UniqueID);
@@ -219,14 +218,14 @@ namespace Lunar.Server.World.Structure
         public void OnPlayerJoined(Player player)
         {
             // Send map data packet to player.
-            var mapDataPacket = new Packet(PacketType.MAP_DATA, ChannelType.UNASSIGNED);
-            mapDataPacket.Message.Write(this.PackData());
-            player.NetworkComponent.SendPacket(mapDataPacket, NetDeliveryMethod.ReliableOrdered);
+            var mapDataPacket = new Packet();
+            mapDataPacket.Write(this.PackData());
+            player.NetworkComponent.SendPacket(PacketType.MAP_DATA, mapDataPacket, DeliveryMethod.ReliableOrdered);
 
             // Send the joining player to the current map players.
-            var joiningPlayerDataPacket = new Packet(PacketType.PLAYER_JOINED, ChannelType.UNASSIGNED);
-            joiningPlayerDataPacket.Message.Write(player.Pack());
-            this.SendPacket(joiningPlayerDataPacket, NetDeliveryMethod.ReliableOrdered);
+            var joiningPlayerDataPacket = new Packet();
+            joiningPlayerDataPacket.Write(player.Pack());
+            this.SendPacket(PacketType.PLAYER_JOINED, joiningPlayerDataPacket, DeliveryMethod.ReliableOrdered);
 
             // Add player to the map
             this.AddActor(player);
@@ -234,19 +233,19 @@ namespace Lunar.Server.World.Structure
             // Send all map players to player.
             foreach (var p in this.GetActors<Player>())
             {
-                var playerDataPacket = new Packet(PacketType.PLAYER_JOINED, ChannelType.UNASSIGNED);
-                playerDataPacket.Message.Write(p.Pack());
+                var playerDataPacket = new Packet();
+                playerDataPacket.Write(p.Pack());
 
-                player.NetworkComponent.SendPacket(playerDataPacket, NetDeliveryMethod.ReliableOrdered);
+                player.NetworkComponent.SendPacket(PacketType.PLAYER_JOINED, playerDataPacket, DeliveryMethod.ReliableOrdered);
             }
 
             // Send all npcs to the player
             foreach (var npc in this.GetActors<NPC>())
             {
-                var npcDataPacket = new Packet(PacketType.NPC_DATA, ChannelType.UNASSIGNED);
-                npcDataPacket.Message.Write(npc.Pack());
+                var npcDataPacket = new Packet();
+                npcDataPacket.Write(npc.Pack());
 
-                player.NetworkComponent.SendPacket(npcDataPacket, NetDeliveryMethod.ReliableOrdered);
+                player.NetworkComponent.SendPacket(PacketType.NPC_DATA, npcDataPacket, DeliveryMethod.ReliableOrdered);
             }
 
             // Select random starting location
@@ -283,30 +282,29 @@ namespace Lunar.Server.World.Structure
             }
         }
 
-        public void SendPacket(Packet packet, NetDeliveryMethod method)
+        public void SendPacket(PacketType packetType, Packet packet, DeliveryMethod deliveryMethod)
         {
             foreach (var player in this.GetActors<Player>())
             {
-                player.NetworkComponent.SendPacket(packet, method);
-                packet.Reset();
+                player.NetworkComponent.SendPacket(packetType, packet, deliveryMethod);
             }
         }
 
-        public NetBuffer PackData()
+        public Packet PackData()
         {
-            var netBuffer = new NetBuffer();
+            var packet = new Packet();
 
-            netBuffer.Write(this.Name);
-            netBuffer.Write(this.Dimensions);
-            netBuffer.Write(this.Dark);
+            packet.Write(this.Name);
+            packet.Write(this.Dimensions);
+            packet.Write(this.Dark);
 
-            netBuffer.Write(this.Layers.Count);
+            packet.Write(this.Layers.Count);
             foreach (var layer in this.Layers)
             {
-                netBuffer.Write(layer.PackData());
+                packet.Write(layer.PackData());
             }
 
-            return netBuffer;
+            return packet;
         }
 
         public void Unload()
