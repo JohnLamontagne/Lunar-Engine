@@ -1,5 +1,5 @@
 <widgets>
-  <picture name="charBackdrop" texture="gfx/Interface/game/statScreen.png"
+  <picture name="charBackdrop" texture="gfx/Interface/statScreen.png"
            x="50%" y="25%" visible="true" />
 
   <label name="charWindowNameLabel" font="interfaceFont" text="Player Name"

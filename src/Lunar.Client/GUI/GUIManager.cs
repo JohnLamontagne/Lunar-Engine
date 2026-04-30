@@ -37,7 +37,7 @@ namespace Lunar.Client.GUI
             {
                 string fontName = fontEntry.Attribute("name")?.Value;
                 string fontPath = fontEntry.Attribute("path")?.Value;
-                fonts.Add(fontName, content.Load<SpriteFont>(Constants.FILEPATH_DATA + fontPath));
+                fonts.Add(fontName, content.LoadAsset<SpriteFont>(Constants.FILEPATH_DATA + fontPath));
             }
 
             this.LoadWidgets(root, fonts, content, this);
@@ -239,9 +239,10 @@ namespace Lunar.Client.GUI
         private void LoadPicture(XElement e, ContentManager content, WidgetCollection parent)
         {
             var texturePath = Attr(e, "texture");
-            Texture2D texture = texturePath != null
-                ? content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath)
-                : null;
+            if (string.IsNullOrWhiteSpace(texturePath))
+                return;
+
+            Texture2D texture = content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath);
 
             Enum.TryParse(Attr(e, "display", "Normal"), out DisplayWidgetMode displayMode);
 
@@ -269,6 +270,9 @@ namespace Lunar.Client.GUI
             ContentManager content, WidgetCollection parent)
         {
             var texturePath = Attr(e, "texture");
+            var containerName = Attr(e, "name");
+            var parsedPosition = parent.ParsePosition(Attr(e, "x"), Attr(e, "y"));
+            var parsedOrigin = new Vector2(AttrFloat(e, "origin-x"), AttrFloat(e, "origin-y"));
             Texture2D texture = texturePath != null
                 ? content.LoadTexture2D(Constants.FILEPATH_DATA + texturePath)
                 : null;
@@ -277,18 +281,19 @@ namespace Lunar.Client.GUI
                 ? this.ParseSize(Attr(e, "width"), Attr(e, "height"), texture)
                 : Vector2.One;
 
-            var container = new WidgetContainer(texture)
-            {
-                Position  = parent.ParsePosition(Attr(e, "x"), Attr(e, "y")),
-                Origin    = new Vector2(AttrFloat(e, "origin-x"), AttrFloat(e, "origin-y")),
-                Size      = size,
-                ZOrder    = AttrInt(e, "zorder"),
-                Draggable = AttrBool(e, "draggable", false),
-                Visible   = AttrBool(e, "visible")
-            };
+            var container = texture != null
+                ? new WidgetContainer(texture)
+                : new WidgetContainer(size);
+
+            container.Position = parsedPosition;
+            container.Origin = parsedOrigin;
+            container.Size = size;
+            container.ZOrder = AttrInt(e, "zorder");
+            container.Draggable = AttrBool(e, "draggable", false);
+            container.Visible = AttrBool(e, "visible");
 
             this.LoadWidgets(e, fonts, content, container);
-            parent.AddWidget(container, Attr(e, "name"));
+            parent.AddWidget(container, containerName);
         }
 
         private void LoadCheckbox(XElement e, ContentManager content, WidgetCollection parent)

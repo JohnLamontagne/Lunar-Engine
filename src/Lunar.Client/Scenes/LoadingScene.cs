@@ -66,7 +66,7 @@ namespace Lunar.Client.Scenes
         private void InitalizeInterface()
         {
             var loadingIndicatorTexture2D = this.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "Interface/loadingIndicator.png");
-            var loadingFont = this.ContentManager.Load<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/loadingFont");
+            var loadingFont = this.ContentManager.LoadAsset<SpriteFont>(Constants.FILEPATH_GFX + "Fonts/loadingFont");
 
             var picLoadingIndicator = new AnimatedPicture(loadingIndicatorTexture2D, 25,
                 new Vector2(loadingIndicatorTexture2D.Width, loadingIndicatorTexture2D.Height))

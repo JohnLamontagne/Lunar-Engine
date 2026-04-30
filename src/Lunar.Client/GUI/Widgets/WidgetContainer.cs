@@ -244,7 +244,7 @@ namespace Lunar.Client.GUI.Widgets
             else if (posX.Contains("%"))
             {
                 float.TryParse(posX.Replace("%", ""), out float pX);
-                x = this.Size.Y * (pX / 100f);
+                x = this.Size.X * (pX / 100f);
             }
             else
             {

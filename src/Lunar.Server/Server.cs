@@ -54,7 +54,7 @@ namespace Lunar.Server
             Console.WriteLine("Firing up engine...");
 
 #if DEV_MODE
-            string rootPath = AppDomain.CurrentDomain.BaseDirectory + "../../";
+            string rootPath = Engine.FindDevRootPath("Server Data");
 #else
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
 #endif

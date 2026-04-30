@@ -10,9 +10,67 @@ namespace Lunar.Graphics
     {
         private static TextureHandler _textureHandler = new TextureHandler();
 
+        public static T LoadAsset<T>(this ContentManager cM, string assetPath)
+        {
+            return cM.Load<T>(NormalizeAssetPath(cM, assetPath));
+        }
+
         public static Texture2D LoadTexture2D(this ContentManager cM, string path)
         {
             return _textureHandler.LoadTexture2D(cM, path);
+        }
+
+        private static string NormalizeAssetPath(ContentManager contentManager, string assetPath)
+        {
+            if (string.IsNullOrWhiteSpace(assetPath))
+                throw new ArgumentException("Asset path cannot be null or empty.", nameof(assetPath));
+
+            var normalized = assetPath.Replace('\\', '/');
+
+            if (Path.IsPathRooted(normalized))
+            {
+                normalized = ToRelativeContentPath(normalized);
+            }
+
+            normalized = normalized.TrimStart('/');
+
+            var rootDirectory = (contentManager.RootDirectory ?? string.Empty).Replace('\\', '/').Trim('/');
+            if (!string.IsNullOrEmpty(rootDirectory) && normalized.StartsWith(rootDirectory + "/", StringComparison.OrdinalIgnoreCase))
+            {
+                normalized = normalized[(rootDirectory.Length + 1)..];
+            }
+
+            var extension = Path.GetExtension(normalized);
+            if (!string.IsNullOrEmpty(extension))
+            {
+                normalized = normalized[..^extension.Length];
+            }
+
+            return normalized;
+        }
+
+        private static string ToRelativeContentPath(string absolutePath)
+        {
+            var markerMappings = new[]
+            {
+                ("/Client Data/", string.Empty),
+                ("/Data/", string.Empty),
+                ("/gfx/", "gfx/"),
+                ("/music/", "music/"),
+                ("/sfx/", "sfx/")
+            };
+
+            foreach (var (marker, mappedPrefix) in markerMappings)
+            {
+                var markerIndex = absolutePath.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+                if (markerIndex < 0)
+                    continue;
+
+                var relativePart = absolutePath[(markerIndex + marker.Length)..].TrimStart('/');
+                return mappedPrefix + relativePart;
+            }
+
+            return Path.GetFileNameWithoutExtension(absolutePath);
         }
 
         private class TextureHandler

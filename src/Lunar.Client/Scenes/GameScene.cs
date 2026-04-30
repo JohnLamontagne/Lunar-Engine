@@ -150,7 +150,7 @@ namespace Lunar.Client.Scenes
             dialogueWindow.Visible = true;
             dialogueWindow.ClearWidgets();
 
-            var font = this.ContentManager.Load<SpriteFont>(Engine.ROOT_PATH + "gfx/Fonts/dialogueFont");
+            var font = this.ContentManager.LoadAsset<SpriteFont>(Engine.ROOT_PATH + "gfx/Fonts/dialogueFont");
 
             var dialogueTextLabel = new Label(font);
             dialogueTextLabel.Position = new Vector2(dialogueWindow.Position.X + 20, dialogueWindow.Position.Y + 30);
@@ -201,13 +201,13 @@ namespace Lunar.Client.Scenes
         private void ResponseLabel_Mouse_Left(object sender, EventArgs e)
         {
             // Make the text regular
-            ((Label)sender).Font = this.ContentManager.Load<SpriteFont>(Engine.ROOT_PATH + "/gfx/Fonts/dialogueFont");
+            ((Label)sender).Font = this.ContentManager.LoadAsset<SpriteFont>(Engine.ROOT_PATH + "/gfx/Fonts/dialogueFont");
         }
 
         private void ResponseLabel_Mouse_Hover(object sender, EventArgs e)
         {
             // Make the text bold
-            ((Label)sender).Font = this.ContentManager.Load<SpriteFont>(Engine.ROOT_PATH + "/gfx/Fonts/dialogueFont_B");
+            ((Label)sender).Font = this.ContentManager.LoadAsset<SpriteFont>(Engine.ROOT_PATH + "/gfx/Fonts/dialogueFont_B");
         }
 
         private void ResponseLabel_Clicked(object sender, WidgetClickedEventArgs e)

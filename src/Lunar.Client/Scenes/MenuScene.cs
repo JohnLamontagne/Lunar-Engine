@@ -23,6 +23,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Diagnostics;
 using GameTime = Microsoft.Xna.Framework.GameTime;
 using Label = Lunar.Client.GUI.Widgets.Label;
 
@@ -151,7 +152,18 @@ namespace Lunar.Client.Scenes
 
         private void WebsiteButton_Clicked(object sender, WidgetClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(Settings.Website);
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Settings.Website,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to open website: {0}", ex.Message);
+            }
         }
 
         private void MuteMusicCheckbox_Clicked(object sender, WidgetClickedEventArgs e)
