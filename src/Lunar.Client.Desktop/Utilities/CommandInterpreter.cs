@@ -56,7 +56,7 @@ namespace Lunar.Client.Utilities
         {
             _manualInterpreter.Execute(output, input);
 
-            if (Client.ServiceLocator.Get<NetHandler>().Connected)
+            if (Engine.Services.Get<NetHandler>().Connected)
             {
                 string[] instructions = input.Split(InstructionSeparator, StringSplitOptions.RemoveEmptyEntries);
 

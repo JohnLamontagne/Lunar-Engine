@@ -11,23 +11,24 @@
 	limitations under the License.
 */
 
-using System;
+using Lunar.Core.Utilities;
+using Penumbra;
 
-namespace Lunar.Client
+namespace Lunar.Client.Utilities.Services
 {
-    /// <summary>
-    /// The main class.
-    /// </summary>
-    public static class Program
+    public class LightManagerService : IService
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        private static void Main()
+        private PenumbraComponent _component;
+
+        public PenumbraComponent Component => _component;
+
+        public LightManagerService(PenumbraComponent component)
         {
-            using (var game = new Client())
-                game.Run();
+            _component = component;
+        }
+
+        public void Initalize()
+        {
         }
     }
 }

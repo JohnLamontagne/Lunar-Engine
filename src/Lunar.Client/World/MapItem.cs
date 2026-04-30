@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 
+using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Client.Utilities;
 using Microsoft.Xna.Framework;
@@ -45,7 +46,7 @@ namespace Lunar.Client.World
             _name = netBuffer.ReadString();
 
             var textureName = netBuffer.ReadString();
-            _sprite = new Sprite(Client.ServiceLocator.Get<ContentManagerService>()
+            _sprite = new Sprite(Engine.Services.Get<ContentManagerService>()
                 .ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName));
 
             _sprite.Transform.Position = position.ToLunar();

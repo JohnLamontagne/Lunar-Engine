@@ -17,9 +17,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/Lunar.Client/bin/Debug/net9.0/Lunar.Client.dll",
+      "program": "${workspaceFolder}/src/Lunar.Client.Desktop/bin/Debug/net9.0/Lunar.Client.Desktop.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/src/Lunar.Client",
+      "cwd": "${workspaceFolder}/src/Lunar.Client.Desktop",
       "stopAtEntry": false,
       "console": "integratedTerminal"
     }

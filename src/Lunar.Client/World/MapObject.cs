@@ -75,7 +75,7 @@ namespace Lunar.Client.World
             float zIndex = netBuffer.ReadSingle();
             var frameTime = netBuffer.ReadInt32();
 
-            var sprite = new AnimatedSprite(Client.ServiceLocator.Get<ContentManagerService>().ContentManager
+            var sprite = new AnimatedSprite(Engine.Services.Get<ContentManagerService>().ContentManager
                 .LoadTexture2D(Constants.FILEPATH_DATA + textureName));
 
             sprite.Transform.Rect = sourceRectangle.ToLunar();

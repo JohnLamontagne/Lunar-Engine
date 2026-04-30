@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <RootNamespace>Lunar.Client</RootNamespace>
+    <AssemblyName>Lunar.Client.Desktop</AssemblyName>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <Authors>John Lamontagne</Authors>
+    <Product>Lunar.Client.Desktop</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.QuakeConsole.DesktopGL" Version="3.0.0" />
+    <PackageReference Include="MonoGame.QuakeConsole.ManualInterpreter.DesktopGL" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lunar.Client\Lunar.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icon.bmp" />
+    <None Update="Client Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+
+</Project>

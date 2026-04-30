@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Mobile client scaffold — not yet buildable without Android/iOS workloads
+    and a Penumbra lighting abstraction in Lunar.Client.
+
+    Prerequisites before building:
+      dotnet workload install android ios
+
+    Then resolve the Penumbra dependency: Lunar.Client currently references
+    MonoGame.Penumbra.DesktopGL. Before Mobile can build, the lighting system
+    needs to be abstracted behind an interface (ILightManager) so each platform
+    can supply its own implementation.
+  -->
+
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Lunar.Client.Mobile</RootNamespace>
+    <AssemblyName>Lunar.Client.Mobile</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <Authors>John Lamontagne</Authors>
+    <Product>Lunar.Client.Mobile</Product>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+    <PackageReference Include="MonoGame.Framework.Android" Version="3.8.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+    <PackageReference Include="MonoGame.Framework.iOS" Version="3.8.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteNetLib" Version="2.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lunar.Core\Lunar.Core.csproj" />
+    <ProjectReference Include="..\Lunar.Graphics\Lunar.Graphics.csproj" />
+    <!--
+      TODO: Reference Lunar.Client once Penumbra is abstracted.
+      <ProjectReference Include="..\Lunar.Client\Lunar.Client.csproj" />
+    -->
+  </ItemGroup>
+
+</Project>
