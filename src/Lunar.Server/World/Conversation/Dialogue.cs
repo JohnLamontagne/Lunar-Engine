@@ -18,7 +18,7 @@ using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Server.Net;
-using Lunar.Server.Utilities.Scripting;
+using Lunar.Server.Scripting.Api;
 using Lunar.Server.World.Actors;
 
 namespace Lunar.Server.World.Conversation
@@ -34,18 +34,10 @@ namespace Lunar.Server.World.Conversation
         public string ScriptPath
         {
             get => _scriptPath;
-            set
-            {
-                _scriptPath = value;
-
-                if (this.Script != null)
-                {
-                    this.Script.Reload(Constants.FILEPATH_DATA + "/" + _scriptPath);
-                }
-            }
+            set => _scriptPath = value;
         }
 
-        public Script Script { get; set; }
+        public DialogueScript Script { get; set; }
 
         public IList<DialogueBranch> Branches => _branches.Values.ToList();
 

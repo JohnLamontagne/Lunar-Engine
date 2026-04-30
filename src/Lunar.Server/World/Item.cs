@@ -17,8 +17,8 @@ using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
-using Lunar.Server.Utilities.Scripting;
-using Lunar.Server.World.BehaviorDefinition;
+using Lunar.Server.Scripting;
+using Lunar.Server.Scripting.Api;
 using Lunar.Server.World.Actors;
 using Lunar.Core.Utilities;
 using Lunar.Core;
@@ -27,20 +27,15 @@ namespace Lunar.Server.World
 {
     public class Item
     {
-        private readonly ScriptManager _scriptManager;
-
         public ItemModel Descriptor { get; }
 
-        public ItemBehaviorDefinition BehaviorDefinition { get; set; }
+        public ItemBehavior Behavior { get; }
 
-        public Item(ItemModel descriptor, ScriptManager scriptManager, Logger logger)
+        public Item(ItemModel descriptor, ScriptHost scriptHost, Logger logger)
         {
-            _scriptManager = scriptManager;
-
             if (descriptor == null)
             {
                 logger.LogEvent("Null item!", LogTypes.ERROR, new Exception("Null item"));
-
                 Descriptor = new ItemModel()
                 {
                     Name = "Null",
@@ -49,75 +44,22 @@ namespace Lunar.Server.World
                 return;
             }
 
-            this.InitalizeHooks();
+            Descriptor = descriptor;
 
-            this.BehaviorDefinition.OnCreated?.Invoke(new ItemArgs(this));
-        }
+            scriptHost.TryCreateItemBehavior(descriptor.BehaviorKey, out var behavior);
+            Behavior = behavior;
 
-        private void InitalizeHooks()
-        {
-            this.BehaviorDefinition = new ItemBehaviorDefinition();
-
-            foreach (var pair in this.Descriptor.Scripts)
-            {
-                string scriptActionHook = pair.Key;
-                string scriptContent = pair.Value;
-
-                Script script = _scriptManager.CreateScriptFromSource(scriptContent);
-
-                switch (scriptActionHook)
-                {
-                    case "OnAcquired":
-                        BehaviorDefinition.OnAcquired = new Action<ServerArgs>((args) =>
-                            {
-                                script.Invoke("on_acquired", args);
-                            }
-                        );
-                        break;
-
-                    case "OnCreated":
-                        BehaviorDefinition.OnCreated = new Action<ServerArgs>((args) =>
-                            {
-                                script.Invoke("on_created", args);
-                            }
-                        );
-                        break;
-
-                    case "OnDropped":
-                        BehaviorDefinition.OnDropped = new Action<ServerArgs>((args) =>
-                            {
-                                script.Invoke("on_dropped", args);
-                            }
-                        );
-                        break;
-
-                    case "OnEquip":
-                        BehaviorDefinition.OnEquip = new Action<ServerArgs>((args) =>
-                            {
-                                script.Invoke("on_equip", args);
-                            }
-                        );
-                        break;
-
-                    case "OnUse":
-                        BehaviorDefinition.OnUse = new Action<ServerArgs>((args) =>
-                            {
-                                script.Invoke("on_use", args);
-                            }
-                        );
-                        break;
-                }
-            }
+            Behavior?.OnCreated(this);
         }
 
         public void OnUse(IActor user)
         {
-            this.BehaviorDefinition?.OnUse?.Invoke(new ItemInteractionArgs(this, user));
+            Behavior?.OnUse(this, user);
         }
 
         public void OnEquip(IActor user)
         {
-            this.BehaviorDefinition?.OnEquip?.Invoke(new ItemInteractionArgs(this, user));
+            Behavior?.OnEquip(this, user);
         }
 
         public Packet PackData()

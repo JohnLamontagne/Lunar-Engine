@@ -41,7 +41,7 @@ namespace Lunar.Server.World
             Console.WriteLine("Loading Items...");
 
             var directoryInfo = new DirectoryInfo(Constants.FILEPATH_ITEMS);
-            FileInfo[] files = directoryInfo.GetFiles($"*.{EngineConstants.ITEM_FILE_EXT}");
+            FileInfo[] files = directoryInfo.GetFiles($"*{EngineConstants.ITEM_FILE_EXT}");
 
             foreach (var file in files)
             {

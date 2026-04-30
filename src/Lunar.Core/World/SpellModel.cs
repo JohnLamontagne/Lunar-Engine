@@ -12,8 +12,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor;
@@ -24,7 +22,6 @@ namespace Lunar.Core.World
     {
         private string _name;
         private SpriteInfo _displaySprite;
-        private Dictionary<string, string> _scripts;
         private int _castTime;
         private int _activeTime;
 
@@ -52,7 +49,7 @@ namespace Lunar.Core.World
             set => _displaySprite = value;
         }
 
-        public Dictionary<string, string> Scripts => _scripts;
+        public string BehaviorKey { get; set; }
 
         public int CastTime
         {
@@ -72,7 +69,6 @@ namespace Lunar.Core.World
 
         public SpellModel()
         {
-            _scripts = new Dictionary<string, string>();
             this.StatModifiers = new Stats();
             this.ReqStats = new Stats();
             this.StatRequirements = new Stats();

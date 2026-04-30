@@ -23,8 +23,8 @@ using Lunar.Core.World;
 using Lunar.Core.World.Actor.Descriptors;
 using Lunar.Server.Utilities;
 using Lunar.Server.World.Structure;
-using Lunar.Server.Utilities.Scripting;
-using Lunar.Server.World.BehaviorDefinition;
+using Lunar.Server.Scripting;
+using Lunar.Server.Scripting.Api;
 using Lunar.Core;
 using Lunar.Server.World.Conversation;
 
@@ -36,10 +36,9 @@ namespace Lunar.Server.World.Actors
         private Stack<Vector> _targetPath;
         private Random _random;
         private long _nextMoveTime;
-        private List<Script> _scripts;
 
         private readonly Logger _logger;
-        private readonly ScriptManager _scriptManager;
+        private readonly ScriptHost _scriptHost;
 
         private float _avgMoveSpeedX = 0;
         private float _avgMoveSpeedY = 0;
@@ -60,7 +59,7 @@ namespace Lunar.Server.World.Actors
 
         public bool Alive => this.Stats.Vitality > 0;
 
-        public ActorBehaviorDefinition Behavior { get; set; }
+        public ActorBehavior Behavior { get; set; }
 
         public ActorStateMachine<NPC> StateMachine { get; }
 
@@ -72,10 +71,9 @@ namespace Lunar.Server.World.Actors
 
         public new Dialogue Dialogue { get; }
 
-        private NPC(NPCModel descriptor, ScriptManager scriptManager, Logger logger, DialogueManager dialogueManager)
+        private NPC(NPCModel descriptor, ScriptHost scriptHost, Logger logger, DialogueManager dialogueManager)
         {
-            _scripts = new List<Script>();
-            _scriptManager = scriptManager;
+            _scriptHost = scriptHost;
             _logger = logger;
 
             this.Name = descriptor.Name;
@@ -97,7 +95,8 @@ namespace Lunar.Server.World.Actors
             this.CollisionBounds = descriptor.CollisionBounds;
             this.DialogueBranch = descriptor.DialogueBranch;
 
-            this.InitalizeScripts(descriptor.Scripts);
+            scriptHost.TryCreateNpcBehavior(descriptor.BehaviorKey, out var behavior);
+            this.Behavior = behavior;
 
             if (!string.IsNullOrEmpty(descriptor.Dialogue))
             {
@@ -106,8 +105,8 @@ namespace Lunar.Server.World.Actors
             }
         }
 
-        public NPC(NPCModel descriptor, Map map, ScriptManager scriptManager, Logger logger, DialogueManager dialogueManager)
-            : this(descriptor, scriptManager, logger, dialogueManager)
+        public NPC(NPCModel descriptor, Map map, ScriptHost scriptHost, Logger logger, DialogueManager dialogueManager)
+            : this(descriptor, scriptHost, logger, dialogueManager)
         {
             if (descriptor == null)
             {
@@ -141,20 +140,6 @@ namespace Lunar.Server.World.Actors
             catch (Exception ex)
             {
                 _logger.LogEvent("Error handling OnCreated: " + ex.Message, LogTypes.ERROR, ex);
-            }
-        }
-
-        private void InitalizeScripts(IEnumerable<string> scriptPaths)
-        {
-            foreach (var scriptPath in scriptPaths)
-            {
-                Script script = _scriptManager.CreateScript(Constants.FILEPATH_DATA + scriptPath);
-                ActorBehaviorDefinition behaviorDefinition = script?.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
-
-                if (behaviorDefinition != null)
-                {
-                    this.Behavior = behaviorDefinition;
-                }
             }
         }
 

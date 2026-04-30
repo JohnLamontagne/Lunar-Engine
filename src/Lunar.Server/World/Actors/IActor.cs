@@ -14,8 +14,8 @@
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Actor.Descriptors;
+using Lunar.Server.Scripting.Api;
 using Lunar.Server.Utilities;
-using Lunar.Server.World.BehaviorDefinition;
 using Lunar.Server.World.Structure;
 
 namespace Lunar.Server.World.Actors
@@ -30,7 +30,7 @@ namespace Lunar.Server.World.Actors
 
         Layer Layer { get; set; }
 
-        ActorBehaviorDefinition Behavior { get; }
+        ActorBehavior Behavior { get; }
 
         CollisionBody CollisionBody { get; }
 

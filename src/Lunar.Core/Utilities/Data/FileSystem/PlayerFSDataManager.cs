@@ -1,4 +1,4 @@
-﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 
 using System;
 using System.IO;
+using System.Text.Json;
 using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities;
@@ -26,72 +27,56 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 {
     public class PlayerFSDataManager : FSDataManager<PlayerModel>
     {
+        private record StatsDto(int Strength, int Intelligence, int Dexterity, int Defense, int Vitality);
+        private record PlayerDto(
+            string Name,
+            string Password,
+            string SpriteName,
+            int SpriteFrameWidth,
+            int SpriteFrameHeight,
+            float Speed,
+            StatsDto Stats,
+            int Level,
+            float PositionX,
+            float PositionY,
+            string MapID,
+            string RoleName,
+            int RoleLevel,
+            float ReachX,
+            float ReachY
+        );
+
+        private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+
         public override PlayerModel Load(IDataManagerArguments arguments)
         {
             string filePath = this.RootPath + (arguments as PlayerDataArguments).Username + EngineConstants.ACC_FILE_EXT;
 
-            string name = "";
-            string password = "";
-            SpriteSheet sprite;
-            float speed;
-            int level;
-            int health;
-            int maximumHealth;
-            int strength;
-            int intelligence;
-            int dexterity;
-            int defense;
-            Vector position;
-            string mapID;
-            Role role;
-            Vector reach;
-
             try
             {
-                using (var fileStream = new FileStream(filePath, FileMode.Open))
-                {
-                    using (var binaryReader = new BinaryReader(fileStream))
-                    {
-                        name = binaryReader.ReadString();
-                        password = binaryReader.ReadString();
-                        sprite = new SpriteSheet(new SpriteInfo(binaryReader.ReadString()), binaryReader.ReadInt32(), binaryReader.ReadInt32());
-                        speed = binaryReader.ReadSingle();
-                        maximumHealth = binaryReader.ReadInt32();
-                        health = binaryReader.ReadInt32();
-                        strength = binaryReader.ReadInt32();
-                        intelligence = binaryReader.ReadInt32();
-                        dexterity = binaryReader.ReadInt32();
-                        defense = binaryReader.ReadInt32();
-                        level = binaryReader.ReadInt32();
-                        position = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                        mapID = binaryReader.ReadString();
-                        role = new Role(binaryReader.ReadString(), binaryReader.ReadInt32());
-                        reach = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                    }
-                }
+                string json = File.ReadAllText(filePath);
+                var dto = JsonSerializer.Deserialize<PlayerDto>(json, JsonOptions);
 
-                var playerDescriptor = new PlayerModel(name, password)
+                return new PlayerModel(dto.Name, dto.Password)
                 {
-                    SpriteSheet = sprite,
-                    Speed = speed,
-                    Level = level,
-                    Position = position,
-                    MapID = mapID,
+                    SpriteSheet = new SpriteSheet(new SpriteInfo(dto.SpriteName), dto.SpriteFrameWidth, dto.SpriteFrameHeight),
+                    Speed = dto.Speed,
                     Stats = new Stats()
                     {
-                        Vitality = health,
-                        Strength = strength,
-                        Intelligence = intelligence,
-                        Dexterity = dexterity,
-                        Defense = defense,
+                        Strength = dto.Stats.Strength,
+                        Intelligence = dto.Stats.Intelligence,
+                        Dexterity = dto.Stats.Dexterity,
+                        Defense = dto.Stats.Defense,
+                        Vitality = dto.Stats.Vitality,
                     },
-                    Role = role,
-                    Reach = reach
+                    Level = dto.Level,
+                    Position = new Vector(dto.PositionX, dto.PositionY),
+                    MapID = dto.MapID,
+                    Role = new Role(dto.RoleName, dto.RoleLevel),
+                    Reach = new Vector(dto.ReachX, dto.ReachY),
                 };
-
-                return playerDescriptor;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -99,34 +84,28 @@ namespace Lunar.Core.Utilities.Data.FileSystem
 
         public override void Save(IContentModel descriptor, IDataManagerArguments arguments)
         {
-            PlayerModel playerDescriptor = ((PlayerModel)descriptor);
+            var p = (PlayerModel)descriptor;
+            string filePath = this.RootPath + p.Name + EngineConstants.ACC_FILE_EXT;
 
-            using (var fileStream = new FileStream(this.RootPath + playerDescriptor.Name + EngineConstants.ACC_FILE_EXT, FileMode.OpenOrCreate))
-            {
-                using (var binaryWriter = new BinaryWriter(fileStream))
-                {
-                    binaryWriter.Write(playerDescriptor.Name);
-                    binaryWriter.Write(playerDescriptor.Password);
-                    binaryWriter.Write(playerDescriptor.SpriteSheet.Sprite.TextureName);
-                    binaryWriter.Write(playerDescriptor.SpriteSheet.FrameWidth);
-                    binaryWriter.Write(playerDescriptor.SpriteSheet.FrameHeight);
-                    binaryWriter.Write(playerDescriptor.Speed);
-                    binaryWriter.Write(playerDescriptor.Stats.Vitality);
-                    binaryWriter.Write(playerDescriptor.Stats.Vitality);
-                    binaryWriter.Write(playerDescriptor.Stats.Strength);
-                    binaryWriter.Write(playerDescriptor.Stats.Intelligence);
-                    binaryWriter.Write(playerDescriptor.Stats.Dexterity);
-                    binaryWriter.Write(playerDescriptor.Stats.Defense);
-                    binaryWriter.Write(playerDescriptor.Level);
-                    binaryWriter.Write(playerDescriptor.Position.X);
-                    binaryWriter.Write(playerDescriptor.Position.Y);
-                    binaryWriter.Write(playerDescriptor.MapID);
-                    binaryWriter.Write(playerDescriptor.Role.Name);
-                    binaryWriter.Write(playerDescriptor.Role.Level);
-                    binaryWriter.Write(playerDescriptor.Reach.X);
-                    binaryWriter.Write(playerDescriptor.Reach.Y);
-                }
-            }
+            var dto = new PlayerDto(
+                p.Name,
+                p.Password,
+                p.SpriteSheet.Sprite.TextureName,
+                p.SpriteSheet.FrameWidth,
+                p.SpriteSheet.FrameHeight,
+                p.Speed,
+                new StatsDto(p.Stats.Strength, p.Stats.Intelligence, p.Stats.Dexterity, p.Stats.Defense, p.Stats.Vitality),
+                p.Level,
+                p.Position.X,
+                p.Position.Y,
+                p.MapID,
+                p.Role.Name,
+                p.Role.Level,
+                p.Reach.X,
+                p.Reach.Y
+            );
+
+            File.WriteAllText(filePath, JsonSerializer.Serialize(dto, JsonOptions));
         }
 
         public override bool Exists(IDataManagerArguments arguments)

@@ -14,7 +14,7 @@
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Commands;
-using Lunar.Server.Utilities.Scripting;
+using Lunar.Server.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +49,7 @@ namespace Lunar.Server.World.Actors
             return new Player(
                 descriptor,
                 connection,
-                _services.GetRequiredService<ScriptManager>(),
+                _services.GetRequiredService<ScriptHost>(),
                 _services.GetRequiredService<CommandHandler>(),
                 _services.GetRequiredService<Logger>());
         }

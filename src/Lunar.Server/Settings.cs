@@ -57,8 +57,6 @@ namespace Lunar.Server
 
         public static Dictionary<string, Role> UserPermissions { get; private set; }
 
-        public static string IronPythonLibsDirectory { get; private set; }
-
         public static bool SuppressErrors { get; private set; }
 
         private static Logger _logger;
@@ -94,7 +92,6 @@ namespace Lunar.Server
                     tileSize = 32,
                     mapItemWidth = 32,
                     mapItemHeight = 32,
-                    ironPythonLibsDir = "C:/Program Files/IronPython 2.7/Lib",
                     suppressErrors = true
                 },
                 roles = new
@@ -137,14 +134,13 @@ namespace Lunar.Server
                 Settings.TileSize = advancedSettings.GetProperty("tileSize").GetInt32();
                 Settings.MapItemWidth = advancedSettings.GetProperty("mapItemWidth").GetInt32();
                 Settings.MapItemHeight = advancedSettings.GetProperty("mapItemHeight").GetInt32();
-                Settings.IronPythonLibsDirectory = advancedSettings.GetProperty("ironPythonLibsDir").GetString();
                 Settings.SuppressErrors = advancedSettings.GetProperty("suppressErrors").GetBoolean();
 
                 Settings.Roles = new Dictionary<string, Role>();
                 var rolesSettings = root.GetProperty("roles");
                 foreach (var roleProp in rolesSettings.EnumerateObject())
                 {
-                    Settings.Roles.Add(roleProp.Name, new Role(roleProp.Name, roleProp.Value.GetInt32()));
+                    Settings.Roles.Add(roleProp.Name.ToLower(), new Role(roleProp.Name.ToLower(), roleProp.Value.GetInt32()));
                 }
 
                 string defaultRole = root.GetProperty("defaultRole").GetString();
@@ -188,7 +184,7 @@ namespace Lunar.Server
                 foreach (var permission in root.GetProperty("permissions").EnumerateArray())
                 {
                     string userName = permission.GetProperty("name").GetString();
-                    string roleName = permission.GetProperty("role").GetString();
+                    string roleName = permission.GetProperty("role").GetString().ToLower();
 
                     Role role = Settings.Roles[roleName] ?? Role.Default;
 

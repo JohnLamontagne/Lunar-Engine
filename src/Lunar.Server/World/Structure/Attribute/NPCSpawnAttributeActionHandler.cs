@@ -2,16 +2,11 @@
 using Lunar.Core.Utilities;
 using Lunar.Core.Utilities.Data;
 using Lunar.Core.World.Structure.Attribute;
+using Lunar.Server.Scripting;
 using Lunar.Server.Utilities;
-using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
 using Lunar.Server.World.Conversation;
-using Lunar.Server.World.Structure.Attribute;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lunar.Server.World.Structure.Attribute
 {
@@ -21,15 +16,15 @@ namespace Lunar.Server.World.Structure.Attribute
         private readonly NPCHeartbeatListener _heartbeatListener;
         private readonly NPCManager _npcManager;
         private readonly Logger _logger;
-        private readonly ScriptManager _scriptManager;
+        private readonly ScriptHost _scriptHost;
         private readonly DialogueManager _dialogueManager;
 
-        public NPCSpawnAttributeActionHandler(NPCManager npcManager, Logger logger, ScriptManager scriptManager, DialogueManager dialogueManager)
+        public NPCSpawnAttributeActionHandler(NPCManager npcManager, Logger logger, ScriptHost scriptHost, DialogueManager dialogueManager)
         {
             _heartbeatListener = new NPCHeartbeatListener();
             _npcManager = npcManager;
             _logger = logger;
-            _scriptManager = scriptManager;
+            _scriptHost = scriptHost;
             _dialogueManager = dialogueManager;
         }
 
@@ -61,7 +56,7 @@ namespace Lunar.Server.World.Structure.Attribute
                     return;
                 }
 
-                NPC npc = new NPC(npcDesc, tile.Layer.Map, _scriptManager, _logger, _dialogueManager)
+                NPC npc = new NPC(npcDesc, tile.Layer.Map, _scriptHost, _logger, _dialogueManager)
                 {
                     Layer = tile.Layer
                 };

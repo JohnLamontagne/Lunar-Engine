@@ -13,8 +13,8 @@
 
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
-using Lunar.Server.Utilities.Scripting;
-using Lunar.Server.World.BehaviorDefinition;
+using Lunar.Server.Scripting;
+using Lunar.Server.Scripting.Api;
 using Lunar.Server.World.Structure;
 using System;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace Lunar.Server.World.Actors
 
         private Map _map;
 
-        private Script _script;
+        private readonly ScriptHost _scriptHost;
 
         private Dictionary<string, List<Action<EventArgs>>> _eventHandlers;
 
@@ -106,18 +106,19 @@ namespace Lunar.Server.World.Actors
 
         public Direction Direction { get; set; }
 
-        public ActorBehaviorDefinition Behavior { get; }
+        public ActorBehavior Behavior { get; private set; }
 
         public CollisionBody CollisionBody { get; }
 
         private readonly Logger _logger;
 
-        public Player(PlayerModel descriptor, PlayerConnection connection, ScriptManager scriptManager, CommandHandler commandHandler, Logger logger)
+        public Player(PlayerModel descriptor, PlayerConnection connection, ScriptHost scriptHost, CommandHandler commandHandler, Logger logger)
         {
             _descriptor = descriptor;
             _connection = connection;
             _connection.Player = this;
             _logger = logger;
+            _scriptHost = scriptHost;
             this.State = ActorStates.Idle;
 
             this.Descriptor.CollisionBounds = new Rect(16, 52, 16, 20);
@@ -132,29 +133,33 @@ namespace Lunar.Server.World.Actors
 
             _eventHandlers = new Dictionary<string, List<Action<EventArgs>>>();
 
-            Script script = scriptManager.CreateScript(Constants.FILEPATH_SCRIPTS + "player.py");
-            _script = script;
+            Behavior = scriptHost.CreatePlayerBehavior(descriptor.Role?.Name, null);
 
-            try
+            if (Behavior == null)
             {
-                this.Behavior = script.GetVariable<ActorBehaviorDefinition>("BehaviorDefinition");
-            }
-            catch { }
-
-            if (this.Behavior == null)
-            {
-                _logger.LogEvent("Error hooking player behavior definition.", LogTypes.ERROR, new Exception("Error hooking player behavior definition."));
+                _logger.LogEvent("No player behavior found.", LogTypes.ERROR, new Exception("No player behavior found."));
             }
             else
             {
-                this.Behavior.OnCreated(this);
-                this.Behavior.EventOccured += this.BehaviorDescriptor_EventOccured;
+                Behavior.OnCreated(this);
+                Behavior.EventOccured += this.BehaviorDescriptor_EventOccured;
             }
+
+            scriptHost.ReloadCompleted += this.OnScriptReloadCompleted;
 
             this.Descriptor.Stats.Changed += (o, args) =>
             {
                 this.NetworkComponent.SendPlayerStats();
             };
+        }
+
+        private void OnScriptReloadCompleted(object sender, EventArgs e)
+        {
+            if (Behavior != null)
+                Behavior.EventOccured -= this.BehaviorDescriptor_EventOccured;
+            Behavior = _scriptHost.CreatePlayerBehavior(this.Descriptor.Role?.Name, null);
+            if (Behavior != null)
+                Behavior.EventOccured += this.BehaviorDescriptor_EventOccured;
         }
 
         private void OnDeath()

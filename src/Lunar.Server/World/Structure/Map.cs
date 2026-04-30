@@ -12,9 +12,9 @@
 */
 
 using Lunar.Server.Net;
+using Lunar.Server.Scripting;
 using Lunar.Server.Utilities;
 using Lunar.Server.Utilities.Pathfinding;
-using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
 using Lunar.Server.World.Structure.Attribute;
 using System;
@@ -45,9 +45,9 @@ namespace Lunar.Server.World.Structure
         private readonly Logger _logger;
 
         public TileAttributeActionHandlerFactory AttributeHandlerFactory { get; }
-        public ScriptManager ScriptManager { get; }
+        public ScriptHost ScriptHost { get; }
 
-        public Map(MapModel<LayerModel<TileModel<SpriteInfo>>> descriptor, TileAttributeActionHandlerFactory attributeHandlerFactory, ScriptManager scriptManager, Logger logger)
+        public Map(MapModel<LayerModel<TileModel<SpriteInfo>>> descriptor, TileAttributeActionHandlerFactory attributeHandlerFactory, ScriptHost scriptHost, Logger logger)
         {
             _actors = new WorldDictionary<string, IActor>();
             _actorCollidingObjects = new WorldDictionary<IActor, List<MapObject>>();
@@ -57,7 +57,7 @@ namespace Lunar.Server.World.Structure
             _logger = logger;
 
             this.AttributeHandlerFactory = attributeHandlerFactory;
-            this.ScriptManager = scriptManager;
+            this.ScriptHost = scriptHost;
 
             this.Name = descriptor.Name;
             this.Bounds = descriptor.Bounds;

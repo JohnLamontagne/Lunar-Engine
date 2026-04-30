@@ -3,8 +3,10 @@ using Lunar.Core.Net;
 using Lunar.Core.Utilities;
 using Lunar.Server.Net;
 using Lunar.Server.World.Actors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Lunar.Server.World.Conversation
 {
@@ -56,12 +58,44 @@ namespace Lunar.Server.World.Conversation
 
                 if (response.IsScripted)
                 {
-                    this.Dialogue.Script?.Invoke(response.Function, new DialogueArgs(this.Dialogue, player));
+                    InvokeScriptMethod(response.Function, this.Dialogue, player);
                 }
                 else
                 {
                     this.Dialogue.Play(response.Next, player);
                 }
+            }
+        }
+
+        private void InvokeScriptMethod(string methodName, Dialogue dialogue, Player player)
+        {
+            var script = dialogue.Script;
+            if (script == null) return;
+            var method = script.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
+            if (method == null)
+            {
+                _logger.LogEvent($"Dialogue script method '{methodName}' not found on {script.GetType().Name}.", LogTypes.ERROR);
+                return;
+            }
+            try { method.Invoke(script, new object[] { dialogue, player }); }
+            catch (Exception ex) { _logger.LogEvent($"Error invoking dialogue script method '{methodName}': {ex.Message}", LogTypes.ERROR, ex); }
+        }
+
+        private bool? InvokeScriptCondition(string methodName, Dialogue dialogue, Player player)
+        {
+            var script = dialogue.Script;
+            if (script == null) return null;
+            var method = script.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
+            if (method == null)
+            {
+                _logger.LogEvent($"Dialogue script condition '{methodName}' not found on {script.GetType().Name}.", LogTypes.ERROR);
+                return null;
+            }
+            try { return (bool)method.Invoke(script, new object[] { dialogue, player }); }
+            catch (Exception ex)
+            {
+                _logger.LogEvent($"Error invoking dialogue script condition '{methodName}': {ex.Message}", LogTypes.ERROR, ex);
+                return null;
             }
         }
 
@@ -82,7 +116,7 @@ namespace Lunar.Server.World.Conversation
             {
                 if (!string.IsNullOrEmpty(response.Condition))
                 {
-                    var displayable = this.Dialogue.Script?.Invoke<bool>(response.Condition, new DialogueArgs(this.Dialogue, player));
+                    var displayable = InvokeScriptCondition(response.Condition, this.Dialogue, player);
 
                     if (!displayable.HasValue)
                     {

@@ -12,7 +12,6 @@
 */
 
 using System;
-using System.Collections.Generic;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data.Management;
 
@@ -30,7 +29,6 @@ namespace Lunar.Core.World
         private int _defence;
         private int _health;
         private ItemTypes _itemType;
-        private Dictionary<string, string> _scripts;
 
         public string Name
         {
@@ -62,7 +60,7 @@ namespace Lunar.Core.World
             set => _slotType = value;
         }
 
-        public Dictionary<string, string> Scripts => _scripts;
+        public string BehaviorKey { get; set; }
 
         public int Strength
         {
@@ -96,7 +94,6 @@ namespace Lunar.Core.World
 
         public ItemModel()
         {
-            _scripts = new Dictionary<string, string>();
         }
 
         public static ItemModel Create()

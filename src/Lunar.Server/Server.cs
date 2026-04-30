@@ -14,7 +14,7 @@
 
 using Lunar.Server.Net;
 using Lunar.Server.Utilities;
-using Lunar.Server.Utilities.Scripting;
+using Lunar.Server.Scripting;
 using Lunar.Server.World;
 using Lunar.Server.World.Actors;
 using Lunar.Server.World.Structure;
@@ -97,8 +97,8 @@ namespace Lunar.Server
             services.AddSingleton<GameEventListener>();
             services.AddSingleton<PluginManager>();
             services.AddSingleton<CommandHandler>();
-            services.AddSingleton<ScriptManager>(sp =>
-                new ScriptManager(Constants.FILEPATH_SCRIPTS, Settings.IronPythonLibsDirectory, sp.GetRequiredService<Logger>()));
+            services.AddSingleton<ScriptHost>(sp =>
+                new ScriptHost(Constants.FILEPATH_SCRIPTS, sp.GetRequiredService<Logger>()));
 
             // Action handlers (per-tile) are constructed by the factory via
             // ActivatorUtilities; they don't need explicit registration.
@@ -109,6 +109,7 @@ namespace Lunar.Server
             // (which load their data via the factory), then connections.
             _services.GetRequiredService<IDataManagerFactory>().Initalize();
             _services.GetRequiredService<NetHandler>().Initalize();
+            _services.GetRequiredService<ScriptHost>().Initialize();
             _services.GetRequiredService<ItemManager>().Initalize();
             _services.GetRequiredService<ClassManager>().Initalize();
             _services.GetRequiredService<NPCManager>().Initalize();

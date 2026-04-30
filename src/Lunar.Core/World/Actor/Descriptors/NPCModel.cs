@@ -27,7 +27,6 @@ namespace Lunar.Core.World.Actor.Descriptors
         private int _aggresiveRange;
         private Vector _maxRoam;
         private int _attackRange;
-        private List<string> _scripts;
 
         public string UniqueID { get; protected set; }
 
@@ -59,13 +58,12 @@ namespace Lunar.Core.World.Actor.Descriptors
 
         public string DialogueBranch { get; set; }
 
-        public List<string> Scripts => _scripts;
+        public string BehaviorKey { get; set; }
 
         public Dictionary<string, object> CustomVariables { get; }
 
         protected NPCModel()
         {
-            _scripts = new List<string>();
             this.CustomVariables = new Dictionary<string, object>();
 
             this.Stats = new Stats();

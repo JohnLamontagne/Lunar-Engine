@@ -1,10 +1,8 @@
 ﻿using Lunar.Core;
 using Lunar.Core.Utilities;
-using Lunar.Server.Utilities.Scripting;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
 
 namespace Lunar.Server.World.Conversation
 {

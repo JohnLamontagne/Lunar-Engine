@@ -23,19 +23,19 @@ namespace Lunar.Core
         /// </summary>
         public const float PARTS_PER_LAYER = .0001f;
 
-        public const string ITEM_FILE_EXT = ".idat";
+        public const string ITEM_FILE_EXT = ".item";
 
-        public const string SPELL_FILE_EXT = ".sdat";
+        public const string SPELL_FILE_EXT = ".spell";
 
-        public const string MAP_FILE_EXT = ".mdat";
+        public const string MAP_FILE_EXT = ".map";
 
-        public const string ANIM_FILE_EXT = ".adat";
+        public const string ANIM_FILE_EXT = ".anim";
 
-        public const string SCRIPT_FILE_EXT = ".py";
+        public const string SCRIPT_FILE_EXT = ".cs";
 
-        public const string NPC_FILE_EXT = ".ndat";
+        public const string NPC_FILE_EXT = ".npc";
 
-        public const string ACC_FILE_EXT = ".acc";
+        public const string ACC_FILE_EXT = ".player";
 
         public const string DIALOGUE_FILE_EXT = ".dxml";
 

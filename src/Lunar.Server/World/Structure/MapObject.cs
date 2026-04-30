@@ -11,12 +11,9 @@
 	limitations under the License.
 */
 
-using Lunar.Server.Utilities.Scripting;
 using Lunar.Server.World.Actors;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using Lunar.Core;
 using Lunar.Core.Content.Graphics;
 using Lunar.Core.Utilities.Data;
 using Lunar.Server.Utilities;
@@ -42,7 +39,6 @@ namespace Lunar.Server.World.Structure
         public bool Animated { get; set; }
         public int FrameTime { get; set; }
         public LightInformation LightInformation { get; set; }
-        public MapObjectBehaviorDefinition MapObjectBehaviorDefinition { get; set; }
 
         public bool Blocked
         {
@@ -59,8 +55,6 @@ namespace Lunar.Server.World.Structure
             _interactingEntities = new List<IActor>();
             _cooldowns = new Dictionary<IActor, double>();
 
-            this.MapObjectBehaviorDefinition = new MapObjectBehaviorDefinition();
-
             this.Layer = layer;
         }
 
@@ -70,7 +64,6 @@ namespace Lunar.Server.World.Structure
             {
                 _interactingEntities.Remove(actor);
                 _cooldowns.Remove(actor);
-                this.MapObjectBehaviorDefinition?.OnLeft?.Invoke(this, actor);
             }
         }
 
@@ -85,19 +78,16 @@ namespace Lunar.Server.World.Structure
                 {
                     _interactingEntities.Add(actor);
                     _cooldowns.Add(actor, 0);
-                    this.MapObjectBehaviorDefinition?.OnEntered?.Invoke(this, actor);
                 }
             }
         }
 
         public void OnInteract(IActor actor)
         {
-            this.MapObjectBehaviorDefinition.OnInteract?.Invoke(this, actor);
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            this.MapObjectBehaviorDefinition?.Update?.Invoke(this, gameTime);
         }
 
         public Packet Pack()
@@ -172,12 +162,9 @@ namespace Lunar.Server.World.Structure
                     Settings.TileSize, Settings.TileSize));
             }
 
-            string scriptPath = bR.ReadString();
-            if (!string.IsNullOrEmpty(scriptPath))
-            {
-                var script = layer.Map.ScriptManager.CreateScript(Constants.FILEPATH_DATA + scriptPath);
-                //mapObject.MapObjectBehaviorDefinition = script.Invoke<MapObjectBehaviorDefinition>("get_behavior_def", new ServerArgs(null));
-            }
+            // Reserved: legacy map-object script reference. Kept in the binary
+            // map format for forward-compat; not currently wired to a behavior.
+            bR.ReadString();
 
             var lightSource = bR.ReadBoolean();
             var lightRadius = bR.ReadSingle();

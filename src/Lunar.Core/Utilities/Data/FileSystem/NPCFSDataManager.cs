@@ -1,14 +1,34 @@
-﻿using Lunar.Core.Utilities.Data.Management;
+using Lunar.Core.Utilities.Data.Management;
 using Lunar.Core.World.Actor;
 using Lunar.Core.World.Actor.Descriptors;
-using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 namespace Lunar.Core.Utilities.Data.FileSystem
 {
     public class NPCFSDataManager : FSDataManager<NPCModel>
     {
+        private record VectorDto(float X, float Y);
+        private record RectDto(int X, int Y, int Width, int Height);
+        private record StatsDto(int Strength, int Defense, int Dexterity, int Vitality, int Intelligence);
+        private record NpcDto(
+            string Name,
+            int Level,
+            float Speed,
+            StatsDto Stats,
+            RectDto CollisionBounds,
+            int AggresiveRange,
+            string TexturePath,
+            VectorDto MaxRoam,
+            VectorDto FrameSize,
+            VectorDto Reach,
+            string BehaviorKey,
+            string Dialogue,
+            string DialogueBranch
+        );
+
+        private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+
         private readonly Logger _logger;
 
         public NPCFSDataManager(Logger logger)
@@ -26,75 +46,34 @@ namespace Lunar.Core.Utilities.Data.FileSystem
             try
             {
                 var npcArguments = (arguments as ContentFileDataLoaderArguments);
-
-                string name = "";
-                int level = 0;
-                float speed = 0f;
-                Rect collisionBounds = new Rect();
-                int aggresiveRange = 0;
-                string texturePath = "";
-                Vector maxRoam = new Vector();
-                Vector frameSize = new Vector();
-                Vector reach = new Vector();
-                Stats stats;
-                List<string> scripts = new List<string>();
-                long uniqueID = 0;
-                string dialogue = "";
-                string dialogueBranch = "";
-
-                using (var fileStream = new FileStream(this.RootPath + npcArguments.FileName + EngineConstants.NPC_FILE_EXT, FileMode.OpenOrCreate))
-                {
-                    using (var binaryReader = new BinaryReader(fileStream))
-                    {
-                        name = binaryReader.ReadString();
-                        level = binaryReader.ReadInt32();
-                        speed = binaryReader.ReadSingle();
-
-                        stats = new Stats()
-                        {
-                            Strength = binaryReader.ReadInt32(),
-                            Defense = binaryReader.ReadInt32(),
-                            Dexterity = binaryReader.ReadInt32(),
-                            Vitality = binaryReader.ReadInt32(),
-                            Intelligence = binaryReader.ReadInt32(),
-                        };
-
-                        collisionBounds = new Rect(binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32(), binaryReader.ReadInt32());
-                        aggresiveRange = binaryReader.ReadInt32();
-                        texturePath = binaryReader.ReadString();
-                        maxRoam = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                        frameSize = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-                        reach = new Vector(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-
-                        int scriptCount = binaryReader.ReadInt32();
-                        for (int i = 0; i < scriptCount; i++)
-                        {
-                            scripts.Add(binaryReader.ReadString());
-                        }
-
-                        dialogue = binaryReader.ReadString();
-                        dialogueBranch = binaryReader.ReadString();
-                    }
-                }
+                string json = File.ReadAllText(this.RootPath + npcArguments.FileName + EngineConstants.NPC_FILE_EXT);
+                var dto = JsonSerializer.Deserialize<NpcDto>(json, JsonOptions);
 
                 var desc = NPCModel.Create(npcArguments.FileName);
-                desc.Name = name;
-                desc.Level = level;
-                desc.Speed = speed;
-                desc.Stats = stats;
-                desc.CollisionBounds = collisionBounds;
-                desc.AggresiveRange = aggresiveRange;
-                desc.TexturePath = texturePath;
-                desc.MaxRoam = maxRoam;
-                desc.FrameSize = frameSize;
-                desc.Reach = reach;
-                desc.Dialogue = dialogue;
-                desc.DialogueBranch = dialogueBranch;
-                desc.Scripts.AddRange(scripts);
+                desc.Name = dto.Name;
+                desc.Level = dto.Level;
+                desc.Speed = dto.Speed;
+                desc.Stats = new Stats()
+                {
+                    Strength = dto.Stats.Strength,
+                    Defense = dto.Stats.Defense,
+                    Dexterity = dto.Stats.Dexterity,
+                    Vitality = dto.Stats.Vitality,
+                    Intelligence = dto.Stats.Intelligence,
+                };
+                desc.CollisionBounds = new Rect(dto.CollisionBounds.X, dto.CollisionBounds.Y, dto.CollisionBounds.Width, dto.CollisionBounds.Height);
+                desc.AggresiveRange = dto.AggresiveRange;
+                desc.TexturePath = dto.TexturePath;
+                desc.MaxRoam = new Vector(dto.MaxRoam.X, dto.MaxRoam.Y);
+                desc.FrameSize = new Vector(dto.FrameSize.X, dto.FrameSize.Y);
+                desc.Reach = new Vector(dto.Reach.X, dto.Reach.Y);
+                desc.BehaviorKey = dto.BehaviorKey;
+                desc.Dialogue = dto.Dialogue;
+                desc.DialogueBranch = dto.DialogueBranch;
 
                 return desc;
             }
-            catch (IOException exception)
+            catch (System.IO.IOException exception)
             {
                 _logger.LogEvent("Unable to load NPC. " + exception.Message, LogTypes.ERROR, exception);
                 return null;
@@ -104,43 +83,25 @@ namespace Lunar.Core.Utilities.Data.FileSystem
         public override void Save(IContentModel descriptor, IDataManagerArguments arguments)
         {
             var npcDesc = (NPCModel)descriptor;
-
             string filePath = this.RootPath + (arguments as ContentFileDataLoaderArguments).FileName + EngineConstants.NPC_FILE_EXT;
 
-            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate))
-            {
-                using (var binaryWriter = new BinaryWriter(fileStream))
-                {
-                    binaryWriter.Write(npcDesc.Name);
-                    binaryWriter.Write(npcDesc.Level);
-                    binaryWriter.Write(npcDesc.Speed);
-                    binaryWriter.Write(npcDesc.Stats.Strength);
-                    binaryWriter.Write(npcDesc.Stats.Defense);
-                    binaryWriter.Write(npcDesc.Stats.Dexterity);
-                    binaryWriter.Write(npcDesc.Stats.Vitality);
-                    binaryWriter.Write(npcDesc.Stats.Intelligence);
-                    binaryWriter.Write(npcDesc.Stats.Vitality);
-                    binaryWriter.Write(npcDesc.CollisionBounds.X);
-                    binaryWriter.Write(npcDesc.CollisionBounds.Y);
-                    binaryWriter.Write(npcDesc.CollisionBounds.Width);
-                    binaryWriter.Write(npcDesc.CollisionBounds.Height);
-                    binaryWriter.Write(npcDesc.AggresiveRange);
-                    binaryWriter.Write(npcDesc.TexturePath);
-                    binaryWriter.Write(npcDesc.MaxRoam.X);
-                    binaryWriter.Write(npcDesc.MaxRoam.Y);
-                    binaryWriter.Write(npcDesc.FrameSize.X);
-                    binaryWriter.Write(npcDesc.FrameSize.Y);
-                    binaryWriter.Write(npcDesc.Reach.X);
-                    binaryWriter.Write(npcDesc.Reach.Y);
+            var dto = new NpcDto(
+                npcDesc.Name,
+                npcDesc.Level,
+                npcDesc.Speed,
+                new StatsDto(npcDesc.Stats.Strength, npcDesc.Stats.Defense, npcDesc.Stats.Dexterity, npcDesc.Stats.Vitality, npcDesc.Stats.Intelligence),
+                new RectDto(npcDesc.CollisionBounds.X, npcDesc.CollisionBounds.Y, npcDesc.CollisionBounds.Width, npcDesc.CollisionBounds.Height),
+                npcDesc.AggresiveRange,
+                npcDesc.TexturePath,
+                new VectorDto(npcDesc.MaxRoam.X, npcDesc.MaxRoam.Y),
+                new VectorDto(npcDesc.FrameSize.X, npcDesc.FrameSize.Y),
+                new VectorDto(npcDesc.Reach.X, npcDesc.Reach.Y),
+                npcDesc.BehaviorKey ?? "",
+                npcDesc.Dialogue ?? "",
+                npcDesc.DialogueBranch ?? ""
+            );
 
-                    binaryWriter.Write(npcDesc.Scripts.Count);
-                    foreach (var script in npcDesc.Scripts)
-                        binaryWriter.Write(script);
-
-                    binaryWriter.Write(npcDesc.Dialogue);
-                    binaryWriter.Write(npcDesc.DialogueBranch);
-                }
-            }
+            File.WriteAllText(filePath, JsonSerializer.Serialize(dto, JsonOptions));
         }
     }
 }
