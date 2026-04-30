@@ -25,10 +25,15 @@ namespace Lunar.Server.Utilities.Commands
     public class CommandHandler : IService
     {
         private readonly Dictionary<string, List<dynamic>> _scriptedCommandHandlers;
+        private readonly ScriptManager _scriptManager;
+        private readonly PlayerManager _playerManager;
         private Script _script;
 
-        public CommandHandler(NetHandler netHandler)
+        public CommandHandler(NetHandler netHandler, ScriptManager scriptManager, PlayerManager playerManager)
         {
+            _scriptManager = scriptManager;
+            _playerManager = playerManager;
+
             netHandler.AddPacketHandler(PacketType.CLIENT_COMMAND, this.Handle_ClientCommand);
 
             _scriptedCommandHandlers = new Dictionary<string, List<dynamic>>();
@@ -44,7 +49,7 @@ namespace Lunar.Server.Utilities.Commands
 
         private void LoadScript()
         {
-            _script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_SCRIPTS + "command_handler.py");
+            _script = _scriptManager.CreateScript(Constants.FILEPATH_SCRIPTS + "command_handler.py");
             _script?.SetVariable<CommandHandler>("command_handler", this);
         }
 
@@ -64,7 +69,7 @@ namespace Lunar.Server.Utilities.Commands
             if (_scriptedCommandHandlers.ContainsKey(command))
             {
                 // Get the player
-                var player = Engine.Services.Get<PlayerManager>().GetPlayer(args.Connection.UniqueIdentifier.ToString());
+                var player = _playerManager.GetPlayer(args.Connection.UniqueIdentifier.ToString());
 
                 _scriptedCommandHandlers[command].ForEach(a =>
                     {
@@ -74,7 +79,7 @@ namespace Lunar.Server.Utilities.Commands
                         }
                         catch (Exception ex)
                         {
-                            Engine.Services.Get<ScriptManager>().HandleException(ex);
+                            _scriptManager.HandleException(ex);
                         }
                     }
                 );

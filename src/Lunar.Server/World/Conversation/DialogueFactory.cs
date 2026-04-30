@@ -8,6 +8,13 @@ namespace Lunar.Server.World.Conversation
 {
     public class DialogueFactory
     {
+        private readonly ScriptManager _scriptManager;
+
+        public DialogueFactory(ScriptManager scriptManager)
+        {
+            _scriptManager = scriptManager;
+        }
+
         public Dialogue Create(string filePath)
         {
             var dialogue = new Dialogue(Path.GetFileNameWithoutExtension(filePath));
@@ -72,7 +79,7 @@ namespace Lunar.Server.World.Conversation
 
             if (File.Exists(Constants.FILEPATH_DATA + "/" + scriptPath))
             {
-                dialogue.Script = Engine.Services.Get<ScriptManager>().CreateScript(Constants.FILEPATH_DATA + "/" + scriptPath);
+                dialogue.Script = _scriptManager.CreateScript(Constants.FILEPATH_DATA + "/" + scriptPath);
             }
 
             var branchNodes = dialogueNode.Elements("Branch");

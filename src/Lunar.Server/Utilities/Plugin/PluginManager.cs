@@ -23,10 +23,12 @@ namespace Lunar.Server.Utilities.Plugin
     public class PluginManager : IService
     {
         private readonly List<Plugin> _plugins;
+        private readonly Logger _logger;
 
-        public PluginManager()
+        public PluginManager(Logger logger)
         {
             _plugins = new List<Plugin>();
+            _logger = logger;
         }
 
         private void LoadPlugins(string pluginDirectory)
@@ -71,7 +73,7 @@ namespace Lunar.Server.Utilities.Plugin
             }
             catch (Exception ex)
             {
-                Engine.Services.Get<Logger>().LogEvent($"Could not load plugin: {ex.Message}", LogTypes.ERROR, new Exception($"Could not load plugin: {ex.Message}"));
+                _logger.LogEvent($"Could not load plugin: {ex.Message}", LogTypes.ERROR, new Exception($"Could not load plugin: {ex.Message}"));
             }
            
         }

@@ -29,11 +29,11 @@ namespace Lunar.Server.World.Structure
         private Dictionary<string, Map> _maps;
         private IDataManager<MapModel<LayerModel<TileModel<SpriteInfo>>>> _mapDataLoader;
 
-        public MapManager()
+        public MapManager(IDataManagerFactory dataManagerFactory)
         {
             _maps = new Dictionary<string, Map>();
 
-            _mapDataLoader = Engine.Services.Get<IDataManagerFactory>().Create<MapModel<LayerModel<TileModel<SpriteInfo>>>>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
+            _mapDataLoader = dataManagerFactory.Create<MapModel<LayerModel<TileModel<SpriteInfo>>>>(new FSDataFactoryArguments(Constants.FILEPATH_MAPS));
         }
 
         private void LoadMaps()

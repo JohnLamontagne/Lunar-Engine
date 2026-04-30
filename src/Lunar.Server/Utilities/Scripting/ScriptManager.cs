@@ -24,12 +24,14 @@ namespace Lunar.Server.Utilities.Scripting
 {
     public class ScriptManager : IService
     {
-        private Dictionary<string, Script> _scripts;
-        private ScriptEngine _scriptEngine;
+        private readonly Dictionary<string, Script> _scripts;
+        private readonly ScriptEngine _scriptEngine;
+        private readonly Logger _logger;
 
-        public ScriptManager(string scriptsDir, string pythonLibsDir)
+        public ScriptManager(string scriptsDir, string pythonLibsDir, Logger logger)
         {
             _scripts = new Dictionary<string, Script>();
+            _logger = logger;
 
             ScriptRuntime runtime = Python.CreateRuntime();
 
@@ -81,7 +83,7 @@ namespace Lunar.Server.Utilities.Scripting
         {
             ExceptionOperations eo = _scriptEngine.GetService<ExceptionOperations>();
             string error = eo.FormatException(ex);
-            Engine.Services.Get<Logger>().LogEvent($"Script error: {error}", LogTypes.ERROR, ex);
+            _logger.LogEvent($"Script error: {error}", LogTypes.ERROR, ex);
         }
 
         public void Initalize()

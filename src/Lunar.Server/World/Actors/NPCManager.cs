@@ -28,11 +28,11 @@ namespace Lunar.Server.World.Actors
 
         private IDataManager<NPCModel> _npcDataManager;
 
-        public NPCManager()
+        public NPCManager(IDataManagerFactory dataManagerFactory)
         {
             _npcs = new Dictionary<string, NPCModel>();
 
-            _npcDataManager = Engine.Services.Get<IDataManagerFactory>().Create<NPCModel>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
+            _npcDataManager = dataManagerFactory.Create<NPCModel>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
         }
 
         private void LoadNPCS()

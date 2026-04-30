@@ -10,13 +10,15 @@ namespace Lunar.Server.World.Conversation
 {
     public class DialogueManager : IService
     {
-        private Dictionary<string, Dialogue> _dialogues;
-        private DialogueFactory _dialogueFactory;
+        private readonly Dictionary<string, Dialogue> _dialogues;
+        private readonly DialogueFactory _dialogueFactory;
+        private readonly Logger _logger;
 
-        public DialogueManager()
+        public DialogueManager(DialogueFactory dialogueFactory, Logger logger)
         {
             _dialogues = new Dictionary<string, Dialogue>();
-            _dialogueFactory = new DialogueFactory();
+            _dialogueFactory = dialogueFactory;
+            _logger = logger;
         }
 
         public void Initalize()
@@ -43,7 +45,7 @@ namespace Lunar.Server.World.Conversation
 
                 if (_dialogues.ContainsKey(dialogue.Name))
                 {
-                    Engine.Services.Get<Logger>().LogEvent($"Unable to load dialogue {file.Name} " +
+                    _logger.LogEvent($"Unable to load dialogue {file.Name} " +
                                     $"as dialogue named {dialogue.Name} already exists!", LogTypes.ERROR);
                     continue;
                 }

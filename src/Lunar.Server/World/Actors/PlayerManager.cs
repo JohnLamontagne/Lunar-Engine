@@ -30,11 +30,11 @@ namespace Lunar.Server.World.Actors
 
         private IDataManager<PlayerModel> _playerDataManager;
 
-        public PlayerManager()
+        public PlayerManager(IDataManagerFactory dataManagerFactory)
         {
             _players = new Dictionary<string, Player>();
 
-            _playerDataManager = Engine.Services.Get<IDataManagerFactory>().Create<PlayerModel>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
+            _playerDataManager = dataManagerFactory.Create<PlayerModel>(new FSDataFactoryArguments(Constants.FILEPATH_ACCOUNTS));
         }
 
         private void AddPlayer(Player player)

@@ -30,15 +30,15 @@ using Lunar.Server.Utilities.Plugin;
 using System.Diagnostics;
 using Lunar.Server.World.Conversation;
 using Lunar.Core.Utilities.Data.Management;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lunar.Server
 {
     public class Server
     {
-        private static ServiceLocator _serviceLocator;
-
         public static bool ShutDown { get; set; }
 
+        private IServiceProvider _services;
         private WebCommunicator _webCommunicator;
 
         private Thread _netThread;
@@ -65,78 +65,80 @@ namespace Lunar.Server
             Console.WriteLine("Loading server settings...");
             Settings.Initalize();
 
-            Engine.Services.Get<Logger>().SuppressErrors = Settings.SuppressErrors;
+            // Configure logger before composing the rest of the graph so
+            // services constructed below can log at startup.
+            var bootstrapLogger = Engine.Services.Get<Logger>();
+            bootstrapLogger.SuppressErrors = Settings.SuppressErrors;
+            bootstrapLogger.LogPath = Constants.FILEPATH_LOGS;
+            bootstrapLogger.Start();
 
-            // Point the logger towards the current directory
-            Engine.Services.Get<Logger>().LogPath = Constants.FILEPATH_LOGS;
-
-            Engine.Services.Get<Logger>().Start();
-
-            Console.WriteLine($"Log output set to: {Engine.Services.Get<Logger>().LogPath} with error suppression {(Engine.Services.Get<Logger>().SuppressErrors ? "on" : "off")}.");
+            Console.WriteLine($"Log output set to: {bootstrapLogger.LogPath} with error suppression {(bootstrapLogger.SuppressErrors ? "on" : "off")}.");
 
             Console.WriteLine("Checking file integrity...");
             this.CheckFileIntegrity();
 
-            Engine.Services.Register(new ScriptManager(Constants.FILEPATH_SCRIPTS, Settings.IronPythonLibsDirectory));
+            // Compose the service graph. Constructor-injected dependencies are
+            // resolved transitively by the container.
+            var services = new ServiceCollection();
 
-            var netHandler = new NetHandler(Settings.GameName, Settings.ServerPort);
-            Engine.Services.Register(netHandler);
-            netHandler.Initalize();
+            services.AddSingleton(bootstrapLogger);
+            services.AddSingleton<NetHandler>(_ => new NetHandler(Settings.GameName, Settings.ServerPort));
+            services.AddSingleton<IDataManagerFactory, FSDataFactory>();
+            services.AddSingleton<ItemManager>();
+            services.AddSingleton<ClassManager>();
+            services.AddSingleton<NPCManager>();
+            services.AddSingleton<MapManager>();
+            services.AddSingleton<PlayerManager>();
+            services.AddSingleton<WorldManager>();
+            services.AddSingleton<DialogueFactory>();
+            services.AddSingleton<DialogueManager>();
+            services.AddSingleton<GameEventListener>();
+            services.AddSingleton<PluginManager>();
+            services.AddSingleton<CommandHandler>();
+            services.AddSingleton<ScriptManager>(sp =>
+                new ScriptManager(Constants.FILEPATH_SCRIPTS, Settings.IronPythonLibsDirectory, sp.GetRequiredService<Logger>()));
 
-            // Register the data loader factories
-            IDataManagerFactory dataFactory = new FSDataFactory();
-            Engine.Services.RegisterAs(dataFactory, typeof(IDataManagerFactory));
-            dataFactory.Initalize();
+            _services = services.BuildServiceProvider();
 
-            // Create and initalize the game content managers.
-            var itemManager = new ItemManager();
-            Engine.Services.Register(itemManager);
-            itemManager.Initalize();
+            // Bridge resolved instances into the legacy ServiceLocator so leaf
+            // classes (NPC, Player, Map, Item, Dialogue, etc.) that still use
+            // Engine.Services keep working until Pass 2 migrates them.
+            BridgeToEngineServices(_services, typeof(NetHandler), typeof(IDataManagerFactory),
+                typeof(ItemManager), typeof(ClassManager), typeof(NPCManager), typeof(MapManager),
+                typeof(PlayerManager), typeof(WorldManager), typeof(DialogueManager),
+                typeof(GameEventListener), typeof(PluginManager), typeof(CommandHandler),
+                typeof(ScriptManager));
 
-            var classManager = new ClassManager();
-            Engine.Services.Register(classManager);
-            classManager.Initalize();
-
-            var npcManager = new NPCManager();
-            Engine.Services.Register(npcManager);
-            npcManager.Initalize();
-
-            var mapManager = new MapManager();
-            Engine.Services.Register(mapManager);
-            mapManager.Initalize();
-
-            var worldManager = new WorldManager(netHandler);
-            Engine.Services.Register(worldManager);
-            worldManager.Initalize();
-
-            var playerManager = new PlayerManager();
-            Engine.Services.Register(playerManager);
-            playerManager.Initalize();
-
-            var dialogueManager = new DialogueManager();
-            Engine.Services.Register(dialogueManager);
-            dialogueManager.Initalize();
-
-            var gameEventListener = new GameEventListener();
-            Engine.Services.Register(gameEventListener);
-            gameEventListener.Initalize();
-
-            var pluginManager = new PluginManager();
-            pluginManager.Initalize();
-            Engine.Services.Register(pluginManager);
-
-            CommandHandler commandHandler = new CommandHandler(netHandler);
-            Engine.Services.Register(commandHandler);
-            commandHandler.Initalize();
+            // Initalize order matters: data factory first, then content managers
+            // (which load their data via the factory), then connections.
+            _services.GetRequiredService<IDataManagerFactory>().Initalize();
+            _services.GetRequiredService<NetHandler>().Initalize();
+            _services.GetRequiredService<ItemManager>().Initalize();
+            _services.GetRequiredService<ClassManager>().Initalize();
+            _services.GetRequiredService<NPCManager>().Initalize();
+            _services.GetRequiredService<MapManager>().Initalize();
+            _services.GetRequiredService<WorldManager>().Initalize();
+            _services.GetRequiredService<PlayerManager>().Initalize();
+            _services.GetRequiredService<DialogueManager>().Initalize();
+            _services.GetRequiredService<GameEventListener>().Initalize();
+            _services.GetRequiredService<PluginManager>().Initalize();
+            _services.GetRequiredService<CommandHandler>().Initalize();
 
             _webCommunicator = new WebCommunicator();
+        }
 
-            //WebCommunicator.SendUDP("127.0.0.1", 41181, WebCommunicator.MessageTypes.Status_Updates, "");
+        private static void BridgeToEngineServices(IServiceProvider provider, params Type[] types)
+        {
+            foreach (var type in types)
+            {
+                var instance = (IService)provider.GetRequiredService(type);
+                Engine.Services.RegisterAs(instance, type);
+            }
         }
 
         public void Start()
         {
-            Engine.Services.Get<NetHandler>().Start();
+            _services.GetRequiredService<NetHandler>().Start();
 
             _webCommunicator.Run();
 
@@ -145,10 +147,13 @@ namespace Lunar.Server
 
         private void BeginServerLoop()
         {
+            var netHandler = _services.GetRequiredService<NetHandler>();
+            var worldManager = _services.GetRequiredService<WorldManager>();
+
             _netThread = new Thread(() =>
             {
                 var gametime = new GameTime();
-                var serverWorldHeartbeat = new ServerHeartbeat(Engine.Services.Get<NetHandler>().Update);
+                var serverWorldHeartbeat = new ServerHeartbeat(netHandler.Update);
 
                 while (!Server.ShutDown)
                 {
@@ -159,15 +164,14 @@ namespace Lunar.Server
             _worldThread = new Thread(() =>
             {
                 var gametime = new GameTime();
-                var serverWorldHeartbeat = new ServerHeartbeat(Engine.Services.Get<WorldManager>().Update);
+                var serverWorldHeartbeat = new ServerHeartbeat(worldManager.Update);
 
                 while (!Server.ShutDown)
                 {
                     serverWorldHeartbeat.Update(gametime);
                 }
 
-                // Save the game world
-                Engine.Services.Get<WorldManager>().Save();
+                worldManager.Save();
             });
 
             _netThread.Start();

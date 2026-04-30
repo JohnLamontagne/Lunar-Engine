@@ -25,13 +25,15 @@ namespace Lunar.Server.World
 {
     public class ItemManager : IService
     {
-        private Dictionary<string, ItemModel> _items;
-        private IDataManager<ItemModel> _dataManager;
+        private readonly Dictionary<string, ItemModel> _items;
+        private readonly IDataManager<ItemModel> _dataManager;
+        private readonly Logger _logger;
 
-        public ItemManager()
+        public ItemManager(IDataManagerFactory dataManagerFactory, Logger logger)
         {
             _items = new Dictionary<string, ItemModel>();
-            _dataManager = Engine.Services.Get<IDataManagerFactory>().Create<ItemModel>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
+            _dataManager = dataManagerFactory.Create<ItemModel>(new FSDataFactoryArguments(Constants.FILEPATH_NPCS));
+            _logger = logger;
         }
 
         private void LoadItems()
@@ -56,7 +58,7 @@ namespace Lunar.Server.World
         {
             if (!_items.ContainsKey(itemName))
             {
-                Engine.Services.Get<Logger>().LogEvent($"Item {itemName} does not exist", LogTypes.ERROR, new Exception($"Item {itemName} does not exist"));
+                _logger.LogEvent($"Item {itemName} does not exist", LogTypes.ERROR, new Exception($"Item {itemName} does not exist"));
                 return null;
             }
 
