@@ -71,7 +71,7 @@ namespace Lunar.Client.World
             }
         }
 
-        public static Tile Unpack(Packet netBuffer)
+        public static Tile Unpack(Packet netBuffer, ContentManagerService contentManagerService, LightManagerService lightManagerService)
         {
             // check for a null tile
             if (netBuffer.ReadBoolean() == false)
@@ -100,10 +100,7 @@ namespace Lunar.Client.World
                 var animated = netBuffer.ReadBoolean();
                 var frameCount = netBuffer.ReadInt32();
 
-
-                var sprite =Engine.Services.Get<ContentManagerService>().ContentManager
-                    .LoadTexture2D(tilesetPath);
-
+                var sprite = contentManagerService.ContentManager.LoadTexture2D(tilesetPath);
 
                 var tile = new Tile(sprite, sourceRectangle, position)
                 {
@@ -112,7 +109,6 @@ namespace Lunar.Client.World
                     Teleporter = teleporter,
                     Color = color,
                     FrameCount = frameCount,
-
                 };
 
                 if (lightSource)
@@ -122,7 +118,7 @@ namespace Lunar.Client.World
                     pointLight.Radius = lightRadius;
                     pointLight.Position = new Vector2(position.X - (lightRadius / 2f) + (EngineConstants.TILE_SIZE / 2f),
                         position.Y - (lightRadius / 2f) + (EngineConstants.TILE_SIZE / 2f));
-                   Engine.Services.Get<LightManagerService>().Component.Lights.Add(pointLight);
+                    lightManagerService.Component.Lights.Add(pointLight);
                 }
 
                 return tile;

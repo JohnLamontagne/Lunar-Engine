@@ -11,9 +11,11 @@
 	limitations under the License.
 */
 
+using Lunar.Client.GUI;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
+using Lunar.Client.Utilities.Services;
 using Lunar.Client.World;
 using Lunar.Client.World.Actors;
 using Lunar.Core;
@@ -21,7 +23,6 @@ using Lunar.Core.Net;
 using Lunar.Core.World;
 using Lunar.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -39,28 +40,29 @@ namespace Lunar.Client.Scenes
 
         private string _dialogueBranchName;
 
-        public GameScene(ContentManager contentManager, GameWindow gameWindow, Camera camera)
-            : base(contentManager, gameWindow)
+        private readonly SceneManager _sceneManager;
+
+        public GameScene(ContentManagerService contentManagerService, GameWindow gameWindow, Camera camera, NetHandler netHandler, LightManagerService lightManager, GUIManager guiManager, SceneManager sceneManager, WorldManager worldManager)
+            : base(contentManagerService, gameWindow, netHandler, lightManager, guiManager)
         {
             _camera = camera;
-            _worldManager = new WorldManager(contentManager, _camera);
+            _worldManager = worldManager;
+            _sceneManager = sceneManager;
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_MSG, this.Handle_PlayerMessage);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.INVENTORY_UPDATE, this.Handle_InventoryUpdate);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.EQUIPMENT_UPDATE, this.Handle_EquipmentUpdate);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.TARGET_ACQ, this.Handle_TargetAcquired);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.QUIT_GAME, this.Handle_QuitGame);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.DIALOGUE, this.Handle_Dialogue);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.DIALOGUE_END, this.Handle_DialogueEnd);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.LOADING_SCREEN, this.Handle_LoadingScreen);
+            netHandler.AddPacketHandler(PacketType.PLAYER_MSG, this.Handle_PlayerMessage);
+            netHandler.AddPacketHandler(PacketType.INVENTORY_UPDATE, this.Handle_InventoryUpdate);
+            netHandler.AddPacketHandler(PacketType.EQUIPMENT_UPDATE, this.Handle_EquipmentUpdate);
+            netHandler.AddPacketHandler(PacketType.TARGET_ACQ, this.Handle_TargetAcquired);
+            netHandler.AddPacketHandler(PacketType.QUIT_GAME, this.Handle_QuitGame);
+            netHandler.AddPacketHandler(PacketType.DIALOGUE, this.Handle_Dialogue);
+            netHandler.AddPacketHandler(PacketType.DIALOGUE_END, this.Handle_DialogueEnd);
+            netHandler.AddPacketHandler(PacketType.LOADING_SCREEN, this.Handle_LoadingScreen);
 
-            Engine.Services.Get<NetHandler>().Disconnected += Handle_Disconnected;
+            netHandler.Disconnected += Handle_Disconnected;
 
             _worldManager.LoadingMap += _worldManager_LoadingMap;
             _worldManager.LoadedMap += _worldManager_LoadedMap;
             _worldManager.PlayerJoined += _worldManager_PlayerJoined;
-
-            Engine.Services.Register(_worldManager);
         }
 
         private void _worldManager_PlayerJoined(object sender, PlayerJoinedEventArgs e)
@@ -73,13 +75,13 @@ namespace Lunar.Client.Scenes
 
         private void _worldManager_LoadedMap(object sender, EventArgs e)
         {
-            Engine.Services.Get<SceneManager>().GetScene<LoadingScene>("loadingScene").OnFinishedLoading();
+            _sceneManager.GetScene<LoadingScene>("loadingScene").OnFinishedLoading();
         }
 
         private void _worldManager_LoadingMap(object sender, EventArgs e)
         {
             _loadingScreen = true;
-            Engine.Services.Get<SceneManager>().SetActiveScene("loadingScene");
+            _sceneManager.SetActiveScene("loadingScene");
         }
 
         private void Player_StatsChanged(object sender, EventArgs e)
@@ -128,7 +130,7 @@ namespace Lunar.Client.Scenes
         private void Handle_LoadingScreen(PacketReceivedEventArgs obj)
         {
             _loadingScreen = true;
-            Engine.Services.Get<SceneManager>().SetActiveScene("loadingScene");
+            _sceneManager.SetActiveScene("loadingScene");
         }
 
         private void Handle_DialogueEnd(PacketReceivedEventArgs obj)
@@ -214,7 +216,7 @@ namespace Lunar.Client.Scenes
             packet.Write(_dialogueBranchName);
             packet.Write(((IWidget)sender).Tag.ToString());
             packet.Write(((Label)sender).Text);
-            Engine.Services.Get<NetHandler>().SendPacket(PacketType.DIALOGUE_RESP, packet, DeliveryMethod.ReliableOrdered);
+            this.NetHandler.SendPacket(PacketType.DIALOGUE_RESP, packet, DeliveryMethod.ReliableOrdered);
         }
 
         private void Handle_TargetAcquired(PacketReceivedEventArgs args)
@@ -240,7 +242,7 @@ namespace Lunar.Client.Scenes
             // Unload the world.
             _worldManager.Unload();
 
-            Engine.Services.Get<SceneManager>().SetActiveScene("menuScene");
+            _sceneManager.SetActiveScene("menuScene");
         }
 
         private void Handle_Disconnected(object sender, EventArgs e)
@@ -253,7 +255,7 @@ namespace Lunar.Client.Scenes
             // Unload the world.
             _worldManager.Unload();
 
-            Engine.Services.Get<SceneManager>().SetActiveScene("menuScene");
+            _sceneManager.SetActiveScene("menuScene");
         }
 
         private void Handle_EquipmentUpdate(PacketReceivedEventArgs args)
@@ -338,7 +340,7 @@ namespace Lunar.Client.Scenes
                 // Unequip the item
                 var packet = new Packet();
                 packet.Write(slotNum);
-                Engine.Services.Get<NetHandler>().SendPacket(PacketType.REQ_UNEQUIP_ITEM, packet, DeliveryMethod.ReliableOrdered);
+                this.NetHandler.SendPacket(PacketType.REQ_UNEQUIP_ITEM, packet, DeliveryMethod.ReliableOrdered);
             }
         }
 
@@ -361,14 +363,14 @@ namespace Lunar.Client.Scenes
                     // Drop the item
                     var packet = new Packet();
                     packet.Write(slotNum);
-                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.DROP_ITEM, packet, DeliveryMethod.ReliableOrdered);
+                    this.NetHandler.SendPacket(PacketType.DROP_ITEM, packet, DeliveryMethod.ReliableOrdered);
                 }
                 else
                 {
                     // Equip the item
                     var packet = new Packet();
                     packet.Write(slotNum);
-                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.REQ_USE_ITEM, packet, DeliveryMethod.ReliableOrdered);
+                    this.NetHandler.SendPacket(PacketType.REQ_USE_ITEM, packet, DeliveryMethod.ReliableOrdered);
                 }
             }
         }
@@ -443,7 +445,7 @@ namespace Lunar.Client.Scenes
                     {
                         var selectPacket = new Packet();
                         selectPacket.Write(entity.UniqueID);
-                        Engine.Services.Get<NetHandler>().SendPacket(PacketType.REQ_TARGET, selectPacket, DeliveryMethod.ReliableOrdered);
+                        this.NetHandler.SendPacket(PacketType.REQ_TARGET, selectPacket, DeliveryMethod.ReliableOrdered);
 
                         foundTarget = true;
                     }
@@ -455,7 +457,7 @@ namespace Lunar.Client.Scenes
                     this.GuiManager.GetWidget<WidgetContainer>("targetPortraitContainer").Visible = false;
 
                     var deselectPacket = new Packet();
-                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.DESELECT_TARGET, deselectPacket, DeliveryMethod.ReliableOrdered);
+                    this.NetHandler.SendPacket(PacketType.DESELECT_TARGET, deselectPacket, DeliveryMethod.ReliableOrdered);
                 }
             }
         }
@@ -533,7 +535,7 @@ namespace Lunar.Client.Scenes
         private void logoutButton_ButtonClicked(object sender, EventArgs e)
         {
             var packet = new Packet();
-            Engine.Services.Get<NetHandler>().SendPacket(PacketType.QUIT_GAME, packet, DeliveryMethod.ReliableOrdered);
+            this.NetHandler.SendPacket(PacketType.QUIT_GAME, packet, DeliveryMethod.ReliableOrdered);
         }
 
         private void messageEntry_ReturnPressed(object sender, EventArgs e)
@@ -544,7 +546,7 @@ namespace Lunar.Client.Scenes
             {
                 var packet = new Packet();
                 packet.Write(text);
-                Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MSG, packet, DeliveryMethod.Unreliable);
+                this.NetHandler.SendPacket(PacketType.PLAYER_MSG, packet, DeliveryMethod.Unreliable);
                 ((Textbox)sender).Text = string.Empty;
                 ((Textbox)sender).Active = false;
             }

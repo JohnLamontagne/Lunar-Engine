@@ -17,8 +17,10 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Utilities;
+using Lunar.Client.Utilities.Services;
 using Lunar.Core;
 using Lunar.Core.Utilities.Data;
+using Lunar.Graphics;
 
 namespace Lunar.Client.World
 {
@@ -35,12 +37,17 @@ namespace Lunar.Client.World
 
         public int LayerIndex { get; }
 
-        public Layer(Vector2 dimensions, int lIndex, string name)
+        private readonly ContentManagerService _contentManager;
+        private readonly LightManagerService _lightManager;
+
+        public Layer(Vector2 dimensions, int lIndex, string name, ContentManagerService contentManager, LightManagerService lightManager)
         {
             _tiles = new Tile[(int)dimensions.X, (int)dimensions.Y];
             this.Name = name;
             this.LayerIndex = lIndex;
             this.ZIndex = lIndex * EngineConstants.PARTS_PER_LAYER;
+            _contentManager = contentManager;
+            _lightManager = lightManager;
 
             _collisionDescriptors = new Dictionary<Vector2, CollisionDescriptor>();
             _mapObjects = new List<MapObject>();
@@ -166,7 +173,7 @@ namespace Lunar.Client.World
             {
                 for (int y = 0; y < _tiles.GetLength(1); y++)
                 {
-                    var tile = Tile.Unpack(netBuffer);
+                    var tile = Tile.Unpack(netBuffer, _contentManager, _lightManager);
                     if (tile != null)
                     {
                         tile.ZIndex = this.ZIndex;
@@ -191,7 +198,7 @@ namespace Lunar.Client.World
 
             for (int i = 0; i < mapObjectCount; i++)
             {
-                var mapObject = MapObject.Unpack(netBuffer);
+                var mapObject = MapObject.Unpack(netBuffer, _contentManager, _lightManager);
 
                 if (mapObject != null)
                     _mapObjects.Add(mapObject);

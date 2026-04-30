@@ -114,13 +114,16 @@ namespace Lunar.Client.World.Actors
 
         public Emitter Emitter { get; set; }
 
-        public NPC(string uniqueID)
+        private readonly Lunar.Client.World.WorldManager _worldManager;
+
+        public NPC(string uniqueID, NetHandler netHandler, Lunar.Client.World.WorldManager worldManager)
         {
             _uniqueID = uniqueID;
+            _worldManager = worldManager;
 
             this.Light = new PointLight();
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.NPC_MOVING, this.Handle_NPCMoving);
+            netHandler.AddPacketHandler(PacketType.NPC_MOVING, this.Handle_NPCMoving);
 
             _targetPath = new Queue<Vector2>();
         }
@@ -158,7 +161,7 @@ namespace Lunar.Client.World.Actors
                 _targetPath.Enqueue(new Vector2(args.Packet.ReadFloat(), args.Packet.ReadFloat()));
             }
 
-            Engine.Services.Get<WorldManager>().Map.Path = new List<Vector2>(_targetPath.ToArray());
+            _worldManager.Map.Path = new List<Vector2>(_targetPath.ToArray());
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -304,7 +307,7 @@ namespace Lunar.Client.World.Actors
             this.Position = position;
 
             var layerName = buffer.ReadString();
-            _layer = Engine.Services.Get<WorldManager>().Map.GetLayer(layerName);
+            _layer = _worldManager.Map.GetLayer(layerName);
 
             this.SpriteSheet.Sprite.Transform.LayerDepth = _layer.ZIndex + (EngineConstants.PARTS_PER_LAYER / 2);
             this.SpriteSheet.HorizontalFrameIndex = 1;

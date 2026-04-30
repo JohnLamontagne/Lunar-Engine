@@ -27,12 +27,14 @@ namespace Lunar.Client.Utilities
         private const StringComparison StringComparisonMethod = StringComparison.OrdinalIgnoreCase;
 
         private readonly ManualInterpreter _manualInterpreter;
+        private readonly NetHandler _netHandler;
 
-        public CommandInterpreter()
+        public CommandInterpreter(NetHandler netHandler)
         {
             _manualInterpreter = new ManualInterpreter();
+            _netHandler = netHandler;
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.AVAILABLE_COMMANDS, this.Handle_AvailableCommands);
+            netHandler.AddPacketHandler(PacketType.AVAILABLE_COMMANDS, this.Handle_AvailableCommands);
         }
 
         private void Handle_AvailableCommands(PacketReceivedEventArgs args)
@@ -56,7 +58,7 @@ namespace Lunar.Client.Utilities
         {
             _manualInterpreter.Execute(output, input);
 
-            if (Engine.Services.Get<NetHandler>().Connected)
+            if (_netHandler.Connected)
             {
                 string[] instructions = input.Split(InstructionSeparator, StringSplitOptions.RemoveEmptyEntries);
 
@@ -75,7 +77,7 @@ namespace Lunar.Client.Utilities
                     foreach (var arg in commandArgs)
                         packet.Write(arg);
 
-                    Engine.Services.Get<NetHandler>().SendPacket(PacketType.CLIENT_COMMAND, packet, DeliveryMethod.ReliableOrdered);
+                    _netHandler.SendPacket(PacketType.CLIENT_COMMAND, packet, DeliveryMethod.ReliableOrdered);
                 }
             }
         }

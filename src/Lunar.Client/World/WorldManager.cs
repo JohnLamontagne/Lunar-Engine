@@ -12,10 +12,12 @@
 */
 
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Net;
+using Lunar.Client.Utilities.Services;
 using Lunar.Graphics;
 using Lunar.Client.Utilities;
 using Lunar.Client.World.Actors;
@@ -51,17 +53,22 @@ namespace Lunar.Client.World
 
         public event EventHandler LoadedMap;
 
-        public WorldManager(ContentManager contentManager, Camera camera)
-        {
-            _contentManager = contentManager;
-            _camera = camera;
+        private readonly NetHandler _netHandler;
+        private readonly IServiceProvider _services;
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.MAP_DATA, this.Handle_MapData);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_JOINED, this.Handle_PlayerJoined);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_LEFT, this.Handle_PlayerLeft);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_DATA, this.Handle_PlayerData);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.NPC_DATA, this.Handle_NPCData);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.POSITION_UPDATE, this.Handle_PositionUpdate);
+        public WorldManager(ContentManagerService contentManagerService, Camera camera, NetHandler netHandler, IServiceProvider services)
+        {
+            _contentManager = contentManagerService.ContentManager;
+            _camera = camera;
+            _netHandler = netHandler;
+            _services = services;
+
+            netHandler.AddPacketHandler(PacketType.MAP_DATA, this.Handle_MapData);
+            netHandler.AddPacketHandler(PacketType.PLAYER_JOINED, this.Handle_PlayerJoined);
+            netHandler.AddPacketHandler(PacketType.PLAYER_LEFT, this.Handle_PlayerLeft);
+            netHandler.AddPacketHandler(PacketType.PLAYER_DATA, this.Handle_PlayerData);
+            netHandler.AddPacketHandler(PacketType.NPC_DATA, this.Handle_NPCData);
+            netHandler.AddPacketHandler(PacketType.POSITION_UPDATE, this.Handle_PositionUpdate);
         }
 
         private void Handle_PositionUpdate(PacketReceivedEventArgs args)
@@ -89,7 +96,7 @@ namespace Lunar.Client.World
 
             if (!_map.EntityExists(uniqueID))
             {
-                var npc = new NPC(uniqueID);
+                var npc = ActivatorUtilities.CreateInstance<NPC>(_services, uniqueID);
                 npc.Unpack(args.Packet, _contentManager);
                 _map.AddEntity(uniqueID, npc);
             }
@@ -103,7 +110,7 @@ namespace Lunar.Client.World
         {
             string uniqueID = args.Packet.ReadString();
 
-            if (uniqueID == Engine.Services.Get<NetHandler>().UniqueID)
+            if (uniqueID == _netHandler.UniqueID)
             {
                 _player.Unpack(args.Packet, _contentManager);
             }
@@ -123,11 +130,11 @@ namespace Lunar.Client.World
 
             Player player;
 
-            if (uniqueID == Engine.Services.Get<NetHandler>().UniqueID)
+            if (uniqueID == _netHandler.UniqueID)
             {
                 if (_player == null)
                 {
-                    player = new Player(_camera, uniqueID);
+                    player = ActivatorUtilities.CreateInstance<Player>(_services, _camera, uniqueID);
                     _player = player;
                     this.PlayerJoined?.Invoke(this, new PlayerJoinedEventArgs(player));
                 }
@@ -136,7 +143,7 @@ namespace Lunar.Client.World
             }
             else
             {
-                player = new Player(uniqueID);
+                player = ActivatorUtilities.CreateInstance<Player>(_services, uniqueID);
                 this.PlayerJoined?.Invoke(this, new PlayerJoinedEventArgs(player));
             }
 
@@ -160,7 +167,7 @@ namespace Lunar.Client.World
 
             _map?.Unload(); // unload the previous map if it existed.
 
-            _map = new Map(dimensions.ToXna(), name);
+            _map = ActivatorUtilities.CreateInstance<Map>(_services, dimensions.ToXna(), name);
             _map.Unpack(args.Packet);
 
             _mapLoaded = true;

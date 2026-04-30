@@ -61,7 +61,7 @@ namespace Lunar.Client.World
             spriteBatch.Draw(this.Sprite);
         }
 
-        public static MapObject Unpack(Packet netBuffer)
+        public static MapObject Unpack(Packet netBuffer, ContentManagerService contentManagerService, LightManagerService lightManagerService)
         {
             // can we view it?
             if (!netBuffer.ReadBoolean())
@@ -75,7 +75,7 @@ namespace Lunar.Client.World
             float zIndex = netBuffer.ReadSingle();
             var frameTime = netBuffer.ReadInt32();
 
-            var sprite = new AnimatedSprite(Engine.Services.Get<ContentManagerService>().ContentManager
+            var sprite = new AnimatedSprite(contentManagerService.ContentManager
                 .LoadTexture2D(Constants.FILEPATH_DATA + textureName));
 
             sprite.Transform.Rect = sourceRectangle.ToLunar();
@@ -99,7 +99,7 @@ namespace Lunar.Client.World
                     Intensity = .7f,
                 };
 
-                Engine.Services.Get<LightManagerService>().Component.Lights.Add(pointLight);
+                lightManagerService.Component.Lights.Add(pointLight);
 
                 mapObject.Light = pointLight;
             }

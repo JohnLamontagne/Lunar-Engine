@@ -16,9 +16,11 @@ using Lunar.Client.Scenes;
 using Lunar.Client.Utilities;
 using Lunar.Client.Utilities.Input;
 using Lunar.Client.Utilities.Services;
+using Lunar.Client.World;
 using Lunar.Core;
 using Lunar.Core.Utilities;
 using Lunar.Graphics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -31,19 +33,53 @@ namespace Lunar.Client
         protected SpriteBatch _spriteBatch;
         protected Camera _camera;
 
+        private NetHandler _netHandler;
+        private SceneManager _sceneManager;
+
+        protected IServiceProvider Services { get; private set; }
+
         protected override void Initialize()
         {
             Window.Title = Settings.GameName;
 
-            Engine.Services.Register(new GraphicsDeviceService(this.GraphicsDevice));
-            Engine.Services.Register(new ContentManagerService(this.Content));
-            Engine.Services.Register(new NetHandler());
-            Engine.Services.Register(new SceneManager());
+            var services = new ServiceCollection();
 
-            _camera = new Camera(new Rectangle(0, 0, Settings.ResolutionX, Settings.ResolutionY));
+            // MonoGame-derived primitives — only available now that GraphicsDevice exists.
+            services.AddSingleton(this.GraphicsDevice);
+            services.AddSingleton(this.Content);
+            services.AddSingleton(this.Window);
+            services.AddSingleton(Engine.Services.Get<Logger>());
+            services.AddSingleton(new GraphicsDeviceService(this.GraphicsDevice));
+            services.AddSingleton(new ContentManagerService(this.Content));
+            services.AddSingleton(new Camera(new Rectangle(0, 0, Settings.ResolutionX, Settings.ResolutionY)));
+
+            services.AddSingleton<NetHandler>();
+            services.AddSingleton<SceneManager>();
+            services.AddSingleton<WorldManager>();
+            // GUIManager is transient: each scene owns its own.
+            services.AddTransient<GUI.GUIManager>();
+            services.AddSingleton<MenuScene>();
+            services.AddSingleton<GameScene>();
+            services.AddSingleton<LoadingScene>();
+
+            this.ConfigureServices(services);
+
+            Services = services.BuildServiceProvider();
+
+            // Bridge resolved instances into the legacy locator until Pass 4 deletes it.
+            BridgeToEngineServices(Services,
+                typeof(GraphicsDeviceService),
+                typeof(ContentManagerService),
+                typeof(NetHandler),
+                typeof(SceneManager),
+                typeof(WorldManager));
+
+            _camera = Services.GetRequiredService<Camera>();
+            _netHandler = Services.GetRequiredService<NetHandler>();
+            _sceneManager = Services.GetRequiredService<SceneManager>();
 
             EventInput.Initialize(this.Window);
-            this.InitializePlatformServices();
+            this.InitializePlatformServices(Services);
             this.InitializeScenes();
 
             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
@@ -51,22 +87,33 @@ namespace Lunar.Client
             base.Initialize();
         }
 
-        protected virtual void InitializePlatformServices() { }
+        protected virtual void ConfigureServices(IServiceCollection services) { }
+
+        protected virtual void InitializePlatformServices(IServiceProvider services) { }
 
         protected virtual void InitializeScenes()
         {
-            var menuScene = new MenuScene(this.Content, this.Window);
-            var gameScene = new GameScene(this.Content, this.Window, _camera);
-            var loadingScene = new LoadingScene(this.Content, this.Window);
+            var menuScene = Services.GetRequiredService<MenuScene>();
+            var gameScene = Services.GetRequiredService<GameScene>();
+            var loadingScene = Services.GetRequiredService<LoadingScene>();
 
             menuScene.Initalize();
             gameScene.Initalize();
             loadingScene.Initalize();
 
-            Engine.Services.Get<SceneManager>().AddScene(menuScene, "menuScene");
-            Engine.Services.Get<SceneManager>().AddScene(gameScene, "gameScene");
-            Engine.Services.Get<SceneManager>().AddScene(loadingScene, "loadingScene");
-            Engine.Services.Get<SceneManager>().SetActiveScene("menuScene");
+            _sceneManager.AddScene(menuScene, "menuScene");
+            _sceneManager.AddScene(gameScene, "gameScene");
+            _sceneManager.AddScene(loadingScene, "loadingScene");
+            _sceneManager.SetActiveScene("menuScene");
+        }
+
+        private static void BridgeToEngineServices(IServiceProvider provider, params Type[] types)
+        {
+            foreach (var type in types)
+            {
+                var instance = (IService)provider.GetRequiredService(type);
+                Engine.Services.RegisterAs(instance, type);
+            }
         }
 
         protected override void LoadContent()
@@ -77,8 +124,8 @@ namespace Lunar.Client
 
         protected override void Update(GameTime gameTime)
         {
-            Engine.Services.Get<NetHandler>().ProcessPacketQueue();
-            Engine.Services.Get<SceneManager>().Update(gameTime);
+            _netHandler.ProcessPacketQueue();
+            _sceneManager.Update(gameTime);
             base.Update(gameTime);
             EventOccured?.Invoke(this, new SubjectEventArgs("updateFinished", new object[] { gameTime }));
         }
@@ -87,7 +134,7 @@ namespace Lunar.Client
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, _camera.GetTransformation());
-            Engine.Services.Get<SceneManager>().Draw(gameTime, _spriteBatch);
+            _sceneManager.Draw(gameTime, _spriteBatch);
             this.DrawOverlay(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);

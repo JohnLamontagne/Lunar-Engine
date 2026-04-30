@@ -135,12 +135,17 @@ namespace Lunar.Client.World.Actors
 
         public Emitter Emitter { get; set; }
 
-        public Player(Camera camera, string uniqueID)
+        private readonly NetHandler _netHandler;
+        private readonly Lunar.Client.World.WorldManager _worldManager;
+
+        public Player(Camera camera, string uniqueID, NetHandler netHandler, Lunar.Client.World.WorldManager worldManager)
         {
             _camera = camera;
             _camera.Subject = this;
             _uniqueID = uniqueID;
             _mainPlayer = true;
+            _netHandler = netHandler;
+            _worldManager = worldManager;
 
             _light = new PointLight
             {
@@ -152,10 +157,12 @@ namespace Lunar.Client.World.Actors
             this.InitalizePacketHandlers();
         }
 
-        public Player(string uniqueID)
+        public Player(string uniqueID, NetHandler netHandler, Lunar.Client.World.WorldManager worldManager)
         {
             _uniqueID = uniqueID;
             _mainPlayer = false;
+            _netHandler = netHandler;
+            _worldManager = worldManager;
 
             _light = new PointLight();
             _light.Color = Color.LightYellow;
@@ -167,8 +174,8 @@ namespace Lunar.Client.World.Actors
 
         private void InitalizePacketHandlers()
         {
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAYER_STATS, this.Handle_PlayerStats);
+            _netHandler.AddPacketHandler(PacketType.PLAYER_MOVING, this.Handle_PlayerMoving);
+            _netHandler.AddPacketHandler(PacketType.PLAYER_STATS, this.Handle_PlayerStats);
         }
 
         private void Handle_PlayerStats(PacketReceivedEventArgs args)
@@ -263,7 +270,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet();
                             packet.Write((byte)Direction.Left);
                             packet.Write(true);
-                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
+                            _netHandler.SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -278,7 +285,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet();
                             packet.Write((byte)Direction.Right);
                             packet.Write(true);
-                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
+                            _netHandler.SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -293,7 +300,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet();
                             packet.Write((byte)Direction.Up);
                             packet.Write(true);
-                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
+                            _netHandler.SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -308,7 +315,7 @@ namespace Lunar.Client.World.Actors
                             var packet = new Packet();
                             packet.Write((byte)Direction.Down);
                             packet.Write(true);
-                            Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
+                            _netHandler.SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                             _requestMoving = true;
                         }
@@ -321,7 +328,7 @@ namespace Lunar.Client.World.Actors
                         var packet = new Packet();
                         packet.Write((byte)_direction);
                         packet.Write(false);
-                        Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
+                        _netHandler.SendPacket(PacketType.PLAYER_MOVING, packet, DeliveryMethod.ReliableOrdered);
 
                         _requestMoving = true;
                     }
@@ -331,7 +338,7 @@ namespace Lunar.Client.World.Actors
             if (keyboardState.IsKeyDown(Keys.LeftControl) && _prevKeyboardState.IsKeyUp(Keys.LeftControl))
             {
                 var packet = new Packet();
-                Engine.Services.Get<NetHandler>().SendPacket(PacketType.PLAYER_INTERACT, packet, DeliveryMethod.ReliableOrdered);
+                _netHandler.SendPacket(PacketType.PLAYER_INTERACT, packet, DeliveryMethod.ReliableOrdered);
             }
 
             _prevKeyboardState = keyboardState;
@@ -426,7 +433,7 @@ namespace Lunar.Client.World.Actors
             _collisionBounds = new Rectangle(buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32(), buffer.ReadInt32());
 
             var layerName = buffer.ReadString();
-            this.Layer = Engine.Services.Get<WorldManager>().Map.GetLayer(layerName);
+            this.Layer = _worldManager.Map.GetLayer(layerName);
 
             _requestMoving = false;
 

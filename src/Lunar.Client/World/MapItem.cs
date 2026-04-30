@@ -40,14 +40,13 @@ namespace Lunar.Client.World
         {
         }
 
-        public void Unpack(Packet netBuffer, Layer layer)
+        public void Unpack(Packet netBuffer, Layer layer, ContentManagerService contentManagerService)
         {
             var position = new Vector2(netBuffer.ReadFloat(), netBuffer.ReadFloat());
             _name = netBuffer.ReadString();
 
             var textureName = netBuffer.ReadString();
-            _sprite = new Sprite(Engine.Services.Get<ContentManagerService>()
-                .ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName));
+            _sprite = new Sprite(contentManagerService.ContentManager.LoadTexture2D(Constants.FILEPATH_GFX + "/Items/" + textureName));
 
             _sprite.Transform.Position = position.ToLunar();
             _sprite.Transform.LayerDepth = layer.ZIndex + .001f; // the .001f makes it so that the item spawns above the map layer, but just below actors

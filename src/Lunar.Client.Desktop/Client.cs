@@ -12,10 +12,12 @@
 */
 #define DEV_MODE
 
+using Lunar.Client.Net;
 using Lunar.Client.Utilities;
 using Lunar.Client.Utilities.Services;
 using Lunar.Core;
 using Lunar.Graphics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -60,16 +62,25 @@ namespace Lunar.Client
             e.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
         }
 
-        protected override void InitializePlatformServices()
+        protected override void ConfigureServices(IServiceCollection services)
         {
-            Engine.Services.Register(new LightManagerService(new PenumbraComponent(this)));
-            Engine.Services.Get<LightManagerService>().Component.Initialize();
+            services.AddSingleton<LightManagerService>(_ => new LightManagerService(new PenumbraComponent(this)));
+        }
+
+        protected override void InitializePlatformServices(IServiceProvider services)
+        {
+            var lightManager = services.GetRequiredService<LightManagerService>();
+            lightManager.Component.Initialize();
+
+            // Register LightManagerService into the legacy locator too because Lunar.Client
+            // leaves still resolve it from there. Will be cleaned up in Pass 4.
+            Engine.Services.RegisterAs(lightManager, typeof(LightManagerService));
 
             _consoleComponent = new ConsoleComponent(this);
             _consoleComponent.FontColor = Color.Wheat;
             this.Components.Add(_consoleComponent);
 
-            var interpreter = new CommandInterpreter();
+            var interpreter = new CommandInterpreter(services.GetRequiredService<NetHandler>());
             _consoleComponent.Interpreter = interpreter;
 
             _consoleRedirector = new ConsoleRedirector(_consoleComponent);
@@ -93,7 +104,7 @@ namespace Lunar.Client
                 _consoleComponent.ToggleOpenClose();
             _previousKeyboardState = currentKeyboardState;
 
-            Engine.Services.Get<LightManagerService>().Component.Transform = _camera.GetTransformation();
+            Services.GetRequiredService<LightManagerService>().Component.Transform = _camera.GetTransformation();
             _cursorPos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
 
             base.Update(gameTime);
@@ -101,7 +112,7 @@ namespace Lunar.Client
 
         protected override void Draw(GameTime gameTime)
         {
-            Engine.Services.Get<LightManagerService>().Component.BeginDraw();
+            Services.GetRequiredService<LightManagerService>().Component.BeginDraw();
             base.Draw(gameTime);
         }
 

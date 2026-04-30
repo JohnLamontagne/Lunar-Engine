@@ -11,8 +11,10 @@
 	limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Lunar.Client.Net;
@@ -21,7 +23,6 @@ using Lunar.Client.Utilities.Services;
 using Lunar.Client.World.Actors;
 using Lunar.Core.Net;
 using Lunar.Graphics;
-using Lunar.Core;
 
 namespace Lunar.Client.World
 {
@@ -31,6 +32,9 @@ namespace Lunar.Client.World
         private readonly Dictionary<string, IActor> _entities;
         private readonly Dictionary<Vector2, List<MapItem>> _mapItems;
         private readonly List<MapObject> _mapObjects;
+        private readonly LightManagerService _lightManager;
+        private readonly ContentManagerService _contentManager;
+        private readonly IServiceProvider _services;
 
         public string Name { get; private set; }
 
@@ -44,7 +48,7 @@ namespace Lunar.Client.World
 
         public List<Vector2> Path { get; set; }
 
-        public Map(Vector2 dimensions, string name)
+        public Map(Vector2 dimensions, string name, NetHandler netHandler, LightManagerService lightManager, ContentManagerService contentManager, IServiceProvider services)
         {
             this.Dimensions = dimensions;
             this.Name = name;
@@ -55,9 +59,12 @@ namespace Lunar.Client.World
             _entities = new Dictionary<string, IActor>();
             _mapItems = new Dictionary<Vector2, List<MapItem>>();
             _mapObjects = new List<MapObject>();
+            _lightManager = lightManager;
+            _contentManager = contentManager;
+            _services = services;
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_SPAWN, this.Handle_MapItemSpawn);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.MAP_ITEM_DESPAWN, this.Handle_MapItemDeSpawn);
+            netHandler.AddPacketHandler(PacketType.MAP_ITEM_SPAWN, this.Handle_MapItemSpawn);
+            netHandler.AddPacketHandler(PacketType.MAP_ITEM_DESPAWN, this.Handle_MapItemDeSpawn);
         }
 
         private void Handle_MapItemDeSpawn(PacketReceivedEventArgs args)
@@ -69,7 +76,7 @@ namespace Lunar.Client.World
             MapItem mapItem = new MapItem();
             string layerName = args.Packet.ReadString();
 
-            mapItem.Unpack(args.Packet, this.GetLayer(layerName));
+            mapItem.Unpack(args.Packet, this.GetLayer(layerName), _contentManager);
 
             if (!_mapItems.ContainsKey(mapItem.Position))
                 _mapItems.Add(mapItem.Position, new List<MapItem>());
@@ -138,17 +145,17 @@ namespace Lunar.Client.World
 
         public void Unpack(Packet netBuffer)
         {
-            Engine.Services.Get<LightManagerService>().Component.Lights.Clear();
+            _lightManager.Component.Lights.Clear();
 
             this.Dark = netBuffer.ReadBoolean();
 
             if (this.Dark)
             {
-                Engine.Services.Get<LightManagerService>().Component.AmbientColor = new Color(100, 100, 100, 20);
+                _lightManager.Component.AmbientColor = new Color(100, 100, 100, 20);
             }
             else
             {
-                Engine.Services.Get<LightManagerService>().Component.AmbientColor = Color.White;
+                _lightManager.Component.AmbientColor = Color.White;
             }
 
             int layerCount = netBuffer.ReadInt32();
@@ -157,7 +164,7 @@ namespace Lunar.Client.World
             {
                 string layerName = netBuffer.ReadString();
                 int lIndex = netBuffer.ReadInt32();
-                var layer = new Layer(this.Dimensions, lIndex, layerName);
+                var layer = ActivatorUtilities.CreateInstance<Layer>(_services, this.Dimensions, lIndex, layerName);
                 layer.Unpack(netBuffer);
                 _layers.Add(layerName, layer);
             }
@@ -199,12 +206,12 @@ namespace Lunar.Client.World
         {
             _entities.Add(uniqueID, actor);
 
-            Engine.Services.Get<LightManagerService>().Component.Lights.Add(actor.Light);
+            _lightManager.Component.Lights.Add(actor.Light);
         }
 
         public void RemoveEntity(string uniqueID)
         {
-            Engine.Services.Get<LightManagerService>().Component.Lights.Remove(_entities[uniqueID].Light);
+            _lightManager.Component.Lights.Remove(_entities[uniqueID].Light);
 
             _entities.Remove(uniqueID);
         }

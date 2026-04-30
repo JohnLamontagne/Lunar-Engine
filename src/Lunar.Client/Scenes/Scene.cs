@@ -17,6 +17,7 @@ using Lunar.Client.Utilities.Services;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Core.Utilities;
+using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -38,17 +39,23 @@ namespace Lunar.Client.Scenes
 
         public bool Active { get; private set; }
 
-        protected Scene(ContentManager contentManager, GameWindow gameWindow)
+        private readonly LightManagerService _lightManager;
+
+        protected NetHandler NetHandler { get; }
+
+        protected Scene(ContentManagerService contentManagerService, GameWindow gameWindow, NetHandler netHandler, LightManagerService lightManager, GUIManager guiManager)
         {
-            _contentManager = contentManager;
-            _guiManager = new GUIManager();
+            _contentManager = contentManagerService.ContentManager;
+            _guiManager = guiManager;
             _gameComponents = new List<GameComponent>();
+            _lightManager = lightManager;
+            this.NetHandler = netHandler;
 
             // Allow the server to demand that the client play music.
             // We handle this here so that we may easily play music in any scene.
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAY_MUSIC, this.Handle_PlayMusic);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.STOP_MUSIC, this.Handle_StopMusic);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.PLAY_SOUND, this.Handle_PlaySound);
+            netHandler.AddPacketHandler(PacketType.PLAY_MUSIC, this.Handle_PlayMusic);
+            netHandler.AddPacketHandler(PacketType.STOP_MUSIC, this.Handle_StopMusic);
+            netHandler.AddPacketHandler(PacketType.PLAY_SOUND, this.Handle_PlaySound);
         }
 
         private void Handle_PlaySound(PacketReceivedEventArgs args)
@@ -109,7 +116,7 @@ namespace Lunar.Client.Scenes
             // This also ensures that GuiManager can call Begin and render outside of worldspace
             //spriteBatch.End();
 
-            Engine.Services.Get<LightManagerService>().Component.Draw(gameTime);
+            _lightManager.Component.Draw(gameTime);
 
             this.GuiManager.Begin(spriteBatch);
             this.GuiManager.Draw(spriteBatch);

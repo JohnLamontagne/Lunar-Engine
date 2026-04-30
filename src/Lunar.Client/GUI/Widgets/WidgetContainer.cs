@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 
+using Lunar.Client.Utilities.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -132,7 +133,8 @@ namespace Lunar.Client.GUI.Widgets
 
         public event EventHandler<WidgetNameChangedEventArgs> NameChanged;
 
-        public WidgetContainer(Texture2D backSprite)
+        public WidgetContainer(Texture2D backSprite, GraphicsDeviceService graphicsDeviceService)
+            : base(graphicsDeviceService)
         {
             _backSprite = backSprite;
 
@@ -144,7 +146,8 @@ namespace Lunar.Client.GUI.Widgets
             this.Origin = Vector2.Zero;
         }
 
-        public WidgetContainer(Vector2 size)
+        public WidgetContainer(Vector2 size, GraphicsDeviceService graphicsDeviceService)
+            : base(graphicsDeviceService)
         {
             this.Size = size;
             this.Selectable = true;

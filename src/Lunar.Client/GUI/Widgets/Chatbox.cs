@@ -11,6 +11,7 @@
 	limitations under the License.
 */
 
+using Lunar.Client.Utilities.Services;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -40,8 +41,8 @@ namespace Lunar.Client.GUI.Widgets
 
         public int MaxEntries { get; set; }
 
-        public Chatbox(Texture2D backSprite, SpriteFont font, int maxEntries)
-            : base(backSprite)
+        public Chatbox(Texture2D backSprite, SpriteFont font, int maxEntries, GraphicsDeviceService graphicsDeviceService)
+            : base(backSprite, graphicsDeviceService)
         {
             this.Font = font;
             this.MaxEntries = maxEntries;

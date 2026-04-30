@@ -11,8 +11,10 @@
 	limitations under the License.
 */
 
+using Lunar.Client.GUI;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
+using Lunar.Client.Utilities.Services;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Graphics;
@@ -29,19 +31,21 @@ namespace Lunar.Client.Scenes
     internal class MenuScene : Scene
     {
         private GameWindow _gameWindow;
+        private readonly SceneManager _sceneManager;
 
         private bool _authenticating;
 
-        public MenuScene(ContentManager contentManager, GameWindow gameWindow)
-            : base(contentManager, gameWindow)
+        public MenuScene(ContentManagerService contentManagerService, GameWindow gameWindow, NetHandler netHandler, LightManagerService lightManager, GUIManager guiManager, SceneManager sceneManager)
+            : base(contentManagerService, gameWindow, netHandler, lightManager, guiManager)
         {
             _gameWindow = gameWindow;
+            _sceneManager = sceneManager;
             _authenticating = false;
 
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_RegistrationSuccess);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_SUCCESS, this.Handle_AuthenticationSuccess);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.LOGIN_FAIL, this.Handle_AuthenticationFailure);
-            Engine.Services.Get<NetHandler>().AddPacketHandler(PacketType.REGISTRATION_FAIL, this.Handle_AuthenticationFailure);
+            netHandler.AddPacketHandler(PacketType.REGISTER_SUCCESS, this.Handle_RegistrationSuccess);
+            netHandler.AddPacketHandler(PacketType.LOGIN_SUCCESS, this.Handle_AuthenticationSuccess);
+            netHandler.AddPacketHandler(PacketType.LOGIN_FAIL, this.Handle_AuthenticationFailure);
+            netHandler.AddPacketHandler(PacketType.REGISTRATION_FAIL, this.Handle_AuthenticationFailure);
         }
 
         private void Handle_RegistrationSuccess(PacketReceivedEventArgs args)
@@ -80,7 +84,7 @@ namespace Lunar.Client.Scenes
             if (!this.Active)
                 return;
 
-            Engine.Services.Get<SceneManager>().SetActiveScene("loadingScene");
+            _sceneManager.SetActiveScene("loadingScene");
         }
 
         private void Handle_AuthenticationFailure(PacketReceivedEventArgs args)
@@ -160,7 +164,7 @@ namespace Lunar.Client.Scenes
             if (_authenticating)
                 return;
 
-            NetHandler netHandler = Engine.Services.Get<NetHandler>();
+            var netHandler = this.NetHandler;
 
             var menuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
 
@@ -200,7 +204,7 @@ namespace Lunar.Client.Scenes
             if (_authenticating)
                 return;
 
-            NetHandler netHandler = Engine.Services.Get<NetHandler>();
+            var netHandler = this.NetHandler;
 
             var loginMenuContainer = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
 

@@ -11,14 +11,15 @@
 	limitations under the License.
 */
 
+using Lunar.Client.GUI;
 using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
 using Lunar.Client.Utilities;
+using Lunar.Client.Utilities.Services;
 using Lunar.Core;
 using Lunar.Core.Net;
 using Lunar.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Lunar.Client.Scenes
@@ -28,9 +29,12 @@ namespace Lunar.Client.Scenes
         private bool _finishedLoading;
         private double _minEndTime;
 
-        public LoadingScene(ContentManager contentManager, GameWindow gameWindow) :
-            base(contentManager, gameWindow)
+        private readonly SceneManager _sceneManager;
+
+        public LoadingScene(ContentManagerService contentManagerService, GameWindow gameWindow, NetHandler netHandler, LightManagerService lightManager, GUIManager guiManager, SceneManager sceneManager) :
+            base(contentManagerService, gameWindow, netHandler, lightManager, guiManager)
         {
+            _sceneManager = sceneManager;
             this.InitalizeInterface();
         }
 
@@ -43,9 +47,9 @@ namespace Lunar.Client.Scenes
 
             if (_finishedLoading && gameTime.TotalGameTime.TotalMilliseconds > _minEndTime)
             {
-                Engine.Services.Get<SceneManager>().SetActiveScene("gameScene");
+                _sceneManager.SetActiveScene("gameScene");
                 var mapLoaded = new Packet();
-                Engine.Services.Get<NetHandler>().SendPacket(PacketType.MAP_LOADED, mapLoaded, DeliveryMethod.ReliableOrdered);
+                this.NetHandler.SendPacket(PacketType.MAP_LOADED, mapLoaded, DeliveryMethod.ReliableOrdered);
             }
 
             base.Update(gameTime);

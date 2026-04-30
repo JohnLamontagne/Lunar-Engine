@@ -49,12 +49,15 @@ namespace Lunar.Client.GUI
             }
         }
 
-        public GUIManager()
+        private readonly GraphicsDeviceService _graphicsDeviceService;
+
+        public GUIManager(GraphicsDeviceService graphicsDeviceService)
         {
             _widgets = new Dictionary<string, IWidget>();
             _orderedWidgets = new FlexibleStack<IWidget>();
+            _graphicsDeviceService = graphicsDeviceService;
 
-            var graphicsDevice = Engine.Services.Get<GraphicsDeviceService>().GraphicsDevice;
+            var graphicsDevice = graphicsDeviceService.GraphicsDevice;
 
             var pp = graphicsDevice.PresentationParameters;
             _renderTarget = new RenderTarget2D(graphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
@@ -223,7 +226,7 @@ namespace Lunar.Client.GUI
         {
             spriteBatch.End();
 
-            Engine.Services.Get<GraphicsDeviceService>().GraphicsDevice.SetRenderTarget(null);
+            _graphicsDeviceService.GraphicsDevice.SetRenderTarget(null);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
@@ -389,7 +392,7 @@ namespace Lunar.Client.GUI
             }
 
             SpriteFont font = fonts[fontName];
-            var chatBox = new Chatbox(texture, font, maxLines)
+            var chatBox = new Chatbox(texture, font, maxLines, _graphicsDeviceService)
             {
                 Position = position,
                 ChatOffset = new Vector2(offX, offY),
@@ -538,7 +541,7 @@ namespace Lunar.Client.GUI
                 visible = true;
             }
 
-            var container = new WidgetContainer(texture)
+            var container = new WidgetContainer(texture, _graphicsDeviceService)
             {
                 Position = position,
                 Origin = origin,
