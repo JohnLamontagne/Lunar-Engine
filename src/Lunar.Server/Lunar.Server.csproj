@@ -13,9 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="LiteNetLib" Version="2.1.3" />
-    <PackageReference Include="IronPython" Version="3.4.2" />
-    <PackageReference Include="IronPython.StdLib" Version="3.4.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net90" Version="1.7.9" />
   </ItemGroup>
 
   <ItemGroup>
