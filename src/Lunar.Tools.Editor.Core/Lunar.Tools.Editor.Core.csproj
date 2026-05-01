@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Lunar.Tools.Editor.Core</RootNamespace>
+    <AssemblyName>Lunar.Tools.Editor.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net90" Version="1.7.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lunar.Tools.Editor.Contracts\Lunar.Tools.Editor.Contracts.csproj" />
+    <ProjectReference Include="..\Lunar.Core\Lunar.Core.csproj" />
+  </ItemGroup>
+
+</Project>

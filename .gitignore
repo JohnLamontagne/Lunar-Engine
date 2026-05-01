@@ -286,3 +286,9 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Web editor frontend build output and OS junk
+src/Lunar.Tools.Editor.Web/dist/
+.DS_Store
+.agents/
+skills-lock.json

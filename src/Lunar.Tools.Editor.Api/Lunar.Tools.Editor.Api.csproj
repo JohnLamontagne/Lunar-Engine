@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Lunar.Tools.Editor.Api</RootNamespace>
+    <AssemblyName>Lunar.Tools.Editor.Api</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lunar.Tools.Editor.Core\Lunar.Tools.Editor.Core.csproj" />
+    <ProjectReference Include="..\Lunar.Tools.Editor.Contracts\Lunar.Tools.Editor.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

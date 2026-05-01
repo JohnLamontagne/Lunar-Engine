@@ -2,6 +2,29 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Run Editor API",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build:editor-api",
+      "program": "${workspaceFolder}/src/Lunar.Tools.Editor.Api/bin/Debug/net9.0/Lunar.Tools.Editor.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Lunar.Tools.Editor.Api",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5174"
+      }
+    },
+    {
+      "name": "Run Editor Web",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "start:editor-web",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src/Lunar.Tools.Editor.Web/src"
+    },
+    {
       "name": "Run Server",
       "type": "coreclr",
       "request": "launch",
@@ -25,6 +48,11 @@
     }
   ],
   "compounds": [
+    {
+      "name": "Editor (API + Web)",
+      "configurations": ["Run Editor API", "Run Editor Web"],
+      "stopAll": true
+    },
     {
       "name": "Server + Client",
       "configurations": ["Run Server", "Run Client"],
