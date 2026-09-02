@@ -10,15 +10,38 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
+
+using System;
+using System.Runtime.InteropServices;
+
 namespace Lunar.Server
 {
     internal class Program
     {
         private static void Main(string[] args)
-        {           
+        {
             var server = new Server();
             server.Initalize();
             server.Start();
+
+            // Ctrl+C in a terminal and SIGTERM from a container runtime or test harness both
+            // stop the loops cleanly so the world is saved before exit.
+            Console.CancelKeyPress += (_, e) =>
+            {
+                e.Cancel = true;
+                Console.WriteLine("Shutdown requested (Ctrl+C)...");
+                server.Stop();
+            };
+
+            using var sigterm = PosixSignalRegistration.Create(PosixSignal.SIGTERM, ctx =>
+            {
+                ctx.Cancel = true;
+                Console.WriteLine("Shutdown requested (SIGTERM)...");
+                server.Stop();
+            });
+
+            server.WaitForShutdown();
+            Console.WriteLine("Server stopped.");
         }
     }
 }

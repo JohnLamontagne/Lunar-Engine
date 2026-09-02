@@ -59,6 +59,11 @@ namespace Lunar.Server
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
 #endif
 
+            // Test and container hook: a directory that contains "Server Data".
+            var rootOverride = Environment.GetEnvironmentVariable("LUNAR_DATA_ROOT");
+            if (!string.IsNullOrWhiteSpace(rootOverride))
+                rootPath = rootOverride;
+
             Engine.Initialize(rootPath);
 
             Console.WriteLine("Initalizing server...");
@@ -131,6 +136,26 @@ namespace Lunar.Server
             _webCommunicator.Run();
 
             this.BeginServerLoop();
+
+            // Machine-readable readiness marker for tooling and tests.
+            Console.WriteLine($"Server ready on port {Settings.ServerPort}");
+        }
+
+        /// <summary>
+        /// Requests shutdown and blocks until both loops have exited and the world has been saved.
+        /// </summary>
+        public void Stop()
+        {
+            Server.ShutDown = true;
+            _netThread?.Join(TimeSpan.FromSeconds(10));
+            _worldThread?.Join(TimeSpan.FromSeconds(10));
+        }
+
+        /// <summary>Blocks the calling thread until the loops end (normally via <see cref="Stop"/>).</summary>
+        public void WaitForShutdown()
+        {
+            _netThread?.Join();
+            _worldThread?.Join();
         }
 
         private void BeginServerLoop()

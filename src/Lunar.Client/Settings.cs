@@ -35,6 +35,32 @@ namespace Lunar.Client
         public static void Initalize()
         {
             LoadConfig();
+            ApplyEnvironmentOverrides();
+        }
+
+        /// <summary>
+        /// Test and container hooks: LUNAR_SERVER_HOST, LUNAR_SERVER_PORT and LUNAR_RESOLUTION (WxH)
+        /// override the values from config.json when set.
+        /// </summary>
+        private static void ApplyEnvironmentOverrides()
+        {
+            var host = Environment.GetEnvironmentVariable("LUNAR_SERVER_HOST");
+            if (!string.IsNullOrWhiteSpace(host))
+                Settings.IP = host.Trim();
+
+            if (int.TryParse(Environment.GetEnvironmentVariable("LUNAR_SERVER_PORT"), out var port) && port > 0)
+                Settings.Port = port;
+
+            var resolution = Environment.GetEnvironmentVariable("LUNAR_RESOLUTION");
+            if (!string.IsNullOrWhiteSpace(resolution))
+            {
+                var parts = resolution.ToLowerInvariant().Split('x');
+                if (parts.Length == 2 && int.TryParse(parts[0], out var w) && int.TryParse(parts[1], out var h) && w > 0 && h > 0)
+                {
+                    Settings.ResolutionX = w;
+                    Settings.ResolutionY = h;
+                }
+            }
         }
 
         private static void CreateConfig()

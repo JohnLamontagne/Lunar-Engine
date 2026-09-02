@@ -65,6 +65,7 @@ namespace Lunar.Server
         {
             _logger = logger;
             LoadConfig();
+            ApplyEnvironmentOverrides();
             LoadExperienceChart();
             LoadUserPermissions();
         }
@@ -105,6 +106,15 @@ namespace Lunar.Server
             var options = new JsonSerializerOptions { WriteIndented = true };
             var jsonString = JsonSerializer.Serialize(json, options);
             File.WriteAllText(_filePathConfig, jsonString);
+        }
+
+        /// <summary>
+        /// Test and container hook: LUNAR_SERVER_PORT overrides the port from config.json when set.
+        /// </summary>
+        private static void ApplyEnvironmentOverrides()
+        {
+            if (int.TryParse(Environment.GetEnvironmentVariable("LUNAR_SERVER_PORT"), out var port) && port > 0)
+                Settings.ServerPort = port;
         }
 
         private static void LoadConfig()

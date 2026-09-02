@@ -1,4 +1,4 @@
-/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ namespace Lunar.Client
 
         private NetHandler _netHandler;
         private SceneManager _sceneManager;
+        private Automation.AutomationServer _automation;
 
         protected IServiceProvider Services { get; private set; }
 
@@ -76,6 +77,13 @@ namespace Lunar.Client
 
             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
+            var automationPort = Automation.AutomationServer.PortFromEnvironment();
+            if (automationPort.HasValue)
+            {
+                _automation = new Automation.AutomationServer(this, Services, automationPort.Value);
+                _automation.Start();
+            }
+
             base.Initialize();
         }
 
@@ -109,6 +117,7 @@ namespace Lunar.Client
         {
             _netHandler.ProcessPacketQueue();
             _sceneManager.Update(gameTime);
+            _automation?.OnUpdate();
             base.Update(gameTime);
             EventOccured?.Invoke(this, new SubjectEventArgs("updateFinished", new object[] { gameTime }));
         }
@@ -121,9 +130,19 @@ namespace Lunar.Client
             this.DrawOverlay(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
+            _automation?.OnFrameRendered(GraphicsDevice);
         }
 
         protected virtual void DrawOverlay(SpriteBatch spriteBatch) { }
+
+        protected override void OnExiting(object sender, ExitingEventArgs args)
+        {
+            // Tell the server we are leaving so it releases the account immediately instead of
+            // waiting for the connection timeout.
+            _netHandler?.Disconnect();
+            _automation?.Dispose();
+            base.OnExiting(sender, args);
+        }
 
         public event EventHandler<SubjectEventArgs> EventOccured;
     }

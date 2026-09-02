@@ -26,6 +26,8 @@ namespace Lunar.Client.Scenes
 
         public Scene ActiveScreen { get { return _activeScreen; } }
 
+        public string ActiveSceneName { get; private set; }
+
         public SceneManager()
         {
             _scenes = new Dictionary<string, Scene>();
@@ -65,6 +67,7 @@ namespace Lunar.Client.Scenes
         {
             _activeScreen?.Exit();
             _activeScreen = _scenes[screenName];
+            ActiveSceneName = screenName;
             _activeScreen.Enter();
         }
 
