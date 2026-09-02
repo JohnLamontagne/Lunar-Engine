@@ -7,6 +7,8 @@ milestone ends with an exit check that must pass before the next one starts.
 
 Conventions used below:
 
+- Every milestone adds tests at all three layers of `lunar-testing-pipeline.md` (unit,
+  end-to-end with screenshot assertions, and bots where relevant) before its exit check.
 - **Delete** means remove from the repository in the same change, not deprecate.
 - Every task that changes a `Pack`/`Unpack` pair or a data manager DTO includes its round-trip
   test in the same change.
@@ -23,6 +25,10 @@ Conventions used below:
 - [x] `Lunar.Core.Tests` xunit project added to the solution; 20 tests passing.
 - [x] Upgrade MonoGame to 3.8.5.1 in `Lunar.Client` and `Lunar.Graphics`.
 - [x] Assessment document with decision record.
+- [x] Testing pipeline (`lunar-testing-pipeline.md`): client automation endpoint, `Lunar.E2E.Tests`
+      launching a real server and Xvfb client with screenshot analysis and goldens,
+      `Lunar.Server.Tests`, Docker runner image and compose, CI workflow. Thirteen engine defects
+      found and fixed by the first run.
 
 ---
 

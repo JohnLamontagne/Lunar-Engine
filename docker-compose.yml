@@ -1,0 +1,23 @@
+# Test pipeline on the Docker host.
+#   docker compose run --rm e2e            # unit + end-to-end, artifacts in ./artifacts/e2e
+#   docker compose run --rm e2e unit       # unit tests only
+#   docker compose run --rm e2e e2e        # end-to-end only
+#   docker compose up server               # a standalone game server on UDP 25566
+services:
+  e2e:
+    build:
+      context: .
+      dockerfile: docker/e2e.Dockerfile
+    volumes:
+      - ./artifacts:/artifacts
+    # The suite launches its own server and client inside this container; no ports needed.
+
+  server:
+    build:
+      context: .
+      dockerfile: docker/server.Dockerfile
+    ports:
+      - "25566:25566/udp"
+    environment:
+      LUNAR_SERVER_PORT: "25566"
+    restart: unless-stopped

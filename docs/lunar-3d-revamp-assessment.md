@@ -373,6 +373,10 @@ replacement for that piece exists, and shims are avoided.
 - `Packet.Write(Vector3)/ReadVector3()` and `Write(Box)/ReadBox()`.
 - `Lunar.Core.Tests` xunit project added to the solution with round-trip tests for the wire
   helpers and unit tests for the new math.
+- The testing pipeline described in `lunar-testing-pipeline.md`: unit tests, end-to-end tests
+  that run a real server and a real rendering client under Xvfb with screenshot analysis, and
+  the Docker/CI wiring for the Docker host. Its first run found and fixed thirteen engine
+  defects (Linux-only crashes, script loading, identity handling, auth messaging).
 - This document.
 
 ### Milestone 1: 3D actor model

@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Tools.Editor.Api", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Core.Tests", "Lunar.Core.Tests\Lunar.Core.Tests.csproj", "{713129D8-76CC-4533-8E93-F1E19F1EA32C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.E2E.Tests", "Lunar.E2E.Tests\Lunar.E2E.Tests.csproj", "{DD92ABED-118F-4150-8548-9B571405B613}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar.Server.Tests", "Lunar.Server.Tests\Lunar.Server.Tests.csproj", "{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +153,30 @@ Global
 		{713129D8-76CC-4533-8E93-F1E19F1EA32C}.Release|x64.Build.0 = Release|Any CPU
 		{713129D8-76CC-4533-8E93-F1E19F1EA32C}.Release|x86.ActiveCfg = Release|Any CPU
 		{713129D8-76CC-4533-8E93-F1E19F1EA32C}.Release|x86.Build.0 = Release|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Debug|x64.Build.0 = Debug|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Debug|x86.Build.0 = Debug|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Release|x64.ActiveCfg = Release|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Release|x64.Build.0 = Release|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD92ABED-118F-4150-8548-9B571405B613}.Release|x86.Build.0 = Release|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Debug|x64.Build.0 = Debug|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Debug|x86.Build.0 = Debug|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Release|x64.ActiveCfg = Release|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Release|x64.Build.0 = Release|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{DC181BF7-CE57-47DE-B24C-D3E62955D2B4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

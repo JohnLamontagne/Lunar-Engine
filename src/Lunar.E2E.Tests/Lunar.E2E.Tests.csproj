@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    End-to-end tests: launch a real Lunar.Server and a real Lunar.Client.Desktop (under Xvfb on
+    Linux), drive the client through its automation endpoint, and assert on rendered frames.
+
+    Run only these:      dotnet test src/Lunar.E2E.Tests (filter Category=E2E)
+    Exclude from unit:   dotnet test src (filter Category!=E2E)
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>Lunar.E2E.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="SkiaSharp" Version="4.151.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.151.1" />
+  </ItemGroup>
+
+  <!-- Build the executables first; the harness locates their output by convention. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Lunar.Server\Lunar.Server.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\Lunar.Client.Desktop\Lunar.Client.Desktop.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+</Project>
