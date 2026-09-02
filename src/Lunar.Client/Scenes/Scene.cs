@@ -35,6 +35,9 @@ namespace Lunar.Client.Scenes
         private List<GameComponent> _gameComponents;
 
         protected GUIManager GuiManager => _guiManager;
+
+        /// <summary>Widget tree of this scene, for test automation.</summary>
+        internal GUIManager Gui => _guiManager;
         protected ContentManager ContentManager => _contentManager;
 
         public bool Active { get; private set; }

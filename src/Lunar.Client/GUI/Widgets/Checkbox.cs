@@ -101,7 +101,7 @@ namespace Lunar.Client.GUI.Widgets
         {
             if (!this.Visible) return;
 
-            if (!this.Contains(Mouse.GetState().Position))
+            if (!this.Contains(Lunar.Client.Utilities.Input.Input.Mouse.Position))
                 _state = WidgetStates.Idle;
             else if (_state != WidgetStates.Pressed && _state != WidgetStates.Hover)
                 _state = WidgetStates.Hover;
@@ -117,6 +117,8 @@ namespace Lunar.Client.GUI.Widgets
             else
                 spriteBatch.Draw(this.UncheckedSprite, this.Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, (float)this.ZOrder / widgetCount);
         }
+
+        public Rectangle Bounds => _checkBoxArea;
 
         public bool Contains(Point point)
         {

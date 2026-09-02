@@ -1,4 +1,4 @@
-using Lunar.Client.Utilities;
+﻿using Lunar.Client.Utilities;
 using Lunar.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -39,7 +39,7 @@ namespace Lunar.Client
 
         public override void Initialize()
         {
-            _previousKeyboardState = Keyboard.GetState();
+            _previousKeyboardState = Lunar.Client.Utilities.Input.Input.Keyboard;
             base.Initialize();
         }
 
@@ -83,7 +83,7 @@ namespace Lunar.Client
 
         public override void Update(GameTime gameTime)
         {
-            var keyboardState = Keyboard.GetState();
+            var keyboardState = Lunar.Client.Utilities.Input.Input.Keyboard;
 
             if (IsOpen)
             {

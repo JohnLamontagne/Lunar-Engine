@@ -1,4 +1,4 @@
-/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -121,7 +121,7 @@ namespace Lunar.Client.GUI
 
         public virtual void Update(GameTime gameTime)
         {
-            var mouseState = Mouse.GetState();
+            var mouseState = Lunar.Client.Utilities.Input.Input.Mouse;
 
             for (int i = 0; i < _orderedWidgets.Count; i++)
             {

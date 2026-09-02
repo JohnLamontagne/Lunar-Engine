@@ -47,6 +47,9 @@ namespace Lunar.Client.GUI.Widgets
 
         bool Contains(Point point);
 
+        /// <summary>Screen-space rectangle the widget occupies; what <see cref="Contains"/> tests against.</summary>
+        Rectangle Bounds { get; }
+
         /// <summary>
         /// Binds this widget's position relative to that of the specified one.
         /// </summary>

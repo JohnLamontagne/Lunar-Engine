@@ -262,6 +262,8 @@ namespace Lunar.Client.GUI.Widgets
             _textPosition = new Vector2(x, y);
         }
 
+        public Rectangle Bounds => _buttonArea;
+
         public bool Contains(Point point)
         {
             return _buttonArea.Contains(point);
@@ -298,7 +300,7 @@ namespace Lunar.Client.GUI.Widgets
         {
             if (!this.Visible) return;
 
-            if (!this.Contains(Mouse.GetState().Position))
+            if (!this.Contains(Lunar.Client.Utilities.Input.Input.Mouse.Position))
                 this.State = WidgetStates.Idle;
             else if (this.State != WidgetStates.Pressed)
                 this.State = WidgetStates.Hover;

@@ -120,7 +120,7 @@ namespace Lunar.Client.GUI.Widgets
         {
             if (!this.Visible) return;
 
-            if (!this.Contains(Mouse.GetState().Position))
+            if (!this.Contains(Lunar.Client.Utilities.Input.Input.Mouse.Position))
                 _previousState = WidgetStates.Idle;
             else if (_previousState != WidgetStates.Pressed)
                 _previousState = WidgetStates.Hover;
@@ -131,6 +131,8 @@ namespace Lunar.Client.GUI.Widgets
             if (this.Visible)
                 spriteBatch.Draw(this.Sprite, this.Position - this.Origin, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, (float)this.ZOrder / widgetCount);
         }
+
+        public Rectangle Bounds => _area;
 
         public bool Contains(Point point)
         {

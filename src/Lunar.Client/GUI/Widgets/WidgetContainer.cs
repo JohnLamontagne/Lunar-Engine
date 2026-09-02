@@ -172,15 +172,15 @@ namespace Lunar.Client.GUI.Widgets
             if (!this.Visible)
                 return;
 
-            if (this.Contains(Mouse.GetState().Position))
+            if (this.Contains(Lunar.Client.Utilities.Input.Input.Mouse.Position))
             {
-                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                if (Lunar.Client.Utilities.Input.Input.Mouse.LeftButton == ButtonState.Pressed)
                 {
                     if (this.Draggable && !_dragStarted && this.Active)
                     {
                         // Get the starting mouse position.
-                        _relativeDragX = (int)this.Position.X - Mouse.GetState().Position.X;
-                        _relativeDragY = (int)this.Position.Y - Mouse.GetState().Position.Y;
+                        _relativeDragX = (int)this.Position.X - Lunar.Client.Utilities.Input.Input.Mouse.Position.X;
+                        _relativeDragY = (int)this.Position.Y - Lunar.Client.Utilities.Input.Input.Mouse.Position.Y;
                         _dragStarted = true;
                     }
                 }
@@ -194,8 +194,8 @@ namespace Lunar.Client.GUI.Widgets
             {
                 if (_dragStarted)
                 {
-                    var newX = Mouse.GetState().Position.X + _relativeDragX;
-                    var newY = Mouse.GetState().Position.Y + _relativeDragY;
+                    var newX = Lunar.Client.Utilities.Input.Input.Mouse.Position.X + _relativeDragX;
+                    var newY = Lunar.Client.Utilities.Input.Input.Mouse.Position.Y + _relativeDragY;
 
                     this.Position = new Vector2(newX, newY);
                 }
@@ -203,6 +203,8 @@ namespace Lunar.Client.GUI.Widgets
 
             base.Update(gameTime);
         }
+
+        public Rectangle Bounds => this.Area;
 
         public bool Contains(Point point)
         {

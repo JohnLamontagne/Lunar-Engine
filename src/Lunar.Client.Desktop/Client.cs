@@ -1,4 +1,4 @@
-/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ namespace Lunar.Client
         private KeyboardState _previousKeyboardState;
         private ConsoleRedirector _consoleRedirector;
         private DeveloperConsoleComponent _consoleComponent;
+        private CommandInterpreter _commandInterpreter;
 
         public static bool ShuttingDown { get; set; }
 
@@ -72,12 +73,23 @@ namespace Lunar.Client
             lightManager.Component.Initialize();
 
             var interpreter = new CommandInterpreter(services.GetRequiredService<NetHandler>());
+            _commandInterpreter = interpreter;
             _consoleComponent = new DeveloperConsoleComponent(this, interpreter);
             _consoleComponent.FontColor = Color.Wheat;
             this.Components.Add(_consoleComponent);
 
             _consoleRedirector = new ConsoleRedirector(_consoleComponent);
             Console.SetOut(_consoleRedirector);
+        }
+
+        protected override void ConfigureAutomation(Lunar.Client.Automation.AutomationServer automation)
+        {
+            automation.CommandHandler = input =>
+            {
+                var lines = new System.Text.StringBuilder();
+                bool ok = _commandInterpreter.Execute(input, line => lines.AppendLine(line));
+                return (ok, lines.ToString());
+            };
         }
 
         protected override void LoadContent()
@@ -89,16 +101,16 @@ namespace Lunar.Client
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Lunar.Client.Utilities.Input.Input.Keyboard.IsKeyDown(Keys.Escape))
                 Exit();
 
-            KeyboardState currentKeyboardState = Keyboard.GetState();
+            KeyboardState currentKeyboardState = Lunar.Client.Utilities.Input.Input.Keyboard;
             if (_previousKeyboardState.IsKeyUp(Keys.OemTilde) && currentKeyboardState.IsKeyDown(Keys.OemTilde))
                 _consoleComponent.ToggleOpenClose();
             _previousKeyboardState = currentKeyboardState;
 
             Services.GetRequiredService<LightManagerService>().Component.Transform = _camera.GetTransformation();
-            _cursorPos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            _cursorPos = new Vector2(Lunar.Client.Utilities.Input.Input.Mouse.X, Lunar.Client.Utilities.Input.Input.Mouse.Y);
 
             base.Update(gameTime);
         }

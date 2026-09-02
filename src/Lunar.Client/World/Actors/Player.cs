@@ -257,7 +257,7 @@ namespace Lunar.Client.World.Actors
 
         private void CheckInput(GameTime gameTime)
         {
-            KeyboardState keyboardState = Keyboard.GetState();
+            KeyboardState keyboardState = Lunar.Client.Utilities.Input.Input.Keyboard;
             // Don't spam the server with movement requests
             if (!_requestMoving && !this.InChat)
             {

@@ -229,6 +229,8 @@ namespace Lunar.Client.GUI.Widgets
             throw new NotImplementedException();
         }
 
+        public Rectangle Bounds => _containerRect;
+
         public bool Contains(Point point)
         {
             return _containerRect.Contains(point);
@@ -329,9 +331,9 @@ namespace Lunar.Client.GUI.Widgets
 
         public void Update(GameTime gameTime)
         {
-            var mousePos = Mouse.GetState().Position;
+            var mousePos = Lunar.Client.Utilities.Input.Input.Mouse.Position;
 
-            if (Mouse.GetState().LeftButton == ButtonState.Released && _dragging)
+            if (Lunar.Client.Utilities.Input.Input.Mouse.LeftButton == ButtonState.Released && _dragging)
             {
                 // Move slider left or right
                 if (this.Orientation == Orientation.Horizontal)

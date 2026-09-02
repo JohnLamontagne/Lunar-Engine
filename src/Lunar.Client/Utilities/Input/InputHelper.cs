@@ -81,5 +81,11 @@ namespace Lunar.Client.Utilities.Input
             if (CharEntered != null)
                 CharEntered(null, new CharacterEventArgs(e.Character));
         }
+
+        /// <summary>Delivers a character exactly as if the window had received it. Used by <see cref="Input"/>.</summary>
+        public static void InjectCharacter(char character)
+        {
+            CharEntered?.Invoke(null, new CharacterEventArgs(character));
+        }
     }
 }

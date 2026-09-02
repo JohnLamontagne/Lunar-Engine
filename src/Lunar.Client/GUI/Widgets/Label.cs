@@ -151,7 +151,7 @@ namespace Lunar.Client.GUI.Widgets
 
         public void Update(GameTime gameTime)
         {
-            if (!this.Contains(Mouse.GetState().Position))
+            if (!this.Contains(Lunar.Client.Utilities.Input.Input.Mouse.Position))
             {
                 _previousState = WidgetStates.Idle;
 
@@ -169,6 +169,8 @@ namespace Lunar.Client.GUI.Widgets
             if (this.Visible)
                 spriteBatch.DrawString(this.Font, this.Text, this.Position, this.Color, 0f, Vector2.Zero, 1f, SpriteEffects.None, (float)this.ZOrder / widgetCount);
         }
+
+        public Rectangle Bounds => _area;
 
         public bool Contains(Point point)
         {

@@ -86,22 +86,6 @@ namespace Lunar.Client.Scenes
                 label.Text = text;
         }
 
-        /// <summary>
-        /// Fills in the credential boxes and submits, exactly as clicking Login or Register would.
-        /// Used by test automation; must be called on the game thread.
-        /// </summary>
-        public void Authenticate(string username, string password, bool register)
-        {
-            var container = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
-            container.GetWidget<Textbox>("userLoginTextbox").Text = username ?? string.Empty;
-            container.GetWidget<Textbox>("userPasswordTextbox").Text = password ?? string.Empty;
-
-            if (register)
-                this.registerButton_ButtonClicked(this, EventArgs.Empty);
-            else
-                this.loginButton_ButtonClicked(this, EventArgs.Empty);
-        }
-
         protected override void OnEnter()
         {
             this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "interface/menu/menu_interface.xml", this.ContentManager);

@@ -179,6 +179,8 @@ namespace Lunar.Client.GUI.Widgets
             _label.Draw(spriteBatch, widgetCount);
         }
 
+        public Rectangle Bounds => _fillBounds;
+
         public bool Contains(Point point)
         {
             return false;

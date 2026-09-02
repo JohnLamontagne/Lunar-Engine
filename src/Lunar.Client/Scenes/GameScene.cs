@@ -358,7 +358,7 @@ namespace Lunar.Client.Scenes
 
             if (e.MouseButton == MouseButtons.Right)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.LeftShift) || Keyboard.GetState().IsKeyDown(Keys.RightShift))
+                if (Lunar.Client.Utilities.Input.Input.Keyboard.IsKeyDown(Keys.LeftShift) || Lunar.Client.Utilities.Input.Input.Keyboard.IsKeyDown(Keys.RightShift))
                 {
                     // Drop the item
                     var packet = new Packet();
@@ -403,14 +403,14 @@ namespace Lunar.Client.Scenes
 
         public override void Update(GameTime gameTime)
         {
-            MouseState newMouseState = Mouse.GetState();
+            MouseState newMouseState = Lunar.Client.Utilities.Input.Input.Mouse;
 
             if (newMouseState.LeftButton == ButtonState.Pressed && _oldMouseState.LeftButton == ButtonState.Released)
             {
                 this.HandleClick();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            if (Lunar.Client.Utilities.Input.Input.Keyboard.IsKeyDown(Keys.Enter))
             {
                 var messageBox = this.GuiManager.GetWidget<Chatbox>("chatbox").GetWidget<Textbox>("messageEntry");
                 messageBox.Active = messageBox.Active;
@@ -426,7 +426,7 @@ namespace Lunar.Client.Scenes
 
         private void HandleClick()
         {
-            Point mousePos = Mouse.GetState().Position;
+            Point mousePos = Lunar.Client.Utilities.Input.Input.Mouse.Position;
 
             Vector2 worldPos = _camera.ScreenToWorldCoords(new Vector2(mousePos.X, mousePos.Y));
 

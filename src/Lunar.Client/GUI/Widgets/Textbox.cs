@@ -287,7 +287,7 @@ namespace Lunar.Client.GUI.Widgets
                 return;
             }
 
-            KeyboardState keyState = Keyboard.GetState();
+            KeyboardState keyState = Lunar.Client.Utilities.Input.Input.Keyboard;
 
             if (keyState.IsKeyDown(Keys.Enter) && _prevKeyState.IsKeyUp(Keys.Enter))
             {
@@ -346,6 +346,8 @@ namespace Lunar.Client.GUI.Widgets
             spriteBatch.Draw(this._sprite, this.Position + this.Origin, null, Color.White, 0f, Vector2.Zero, this.Scale, SpriteEffects.None, (float)this.ZOrder / widgetCount);
             spriteBatch.DrawString(_font, _displayText, _textPosition + this.Origin, this.ForeColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ((float)this.ZOrder / widgetCount) + .01f);
         }
+
+        public Rectangle Bounds => _area;
 
         public bool Contains(Point point)
         {

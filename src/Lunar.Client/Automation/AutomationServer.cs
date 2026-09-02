@@ -1,4 +1,4 @@
-/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -13,33 +13,47 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Lunar.Client.GUI;
+using Lunar.Client.GUI.Widgets;
 using Lunar.Client.Net;
 using Lunar.Client.Scenes;
+using Lunar.Client.Utilities.Input;
 using Lunar.Client.World;
+using Lunar.Client.World.Actors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Lunar.Client.Automation
 {
     /// <summary>
     /// Test-automation endpoint hosted inside the running client. Enabled only when the
     /// <c>LUNAR_AUTOMATION_PORT</c> environment variable is set; never active in a normal launch.
-    /// Listens on loopback only and exposes:
+    /// Listens on loopback only.
+    ///
+    /// The design rule: automation drives the client the way a player does. Input goes through
+    /// <see cref="Input"/> so it takes the same path as hardware; UI actions locate real widgets and
+    /// click or type into them; nothing here calls gameplay methods directly. Observation endpoints
+    /// expose what is on screen (widget tree, entities, chat, frames) so tests can assert on it.
+    ///
     /// <list type="bullet">
-    /// <item><c>GET /health</c>: 200 once the game loop is running.</item>
-    /// <item><c>GET /state</c>: JSON snapshot of scene, connection and player state.</item>
-    /// <item><c>GET /screenshot</c>: PNG of the next rendered back buffer.</item>
-    /// <item><c>POST /login</c>, <c>POST /register</c>: JSON body <c>{"username","password"}</c>.</item>
-    /// <item><c>POST /quit</c>: exits the client.</item>
+    /// <item><c>GET /health</c>, <c>GET /state</c>, <c>GET /screenshot</c></item>
+    /// <item><c>GET /ui</c>: widget tree of the active scene. <c>POST /ui/click {name}</c>, <c>POST /ui/type {name,text,enter}</c></item>
+    /// <item><c>POST /input/key {key, action: down|up|tap|hold, frames, durationMs}</c></item>
+    /// <item><c>POST /input/mouse {action: move|down|up|click, x, y, button}</c>, <c>POST /input/text {text}</c>, <c>POST /input/reset</c></item>
+    /// <item><c>GET /entities</c>, <c>GET /chat</c></item>
+    /// <item><c>POST /command {text}</c>: developer console command (when the platform provides one)</item>
+    /// <item><c>POST /quit</c></item>
     /// </list>
-    /// All game-state access is marshalled onto the game thread; the HTTP threads only wait.
     /// </summary>
     public sealed class AutomationServer : IDisposable
     {
@@ -48,6 +62,8 @@ namespace Lunar.Client.Automation
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = false
         };
 
@@ -63,6 +79,11 @@ namespace Lunar.Client.Automation
 
         public int Port { get; }
 
+        /// <summary>
+        /// Optional developer-console bridge supplied by the platform layer: input text in, (success, output) out.
+        /// </summary>
+        public Func<string, (bool Success, string Output)> CommandHandler { get; set; }
+
         public AutomationServer(Game game, IServiceProvider services, int port)
         {
             _game = game ?? throw new ArgumentNullException(nameof(game));
@@ -70,9 +91,6 @@ namespace Lunar.Client.Automation
             Port = port;
         }
 
-        /// <summary>
-        /// Reads <see cref="PortEnvironmentVariable"/>; returns null when automation is not requested.
-        /// </summary>
         public static int? PortFromEnvironment()
         {
             var raw = Environment.GetEnvironmentVariable(PortEnvironmentVariable);
@@ -87,7 +105,7 @@ namespace Lunar.Client.Automation
             Console.WriteLine($"[Automation] listening on http://127.0.0.1:{Port}/");
         }
 
-        /// <summary>Called by the game once per Update on the game thread.</summary>
+        /// <summary>Called by the game once per Update on the game thread, after input has been sampled.</summary>
         public void OnUpdate()
         {
             _loopRunning = true;
@@ -108,14 +126,8 @@ namespace Lunar.Client.Automation
             if (capture == null)
                 return;
 
-            try
-            {
-                capture.TrySetResult(CaptureBackBufferPng(device));
-            }
-            catch (Exception ex)
-            {
-                capture.TrySetException(ex);
-            }
+            try { capture.TrySetResult(CaptureBackBufferPng(device)); }
+            catch (Exception ex) { capture.TrySetException(ex); }
         }
 
         private static byte[] CaptureBackBufferPng(GraphicsDevice device)
@@ -135,24 +147,16 @@ namespace Lunar.Client.Automation
             }
         }
 
+        // ------------------------------------------------------------------ HTTP plumbing
+
         private async Task AcceptLoop()
         {
             while (!_shutdown.IsCancellationRequested)
             {
                 HttpListenerContext context;
-                try
-                {
-                    context = await _listener.GetContextAsync().ConfigureAwait(false);
-                }
-                catch (Exception) when (_shutdown.IsCancellationRequested)
-                {
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[Automation] accept failed: {ex.Message}");
-                    continue;
-                }
+                try { context = await _listener.GetContextAsync().ConfigureAwait(false); }
+                catch (Exception) when (_shutdown.IsCancellationRequested) { return; }
+                catch (Exception ex) { Console.WriteLine($"[Automation] accept failed: {ex.Message}"); continue; }
 
                 _ = Task.Run(() => this.Handle(context));
             }
@@ -166,6 +170,7 @@ namespace Lunar.Client.Automation
             try
             {
                 string path = request.Url?.AbsolutePath?.TrimEnd('/') ?? string.Empty;
+                bool isPost = request.HttpMethod == "POST";
 
                 switch (path)
                 {
@@ -174,35 +179,131 @@ namespace Lunar.Client.Automation
                         break;
 
                     case "/state":
-                        var state = await this.RunOnGameThread(this.BuildState);
-                        await WriteJson(response, 200, state);
+                        await WriteJson(response, 200, await this.RunOnGameThread(this.BuildState));
                         break;
 
                     case "/screenshot":
                         var png = await this.RequestCapture();
-                        response.StatusCode = 200;
-                        response.ContentType = "image/png";
-                        response.ContentLength64 = png.Length;
-                        await response.OutputStream.WriteAsync(png, 0, png.Length);
+                        await WriteBytes(response, 200, "image/png", png);
                         break;
 
-                    case "/login":
-                    case "/register":
-                        if (request.HttpMethod != "POST")
+                    case "/ui":
+                        await WriteJson(response, 200, await this.RunOnGameThread(this.BuildUiTree));
+                        break;
+
+                    case "/ui/click":
+                    {
+                        if (!isPost) { await WriteText(response, 405, "POST required"); break; }
+                        var req = await ReadJson<UiActionRequest>(request);
+                        var result = await this.RunOnGameThread(() => this.ClickWidget(req.Name, ParseButton(req.Button)));
+                        await WriteJson(response, result.Found ? 200 : 404, result);
+                        break;
+                    }
+
+                    case "/ui/type":
+                    {
+                        if (!isPost) { await WriteText(response, 405, "POST required"); break; }
+                        var req = await ReadJson<UiActionRequest>(request);
+                        var result = await this.RunOnGameThread(() => this.ClickWidget(req.Name, MouseButtons.Left));
+                        if (!result.Found) { await WriteJson(response, 404, result); break; }
+
+                        // Let the click land (one frame) so the textbox is active before characters arrive.
+                        await this.WaitFrames(2);
+                        Input.Virtual.Text(req.Text ?? string.Empty);
+                        if (req.Enter)
                         {
-                            await WriteText(response, 405, "POST required");
+                            // Textboxes ignore special keys for a short cooldown after activation, so that the
+                            // keystroke which focused them cannot also submit. Wait it out like a person would.
+                            await Task.Delay(300);
+                            await this.WaitFrames(1);
+                            Input.Virtual.Tap(Keys.Enter);
+                        }
+                        await this.WaitFrames(2);
+                        await WriteJson(response, 200, result);
+                        break;
+                    }
+
+                    case "/input/key":
+                    {
+                        if (!isPost) { await WriteText(response, 405, "POST required"); break; }
+                        var req = await ReadJson<KeyRequest>(request);
+                        if (!Enum.TryParse<Keys>(req.Key ?? string.Empty, true, out var key))
+                        {
+                            await WriteText(response, 400, $"Unknown key '{req.Key}'. Use Microsoft.Xna.Framework.Input.Keys names.");
                             break;
                         }
-                        var credentials = await ReadJson<Credentials>(request);
-                        bool register = path == "/register";
-                        await this.RunOnGameThread(() =>
+                        switch ((req.Action ?? "tap").ToLowerInvariant())
                         {
-                            var menu = _services.GetRequiredService<MenuScene>();
-                            menu.Authenticate(credentials.Username, credentials.Password, register);
-                            return true;
-                        });
-                        await WriteJson(response, 200, new { accepted = true, action = path.Trim('/') });
+                            case "down": Input.Virtual.KeyDown(key); break;
+                            case "up": Input.Virtual.KeyUp(key); break;
+                            case "tap": Input.Virtual.Tap(key, req.Frames > 0 ? req.Frames : 1); break;
+                            case "hold":
+                                Input.Virtual.KeyDown(key);
+                                await Task.Delay(Math.Max(0, req.DurationMs));
+                                Input.Virtual.KeyUp(key);
+                                break;
+                            default:
+                                await WriteText(response, 400, "action must be down, up, tap or hold");
+                                return;
+                        }
+                        await this.WaitFrames(2);
+                        await WriteJson(response, 200, new { ok = true, key = key.ToString(), action = req.Action });
                         break;
+                    }
+
+                    case "/input/mouse":
+                    {
+                        if (!isPost) { await WriteText(response, 405, "POST required"); break; }
+                        var req = await ReadJson<MouseRequest>(request);
+                        var button = ParseButton(req.Button);
+                        switch ((req.Action ?? "move").ToLowerInvariant())
+                        {
+                            case "move": Input.Virtual.MouseMove(req.X, req.Y); break;
+                            case "down": Input.Virtual.MouseMove(req.X, req.Y); Input.Virtual.MouseButton(button, true); break;
+                            case "up": Input.Virtual.MouseButton(button, false); break;
+                            case "click": Input.Virtual.Click(req.X, req.Y, button); break;
+                            default:
+                                await WriteText(response, 400, "action must be move, down, up or click");
+                                return;
+                        }
+                        await this.WaitFrames(2);
+                        await WriteJson(response, 200, new { ok = true });
+                        break;
+                    }
+
+                    case "/input/text":
+                    {
+                        if (!isPost) { await WriteText(response, 405, "POST required"); break; }
+                        var req = await ReadJson<TextRequest>(request);
+                        Input.Virtual.Text(req.Text ?? string.Empty);
+                        await this.WaitFrames(2);
+                        await WriteJson(response, 200, new { ok = true, length = (req.Text ?? string.Empty).Length });
+                        break;
+                    }
+
+                    case "/input/reset":
+                        Input.Virtual.Reset();
+                        await this.WaitFrames(1);
+                        await WriteJson(response, 200, new { ok = true });
+                        break;
+
+                    case "/entities":
+                        await WriteJson(response, 200, await this.RunOnGameThread(this.BuildEntities));
+                        break;
+
+                    case "/chat":
+                        await WriteJson(response, 200, await this.RunOnGameThread(this.BuildChat));
+                        break;
+
+                    case "/command":
+                    {
+                        if (!isPost) { await WriteText(response, 405, "POST required"); break; }
+                        var req = await ReadJson<TextRequest>(request);
+                        if (CommandHandler == null) { await WriteText(response, 501, "No command handler on this platform."); break; }
+                        var (success, output) = await this.RunOnGameThread(() => CommandHandler(req.Text ?? string.Empty));
+                        await WriteJson(response, 200, new { success, output });
+                        break;
+                    }
 
                     case "/quit":
                         _gameThreadActions.Enqueue(() => _game.Exit());
@@ -224,12 +325,13 @@ namespace Lunar.Client.Automation
             }
         }
 
+        // ------------------------------------------------------------------ Game-thread helpers
+
         private Task<byte[]> RequestCapture()
         {
             var tcs = new TaskCompletionSource<byte[]>(TaskCreationOptions.RunContinuationsAsynchronously);
             var existing = Interlocked.CompareExchange(ref _pendingCapture, tcs, null);
-            var awaited = existing ?? tcs;
-            return WithTimeout(awaited.Task, TimeSpan.FromSeconds(10), "screenshot");
+            return WithTimeout((existing ?? tcs).Task, TimeSpan.FromSeconds(10), "screenshot");
         }
 
         private Task<T> RunOnGameThread<T>(Func<T> func)
@@ -243,6 +345,19 @@ namespace Lunar.Client.Automation
             return WithTimeout(tcs.Task, TimeSpan.FromSeconds(10), "game thread action");
         }
 
+        /// <summary>Resolves after the game loop has processed at least <paramref name="frames"/> more updates.</summary>
+        private async Task WaitFrames(int frames)
+        {
+            long target = Input.Frame + frames;
+            var deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
+            while (Input.Frame < target)
+            {
+                if (DateTime.UtcNow > deadline)
+                    throw new TimeoutException("Game loop stopped advancing frames.");
+                await Task.Delay(5);
+            }
+        }
+
         private static async Task<T> WithTimeout<T>(Task<T> task, TimeSpan timeout, string what)
         {
             var completed = await Task.WhenAny(task, Task.Delay(timeout)).ConfigureAwait(false);
@@ -251,13 +366,19 @@ namespace Lunar.Client.Automation
             return await task.ConfigureAwait(false);
         }
 
+        private static MouseButtons ParseButton(string button)
+        {
+            return Enum.TryParse<MouseButtons>(button ?? "Left", true, out var b) ? b : MouseButtons.Left;
+        }
+
+        // ------------------------------------------------------------------ Observation
+
         private ClientState BuildState()
         {
             var sceneManager = _services.GetRequiredService<SceneManager>();
             var netHandler = _services.GetRequiredService<NetHandler>();
             var worldManager = _services.GetRequiredService<WorldManager>();
             var menu = _services.GetRequiredService<MenuScene>();
-
             var player = worldManager.Player;
 
             return new ClientState
@@ -266,38 +387,167 @@ namespace Lunar.Client.Automation
                 Connected = netHandler.Connected,
                 StatusText = menu.StatusText,
                 FramesRendered = Interlocked.Read(ref _framesRendered),
+                Frame = Input.Frame,
                 Width = _game.GraphicsDevice.PresentationParameters.BackBufferWidth,
                 Height = _game.GraphicsDevice.PresentationParameters.BackBufferHeight,
-                Player = player == null ? null : new PlayerState
+                Mouse = new PointState { X = Input.Mouse.X, Y = Input.Mouse.Y },
+                Player = player == null ? null : new EntityState
                 {
+                    Id = player.UniqueID,
                     Name = player.Name,
+                    Type = "Player",
                     X = player.Position.X,
                     Y = player.Position.Y,
                     Health = player.Health,
-                    MaximumHealth = player.MaximumHealth
+                    MaximumHealth = player.MaximumHealth,
+                    IsLocal = true
                 }
             };
         }
 
-        private static async Task<T> ReadJson<T>(HttpListenerRequest request)
+        private GUIManager ActiveGui()
+        {
+            var scene = _services.GetRequiredService<SceneManager>().ActiveScreen;
+            return scene?.Gui;
+        }
+
+        private List<UiNode> BuildUiTree()
+        {
+            var gui = ActiveGui();
+            return gui == null ? new List<UiNode>() : BuildNodes(gui);
+        }
+
+        private static List<UiNode> BuildNodes(WidgetCollection collection)
+        {
+            var nodes = new List<UiNode>();
+            foreach (var entry in collection.GetWidgetEntries().OrderBy(e => e.Value.ZOrder))
+            {
+                var w = entry.Value;
+                var bounds = w.Bounds;
+                var node = new UiNode
+                {
+                    Name = entry.Key,
+                    Type = w.GetType().Name,
+                    X = bounds.X, Y = bounds.Y, Width = bounds.Width, Height = bounds.Height,
+                    Visible = w.Visible,
+                    Active = w.Active,
+                    Text = TextOf(w),
+                };
+                if (w is WidgetCollection children)
+                    node.Children = BuildNodes(children);
+                nodes.Add(node);
+            }
+            return nodes;
+        }
+
+        private static string TextOf(IWidget widget)
+        {
+            switch (widget)
+            {
+                case Label l: return l.Text;
+                case Textbox t: return t.Text;
+                case Button b: return b.Text;
+                default: return null;
+            }
+        }
+
+        /// <summary>Depth-first search by widget name across nested containers.</summary>
+        private static IWidget FindWidget(WidgetCollection collection, string name, out bool visibleChain)
+        {
+            visibleChain = true;
+            foreach (var entry in collection.GetWidgetEntries())
+            {
+                if (entry.Key == name)
+                {
+                    visibleChain = entry.Value.Visible;
+                    return entry.Value;
+                }
+                if (entry.Value is WidgetCollection children)
+                {
+                    var found = FindWidget(children, name, out var childVisible);
+                    if (found != null)
+                    {
+                        visibleChain = childVisible && entry.Value.Visible;
+                        return found;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private UiActionResult ClickWidget(string name, MouseButtons button)
+        {
+            var gui = ActiveGui();
+            var widget = gui == null ? null : FindWidget(gui, name, out var visible);
+            if (widget == null)
+                return new UiActionResult { Found = false, Name = name, Error = "No widget with that name in the active scene." };
+
+            var b = widget.Bounds;
+            if (b.Width <= 0 || b.Height <= 0)
+                return new UiActionResult { Found = true, Name = name, Error = "Widget has no clickable area." };
+            if (!widget.Visible)
+                return new UiActionResult { Found = true, Name = name, Error = "Widget is not visible." };
+
+            int x = b.X + b.Width / 2;
+            int y = b.Y + b.Height / 2;
+            Input.Virtual.Click(x, y, button);
+            return new UiActionResult { Found = true, Name = name, X = x, Y = y };
+        }
+
+        private List<EntityState> BuildEntities()
+        {
+            var worldManager = _services.GetRequiredService<WorldManager>();
+            var local = worldManager.Player;
+            var list = new List<EntityState>();
+            if (worldManager.Map == null)
+                return list;
+
+            foreach (var entity in worldManager.Map.GetEntities())
+            {
+                switch (entity)
+                {
+                    case Player p:
+                        list.Add(new EntityState { Id = p.UniqueID, Name = p.Name, Type = "Player", X = p.Position.X, Y = p.Position.Y, Health = p.Health, MaximumHealth = p.MaximumHealth, IsLocal = ReferenceEquals(p, local) });
+                        break;
+                    case NPC n:
+                        list.Add(new EntityState { Id = n.UniqueID, Name = n.Name, Type = "NPC", X = n.Position.X, Y = n.Position.Y, Health = n.Health, MaximumHealth = n.MaximumHealth });
+                        break;
+                    default:
+                        list.Add(new EntityState { Type = entity.GetType().Name, X = entity.Position.X, Y = entity.Position.Y });
+                        break;
+                }
+            }
+            return list;
+        }
+
+        private List<string> BuildChat()
+        {
+            var gui = ActiveGui();
+            var chat = gui == null ? null : FindWidget(gui, "chatbox", out _) as Chatbox;
+            if (chat == null)
+                return new List<string>();
+
+            // Entries are labels stacked bottom-up; return them oldest first (top to bottom on screen).
+            return chat.GetWidgets<Label>().OrderBy(l => l.Position.Y).Select(l => l.Text).ToList();
+        }
+
+        // ------------------------------------------------------------------ JSON I/O
+
+        private static async Task<T> ReadJson<T>(HttpListenerRequest request) where T : new()
         {
             using (var reader = new StreamReader(request.InputStream, request.ContentEncoding ?? Encoding.UTF8))
             {
                 var body = await reader.ReadToEndAsync();
-                return JsonSerializer.Deserialize<T>(body, JsonOptions)
-                       ?? throw new InvalidDataException("Empty JSON body.");
+                if (string.IsNullOrWhiteSpace(body)) return new T();
+                return JsonSerializer.Deserialize<T>(body, JsonOptions) ?? new T();
             }
         }
 
         private static Task WriteJson(HttpListenerResponse response, int status, object value)
-        {
-            return WriteBytes(response, status, "application/json", JsonSerializer.SerializeToUtf8Bytes(value, value.GetType(), JsonOptions));
-        }
+            => WriteBytes(response, status, "application/json", JsonSerializer.SerializeToUtf8Bytes(value, value.GetType(), JsonOptions));
 
         private static Task WriteText(HttpListenerResponse response, int status, string text)
-        {
-            return WriteBytes(response, status, "text/plain; charset=utf-8", Encoding.UTF8.GetBytes(text));
-        }
+            => WriteBytes(response, status, "text/plain; charset=utf-8", Encoding.UTF8.GetBytes(text));
 
         private static async Task WriteBytes(HttpListenerResponse response, int status, string contentType, byte[] bytes)
         {
@@ -313,11 +563,30 @@ namespace Lunar.Client.Automation
             try { _listener.Stop(); _listener.Close(); } catch { /* ignore */ }
         }
 
-        private sealed class Credentials
+        // ------------------------------------------------------------------ Wire types
+
+        private sealed class UiActionRequest { public string Name { get; set; } public string Text { get; set; } public bool Enter { get; set; } public string Button { get; set; } }
+        private sealed class KeyRequest { public string Key { get; set; } public string Action { get; set; } public int Frames { get; set; } public int DurationMs { get; set; } }
+        private sealed class MouseRequest { public string Action { get; set; } public int X { get; set; } public int Y { get; set; } public string Button { get; set; } }
+        private sealed class TextRequest { public string Text { get; set; } }
+
+        public sealed class UiActionResult { public bool Found { get; set; } public string Name { get; set; } public int X { get; set; } public int Y { get; set; } public string Error { get; set; } }
+
+        public sealed class UiNode
         {
-            public string Username { get; set; }
-            public string Password { get; set; }
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public bool Visible { get; set; }
+            public bool Active { get; set; }
+            public string Text { get; set; }
+            public List<UiNode> Children { get; set; }
         }
+
+        public sealed class PointState { public int X { get; set; } public int Y { get; set; } }
 
         public sealed class ClientState
         {
@@ -325,18 +594,23 @@ namespace Lunar.Client.Automation
             public bool Connected { get; set; }
             public string StatusText { get; set; }
             public long FramesRendered { get; set; }
+            public long Frame { get; set; }
             public int Width { get; set; }
             public int Height { get; set; }
-            public PlayerState Player { get; set; }
+            public PointState Mouse { get; set; }
+            public EntityState Player { get; set; }
         }
 
-        public sealed class PlayerState
+        public sealed class EntityState
         {
+            public string Id { get; set; }
             public string Name { get; set; }
+            public string Type { get; set; }
             public float X { get; set; }
             public float Y { get; set; }
             public int Health { get; set; }
             public int MaximumHealth { get; set; }
+            public bool IsLocal { get; set; }
         }
     }
 }

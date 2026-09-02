@@ -81,6 +81,7 @@ namespace Lunar.Client
             if (automationPort.HasValue)
             {
                 _automation = new Automation.AutomationServer(this, Services, automationPort.Value);
+                this.ConfigureAutomation(_automation);
                 _automation.Start();
             }
 
@@ -115,6 +116,7 @@ namespace Lunar.Client
 
         protected override void Update(GameTime gameTime)
         {
+            Utilities.Input.Input.Update();
             _netHandler.ProcessPacketQueue();
             _sceneManager.Update(gameTime);
             _automation?.OnUpdate();
@@ -134,6 +136,9 @@ namespace Lunar.Client
         }
 
         protected virtual void DrawOverlay(SpriteBatch spriteBatch) { }
+
+        /// <summary>Platform hook to attach extra automation capabilities (e.g. the developer console).</summary>
+        protected virtual void ConfigureAutomation(Automation.AutomationServer automation) { }
 
         protected override void OnExiting(object sender, ExitingEventArgs args)
         {
