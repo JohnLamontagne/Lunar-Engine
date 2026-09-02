@@ -93,17 +93,50 @@ player would run; the only differences are environment variables.
 `LUNAR_AUTOMATION_PORT` is set. It listens on loopback only and marshals every call onto the game
 thread.
 
+The design rule is that **automation drives the client the way a player does**. There are no
+"do the login" shortcuts: tests find real widgets and click them, type real characters, and hold
+real keys. That keeps the surface generic as behaviour and content grow, and it means a test
+exercising a feature also exercises the widget hit-testing, focus, and input handling under it.
+
+**Input layer.** `Lunar.Client/Utilities/Input/Input.cs` is the single source of keyboard and
+mouse state; every place that used to call `Keyboard.GetState()` or `Mouse.GetState()` now reads
+`Input.Keyboard` / `Input.Mouse`. Once per frame `Input.Update()` samples hardware and merges
+virtual input: keys are down if hardware or automation holds them, and the mouse is replaced by
+the virtual mouse once automation has positioned it. Typed text is delivered through the same
+`EventInput.CharEntered` event the window raises. The 3D client keeps this facade; it becomes the
+implementation behind the input service planned for Milestone 5b.
+
 | Endpoint | Purpose |
 |---|---|
 | `GET /health` | 200 once the game loop is running |
-| `GET /state` | JSON: active scene, connection state, menu status text, frames rendered, back-buffer size, local player (name, position, health) |
+| `GET /state` | Scene, connection, menu status text, frame counters, back-buffer size, virtual mouse position, local player |
 | `GET /screenshot` | PNG of the next rendered back buffer |
-| `POST /login`, `POST /register` | `{"username","password"}`; fills the menu boxes and submits exactly as a click would |
-| `POST /quit` | Exits the client through its normal path (disconnects from the server) |
+| `GET /ui` | Widget tree of the active scene: name, type, bounds, visible, active, text, children |
+| `POST /ui/click {name, button}` | Finds the widget by name anywhere in the tree and clicks its centre |
+| `POST /ui/type {name, text, enter}` | Clicks the widget to focus it, types the characters, optionally taps Enter |
+| `POST /input/key {key, action, frames, durationMs}` | `down`, `up`, `tap` (held for N frames), or `hold` (held for a duration). Key names are `Microsoft.Xna.Framework.Input.Keys` |
+| `POST /input/mouse {action, x, y, button}` | `move`, `down`, `up`, `click` |
+| `POST /input/text {text}` | Types into whatever has focus |
+| `POST /input/reset` | Releases all virtual input and returns the mouse to hardware |
+| `GET /entities` | Every actor on the client's map: id, name, type, position, health, whether it is the local player |
+| `GET /chat` | Chat lines currently shown, oldest first |
+| `POST /command {text}` | Runs a developer-console command through the platform's interpreter |
+| `POST /quit` | Exits the client through its normal path, which disconnects from the server |
 
-As the 3D client is built, `/state` grows (camera, loaded cells, entity views) and input
-injection is added behind the input service from Milestone 5b. The rule is that automation
-drives the same code paths a player does; it never reaches into internals to fake a result.
+Widgets are addressed by the names in the interface XML (`btnLogin`, `userLoginTextbox`,
+`messageEntry`, `chatbox`), so a content change that renames or removes a control fails the test
+that depends on it with a clear "no widget with that name" message.
+
+**Extending it.** When a new client system arrives, add observation first (a `/state` field or a
+new `GET`), then make sure the feature is reachable through existing input and widgets. Add a new
+`POST` only for a capability a player also has that cannot be expressed as clicks and keys (for
+example a gamepad axis in the 3D client). Never add an endpoint that calls gameplay code directly.
+
+**Harness API.** `Lunar.E2E.Tests/Harness/ClientInstance.cs` wraps the endpoint: `UiAsync`,
+`FindAsync`, `ClickAsync`, `TypeAsync`, `KeyTapAsync`, `KeyHoldAsync`, `MouseClickAsync`,
+`TextAsync`, `EntitiesAsync`, `ChatAsync`, `CommandAsync`, plus `WaitForStateAsync`,
+`WaitForUiAsync` and `WaitForAsync` for polling. Flows such as `LoginAsync`, `RegisterAsync`
+and `SayAsync` are compositions of those primitives, not separate endpoints.
 
 ### Environment hooks
 
@@ -145,7 +178,8 @@ silhouette within the expected screen region) before any pixel comparison.
 
 ### Test inventory
 
-`MenuAndLoginTests` (one server per class, one client per test):
+`MenuAndLoginTests` (one server per class, one client per test; login and registration happen
+through typed credentials and button clicks):
 
 - Client boots into the menu, renders a non-blank frame at the requested resolution, matches the
   menu golden.
@@ -155,6 +189,14 @@ silhouette within the expected screen region) before any pixel comparison.
   server released the account promptly on clean exit.
 - Logging in with a nonexistent account stays on the menu, shows the failure reason, and leaves
   the connection open for a retry.
+
+`UiAndInputTests`:
+
+- The menu widget tree exposes the login controls with on-screen bounds, and text typed through
+  the focus path appears in the textbox.
+- Holding a movement key moves the player; after release the position is stable and still moved,
+  which means the server accepted the movement.
+- A chat line typed by one client into the chat box is shown in a second client's chat.
 
 `ServerLifecycleTests` (own server):
 
@@ -206,8 +248,9 @@ should be treated as part of setting up the runner.
 
 - **Every milestone adds tests at all three layers before its exit check.** The checklists in
   `lunar-3d-revamp-milestone-checklists.md` name them.
-- **Automation drives player paths.** New client features expose state through `/state` and
-  actions through endpoints that call the same code a player's input would.
+- **Automation drives player paths.** New client features expose state through `/state`, `/ui`
+  or a new `GET`, and are exercised through the generic input and widget endpoints. No endpoint
+  calls gameplay code directly.
 - **Goldens are updated deliberately.** Run with `LUNAR_UPDATE_GOLDENS=1`, inspect the diff in
   the pull request, and say why the frame changed.
 - **A failing end-to-end test is a defect until proven otherwise.** The run captured above

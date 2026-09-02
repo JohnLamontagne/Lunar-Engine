@@ -104,15 +104,145 @@ namespace Lunar.E2E.Tests.Harness
             return Frame.FromPng(bytes);
         }
 
-        public Task LoginAsync(string username, string password) => PostAsync("login", username, password);
+        // ------------------------------------------------------------------ Observation
 
-        public Task RegisterAsync(string username, string password) => PostAsync("register", username, password);
-
-        private async Task PostAsync(string path, string username, string password)
+        public async Task<List<UiNode>> UiAsync()
         {
-            var response = await _http.PostAsJsonAsync(path, new { username, password });
-            response.EnsureSuccessStatusCode();
+            var json = await _http.GetStringAsync("ui");
+            return JsonSerializer.Deserialize<List<UiNode>>(json, Json);
         }
+
+        /// <summary>Finds a widget by name anywhere in the active scene's tree, or null.</summary>
+        public async Task<UiNode> FindAsync(string name)
+        {
+            static UiNode Search(IEnumerable<UiNode> nodes, string n)
+            {
+                foreach (var node in nodes)
+                {
+                    if (node.Name == n) return node;
+                    if (node.Children != null)
+                    {
+                        var hit = Search(node.Children, n);
+                        if (hit != null) return hit;
+                    }
+                }
+                return null;
+            }
+            return Search(await UiAsync(), name);
+        }
+
+        public async Task<List<EntityState>> EntitiesAsync()
+        {
+            var json = await _http.GetStringAsync("entities");
+            return JsonSerializer.Deserialize<List<EntityState>>(json, Json);
+        }
+
+        public async Task<List<string>> ChatAsync()
+        {
+            var json = await _http.GetStringAsync("chat");
+            return JsonSerializer.Deserialize<List<string>>(json, Json);
+        }
+
+        // ------------------------------------------------------------------ Interaction (player paths)
+
+        /// <summary>Clicks the centre of the named widget with a real (virtual) mouse click.</summary>
+        public async Task ClickAsync(string widgetName, string button = "Left")
+        {
+            var response = await _http.PostAsJsonAsync("ui/click", new { name = widgetName, button });
+            await EnsureUiActionAsync(response, $"click '{widgetName}'");
+        }
+
+        /// <summary>Clicks the named textbox to focus it, then types <paramref name="text"/> as key characters.</summary>
+        public async Task TypeAsync(string widgetName, string text, bool enter = false)
+        {
+            var response = await _http.PostAsJsonAsync("ui/type", new { name = widgetName, text, enter });
+            await EnsureUiActionAsync(response, $"type into '{widgetName}'");
+        }
+
+        /// <summary>Taps a key for one frame. Key names follow Microsoft.Xna.Framework.Input.Keys.</summary>
+        public Task KeyTapAsync(string key, int frames = 1) => PostAsync("input/key", new { key, action = "tap", frames });
+
+        public Task KeyDownAsync(string key) => PostAsync("input/key", new { key, action = "down" });
+
+        public Task KeyUpAsync(string key) => PostAsync("input/key", new { key, action = "up" });
+
+        /// <summary>Holds a key for the given duration; returns after it has been released.</summary>
+        public Task KeyHoldAsync(string key, int durationMs) => PostAsync("input/key", new { key, action = "hold", durationMs });
+
+        public Task MouseMoveAsync(int x, int y) => PostAsync("input/mouse", new { action = "move", x, y });
+
+        public Task MouseClickAsync(int x, int y, string button = "Left") => PostAsync("input/mouse", new { action = "click", x, y, button });
+
+        /// <summary>Delivers characters to whatever widget currently has focus.</summary>
+        public Task TextAsync(string text) => PostAsync("input/text", new { text });
+
+        public Task ResetInputAsync() => PostAsync("input/reset", new { });
+
+        /// <summary>Runs a developer-console command; returns its success flag and output.</summary>
+        public async Task<(bool Success, string Output)> CommandAsync(string text)
+        {
+            var response = await _http.PostAsJsonAsync("command", new { text });
+            response.EnsureSuccessStatusCode();
+            var doc = JsonSerializer.Deserialize<CommandResult>(await response.Content.ReadAsStringAsync(), Json);
+            return (doc.Success, doc.Output);
+        }
+
+        // ------------------------------------------------------------------ Flows built from the primitives
+
+        /// <summary>Fills in the menu's credential boxes and clicks Login, exactly as a player would.</summary>
+        public async Task LoginAsync(string username, string password)
+        {
+            await TypeAsync("userLoginTextbox", username);
+            await TypeAsync("userPasswordTextbox", password);
+            await ClickAsync("btnLogin");
+        }
+
+        /// <summary>Fills in the menu's credential boxes and clicks Register.</summary>
+        public async Task RegisterAsync(string username, string password)
+        {
+            await TypeAsync("userLoginTextbox", username);
+            await TypeAsync("userPasswordTextbox", password);
+            await ClickAsync("btnRegister");
+        }
+
+        /// <summary>Types a chat line into the in-world chat box and sends it with Enter.</summary>
+        public Task SayAsync(string message) => TypeAsync("messageEntry", message, enter: true);
+
+        private async Task PostAsync(string path, object body)
+        {
+            var response = await _http.PostAsJsonAsync(path, body);
+            if (!response.IsSuccessStatusCode)
+                throw new InvalidOperationException($"{path} failed ({(int)response.StatusCode}): {await response.Content.ReadAsStringAsync()}");
+        }
+
+        private static async Task EnsureUiActionAsync(HttpResponseMessage response, string what)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode) return;
+            throw new InvalidOperationException($"Could not {what}: {body}");
+        }
+
+        /// <summary>Polls <paramref name="probe"/> until it returns non-null (or true), or times out.</summary>
+        public async Task<T> WaitForAsync<T>(Func<Task<T>> probe, TimeSpan timeout, string description)
+        {
+            var deadline = DateTime.UtcNow + timeout;
+            while (DateTime.UtcNow < deadline)
+            {
+                var value = await probe();
+                if (value is bool ok ? ok : value != null)
+                    return value;
+                await Task.Delay(200);
+            }
+            throw new TimeoutException($"Client did not reach '{description}' within {timeout}.\n--- client output ---\n{_process.Output}");
+        }
+
+        /// <summary>Polls the widget tree until the named widget satisfies <paramref name="predicate"/>.</summary>
+        public Task<UiNode> WaitForUiAsync(string widgetName, Func<UiNode, bool> predicate, TimeSpan timeout, string description)
+            => WaitForAsync(async () =>
+            {
+                var node = await FindAsync(widgetName);
+                return node != null && predicate(node) ? node : null;
+            }, timeout, description);
 
         /// <summary>Polls state until <paramref name="predicate"/> holds or the timeout elapses.</summary>
         public async Task<ClientState> WaitForStateAsync(Func<ClientState, bool> predicate, TimeSpan timeout, string description)
@@ -146,18 +276,38 @@ namespace Lunar.E2E.Tests.Harness
             public bool Connected { get; set; }
             public string StatusText { get; set; }
             public long FramesRendered { get; set; }
+            public long Frame { get; set; }
             public int Width { get; set; }
             public int Height { get; set; }
-            public PlayerState Player { get; set; }
+            public EntityState Player { get; set; }
         }
 
-        public sealed class PlayerState
+        public sealed class EntityState
         {
+            public string Id { get; set; }
             public string Name { get; set; }
+            public string Type { get; set; }
             public float X { get; set; }
             public float Y { get; set; }
             public int Health { get; set; }
             public int MaximumHealth { get; set; }
+            public bool IsLocal { get; set; }
         }
+
+        public sealed class UiNode
+        {
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public bool Visible { get; set; }
+            public bool Active { get; set; }
+            public string Text { get; set; }
+            public List<UiNode> Children { get; set; }
+        }
+
+        private sealed class CommandResult { public bool Success { get; set; } public string Output { get; set; } }
     }
 }

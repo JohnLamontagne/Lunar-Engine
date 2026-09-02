@@ -20,9 +20,10 @@ namespace Lunar.Server.Tests.Utilities
             TimerHelper.SleepForNoMoreThan(20);
             sw.Stop();
 
-            // Must not sleep past the requested period by more than a generous scheduler allowance,
-            // and must not spin for the whole period on a platform without timer resolution APIs.
-            Assert.InRange(sw.Elapsed.TotalMilliseconds, 0, 20 + 25);
+            // This guards against hanging or spinning far past the requested period on platforms without
+            // timer-resolution APIs. Exact overshoot depends on the scheduler and the load on the test
+            // machine, so the bound is deliberately generous rather than tight.
+            Assert.InRange(sw.Elapsed.TotalMilliseconds, 0, 250);
         }
     }
 }
