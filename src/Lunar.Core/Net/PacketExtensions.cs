@@ -1,4 +1,4 @@
-/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -43,6 +43,21 @@ namespace Lunar.Core.Net
             return packet;
         }
 
+        public static Packet Write(this Packet packet, Vector3 vector)
+        {
+            packet.Write(vector.X);
+            packet.Write(vector.Y);
+            packet.Write(vector.Z);
+            return packet;
+        }
+
+        public static Packet Write(this Packet packet, Box box)
+        {
+            packet.Write(box.Min);
+            packet.Write(box.Max);
+            return packet;
+        }
+
         public static Color ReadColor(this Packet packet)
         {
             return new Color(packet.ReadByte(), packet.ReadByte(), packet.ReadByte(), packet.ReadByte());
@@ -56,6 +71,16 @@ namespace Lunar.Core.Net
         public static Vector ReadVector(this Packet packet)
         {
             return new Vector(packet.ReadFloat(), packet.ReadFloat());
+        }
+
+        public static Vector3 ReadVector3(this Packet packet)
+        {
+            return new Vector3(packet.ReadFloat(), packet.ReadFloat(), packet.ReadFloat());
+        }
+
+        public static Box ReadBox(this Packet packet)
+        {
+            return new Box(packet.ReadVector3(), packet.ReadVector3());
         }
     }
 }
