@@ -22,13 +22,15 @@ stack (Milestones 1-4)"), which is the tip of `modernization`.
   and the on-disk map schema. The client rendering layer is fully 2D (`SpriteBatch`) and the
   gameplay classes on the client are also the render classes.
 - Roughly two thirds of the 3D work is **renderer independent**: a 3D world model in Core, a
-  zone/navmesh based server simulation, a 3D wire protocol, and a zone editor. That work is the
+  cell/navmesh based server simulation, a 3D wire protocol, and a world editor. That work is the
   same whichever 3D client technology is chosen, so it should start first.
 - **Decisions taken**: Lunar stays the engine and owns its renderer; no third-party engine is
   used as the front end; **MonoGame 3.8.5 is the graphics backend**; the visual target is
-  **retro 3D with modern spins**, which caps the renderer's scope. The project is unreleased,
-  so there are no compatibility or transition constraints: 2D code is deleted rather than
-  shimmed.
+  **retro 3D with modern spins**, which caps the renderer's scope. The world is a **seamless,
+  streamed open world** built from fixed-size cells, terrain is **heightmap plus glTF set
+  pieces**, server movement is **navmesh only**, and accounts live in **PostgreSQL**. The
+  project is unreleased, so there are no compatibility or transition constraints: 2D code is
+  deleted rather than shimmed.
 - Several pre-existing server issues (no synchronization between the net and world threads,
   no area-of-interest filtering, inventory not persisted, no autosave) are not 3D problems but
   they become MMORPG blockers. They are listed so they can be scheduled alongside the revamp.
@@ -239,46 +241,75 @@ imported models need no axis swap.
 - `IActorModel.Position` becomes `Vector3`; `CollisionBounds` becomes a `Box` or a capsule
   (radius, height) built by `Box.FromFootprint`.
 - `Direction` is replaced by a yaw angle plus a facing-vector helper; the enum is deleted.
-- `MapModel`/`LayerModel`/`TileModel` are replaced by a **`ZoneModel`** authoring document:
-  - `Id`, `Name`, `Bounds: Box`
-  - `Terrain`: heightmap reference (resolution, cell size, height scale) or a static mesh
-    reference, plus a material/splat reference for the client
-  - `StaticGeometry[]`: model reference + transform (client rendering, server collision source)
-  - `NavMesh`: reference to a baked navmesh asset
-  - `SpawnPoints[]`: `Vector3 Position`, yaw, kind (player/NPC), NPC key, respawn timing
-  - `Triggers[]`: `Box` volume + kind (warp, dialogue, script event) + parameters
-  - `Lights[]`: position, colour, radius, type
-  - `Ambient`: sky/fog/time-of-day settings
+- `MapModel`/`LayerModel`/`TileModel` are replaced by a **world of cells**. There is one
+  global coordinate space; the world is partitioned into fixed-size square cells (working
+  value: 128 m, tunable in the world manifest). Authoring documents:
+  - `WorldModel` (one per world): `Id`, `Name`, `CellSize`, `Bounds: Box` (whole-world extent),
+    `SchemaVersion`, global `Ambient` defaults (sky, fog, time-of-day), and the list of
+    populated cell coordinates.
+  - `CellModel` (one JSON file per populated cell, addressed by integer `(cx, cz)`):
+    - `Terrain`: heightmap tile reference (a 16-bit grayscale image covering exactly this cell,
+      plus height scale) and a splat/material reference. Cells share edge rows so seams match.
+    - `StaticGeometry[]`: glTF model reference + transform for set pieces (caves, cliffs,
+      buildings, overhangs). Rendered by the client; voxelised into the navmesh bake on the
+      server side.
+    - `NavMeshTile`: reference to this cell's baked Detour tile(s).
+    - `SpawnPoints[]`: `Vector3 Position`, yaw, kind (player/NPC), NPC key, respawn timing.
+    - `Triggers[]`: `Box` volume + kind (script event, dialogue, teleport for instances) +
+      parameters. Warps between regions of the open world are not needed; teleports remain for
+      dungeons or instanced content.
+    - `Lights[]`: position, colour, radius, type. `AmbientOverride` for local fog/sky changes.
+  - `Region` is an editor-only grouping of cells (a named rectangle) for authoring and for
+    server thread scheduling; it has no runtime data of its own.
+- All positions are stored in global world coordinates as `float`. World extent is capped at
+  16 km per axis so that `float` keeps sub-centimetre precision everywhere; the client renders
+  relative to a floating origin (see Client) so GPU precision is never an issue.
 - Tile attributes (`Blocked`, `Warp`, `NPCSpawn`, `PlayerSpawn`, `StartDialogue`) become
-  trigger volumes and spawn points. Collision comes from the navmesh and static geometry, not
-  from flags.
-- Data managers gain a `ZoneFSDataManager` using the existing JSON DTO pattern. A `schemaVersion`
-  field is added, as the editor spec already recommends.
+  trigger volumes and spawn points. Collision comes from the navmesh, not from flags.
+- Data managers gain `WorldFSDataManager` and `CellFSDataManager` using the existing JSON DTO
+  pattern, with `schemaVersion` fields.
 
 ### Server (`Lunar.Server`)
 
-- `Map` becomes `Zone` (or `Region` if multiple zones must share a process). One zone owns a
-  navmesh, its actors, its triggers and spawners, and its interest-management grid.
-- **Navigation and movement validation via DotRecast** (`DotRecast.Detour`, 2026.3.1 on NuGet),
-  the C# port of Recast/Detour. Player movement is validated by projecting the requested
-  position onto the navmesh (`findNearestPoly`, `moveAlongSurface`); NPC pathing uses Detour
-  path queries. The same bake is shipped to the client for local movement prediction, so
-  the server and client agree on walkable space.
-- Height comes from the navmesh polygon or the terrain heightmap; the server does not run a full
-  physics engine. If richer collision is needed later, Bepu (already used by Stride) is the
-  .NET candidate.
-- Interest management: a uniform grid of cells per zone (cell size around 2x view distance).
-  Broadcasts go to players in the neighbouring cells. Entity enter/leave packets replace the
-  full-map dump on join.
-- Movement protocol: client sends input (move vector, yaw, sequence number) at a fixed rate;
-  server simulates, sends authoritative snapshots at 10 to 20 Hz with the last processed
-  sequence number; client predicts locally and reconciles; remote entities are interpolated from
-  snapshots. This replaces `PLAYER_MOVING` intent transitions and `NPC_MOVING` waypoint dumps.
-- Threading: a single writer per zone. Packet handlers enqueue commands to the owning zone
-  instead of mutating state on the net thread. Zones can then be scheduled across a thread pool.
-- Persistence: add inventory/equipment/experience to `PlayerDto`, periodic autosave, and a
-  shutdown signal handler. Consider SQLite via `Microsoft.Data.Sqlite` for accounts and
-  characters while keeping content as JSON files.
+- **One world, many cells.** `Map` is replaced by a `World` that owns a sparse grid of loaded
+  `Cell`s. A cell holds its navmesh tile, static geometry bounds, resident actors, triggers,
+  spawners and ground items. Cells load on demand when a player approaches and unload after an
+  idle timeout, so the whole world is never resident at once.
+- **Navigation and movement validation via DotRecast** (`DotRecast.Detour` and
+  `DotRecast.Recast`, 2026.3.1 on NuGet; ZLib licence). The navmesh is a **tiled Detour mesh**
+  with one Detour tile per world cell, baked offline by a `Lunar.Tools.NavBake` command-line
+  tool from the cell's heightmap plus voxelised static geometry, and added/removed at runtime
+  with the cell. Player movement is validated by projecting the requested position onto the
+  navmesh (`findNearestPoly`, `moveAlongSurface`); NPC pathing uses Detour path queries, which
+  cross tile boundaries natively. `Detour.Dynamic` is available later for doors and destructible
+  obstacles.
+- **Navmesh only.** The server runs no physics engine. Height comes from the navmesh polygon.
+  Jumping is an animation with a scripted vertical arc over a navmesh-validated horizontal
+  path; knockback is a navmesh-constrained displacement; projectiles and areas of effect are
+  geometric tests, not rigid bodies. If a feature ever needs real collision response, a
+  kinematic capsule-sweep layer is the next step, not a physics engine.
+- **Interest management is the cell grid.** A player receives state from their own cell and
+  the eight neighbours (a 3x3 window; the client streams the same window of terrain).
+  Crossing a cell boundary emits enter/leave packets for entities that fall out of or into the
+  window. Broadcasts never address "the map"; they address a cell window.
+- **Cross-cell handoff.** Within one process an actor moving between cells is a dictionary
+  move. Cells are grouped into regions, each region driven by one worker thread with a
+  single-writer rule; an actor crossing a region boundary is handed off through a command
+  queue at the tick boundary. Cross-process sharding by region is the later extension, and is
+  why accounts live in PostgreSQL from the start.
+- **Movement protocol.** Client sends input (move vector, yaw, jump/action flags, sequence
+  number) at a fixed rate; the server simulates, then sends authoritative snapshots at 10 to
+  20 Hz with the last processed sequence number; the client predicts locally and reconciles;
+  remote entities are interpolated from snapshots. This replaces `PLAYER_MOVING` intent
+  transitions and `NPC_MOVING` waypoint dumps.
+- **Threading.** Packet handlers enqueue commands to the owning region instead of mutating
+  state on the net thread. Regions are scheduled across a thread pool each tick.
+- **Persistence in PostgreSQL** via `Npgsql.EntityFrameworkCore.PostgreSQL` (10.x) with EF
+  Core migrations: accounts, characters (stats, position, cell, inventory, equipment,
+  experience), and later guilds, mail and auction data. Autosave dirty characters on a timer
+  and on logout; a shutdown signal handler flushes everything. World content (world manifest,
+  cells, items, NPCs, spells, dialogues) stays as JSON files under version control. A
+  `docker-compose.yml` provides the development database.
 
 ### Client
 
@@ -297,9 +328,15 @@ that does not know about gameplay and a game layer that does not know about the 
   The XML GUI layouts and widget event model are kept; widgets render through
   `Lunar.Rendering`'s overlay path. Penumbra, `Lunar.Graphics`, the 2D world view and the
   2D `Content.mgcb` are deleted, not abstracted.
+- **World streaming**: the client keeps the 3x3 cell window around the player loaded
+  (terrain tile, set pieces, lights, navmesh tile), prefetching the next ring as the player
+  nears a boundary. Terrain uses a skirt or shared edge rows so cell seams never show.
+- **Floating origin**: world positions are `float` in global coordinates; the renderer
+  re-bases everything relative to the camera's cell origin each frame so GPU-side precision
+  is constant regardless of where the player is in the world.
 - **Client-side simulation**: local player controller with prediction and reconciliation
   against server snapshots; remote entity interpolation; navmesh projection for local movement
-  using the same DotRecast bake the server uses.
+  using the same DotRecast tiles the server uses.
 - **Camera**: third person orbit follow; the existing 2D lerp follow is the reference for feel.
 - **Platforms**: the native backend (Vulkan on Linux/macOS via MoltenVK where applicable,
   DirectX 12 on Windows) as primary and DesktopGL as the compatibility target. Mobile is not a
@@ -307,18 +344,22 @@ that does not know about gameplay and a game layer that does not know about the 
 
 ### Editor (`Lunar.Tools.Editor`)
 
-The spec's Milestones 6 and 7 (tile map editor) are replaced by a **zone editor**:
+The spec's Milestones 6 and 7 (tile map editor) are replaced by a **world editor** that edits
+cells:
 
-- Contracts: `ZoneEditorDocument` mirroring `ZoneModel`.
-- Core: `IZoneRepository`, validation rules (spawn inside bounds, trigger references resolve,
-  navmesh present).
-- Api: `/api/zones` CRUD plus `/api/assets/models` and `/api/assets/terrains` discovery.
-- Web: a Three.js (or Babylon.js) viewport for placing spawn points, trigger volumes and lights
-  over the imported terrain/mesh, with a properties panel. Heavy authoring (terrain sculpting,
-  modelling, rigging) is expected to happen in Blender and be imported as glTF and heightmap
-  images; the web editor edits gameplay data over the result. A native Lunar zone editor built
-  on `Lunar.Rendering` is a later option once the renderer exists, since it would render zones
-  exactly as the client does.
+- Contracts: `WorldManifestDocument` and `CellEditorDocument` mirroring the Core models.
+- Core: `IWorldRepository`, `ICellRepository`, validation rules (spawn inside the cell, trigger
+  references resolve, heightmap tile dimensions match the cell size, navmesh tile present and
+  not stale relative to its inputs).
+- Api: `/api/world`, `/api/cells/{cx}/{cz}` CRUD, `/api/assets/models`,
+  `/api/assets/heightmaps`, and `/api/navmesh/bake` which shells out to `Lunar.Tools.NavBake`.
+- Web: a Three.js (or Babylon.js) viewport that shows the selected cell and its neighbours,
+  for placing set pieces, spawn points, trigger volumes and lights over the terrain, with a
+  properties panel and a world overview grid for jumping between cells. Heightmap sculpting
+  and splat painting are in scope for the web editor because heightmaps are images; mesh
+  modelling and rigging stay in Blender and arrive as glTF.
+- A native Lunar placement tool built on `Lunar.Rendering` is a later option, since it would
+  render cells exactly as the client does.
 
 ## Milestone Plan
 
@@ -348,44 +389,50 @@ replacement for that piece exists, and shims are avoided.
 Exit: all positions are 3D in Core, Server and on the wire; no `Vector`/`Rect` remain in
 actor or packet code.
 
-### Milestone 2: Zone model and data manager
+### Milestone 2: World and cell model
 
-- `ZoneModel` and `ZoneFSDataManager` in Core with schema version.
-- A converter that turns an existing `.map` into a flat `ZoneModel` (bounds from dimensions,
-  blocked tiles into static collision boxes, tile attributes into spawn points and triggers).
-  This preserves test content and validates the model.
-- Server can load zones alongside maps behind a config flag.
+- `WorldModel`, `CellModel`, `WorldFSDataManager` and `CellFSDataManager` in Core with schema
+  versions.
+- A converter that turns an existing `.map` into one or more flat cells (blocked tiles into
+  static collision boxes, tile attributes into spawn points and triggers) so existing test
+  content survives and validates the model.
+- Server `World` with sparse cell loading and unloading; `Map`, `Layer` and `Tile` deleted.
 
-Exit: a converted zone loads on the server with spawns and warps working via triggers.
+Exit: converted cells load on demand on the server with spawns and triggers working.
 
-### Milestone 3: Navigation and movement
+### Milestone 3: Navigation, streaming and movement
 
-- Add `DotRecast.Detour` to the server. Bake a navmesh for the converted flat zone (a heightmap
-  at zero height with blocked boxes as obstacles) using `DotRecast.Recast`.
-- Replace `Pathfinder` with Detour queries; replace `Layer.CheckCollision` with navmesh
-  projection.
-- Introduce the input/snapshot movement protocol with sequence numbers.
-- Interest-management grid and enter/leave packets; remove the full-map dump.
-- Command queue per zone; packet handlers stop touching world state directly.
+- `Lunar.Tools.NavBake`: bakes one Detour tile per cell from heightmap plus voxelised glTF set
+  pieces using `DotRecast.Recast`; output stored beside the cell.
+- Server loads/unloads Detour tiles with cells; `Pathfinder` replaced by Detour queries;
+  `Layer.CheckCollision` replaced by navmesh projection.
+- Input/snapshot movement protocol with sequence numbers.
+- Cell-window interest management with enter/leave packets; the full-map dump is removed.
+- Region worker threads with per-region command queues; packet handlers stop touching world
+  state directly; actor handoff across region boundaries.
 
-Exit: NPCs path on the navmesh; players move by input packets with server reconciliation;
-join no longer sends the whole map.
+Exit: NPCs path across cell boundaries on the tiled navmesh; players move by input packets with
+server reconciliation; walking across the world streams cells in and out with no load screen.
 
 ### Milestone 4: Persistence and server hardening
 
-- Inventory/equipment/experience in `PlayerDto`; autosave; shutdown handler.
+- PostgreSQL via EF Core: accounts, characters with inventory, equipment and experience;
+  migrations; `docker-compose.yml` for development; the JSON account files are deleted.
+- Autosave on a timer and on logout; shutdown handler that flushes dirty characters.
 - Fix the bugs listed above.
-- Zone scheduling across a thread pool with one writer per zone.
-- Load test harness: headless bot clients using `Lunar.Core` + LiteNetLib.
+- Load test harness: headless bot clients using `Lunar.Core` + LiteNetLib walking across cell
+  and region boundaries.
 
-Exit: 200 bots on one zone with stable tick time and no data loss on restart.
+Exit: 200 bots roaming across several regions with stable tick time and no data loss on
+restart.
 
 ### Milestone 5a: Renderer proof scene
 
 Time-boxed to about two weeks. Stand up `Lunar.Rendering` on MonoGame 3.8.5 with the native
 backend and DesktopGL and render one scene that exercises every item in the retro feature list:
 
-- heightmap terrain with a two-layer splat material, distance fog and a directional shadow map,
+- heightmap terrain built from two adjacent cell tiles with a two-layer splat material,
+  distance fog and a directional shadow map (proves the seam handling and floating origin),
 - one glTF skinned character loaded with `SharpGLTF.Core`, playing a blended animation clip
   with vertex-shader skinning,
 - 500 instanced static props with frustum culling,
@@ -403,15 +450,16 @@ Exit: the scene runs on the native backend and DesktopGL with the shader loop do
 - `Lunar.Rendering` grows from the proof scene into the renderer described above.
 - `Lunar.Client` rebuild: `IEntityView`, input service, GUI on the overlay path; Penumbra,
   `Lunar.Graphics`, the 2D world view and `Content.mgcb` deleted.
-- Load a zone (terrain + static meshes + lights), connect, log in, spawn, walk with prediction,
-  see other players interpolated, chat.
+- Stream cells (terrain + set pieces + lights) around the player, connect, log in, spawn, walk
+  across cell boundaries with prediction, see other players interpolated, chat.
 - Basic UI: login, chat, target frame.
 
-Exit: two clients walk around one zone together.
+Exit: two clients walk across several cells together with no load screens.
 
-### Milestone 6: Zone editor
+### Milestone 6: World editor
 
-- Contracts, repository, API and Three.js viewport as described above.
+- Contracts, repositories, API, navmesh bake endpoint and Three.js viewport as described
+  above, including heightmap sculpting and splat painting.
 - Replaces editor spec Milestones 6 and 7.
 - Optionally a native placement tool on `Lunar.Rendering` once the renderer is stable.
 
@@ -421,22 +469,36 @@ Exit: two clients walk around one zone together.
   but no server implementation), NPC behaviours in 3D (aggro by `PlanarDistance`, leash, patrol
   paths), loot, quests.
 
-## Explicit Open Decisions
+## Decision Record
 
-1. **Graphics backend**: decided, MonoGame 3.8.5. NeoVeldrid is the fallback only if the API
-   ceiling is hit; third-party engines as the front end are ruled out.
-2. **Zone size and sharding**: one large seamless world with streaming, or discrete zones with
-   warp triggers. The plan assumes discrete zones first; seamless streaming is an extension of
-   the interest grid.
-3. **Terrain representation**: heightmap (cheap, editable in the web editor) versus arbitrary
-   mesh (flexible, authored in Blender). The `ZoneModel` allows either; pick heightmap for the
-   first slice.
-4. **Server physics**: navmesh-only movement (recommended for MMO scale) versus a full physics
-   engine (Bepu).
-5. **Account storage**: stay on JSON files or move to SQLite/Postgres before Milestone 4.
-6. **Fate of `Lunar.Editor` and `Lunar.UnitTests`**: decided, delete in Milestone 1. Both are
-   unbuildable and outside the solution, and the legacy map editor code is not relevant to a
-   zone editor. NPC and dialogue editing arrive in the web editor per its own spec.
+Decisions taken so far, with the reasoning that should be revisited if circumstances change.
+
+1. **Graphics backend: MonoGame 3.8.5.** Already integrated, native Vulkan/DX12 backend
+   available, every known limitation has a mitigation for the retro target. NeoVeldrid is the
+   fallback only if the API ceiling is hit; third-party engines as the front end are ruled out.
+2. **World shape: seamless open world from the start.** Chosen over discrete zones despite the
+   higher up-front cost (cell streaming, tiled navmesh, region handoff, floating origin) so
+   that the world never has to be re-partitioned later. Instanced content (dungeons) uses
+   separate small worlds reached by teleport triggers.
+3. **Terrain: heightmap plus glTF set pieces.** Heightmaps keep terrain cheap and editable in
+   the web editor; set pieces from Blender supply caves, cliffs and interiors; the tiled
+   navmesh unifies both for movement.
+4. **Server physics: navmesh only.** No physics engine on the server. Jumping, knockback,
+   projectiles and areas of effect are scripted or geometric. A kinematic capsule layer is the
+   escalation path if ever needed.
+5. **Account storage: PostgreSQL from the start**, via Npgsql and EF Core, because
+   cross-process sharding by region is anticipated and a shared database is its prerequisite.
+   World content stays in JSON files.
+6. **Legacy projects: delete in Milestone 1.** `Lunar.Editor`, `Lunar.UnitTests` and the
+   mobile stub are unbuildable or empty and not relevant to the new world model.
+
+Still open, to be decided when their milestone starts:
+
+- **Cell size** (working value 128 m) and **world extent cap** (16 km per axis): confirm
+  against the intended world size before Milestone 2 fixes the heightmap tile resolution.
+- **Snapshot rate and prediction window** for the movement protocol (Milestone 3).
+- **Fixed internal resolution** for the retro look (Milestone 5a).
+- **Web editor viewport library**: Three.js versus Babylon.js (Milestone 6).
 
 ## Guardrails for Agents Working on This Plan
 
@@ -452,6 +514,9 @@ Exit: two clients walk around one zone together.
   check that MonoGame's API can carry it before work starts.
 - Never use MonoGame's stock effects or `Model` pipeline for world rendering; Lunar owns its
   effects and mesh loading.
-- Do not add tile-specific concepts to `ZoneModel`. If a feature needs a grid (for example
-  building placement), model it as a component of the zone, not as the zone.
+- Do not add 2D tile concepts to `CellModel`. Cells are a streaming and scheduling partition,
+  not a gameplay grid; if a feature needs a placement grid (for example housing), model it as
+  a component inside a cell.
+- No load screens inside the open world. Anything that would need one (a huge set piece, a
+  slow bake) is a content or tooling problem to solve, not a reason to add a warp.
 - Server owns truth. The client never sends a position, only inputs.
