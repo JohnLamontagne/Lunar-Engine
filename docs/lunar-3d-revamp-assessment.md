@@ -50,7 +50,7 @@ stack (Milestones 1-4)"), which is the tip of `modernization`.
 | `Lunar.UnitTests` | Legacy MSTest project. .NET Framework 4.8, **not in the solution**, references removed APIs | |
 | `Lunar.Core.Tests` | **New in this branch.** xunit, net9.0 | |
 
-All solution projects build with zero warnings on Linux with the .NET 10 SDK.
+All solution projects build with zero errors on Linux with the .NET 10 SDK; `Lunar.Client` carries a handful of pre-existing unused-member warnings.
 
 ### Where the 2D assumption lives
 
