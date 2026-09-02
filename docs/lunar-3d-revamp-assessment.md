@@ -24,10 +24,12 @@ stack (Milestones 1-4)"), which is the tip of `modernization`.
 - Roughly two thirds of the 3D work is **renderer independent**: a 3D world model in Core, a
   zone/navmesh based server simulation, a 3D wire protocol, and a zone editor. That work is the
   same whichever 3D client technology is chosen, so it should start first.
-- The one decision that must be made deliberately is **what renders the 3D client**. Three
-  realistic options are laid out below with a recommendation. The recommendation is to keep
-  Lunar as the authoritative .NET server and data model, and to build the client on an existing
-  3D engine rather than growing a 3D renderer out of the MonoGame 2D stack.
+- The one decision that must be made deliberately is **which graphics library sits under the
+  3D client**. Lunar stays the engine and owns its renderer; adopting a third-party engine as
+  the front end was rejected. The realistic backends are MonoGame 3.8.5 (now with Vulkan and
+  DirectX 12 targets) and NeoVeldrid, with SDL3 GPU as a watch item. The plan builds
+  `Lunar.Rendering` against a thin backend interface and settles the first backend with a
+  short measured spike.
 - Several pre-existing server issues (no synchronization between the net and world threads,
   no area-of-interest filtering, inventory not persisted, no autosave) are not 3D problems but
   they become MMORPG blockers. They are listed so they can be scheduled alongside the revamp.
@@ -143,56 +145,104 @@ Not caused by 2D, but each one must be fixed before real players are on a server
 ## The Client Renderer Decision
 
 Everything in the server and data model can proceed without this decision, but the client
-cannot. Three realistic options were evaluated. Versions were checked against NuGet on the day
-of writing.
+cannot. The guiding constraint is that **Lunar stays the engine**: the client is Lunar's own
+code (scenes, world view, entity views, UI, input, networking) and the decision is only about
+which library sits underneath it and talks to the GPU. Adopting a whole third-party engine as
+the front end (Godot, Unity, or Stride used through Game Studio) was considered and rejected:
+it means two asset pipelines, two scene models, two sets of conventions, and a permanent
+impedance mismatch at the boundary with `Lunar.Core`.
 
-### Option A: Extend MonoGame into a 3D renderer
+That framing also clarifies how much is at stake. Whatever backend is chosen, the following
+is Lunar's own code and is the same work under every option: scene representation and
+culling, camera, material system, glTF model loading (`SharpGLTF.Core` 1.0.6), skeletal
+animation and skinning, terrain from heightmaps, lighting and shadows, particle effects, text,
+and a 3D-aware UI. The backend determines only the bottom of that stack: device, buffers,
+textures, pipelines/state, shaders, render targets, swapchain, plus windowing and input if the
+library provides them. Versions below were checked against NuGet on the day of writing.
 
-MonoGame 3.8.5.1 is current. It exposes the GPU (`Effect`, `VertexBuffer`, `Model`,
-`BasicEffect`, `SkinnedEffect`) but offers no scene graph, no PBR, no glTF import through the
-content pipeline, skinning limited to 72 bones, no terrain, no physics, no navmesh and no
-3D-aware UI. Community libraries (MonoScene, SharpGLTF) fill some gaps.
+### Option A: MonoGame 3.8.5 as the graphics backend
 
-- Pro: stays entirely inside the current codebase; Lunar remains "an engine" end to end;
-  `Lunar.Core` and the client network layer are reused as-is.
-- Con: the team would be writing a renderer, an animation system, a terrain system, a material
-  pipeline, a physics/collision layer and a UI toolkit before writing any MMORPG gameplay. For a
-  small team this is the slowest path to a playable 3D game.
+The project is on MonoGame 3.8.4.1. The 3.8.5 release (July 2026, 3.8.5.1 on NuGet) replaced
+the OpenTK/SharpDX dependencies with a native C++ backend and added **cross-platform Vulkan
+and Windows DirectX 12 targets** alongside DesktopGL, plus a new code-centric content
+project system and ARM64 support. It still ships no glTF import, no PBR, and only the
+72-bone `SkinnedEffect`, so Lunar would write its own model loading and skinning either way.
+Shaders are HLSL compiled through MonoGame's effect compiler; there is no compute shader
+access, and the feature set is roughly Direct3D 11 class.
 
-### Option B: Stride
+- Pro: already integrated; zero new native dependencies; windowing, input, audio,
+  `SpriteBatch`/`SpriteFont` for UI overlays and the existing 2D client all keep working
+  during the transition; the XNA-style `GraphicsDevice` API is familiar and well documented;
+  modern backends now exist; MonoGame Foundation backing.
+- Con: the effect compiler pipeline is the single biggest friction point for a custom 3D
+  renderer (every shader change goes through the content build); no compute; the `Model`
+  content pipeline is not worth using, so the content pipeline's value drops to fonts and audio.
 
-Stride 4.3 is the stable release (4.4 is in beta). It targets .NET 10 and C# 14 and ships PBR,
-glTF/FBX import, skeletal animation, Bepu physics, Vulkan/D3D/OpenGL backends, a scene/entity
-system and the Game Studio editor.
+### Option B: NeoVeldrid as the graphics backend
 
-- Pro: pure open-source .NET, so `Lunar.Core` can be referenced directly by the client project
-  and shared types (descriptors, packets, `Vector3`) flow through without a boundary. Bepu can
-  also run on the server for authoritative collision.
-- Con: the Game Studio editor is Windows-only; community and asset ecosystem are much smaller
-  than Godot or Unity; 4.4 is still in beta.
+Veldrid was the leading low-level .NET graphics abstraction until its author stopped
+publishing in 2023. **NeoVeldrid** (1.2.1 on NuGet) is the maintained fork with native
+bindings replaced by Silk.NET and the public API preserved. Backends: Vulkan, Direct3D 11,
+OpenGL and OpenGL ES, with macOS through bundled MoltenVK. Shaders are written once in GLSL
+and cross-compiled to each backend through SPIR-V at runtime, which removes the offline
+shader build step entirely. Compute shaders are supported. `ImGui.NET` has a Veldrid renderer
+and `FontStashSharp` can be driven from it for text.
 
-### Option C: Godot 4 with .NET
+- Pro: a clean, modern, explicit API (command lists, resource sets, pipelines) that maps
+  directly onto how a 3D renderer is structured; runtime shader cross-compilation makes
+  iteration fast; compute is available for skinning, culling and particles later; MoltenVK
+  covers macOS without a Metal backend of Lunar's own.
+- Con: it is a fork with a small maintainer base, so the risk is abandonment rather than
+  capability; Lunar must assemble windowing and input (Silk.NET.Windowing or SDL), audio
+  (Silk.NET.OpenAL or similar) and text itself; no mobile story beyond OpenGL ES.
 
-Godot 4.x .NET (4.7 stable line at the time of writing; the .NET baseline is net8.0 since 4.4)
-provides a mature cross-platform editor, glTF import, skeletal animation, Jolt physics,
-navmesh baking, a UI toolkit, and mobile/web export.
+### Option C: SDL3 GPU through C# bindings
 
-- Pro: the fastest route to a playable 3D client for a small team; largest ecosystem of the
-  three; editor runs on Linux, macOS and Windows; the client can be a Godot .NET project that
-  references `Lunar.Core` (multi-targeted to `net8.0;net9.0`) and uses LiteNetLib directly.
-- Con: the client lives in a different engine than the server; `Lunar.Core` must stay
-  net8-compatible until Godot moves; Godot's navmesh format is not directly consumable by the
-  server, so navmeshes are baked once for the server (see Milestone 3) and exported for the client.
+SDL3's GPU API is a new cross-platform abstraction over Vulkan, Direct3D 12 and Metal,
+maintained by the SDL project, with shader cross-compilation via SDL_shadercross. Several
+C# binding sets exist (`ppy.SDL3-CS` from the osu! team is the most actively published), and
+SDL3 also supplies windowing, input and audio in one dependency. MoonWorks, the C# framework
+from the FNA ecosystem, is built on it and is a useful reference for how a .NET renderer sits
+on SDL3 GPU.
+
+- Pro: the only option with native Metal; backed by a project that will outlive any .NET
+  wrapper; one dependency for window, input, audio and GPU; modern API designed for exactly
+  this use.
+- Con: the youngest option; the C# ecosystem around it (text, UI, samples) is thin; shader
+  cross-compilation tooling from .NET is less turnkey than NeoVeldrid's runtime SPIR-V path.
+
+### Option D: Silk.NET raw Vulkan or OpenGL
+
+Silk.NET 2.23 provides direct bindings (Vulkan 1.4, OpenGL, Assimp, windowing, input, OpenAL).
+Writing the renderer straight against Vulkan gives maximum control and maximum work; Silk.NET
+3.0 is still in preview. This is the right choice only if the renderer is itself the product.
+It is noted for completeness and not recommended.
+
+### Option E: Stride used code-only
+
+Stride 4.3 (net10) can be driven without Game Studio through `Stride.CommunityToolkit`
+(1.0.2). It brings PBR, animation, Bepu physics and glTF import as libraries. However
+code-only content loading is a known gap, code-only development is not fully supported off
+Windows, and Stride's entity/scene/asset model would still become the client's model. It
+carries the same "engine as front end" cost that ruled out Godot, in a smaller and less
+portable package, so it is not recommended under the current constraint.
 
 ### Recommendation
 
-**Keep Lunar as the authoritative .NET server, data model and tooling, and build the 3D client
-on Godot 4 .NET, with Stride as the fallback if staying 100 percent inside .NET matters more than
-editor portability and ecosystem size.** Option A is only advisable if the goal is to build a
-renderer rather than a game.
+**Lunar owns the renderer. Build it as `Lunar.Rendering` against a thin backend interface, and
+decide the first backend with a short measured spike between MonoGame 3.8.5 and NeoVeldrid
+rather than on paper.** The two are the only options that are both mature enough and
+compatible with Lunar remaining the engine. The interface is intentionally small (device,
+buffer, texture, shader/pipeline, render pass, swapchain) so that the spike is cheap and a
+later switch to SDL3 GPU, once its .NET ecosystem matures, is a backend port rather than a
+renderer rewrite.
 
-This is recorded as an open decision below because it is the owner's call. The milestone plan
-is structured so that Milestones 0 through 4 are identical under all three options.
+Leaning, before the spike: **MonoGame 3.8.5** has the lower risk and the shortest path to
+pixels because it is already in the tree, its new Vulkan/DX12 targets remove the old
+"OpenGL-only" ceiling, and the 2D client keeps running on the same device during the
+transition. **NeoVeldrid** is the better long-term fit for a custom renderer because of
+runtime shader cross-compilation and compute. If the spike shows MonoGame's effect pipeline
+is the dominant friction, start on NeoVeldrid. The spike is defined in Milestone 5a.
 
 ## Target Architecture
 
@@ -200,8 +250,8 @@ is structured so that Milestones 0 through 4 are identical under all three optio
 
 Right-handed, Y up, metres. `X` east, `Y` up, `Z` south. A legacy 2D map maps onto the ground
 plane with 2D `Y` becoming 3D `Z`. This convention is encoded in `Vector3.FromGroundPlane` and
-`Vector3.ToGroundPlane` and matches Godot and Stride defaults, so no axis swap is needed at the
-client boundary.
+`Vector3.ToGroundPlane` and matches the glTF specification's right-handed Y-up convention, so
+imported models need no axis swap.
 
 ### Core (`Lunar.Core`)
 
@@ -234,8 +284,8 @@ client boundary.
 - **Navigation and movement validation via DotRecast** (`DotRecast.Detour`, 2026.3.1 on NuGet),
   the C# port of Recast/Detour. Player movement is validated by projecting the requested
   position onto the navmesh (`findNearestPoly`, `moveAlongSurface`); NPC pathing uses Detour
-  path queries. Recast is also what Godot, Unity and Stride use, so a single bake can serve the
-  server and the client.
+  path queries. The same bake is shipped to the client for local movement prediction, so
+  the server and client agree on walkable space.
 - Height comes from the navmesh polygon or the terrain heightmap; the server does not run a full
   physics engine. If richer collision is needed later, Bepu (already used by Stride) is the
   .NET candidate.
@@ -254,21 +304,29 @@ client boundary.
 
 ### Client
 
-Under Options B and C, a new client project (`Lunar.Client.Godot` or `Lunar.Client.Stride`)
-references `Lunar.Core`, hosts a `NetHandler` equivalent over LiteNetLib, and owns:
+The client stays in this repository and stays Lunar's code. The work splits into a renderer
+that does not know about gameplay and a game layer that does not know about the GPU:
 
-- Zone loading: terrain, static geometry and lights from the `ZoneModel`.
-- Entity views: a view object per remote actor driven by snapshots; local player controller
-  with prediction and reconciliation.
-- UI rebuilt in the engine's UI toolkit. The existing XML layout files inform the design but are
-  not ported.
-- Camera: third person orbit follow, with the existing 2D lerp-follow behaviour as the reference
-  for feel.
-
-Under Option A, the same split is achieved inside `Lunar.Client` by introducing
-`IRenderer`/`IEntityView` abstractions, moving `Draw` off `IActor`, wrapping Penumbra behind
-`ILightManager` (already noted as a mobile prerequisite), and building a 3D scene on
-`GraphicsDevice` with custom effects.
+- **`Lunar.Rendering`** (new project): the 3D renderer. Scene graph with frustum culling,
+  camera, material system, glTF loading via `SharpGLTF.Core`, skeletal animation and GPU
+  skinning, heightmap terrain with splat materials, directional light plus shadow maps and a
+  small number of local lights, particle emitters, text and 2D overlay for UI. It talks to the
+  GPU only through **`Lunar.Rendering.Abstractions`**, a small interface set: `IGraphicsDevice`,
+  buffers, textures, samplers, shader programs and pipeline state, render passes and targets,
+  swapchain. Shaders are authored once in a single source language and translated per backend
+  (HLSL through MonoGame's compiler, or GLSL through SPIR-V cross-compilation on NeoVeldrid).
+- **Backends**: `Lunar.Rendering.MonoGame` and/or `Lunar.Rendering.Veldrid`, one class per
+  abstraction, no engine logic. The spike in Milestone 5a builds the same test scene on both.
+- **`Lunar.Client`** (refactored): `IActor` loses `Draw`, `SpriteSheet`, `Light` and `Emitter`;
+  those move to an `IEntityView` created by a view factory from the actor's descriptor. Penumbra
+  is removed with the 2D world view rather than abstracted. Input moves behind an input service
+  so gameplay stops calling `Keyboard.GetState()` directly. The XML GUI layouts and widget
+  event model are kept; widgets render through `Lunar.Rendering`'s overlay path instead of
+  `SpriteBatch`.
+- **Client-side simulation**: local player controller with prediction and reconciliation
+  against server snapshots; remote entity interpolation; navmesh projection for local movement
+  using the same DotRecast bake the server uses.
+- **Camera**: third person orbit follow; the existing 2D lerp follow is the reference for feel.
 
 ### Editor (`Lunar.Tools.Editor`)
 
@@ -280,8 +338,10 @@ The spec's Milestones 6 and 7 (tile map editor) are replaced by a **zone editor*
 - Api: `/api/zones` CRUD plus `/api/assets/models` and `/api/assets/terrains` discovery.
 - Web: a Three.js (or Babylon.js) viewport for placing spawn points, trigger volumes and lights
   over the imported terrain/mesh, with a properties panel. Heavy authoring (terrain sculpting,
-  modelling) is expected to happen in Blender or the client engine's editor; the web editor
-  edits gameplay data over the result.
+  modelling, rigging) is expected to happen in Blender and be imported as glTF and heightmap
+  images; the web editor edits gameplay data over the result. A native Lunar zone editor built
+  on `Lunar.Rendering` is a later option once the renderer exists, since it would render zones
+  exactly as the client does.
 
 ## Milestone Plan
 
@@ -340,19 +400,38 @@ join no longer sends the whole map.
 
 Exit: 200 bots on one zone with stable tick time and no data loss on restart.
 
-### Milestone 5: 3D client vertical slice (renderer decision required)
+### Milestone 5a: Renderer spike (backend decision)
 
-- New client project per the chosen option.
+Time-boxed to about two weeks. Build the identical test scene twice, once on MonoGame 3.8.5
+(DesktopGL and the Vulkan target) and once on NeoVeldrid 1.2.1, both behind the same
+`Lunar.Rendering.Abstractions` interfaces:
+
+- heightmap terrain with a two-layer splat material and a directional light with a shadow map,
+- one glTF skinned character loaded with `SharpGLTF.Core`, playing an animation clip,
+- 500 instanced static props with frustum culling,
+- a text overlay with frame time.
+
+Record for each: lines of backend code, shader iteration loop time, frame time at 1080p,
+platform coverage achieved, and any wall hit. Decide the first backend from those numbers
+and record the decision in this document. The abstraction layer and the shared renderer code
+are kept regardless of the outcome.
+
+### Milestone 5b: 3D client vertical slice
+
+- `Lunar.Rendering` grows from the spike into the renderer described above.
+- `Lunar.Client` refactor: `IEntityView`, input service, GUI on the overlay path, Penumbra and
+  the 2D world view removed.
 - Load a zone (terrain + static meshes + lights), connect, log in, spawn, walk with prediction,
   see other players interpolated, chat.
 - Basic UI: login, chat, target frame.
 
-Exit: two clients walk around one zone together. The 2D client is retired.
+Exit: two clients walk around one zone together. The 2D world view is retired.
 
 ### Milestone 6: Zone editor
 
 - Contracts, repository, API and Three.js viewport as described above.
 - Replaces editor spec Milestones 6 and 7.
+- Optionally a native placement tool on `Lunar.Rendering` once the renderer is stable.
 
 ### Milestone 7: Gameplay breadth
 
@@ -362,8 +441,9 @@ Exit: two clients walk around one zone together. The 2D client is retired.
 
 ## Explicit Open Decisions
 
-1. **Client renderer**: Godot .NET (recommended), Stride, or MonoGame 3D. Blocks Milestone 5
-   only.
+1. **Graphics backend**: MonoGame 3.8.5 or NeoVeldrid, decided by the Milestone 5a spike;
+   SDL3 GPU revisited when its .NET ecosystem matures. Third-party engines as the front end
+   are ruled out. Blocks Milestone 5b only.
 2. **Zone size and sharding**: one large seamless world with streaming, or discrete zones with
    warp triggers. The plan assumes discrete zones first; seamless streaming is an extension of
    the interest grid.
@@ -379,13 +459,15 @@ Exit: two clients walk around one zone together. The 2D client is retired.
 
 ## Guardrails for Agents Working on This Plan
 
-- Do not remove `Vector`/`Rect` until the 2D client is retired in Milestone 5. Add, then migrate,
+- Do not remove `Vector`/`Rect` until the 2D world view is retired in Milestone 5b. Add, then migrate,
   then delete.
 - Every change to a `Pack`/`Unpack` pair must come with a round-trip test in `Lunar.Core.Tests`
   or a server test project. The wire format has no field tags; the compiler will not catch a
   mismatch.
-- Keep `Lunar.Core` free of engine dependencies. If the client is Godot, multi-target Core to
-  `net8.0;net9.0` rather than adding Godot types to Core.
+- Keep `Lunar.Core` free of graphics dependencies. Renderer-facing types (`Vector3`, `Box`,
+  descriptors) stay engine-neutral; backend types belong in `Lunar.Rendering.*` only.
+- Nothing above `Lunar.Rendering.Abstractions` may reference a backend library. If a feature
+  needs a backend-specific call, extend the abstraction rather than leaking the type upward.
 - Do not add tile-specific concepts to `ZoneModel`. If a feature needs a grid (for example
   building placement), model it as a component of the zone, not as the zone.
 - Server owns truth. The client never sends a position, only inputs.
