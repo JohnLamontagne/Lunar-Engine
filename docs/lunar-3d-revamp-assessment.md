@@ -346,7 +346,7 @@ The spec's Milestones 6 and 7 (tile map editor) are replaced by a **zone editor*
 ## Milestone Plan
 
 Each milestone leaves the solution building and the existing 2D client working until Milestone
-5 explicitly retires it.
+5b explicitly retires it.
 
 ### Milestone 0: Foundations (done in this branch)
 
