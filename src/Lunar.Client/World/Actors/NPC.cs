@@ -292,7 +292,7 @@ namespace Lunar.Client.World.Actors
             string texturePath = buffer.ReadString();
 
             var sprite = new Sprite(
-                contentManager.LoadTexture2D(Engine.ROOT_PATH + texturePath));
+                contentManager.LoadTexture2D(Constants.FILEPATH_DATA + texturePath));
             this.Speed = buffer.ReadFloat();
 
             this.Health = buffer.ReadInt32();

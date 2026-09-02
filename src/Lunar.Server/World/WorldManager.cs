@@ -73,6 +73,11 @@ namespace Lunar.Server.World
         {
             if (!_maps.ContainsKey(player.MapID))
             {
+                if (!_mapManager.MapExists(player.MapID))
+                    throw new System.InvalidOperationException(
+                        $"Player '{player.Name}' cannot join map '{player.MapID}': no such map is loaded. " +
+                        $"Check gameplay.startingMap in config.json and the contents of {Constants.FILEPATH_MAPS}.");
+
                 this.AddMap(player.MapID, _mapManager.GetMap(player.MapID));
             }
 

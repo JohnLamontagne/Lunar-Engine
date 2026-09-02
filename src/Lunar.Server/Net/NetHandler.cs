@@ -1,4 +1,4 @@
-/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -168,7 +168,20 @@ namespace Lunar.Server.Net
             {
                 using var packet = new Packet(payload);
                 var args = new PacketReceivedEventArgs(packetType, packet, connection);
-                handlers[i].Invoke(args);
+
+                try
+                {
+                    handlers[i].Invoke(args);
+                }
+                catch (Exception ex)
+                {
+                    // A faulty handler must never take the whole server down. Log it, drop the
+                    // offending connection, and keep serving everyone else.
+                    _logger.LogEvent($"Unhandled exception in {packetType} handler for peer {peer.Id}: {ex}", LogTypes.ERROR, ex);
+                    Console.WriteLine($"Error handling {packetType} from peer {peer.Id}: {ex.GetType().Name}: {ex.Message}");
+                    try { connection.Disconnect("serverError"); } catch { /* peer may already be gone */ }
+                    return;
+                }
             }
         }
     }

@@ -96,8 +96,7 @@ namespace Lunar.Server.World.Actors
             {
                 var packet = new Packet();
                 packet.Write("Account already logged in!");
-                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
-                connection.Disconnect("byeFelicia");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.ReliableOrdered);
 
                 return false;
             }
@@ -111,8 +110,7 @@ namespace Lunar.Server.World.Actors
                 // The account doesn't exist!
                 var packet = new Packet();
                 packet.Write("Account does not exist!");
-                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
-                connection.Disconnect("byeFelicia");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.ReliableOrdered);
 
                 return false;
             }
@@ -132,8 +130,11 @@ namespace Lunar.Server.World.Actors
 
                 // Now we'll go ahead and tell their client to make whatever preperations that it needs to.
                 // We'll also tell them their super duper unique id.
+                // The client learns its server-side identity here; peer ids are assigned independently
+                // on each side of the connection, so it must never assume they match.
                 var packet = new Packet();
-                connection.SendPacket(PacketType.LOGIN_SUCCESS, packet, DeliveryMethod.Unreliable);
+                packet.Write(player.UniqueID);
+                connection.SendPacket(PacketType.LOGIN_SUCCESS, packet, DeliveryMethod.ReliableOrdered);
 
                 this.EventOccured?.Invoke(this, new SubjectEventArgs("playerLogin", new object[] { }));
 
@@ -143,8 +144,7 @@ namespace Lunar.Server.World.Actors
             {
                 var packet = new Packet();
                 packet.Write("Incorrect password!");
-                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
-                connection.Disconnect("byeFelicia");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.ReliableOrdered);
 
                 return false;
             }
@@ -158,8 +158,7 @@ namespace Lunar.Server.World.Actors
             {
                 var packet = new Packet();
                 packet.Write("Account already exists!");
-                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.Unreliable);
-                connection.Disconnect("byeFelicia");
+                connection.SendPacket(PacketType.LOGIN_FAIL, packet, DeliveryMethod.ReliableOrdered);
 
                 return false;
             }
@@ -175,7 +174,8 @@ namespace Lunar.Server.World.Actors
 
             // Notify them that they successfully registered.
             var successPacket = new Packet();
-            player.NetworkComponent.SendPacket(PacketType.REGISTER_SUCCESS, successPacket, DeliveryMethod.Unreliable);
+            successPacket.Write(player.UniqueID);
+            player.NetworkComponent.SendPacket(PacketType.REGISTER_SUCCESS, successPacket, DeliveryMethod.ReliableOrdered);
 
             return true;
         }

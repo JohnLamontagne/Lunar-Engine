@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -23,9 +23,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Server Data\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <InternalsVisibleTo Include="Lunar.Server.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Everything under Server Data is runtime content. The .cs files there are gameplay scripts
+         compiled by the Roslyn ScriptHost at startup, so they must be copied, not compiled here. -->
+    <Compile Remove="Server Data\**" />
+    <None Include="Server Data\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

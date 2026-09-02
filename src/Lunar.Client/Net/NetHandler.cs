@@ -1,4 +1,4 @@
-/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
+﻿/** Copyright 2018 John Lamontagne https://www.rpgorigin.com
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -37,7 +37,11 @@ namespace Lunar.Client.Net
         private PacketType? _collectAndWaitPacket;
         private Func<bool> _collectAndWaitFunc;
 
-        public string UniqueID => _peer != null ? _peer.Id.ToString() : string.Empty;
+        /// <summary>
+        /// This client's identity as the server knows it, assigned on login/registration. Local peer
+        /// ids are not used: LiteNetLib numbers peers independently on each side.
+        /// </summary>
+        public string UniqueID { get; set; } = string.Empty;
 
         public bool Connected => _peer != null && _peer.ConnectionState == ConnectionState.Connected;
 

@@ -490,7 +490,7 @@ namespace Lunar.Client.Scenes
 
         private void InitalizeInterface()
         {
-            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "/Interface/game/game_interface.xml", this.ContentManager);
+            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "interface/game/game_interface.xml", this.ContentManager);
 
             var chat = this.GuiManager.GetWidget<Chatbox>("chatbox");
             var messageEntry = chat.GetWidget<Textbox>("messageEntry");

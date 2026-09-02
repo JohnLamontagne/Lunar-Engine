@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -71,20 +71,28 @@ namespace Lunar.Server.Scripting
         private static IReadOnlyList<MetadataReference> BuildReferences()
         {
             var refs = new List<MetadataReference>();
+
+            // The BCL comes from the net9.0 reference assemblies. Only application-local assemblies
+            // (the server, Lunar.Core, LiteNetLib, ...) are added on top; adding the runtime's own
+            // implementation assemblies as well gives Roslyn two candidate core libraries and it
+            // then fails to resolve even System.Void (CS0518). This also keeps compilation identical
+            // whether the host runs on the .NET 9 runtime or rolls forward to a newer one.
             refs.AddRange(Basic.Reference.Assemblies.Net90.References.All);
 
-            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            // Application-local assemblies are referenced from disk rather than from what happens to be
+            // loaded already: assembly loading is lazy, so relying on AppDomain.GetAssemblies() made the
+            // set of visible types depend on what the host had touched before the first compile.
+            string appRoot = AppContext.BaseDirectory;
+            foreach (var dll in Directory.EnumerateFiles(appRoot, "*.dll", SearchOption.TopDirectoryOnly))
             {
-                if (asm.IsDynamic) continue;
-                var loc = asm.Location;
-                if (string.IsNullOrEmpty(loc)) continue;
-                if (!seen.Add(loc)) continue;
                 try
                 {
-                    refs.Add(MetadataReference.CreateFromFile(loc));
+                    refs.Add(MetadataReference.CreateFromFile(dll));
                 }
-                catch { /* skip refs that can't be loaded */ }
+                catch
+                {
+                    // Native libraries and anything else that is not a managed assembly are skipped.
+                }
             }
 
             return refs;

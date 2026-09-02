@@ -51,12 +51,60 @@ namespace Lunar.Client.Scenes
 
         private void Handle_RegistrationSuccess(PacketReceivedEventArgs args)
         {
-            throw new NotImplementedException();
+            _authenticating = false;
+            this.NetHandler.UniqueID = args.Packet.ReadString();
+
+            if (!this.Active)
+                return;
+
+            this.SetStatus("Account created. You can now log in.");
+        }
+
+        /// <summary>
+        /// Text of the status label on the main menu, or null before the interface has loaded.
+        /// Read by test automation.
+        /// </summary>
+        public string StatusText
+        {
+            get
+            {
+                try
+                {
+                    return this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer")?.GetWidget<Label>("lblStatus")?.Text;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
+
+        private void SetStatus(string text)
+        {
+            var label = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer")?.GetWidget<Label>("lblStatus");
+            if (label != null)
+                label.Text = text;
+        }
+
+        /// <summary>
+        /// Fills in the credential boxes and submits, exactly as clicking Login or Register would.
+        /// Used by test automation; must be called on the game thread.
+        /// </summary>
+        public void Authenticate(string username, string password, bool register)
+        {
+            var container = this.GuiManager.GetWidget<WidgetContainer>("mainMenuContainer");
+            container.GetWidget<Textbox>("userLoginTextbox").Text = username ?? string.Empty;
+            container.GetWidget<Textbox>("userPasswordTextbox").Text = password ?? string.Empty;
+
+            if (register)
+                this.registerButton_ButtonClicked(this, EventArgs.Empty);
+            else
+                this.loginButton_ButtonClicked(this, EventArgs.Empty);
         }
 
         protected override void OnEnter()
         {
-            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "Interface/menu/menu_interface.xml", this.ContentManager);
+            this.GuiManager.LoadFromFile(Constants.FILEPATH_DATA + "interface/menu/menu_interface.xml", this.ContentManager);
 
             this.HookInterfaceEvents();
 
@@ -81,6 +129,7 @@ namespace Lunar.Client.Scenes
         private void Handle_AuthenticationSuccess(PacketReceivedEventArgs args)
         {
             _authenticating = false;
+            this.NetHandler.UniqueID = args.Packet.ReadString();
 
             if (!this.Active)
                 return;
@@ -198,11 +247,12 @@ namespace Lunar.Client.Scenes
                 failure = true;
             }
 
-            if (!netHandler.Connected && !failure)
+            if (!failure)
             {
                 _authenticating = true;
 
-                netHandler.Connect();
+                if (!netHandler.Connected)
+                    netHandler.Connect();
 
                 var packet = new Packet();
                 packet.Write(menuContainer.GetWidget<Textbox>("userLoginTextbox").Text);
@@ -238,11 +288,12 @@ namespace Lunar.Client.Scenes
                 failure = true;
             }
 
-            if (!failure && !netHandler.Connected)
+            if (!failure)
             {
                 _authenticating = true;
 
-                netHandler.Connect();
+                if (!netHandler.Connected)
+                    netHandler.Connect();
 
                 var packet = new Packet();
                 packet.Write(loginMenuContainer.GetWidget<Textbox>("userLoginTextbox").Text);

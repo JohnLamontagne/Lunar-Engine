@@ -14,13 +14,39 @@ namespace Lunar.Server.Utilities
         [DllImport("ntdll.dll", SetLastError = true)]
         private static extern int NtQueryTimerResolution(out uint MinimumResolution, out uint MaximumResolution, out uint CurrentResolution);
 
+        private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+        /// <summary>
+        /// Assumed scheduler granularity on non-Windows hosts. Linux and macOS use high-resolution
+        /// timers, so Thread.Sleep overshoots by roughly a millisecond in practice.
+        /// </summary>
+        private const double DefaultResolutionMilliseconds = 1.0;
+
         private static readonly double LowestSleepThreshold;
 
         static TimerHelper()
         {
-            uint min, max, current;
-            NtQueryTimerResolution(out min, out max, out current);
-            LowestSleepThreshold = 1.0 + (max / 10000.0);
+            LowestSleepThreshold = 1.0 + QueryResolution();
+        }
+
+        private static double QueryResolution()
+        {
+            if (!IsWindows)
+                return DefaultResolutionMilliseconds;
+
+            try
+            {
+                NtQueryTimerResolution(out _, out uint max, out _);
+                return max / 10000.0;
+            }
+            catch (DllNotFoundException)
+            {
+                return DefaultResolutionMilliseconds;
+            }
+            catch (EntryPointNotFoundException)
+            {
+                return DefaultResolutionMilliseconds;
+            }
         }
 
         /// <summary>
@@ -28,8 +54,10 @@ namespace Lunar.Server.Utilities
         /// </summary>
         public static double GetCurrentResolution()
         {
-            uint min, max, current;
-            NtQueryTimerResolution(out min, out max, out current);
+            if (!IsWindows)
+                return DefaultResolutionMilliseconds;
+
+            NtQueryTimerResolution(out _, out _, out uint current);
             return current / 10000.0;
         }
 

@@ -37,21 +37,25 @@ namespace Lunar.Server.World.Structure
 
         public Dictionary<Vector, CollisionBody> CollisionDescriptors { get { return _collisionDescriptors; } }
 
-        private Layer(LayerModel<TileModel<SpriteInfo>> baseLayer)
+        public Layer(Map map, LayerModel<TileModel<SpriteInfo>> descriptor)
         {
-            this.Name = baseLayer.Name;
+            // Map must be assigned before tiles are built: tile attributes resolve their action
+            // handlers through Map.AttributeHandlerFactory during construction.
+            this.Map = map;
 
-            this.Tiles = new Tile[baseLayer.Tiles.GetLength(0), baseLayer.Tiles.GetLength(1)];
+            this.Name = descriptor.Name;
 
-            this.LayerIndex = baseLayer.LayerIndex;
+            this.Tiles = new Tile[descriptor.Tiles.GetLength(0), descriptor.Tiles.GetLength(1)];
+
+            this.LayerIndex = descriptor.LayerIndex;
 
             for (int x = 0; x < this.Tiles.GetLength(0); x++)
             {
                 for (int y = 0; y < this.Tiles.GetLength(1); y++)
                 {
-                    if (baseLayer.Tiles[x, y] != null)
+                    if (descriptor.Tiles[x, y] != null)
                     {
-                        this.Tiles[x, y] = new Tile(this, baseLayer.Tiles[x, y]);
+                        this.Tiles[x, y] = new Tile(this, descriptor.Tiles[x, y]);
                     }
                     else
                     {
@@ -59,12 +63,7 @@ namespace Lunar.Server.World.Structure
                     }
                 }
             }
-        }
 
-        public Layer(Map map, LayerModel<TileModel<SpriteInfo>> descriptor)
-            : this(descriptor)
-        {
-            this.Map = map;
 
             _playerCollidingTiles = new Dictionary<Player, List<Tile>>(); ;
             _collisionDescriptors = new Dictionary<Vector, CollisionBody>();

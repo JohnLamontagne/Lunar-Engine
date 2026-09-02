@@ -113,7 +113,7 @@ namespace Lunar.Core.World.Actor.Descriptors
             {
                 Name = name,
                 Password = password,
-                SpriteSheet = new SpriteSheet(new SpriteInfo("soldier.png"), 64, 64),
+                SpriteSheet = new SpriteSheet(new SpriteInfo("gfx/Characters/soldier.png"), 64, 64),
                 Level = 1,
                 Experience = 0,
                 Speed = .1f,

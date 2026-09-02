@@ -52,7 +52,9 @@ namespace Lunar.Core.Utilities
                     var newConsoleLog = $"Error: {eventDetails}";
 
                     // If our new console log is the same as the previous log entry, we'll just consolidate the entries and append a [n] at the end where n: the number of duplicate log entries.
-                    if (newConsoleLog == _previousConsoleLog)
+                    // Cursor repositioning only makes sense on an interactive terminal; when output is
+                    // redirected (containers, test harnesses, log files) just write each line.
+                    if (newConsoleLog == _previousConsoleLog && !Console.IsOutputRedirected)
                     {
                         // We set this variable to -1 so that we can have the correct Y index of the console log to update. Otherwise any additional console activity would break the error logging consolidation feature.
                         if (_previousConsoleLogY == -1)
@@ -72,9 +74,9 @@ namespace Lunar.Core.Utilities
                         _previousConsoleLog = newConsoleLog;
                     }
 
-                    TextLog($"Error: {eventDetails}.", exception.StackTrace, this.LogPath + "Error.txt");
+                    TextLog($"Error: {eventDetails}.", exception?.StackTrace, this.LogPath + "Error.txt");
 
-                    if (!this.SuppressErrors)
+                    if (!this.SuppressErrors && exception != null)
                     {
                         if (exception.InnerException != null)
                             ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
